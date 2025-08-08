@@ -13,6 +13,12 @@ public class Game1 : Game
 
     // Render helpers
     private Texture2D _pixel;
+    private SpriteFont _defaultFont;
+    private Texture2D _characterSprite;
+    
+    // Audio feedback (visual for now)
+    private string _lastFeedbackMessage = "";
+    private float _feedbackTimer = 0f;
 
     // World
     private const int ViewWidth = 1280;
@@ -101,6 +107,58 @@ public class Game1 : Game
         _spriteBatch = new SpriteBatch(GraphicsDevice);
         _pixel = new Texture2D(GraphicsDevice, 1, 1);
         _pixel.SetData(new[] { Color.White });
+        _defaultFont = Content.Load<SpriteFont>("DefaultFont");
+        
+        // Create simple character sprite
+        CreateCharacterSprite();
+    }
+    
+    private void CreateCharacterSprite()
+    {
+        int width = 44;
+        int height = 88;
+        _characterSprite = new Texture2D(GraphicsDevice, width, height);
+        
+        Color[] data = new Color[width * height];
+        
+        // Create a simple humanoid shape
+        for (int y = 0; y < height; y++)
+        {
+            for (int x = 0; x < width; x++)
+            {
+                int idx = y * width + x;
+                data[idx] = Color.Transparent;
+                
+                // Head (circle-ish)
+                if (y >= 8 && y <= 28 && x >= 16 && x <= 28)
+                {
+                    float centerX = 22f;
+                    float centerY = 18f;
+                    float dist = MathF.Sqrt((x - centerX) * (x - centerX) + (y - centerY) * (y - centerY));
+                    if (dist <= 8f) data[idx] = Color.White;
+                }
+                
+                // Body (rectangle)
+                if (y >= 28 && y <= 60 && x >= 18 && x <= 26)
+                {
+                    data[idx] = Color.White;
+                }
+                
+                // Arms
+                if (y >= 32 && y <= 48 && ((x >= 12 && x <= 17) || (x >= 27 && x <= 32)))
+                {
+                    data[idx] = Color.White;
+                }
+                
+                // Legs
+                if (y >= 60 && y <= 84 && ((x >= 16 && x <= 20) || (x >= 24 && x <= 28)))
+                {
+                    data[idx] = Color.White;
+                }
+            }
+        }
+        
+        _characterSprite.SetData(data);
     }
 
     protected override void Update(GameTime gameTime)
@@ -150,6 +208,9 @@ public class Game1 : Game
             _camera.Update(dtReal);
             UpdateParticles(dt);
         }
+        
+        // Update feedback timer
+        if (_feedbackTimer > 0) _feedbackTimer -= dtReal;
 
         _prevKb = kb;
         base.Update(gameTime);
@@ -286,22 +347,49 @@ public class Game1 : Game
 
         float targetSpeed = isTryingToMove ? move * f.MoveSpeed : 0f;
         f.Velocity.X = MathHelper.Lerp(f.Velocity.X, targetSpeed, 0.25f);
+        
+        // Update movement animation
+        if (isTryingToMove && f.CurrentAnimation == AnimationState.Idle)
+        {
+            f.CurrentAnimation = AnimationState.Walking;
+            f.AnimationTimer = 0f;
+        }
 
         // Dash
         if (Pressed(kb, f.Controls.Dash) && f.CanDash())
         {
             f.StartDash();
+            // Spawn dash particles
+            SpawnHitSparks(f.Position, 8, new Color(200, 200, 255));
+            AddShake(3f);
         }
 
         // Attack
         if (Pressed(kb, f.Controls.Attack) && f.CanAttack())
         {
             f.StartAttack();
+            // Spawn attack particles at weapon position
+            var attackPos = new Vector2(
+                f.Position.X + f.Facing * f.HalfWidth,
+                f.Position.Y - f.Height * 0.4f
+            );
+            SpawnHitSparks(attackPos, 6, new Color(255, 255, 200));
+            AddShake(2f);
         }
 
         // Block/Parry
         f.IsBlocking = kb.IsKeyDown(f.Controls.Block);
-        if (Pressed(kb, f.Controls.Block)) f.TriggerParryWindow();
+        if (Pressed(kb, f.Controls.Block)) 
+        {
+            f.TriggerParryWindow();
+            f.CurrentAnimation = AnimationState.Blocking;
+            f.AnimationTimer = 0f;
+        }
+        else if (f.IsBlocking && f.CurrentAnimation == AnimationState.Idle)
+        {
+            f.CurrentAnimation = AnimationState.Blocking;
+            f.AnimationTimer = 0f;
+        }
 
         f.UpdateTimers(dt);
         f.Position += f.Velocity * dt;
@@ -374,8 +462,18 @@ public class Game1 : Game
                 attacker.ApplyStun(0.6f);
                 defender.GainRage(12);
                 AddShake(12f);
-                SpawnHitSparks(defender.Position + new Vector2(defender.Facing * -6, -defender.Height + 24), 16, new Color(255, 230, 90));
+                
+                // Special parry effect - ring of sparkles
+                var parryPos = defender.Position + new Vector2(defender.Facing * -6, -defender.Height + 24);
+                for (int i = 0; i < 24; i++)
+                {
+                    float angle = (i / 24f) * MathF.PI * 2f;
+                    var sparkPos = parryPos + new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * 30f;
+                    SpawnHitSparks(sparkPos, 2, new Color(255, 230, 90));
+                }
+                
                 TriggerSlowMo(0.55f, 0.30f);
+                ShowFeedback("PARRY!", 0.8f);
                 return;
             }
 
@@ -388,6 +486,11 @@ public class Game1 : Game
                 hpDamage *= 0.2f;
                 postureDamage *= 1.6f;
                 defender.GainRage(6);
+                ShowFeedback("BLOCKED", 0.5f);
+            }
+            else
+            {
+                ShowFeedback("HIT", 0.3f);
             }
 
             bool defenderWasStunned = defender.IsStunned;
@@ -398,6 +501,13 @@ public class Game1 : Game
             // Rage: both sides gain some
             attacker.GainRage(10);
             defender.GainRage(4);
+            
+            // Trigger hit reaction animation
+            if (!defender.IsStunned)
+            {
+                defender.CurrentAnimation = AnimationState.HitReaction;
+                defender.AnimationTimer = 0f;
+            }
 
             if (defender.HealthCurrent < 0) defender.HealthCurrent = 0;
             AddShake(6f);
@@ -426,11 +536,20 @@ public class Game1 : Game
 
             _spriteBatch.Begin(samplerState: SamplerState.PointClamp);
             DrawHUD();
+            
+            // Draw combat feedback
+            if (_feedbackTimer > 0)
+            {
+                var alpha = (byte)MathHelper.Clamp(_feedbackTimer * 255f, 0, 255);
+                var feedbackColor = new Color((byte)255, (byte)255, (byte)100, alpha);
+                var pos = new Vector2(ViewWidth / 2 - 50, 200);
+                DrawText(_lastFeedbackMessage, pos, feedbackColor);
+            }
 
             if (_isPausedOnEnd)
             {
                 DrawCenterText(_endMessage, new Color(250, 250, 250, 200));
-                DrawSubCenterText("Enter: continue  •  R: restart run", new Color(220, 220, 220, 180));
+                DrawSubCenterText("Enter: continue | R: restart run", new Color(220, 220, 220, 180));
             }
             DrawVignette();
             DrawScanlines();
@@ -509,7 +628,7 @@ public class Game1 : Game
             }
         }
 
-        DrawTextLike(30, 34, "Map: Left/Right select • Enter to travel • R restart run", new Color(180, 180, 190));
+        DrawText("Map: Left/Right select | Enter to travel | R restart run", 30, 34, new Color(180, 180, 190));
     }
 
     private void DrawMapBackdrop()
@@ -545,7 +664,7 @@ public class Game1 : Game
         int h = 200;
         var rect = new Rectangle((ViewWidth - w) / 2, (ViewHeight - h) / 2 - 40, w, h);
         DrawRect(rect, new Color(0, 0, 0, 140));
-        DrawTextLike(rect.X + 28, rect.Y + 28, "Choose a reward: 1 or 2", Color.White);
+        DrawText("Choose a reward: 1 or 2", rect.X + 28, rect.Y + 28, Color.White);
 
         // Draw two option boxes
         int boxW = (w - 60) / 2;
@@ -554,8 +673,8 @@ public class Game1 : Game
         var box2 = new Rectangle(rect.X + 40 + boxW, rect.Y + 80, boxW, boxH);
         DrawRect(box1, new Color(30, 30, 36));
         DrawRect(box2, new Color(30, 30, 36));
-        DrawTextLike(box1.X + 16, box1.Y + 16, _reward1?.Label ?? "...", new Color(200, 220, 255));
-        DrawTextLike(box2.X + 16, box2.Y + 16, _reward2?.Label ?? "...", new Color(200, 220, 255));
+        DrawText(_reward1?.Label ?? "...", box1.X + 16, box1.Y + 16, new Color(200, 220, 255));
+        DrawText(_reward2?.Label ?? "...", box2.X + 16, box2.Y + 16, new Color(200, 220, 255));
     }
 
     private void DrawArena()
@@ -573,42 +692,106 @@ public class Game1 : Game
 
     private void DrawFighter(Fighter f)
     {
-        var bodyRect = new Rectangle((int)(f.Position.X - f.HalfWidth), (int)(f.Position.Y - f.Height), (int)(f.HalfWidth * 2), (int)f.Height);
+        // Apply animation offset to position
+        var animatedPos = f.Position + f.AnimationOffset;
+        var bodyRect = new Rectangle((int)(animatedPos.X - f.HalfWidth), (int)(animatedPos.Y - f.Height), (int)(f.HalfWidth * 2), (int)f.Height);
 
-        // Outline
-        DrawRect(new Rectangle(bodyRect.X - 2, bodyRect.Y - 2, bodyRect.Width + 4, bodyRect.Height + 4), new Color(0, 0, 0, 180));
-
-        // Telegraph flash overlay
+        // Enhanced telegraph animation
         if (f.IsTelegraphing)
         {
-            var flash = Color.Lerp(Color.Transparent, new Color(255, 50, 50), 0.5f + 0.5f * (float)Math.Abs(Math.Sin((f.TelegraphTimer * 12))));
-            DrawRect(bodyRect, flash);
+            float intensity = 0.5f + 0.5f * (float)Math.Abs(Math.Sin((f.TelegraphTimer * 15)));
+            var flash = Color.Lerp(Color.Transparent, new Color(255, 50, 50), intensity);
+            
+            // Pulsing outline effect
+            for (int size = 1; size <= 4; size++)
+            {
+                var outlineRect = new Rectangle(
+                    bodyRect.X - size * 2, 
+                    bodyRect.Y - size * 2, 
+                    bodyRect.Width + size * 4, 
+                    bodyRect.Height + size * 4
+                );
+                var outlineAlpha = (byte)(flash.A / (size * 2));
+                DrawRect(outlineRect, new Color((byte)255, (byte)50, (byte)50, outlineAlpha));
+            }
+            
+            // Warning indicators
+            var warningPos1 = new Vector2(bodyRect.X + bodyRect.Width/2, bodyRect.Y - 20);
+            var warningPos2 = new Vector2(bodyRect.X + bodyRect.Width/2, bodyRect.Y + bodyRect.Height + 10);
+            DrawRect(new Rectangle((int)warningPos1.X - 10, (int)warningPos1.Y - 2, 20, 4), flash);
+            DrawRect(new Rectangle((int)warningPos2.X - 10, (int)warningPos2.Y - 2, 20, 4), flash);
         }
 
-        // Base body
-        DrawRect(bodyRect, f.ColorBody);
+        // Draw character sprite with glow effect for better visibility
+        var spriteEffect = f.Facing > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+        var spriteColor = f.ColorBody;
+        
+        // Special effects based on animation state
+        if (f.CurrentAnimation == AnimationState.Attacking)
+        {
+            spriteColor = Color.Lerp(spriteColor, Color.Yellow, 0.3f);
+        }
+        else if (f.CurrentAnimation == AnimationState.Blocking)
+        {
+            spriteColor = Color.Lerp(spriteColor, Color.Cyan, 0.2f);
+        }
+        else if (f.CurrentAnimation == AnimationState.HitReaction)
+        {
+            spriteColor = Color.Lerp(spriteColor, Color.Red, 0.4f);
+        }
+        
+        // Add a subtle glow/outline effect
+        for (int ox = -1; ox <= 1; ox++)
+        {
+            for (int oy = -1; oy <= 1; oy++)
+            {
+                if (ox == 0 && oy == 0) continue;
+                var glowRect = new Rectangle(bodyRect.X + ox, bodyRect.Y + oy, bodyRect.Width, bodyRect.Height);
+                _spriteBatch.Draw(_characterSprite, glowRect, null, new Color(0, 0, 0, 60), 0f, Vector2.Zero, spriteEffect, 0f);
+            }
+        }
+        
+        // Tint sprite with character color
+        _spriteBatch.Draw(_characterSprite, bodyRect, null, spriteColor, 0f, Vector2.Zero, spriteEffect, 0f);
+        
+        // Special dash afterimage effect
+        if (f.CurrentAnimation == AnimationState.Dashing)
+        {
+            for (int i = 1; i <= 3; i++)
+            {
+                var afterimageRect = new Rectangle(
+                    bodyRect.X - f.Facing * i * 12,
+                    bodyRect.Y,
+                    bodyRect.Width,
+                    bodyRect.Height
+                );
+                var afterimageAlpha = (byte)(60 / i);
+                var afterimageColor = new Color(spriteColor.R, spriteColor.G, spriteColor.B, afterimageAlpha);
+                _spriteBatch.Draw(_characterSprite, afterimageRect, null, afterimageColor, 0f, Vector2.Zero, spriteEffect, 0f);
+            }
+        }
 
-        // Weapon arm indicator
-        int armWidth = 8;
-        var arm = new Rectangle(
-            f.Facing > 0 ? bodyRect.Right - armWidth : bodyRect.Left,
-            bodyRect.Top + 10,
-            armWidth,
-            bodyRect.Height - 20
-        );
-        DrawRect(arm, f.ColorAccent);
-
-        // Attack trail
+        // Weapon indicator (sword-like line)
         if (f.IsHitActive())
         {
             int len = (int)f.AttackRange;
-            var trail = new Rectangle(
-                f.Facing > 0 ? bodyRect.Right : bodyRect.Left - len,
-                bodyRect.Top + 20,
-                len,
-                4
+            var weaponStart = new Vector2(
+                f.Facing > 0 ? f.Position.X + f.HalfWidth : f.Position.X - f.HalfWidth,
+                f.Position.Y - f.Height * 0.4f
             );
-            DrawRect(trail, new Color(210, 240, 255, 120));
+            var weaponEnd = new Vector2(
+                weaponStart.X + f.Facing * len,
+                weaponStart.Y
+            );
+            
+            // Draw weapon trail as a thick line
+            for (int i = 0; i < 4; i++)
+            {
+                var offset = new Vector2(0, i - 2);
+                DrawLine(new Point((int)(weaponStart.X + offset.X), (int)(weaponStart.Y + offset.Y)), 
+                        new Point((int)(weaponEnd.X + offset.X), (int)(weaponEnd.Y + offset.Y)), 
+                        new Color(210, 240, 255, 80), 2);
+            }
         }
 
         // Stun stars
@@ -632,7 +815,7 @@ public class Game1 : Game
         DrawBars(_enemy, ViewWidth / 2 + 30, 34, mirror: true);
 
         // Help
-        DrawTextLike(30, 124, "A/D move  •  J attack  •  K block/parry  •  Space dash  •  R restart", new Color(180, 180, 190));
+        DrawText("A/D move | J attack | K block/parry | Space dash | R restart", 30, 124, new Color(180, 180, 190));
     }
 
     private void DrawBars(Fighter f, int x, int y, bool mirror = false)
@@ -641,18 +824,33 @@ public class Game1 : Game
         int barH = 16;
         int gap = 6;
 
-        void Bar(float pct, Color c, int row)
+        void Bar(float pct, Color c, int row, string label)
         {
             var back = new Rectangle(x, y + row * (barH + gap), width, barH);
             DrawRect(back, new Color(12, 12, 16));
+            
+            // Add a subtle border
+            DrawRect(new Rectangle(back.X - 1, back.Y - 1, back.Width + 2, back.Height + 2), new Color(60, 60, 70));
+            DrawRect(back, new Color(20, 20, 24));
+            
             int w = (int)(width * Math.Clamp(pct, 0f, 1f));
             var fill = new Rectangle(x, y + row * (barH + gap), w, barH);
             DrawRect(fill, c);
+            
+            // Add a bright edge effect for full bars
+            if (pct > 0.95f)
+            {
+                var highlight = new Rectangle(x, y + row * (barH + gap), w, 2);
+                DrawRect(highlight, Color.Lerp(c, Color.White, 0.6f));
+            }
+            
+            // Draw label
+            DrawText(label, x - 50, y + row * (barH + gap) + 2, new Color(180, 180, 190));
         }
 
-        Bar(f.HealthCurrent / f.HealthMax, new Color(231, 76, 60), 0);
-        Bar(f.PostureCurrent / f.PostureMax, new Color(241, 196, 15), 1);
-        Bar(f.RageCurrent / f.RageMax, new Color(142, 68, 173), 2);
+        Bar(f.HealthCurrent / f.HealthMax, new Color(231, 76, 60), 0, "HP");
+        Bar(f.PostureCurrent / f.PostureMax, new Color(241, 196, 15), 1, "PST");
+        Bar(f.RageCurrent / f.RageMax, new Color(142, 68, 173), 2, "RGE");
     }
 
     private void DrawCenterText(string text, Color color)
@@ -662,7 +860,7 @@ public class Game1 : Game
         int h = 120;
         var rect = new Rectangle((ViewWidth - w) / 2, (ViewHeight - h) / 2 - 24, w, h);
         DrawRect(rect, new Color(0, 0, 0, 140));
-        DrawTextLike(rect.X + 28, rect.Y + 28, text, color);
+        DrawText(text, rect.X + 28, rect.Y + 28, color);
     }
 
     private void DrawSubCenterText(string text, Color color)
@@ -671,21 +869,17 @@ public class Game1 : Game
         int h = 60;
         var rect = new Rectangle((ViewWidth - w) / 2, (ViewHeight - h) / 2 + 60, w, h);
         DrawRect(rect, new Color(0, 0, 0, 90));
-        DrawTextLike(rect.X + 18, rect.Y + 18, text, color);
+        DrawText(text, rect.X + 18, rect.Y + 18, color);
     }
 
-    private void DrawTextLike(int x, int y, string text, Color color)
+    private void DrawText(string text, Vector2 position, Color color)
     {
-        // Placeholder: draw a simple bar per character to simulate text
-        int charW = 8;
-        int charH = 2;
-        int spacing = 2;
-        int idx = 0;
-        foreach (char _ in text)
-        {
-            DrawRect(new Rectangle(x + idx * (charW + spacing), y, charW, charH), color);
-            idx++;
-        }
+        _spriteBatch.DrawString(_defaultFont, text, position, color);
+    }
+
+    private void DrawText(string text, int x, int y, Color color)
+    {
+        DrawText(text, new Vector2(x, y), color);
     }
 
     private void DrawRect(Rectangle r, Color c)
@@ -737,6 +931,12 @@ public class Game1 : Game
         _timeScale = MathHelper.Clamp(factor, 0.3f, 1f);
         _timeScaleRecoverTimer = Math.Max(_timeScaleRecoverTimer, duration);
     }
+    
+    private void ShowFeedback(string message, float duration = 1.0f)
+    {
+        _lastFeedbackMessage = message;
+        _feedbackTimer = duration;
+    }
 
     private void SpawnHitSparks(Vector2 center, int count, Color color)
     {
@@ -745,13 +945,17 @@ public class Game1 : Game
             float ang = (float)(_rng.NextDouble() * Math.PI * 2);
             float spd = 280f + (float)_rng.NextDouble() * 180f;
             var vel = new Vector2(MathF.Cos(ang), MathF.Sin(ang)) * spd;
+            float life = 0.18f + (float)_rng.NextDouble() * 0.22f;
             _particles.Add(new Particle
             {
                 Position = center,
                 Velocity = vel,
-                Life = 0.18f + (float)_rng.NextDouble() * 0.22f,
+                Life = life,
+                MaxLife = life,
                 Color = color,
-                Size = 2 + _rng.Next(2),
+                Size = 2 + _rng.Next(3),
+                Rotation = (float)(_rng.NextDouble() * Math.PI * 2),
+                RotationSpeed = ((float)_rng.NextDouble() - 0.5f) * 12f,
             });
         }
     }
@@ -765,6 +969,8 @@ public class Game1 : Game
             if (p.Life <= 0) { _particles.RemoveAt(i); continue; }
             p.Position += p.Velocity * dt;
             p.Velocity *= 0.92f;
+            p.Rotation += p.RotationSpeed * dt;
+            p.Velocity.Y += 120f * dt; // Gravity
             _particles[i] = p;
         }
     }
@@ -773,10 +979,33 @@ public class Game1 : Game
     {
         foreach (var p in _particles)
         {
-            byte a = (byte)(Math.Clamp(p.Life, 0f, 0.4f) / 0.4f * 200);
-            DrawRect(new Rectangle((int)p.Position.X, (int)p.Position.Y, p.Size, p.Size), new Color(p.Color, a));
+            float lifeRatio = p.Life / p.MaxLife;
+            byte a = (byte)(lifeRatio * 255);
+            var particleColor = new Color(p.Color.R, p.Color.G, p.Color.B, a);
+            
+            // Draw as rotated squares that fade and shrink over time
+            var destRect = new Rectangle(
+                (int)p.Position.X, 
+                (int)p.Position.Y, 
+                (int)(p.Size * (0.5f + lifeRatio * 0.5f)), 
+                (int)(p.Size * (0.5f + lifeRatio * 0.5f))
+            );
+            var origin = new Vector2(destRect.Width / 2f, destRect.Height / 2f);
+            
+            _spriteBatch.Draw(_pixel, destRect, null, particleColor, p.Rotation, origin, SpriteEffects.None, 0f);
         }
     }
+}
+
+public enum AnimationState
+{
+    Idle,
+    Walking,
+    Attacking,
+    HitReaction,
+    Blocking,
+    Stunned,
+    Dashing
 }
 
 public class Fighter
@@ -787,6 +1016,11 @@ public class Fighter
     // Visual
     public Color ColorBody { get; set; } = new Color(130, 160, 220);
     public Color ColorAccent { get; set; } = new Color(90, 120, 190);
+    
+    // Animation
+    public AnimationState CurrentAnimation { get; set; } = AnimationState.Idle;
+    public float AnimationTimer { get; set; } = 0f;
+    public Vector2 AnimationOffset { get; set; } = Vector2.Zero;
 
     // Kinematics
     public Vector2 Position;
@@ -848,7 +1082,11 @@ public class Fighter
         if (IsStunned)
         {
             _stunTimer -= dt;
-            if (_stunTimer <= 0) IsStunned = false;
+            if (_stunTimer <= 0) 
+            {
+                IsStunned = false;
+                CurrentAnimation = AnimationState.Idle;
+            }
         }
 
         if (_attackTimer > 0)
@@ -858,6 +1096,7 @@ public class Fighter
             {
                 _attackTimer = 0;
                 WasHitThisSwing = false;
+                CurrentAnimation = AnimationState.Idle;
             }
         }
 
@@ -869,6 +1108,7 @@ public class Fighter
                 _dashTimer = 0;
                 // End dash velocity
                 Velocity.X *= 0.3f;
+                CurrentAnimation = AnimationState.Idle;
             }
         }
 
@@ -879,6 +1119,66 @@ public class Fighter
             {
                 IsTelegraphing = false;
             }
+        }
+        
+        // Update animation
+        UpdateAnimation(dt);
+    }
+    
+    private void UpdateAnimation(float dt)
+    {
+        AnimationTimer += dt;
+        
+        switch (CurrentAnimation)
+        {
+            case AnimationState.Attacking:
+                // Lunge forward during attack
+                float attackProgress = 1f - (_attackTimer / 0.35f);
+                AnimationOffset = new Vector2(MathF.Sin(attackProgress * MathF.PI) * 15f * Facing, AnimationOffset.Y);
+                break;
+                
+            case AnimationState.HitReaction:
+                // Knockback effect
+                AnimationOffset = new Vector2(MathF.Cos(AnimationTimer * 20f) * 8f * -Facing, AnimationOffset.Y);
+                if (AnimationTimer > 0.3f)
+                {
+                    CurrentAnimation = AnimationState.Idle;
+                    AnimationTimer = 0f;
+                }
+                break;
+                
+            case AnimationState.Blocking:
+                // Slight defensive crouch
+                AnimationOffset = new Vector2(AnimationOffset.X, MathF.Sin(AnimationTimer * 8f) * 3f);
+                if (!IsBlocking)
+                {
+                    CurrentAnimation = AnimationState.Idle;
+                    AnimationTimer = 0f;
+                }
+                break;
+                
+            case AnimationState.Stunned:
+                // Wobble effect
+                AnimationOffset = new Vector2(MathF.Sin(AnimationTimer * 12f) * 5f, MathF.Cos(AnimationTimer * 15f) * 2f);
+                break;
+                
+            case AnimationState.Dashing:
+                // Blur/stretch effect handled in rendering
+                break;
+                
+            case AnimationState.Walking:
+                // Bob up and down
+                AnimationOffset = new Vector2(AnimationOffset.X, MathF.Sin(AnimationTimer * 12f) * 2f);
+                if (Math.Abs(Velocity.X) < 10f)
+                {
+                    CurrentAnimation = AnimationState.Idle;
+                    AnimationTimer = 0f;
+                }
+                break;
+                
+            default:
+                AnimationOffset = Vector2.Lerp(AnimationOffset, Vector2.Zero, 0.15f);
+                break;
         }
     }
 
@@ -908,6 +1208,8 @@ public class Fighter
         _attackCooldown = 0.35f;
         WasHitThisSwing = false;
         IsTelegraphing = false;
+        CurrentAnimation = AnimationState.Attacking;
+        AnimationTimer = 0f;
     }
 
     public bool IsHitActive()
@@ -925,6 +1227,8 @@ public class Fighter
         _dashTimer = 0.16f;
         _dashCooldown = 0.60f;
         Velocity.X = Facing * 900f;
+        CurrentAnimation = AnimationState.Dashing;
+        AnimationTimer = 0f;
     }
 
     public void TriggerParryWindow()
@@ -962,6 +1266,8 @@ public class Fighter
         _attackCooldown = 0.25f;
         IsTelegraphing = false;
         Velocity.X *= 0.3f;
+        CurrentAnimation = AnimationState.Stunned;
+        AnimationTimer = 0f;
     }
 
     public void GainRage(float amount)
@@ -996,8 +1302,11 @@ public struct Particle
     public Vector2 Position;
     public Vector2 Velocity;
     public float Life;
+    public float MaxLife;
     public Color Color;
     public int Size;
+    public float Rotation;
+    public float RotationSpeed;
 }
 
 public sealed class Camera2D
