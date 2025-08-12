@@ -1,2 +1,2 @@
-﻿using var game = new WUDemo.Game1();
+﻿using var game = new WUDemo.WUGame();
 game.Run();

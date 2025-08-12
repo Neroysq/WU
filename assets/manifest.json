@@ -1,0 +1,51 @@
+{
+  "sprites": {
+    "characters": {
+      "player": "sprites/player.png",
+      "enemy_basic": "sprites/enemy_basic.png",
+      "enemy_elite": "sprites/enemy_elite.png",
+      "enemy_boss": "sprites/enemy_boss.png"
+    },
+    "effects": {
+      "hit_spark": "sprites/effects/hit_spark.png",
+      "parry_flash": "sprites/effects/parry_flash.png",
+      "dash_trail": "sprites/effects/dash_trail.png"
+    },
+    "ui": {
+      "health_bar": "ui/health_bar.png",
+      "posture_bar": "ui/posture_bar.png",
+      "rage_bar": "ui/rage_bar.png",
+      "window_frame": "ui/window_frame.png"
+    }
+  },
+  "backgrounds": {
+    "temple_courtyard": "backgrounds/temple_courtyard.png",
+    "bamboo_forest": "backgrounds/bamboo_forest.png",
+    "mountain_peak": "backgrounds/mountain_peak.png"
+  },
+  "audio": {
+    "sfx": {
+      "sword_hit": "audio/sfx/sword_hit.wav",
+      "parry": "audio/sfx/parry.wav",
+      "dash": "audio/sfx/dash.wav"
+    },
+    "music": {
+      "combat": "audio/music/combat.ogg",
+      "map": "audio/music/map.ogg"
+    }
+  },
+  "animations": {
+    "player_idle": {
+      "frames": 4,
+      "duration": 0.8
+    },
+    "player_attack": {
+      "frames": 6,
+      "duration": 0.35
+    },
+    "player_dash": {
+      "frames": 4,
+      "duration": 0.16
+    }
+  }
+}
