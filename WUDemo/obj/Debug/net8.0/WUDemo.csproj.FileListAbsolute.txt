@@ -1,3 +1,10 @@
+/Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/WUDemo.csproj.AssemblyReference.cache
+/Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/WUDemo.GeneratedMSBuildEditorConfig.editorconfig
+/Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/WUDemo.AssemblyInfoInputs.cache
+/Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/WUDemo.AssemblyInfo.cs
+/Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/WUDemo.csproj.CoreCompileInputs.cache
+/Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/WUDemo.sourcelink.json
+/Users/animula/GitReps/wu/WUDemo/bin/Debug/net8.0/Content/DefaultFont.xnb
 /Users/animula/GitReps/wu/WUDemo/bin/Debug/net8.0/WUDemo
 /Users/animula/GitReps/wu/WUDemo/bin/Debug/net8.0/WUDemo.deps.json
 /Users/animula/GitReps/wu/WUDemo/bin/Debug/net8.0/WUDemo.runtimeconfig.json
@@ -18,16 +25,9 @@
 /Users/animula/GitReps/wu/WUDemo/bin/Debug/net8.0/runtimes/linux-x64/native/libSDL2-2.0.so.0
 /Users/animula/GitReps/wu/WUDemo/bin/Debug/net8.0/runtimes/osx/native/libSDL2-2.0.0.dylib
 /Users/animula/GitReps/wu/WUDemo/bin/Debug/net8.0/runtimes/win-x64/native/SDL2.dll
-/Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/WUDemo.csproj.AssemblyReference.cache
-/Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/WUDemo.GeneratedMSBuildEditorConfig.editorconfig
-/Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/WUDemo.AssemblyInfoInputs.cache
-/Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/WUDemo.AssemblyInfo.cs
-/Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/WUDemo.csproj.CoreCompileInputs.cache
 /Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/WUDemo.csproj.Up2Date
 /Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/WUDemo.dll
 /Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/refint/WUDemo.dll
 /Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/WUDemo.pdb
 /Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/WUDemo.genruntimeconfig.cache
 /Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/ref/WUDemo.dll
-/Users/animula/GitReps/wu/WUDemo/bin/Debug/net8.0/Content/DefaultFont.xnb
-/Users/animula/GitReps/wu/WUDemo/obj/Debug/net8.0/WUDemo.sourcelink.json

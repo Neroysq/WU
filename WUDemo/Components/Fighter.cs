@@ -1,7 +1,10 @@
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using WUDemo.Core;
+using WUDemo.Debug;
+using WUDemo.Graphics;
 
 namespace WUDemo.Components
 {
@@ -13,7 +16,10 @@ namespace WUDemo.Components
         HitReaction,
         Blocking,
         Stunned,
-        Dashing
+        Dashing,
+        Jumping,
+        Falling,
+        Landing
     }
     
     public class Fighter
@@ -25,9 +31,22 @@ namespace WUDemo.Components
         // Visual
         public Color ColorBody { get; set; } = new Color(130, 160, 220);
         public Color ColorAccent { get; set; } = new Color(90, 120, 190);
-        public AnimationState CurrentAnimation { get; set; } = AnimationState.Idle;
+        private AnimationState _currentAnimation = AnimationState.Idle;
+        public AnimationState CurrentAnimation 
+        { 
+            get => _currentAnimation;
+            set
+            {
+                if (_currentAnimation != value)
+                {
+                    CombatDebugger.Instance.LogStateChange(Name, _currentAnimation.ToString(), value.ToString());
+                    _currentAnimation = value;
+                }
+            }
+        }
         public float AnimationTimer { get; set; } = 0f;
         public Vector2 AnimationOffset { get; set; } = Vector2.Zero;
+        public AnimatedSprite Sprite { get; set; }
         
         // Transform
         public Vector2 Position { get; set; }
@@ -40,6 +59,11 @@ namespace WUDemo.Components
         
         // Movement
         public float MoveSpeed { get; set; } = GameConstants.DefaultMoveSpeed;
+        public float JumpForce { get; set; } = 750f;
+        public float Gravity { get; set; } = 2800f;
+        public bool IsGrounded { get; set; } = true;
+        public bool HasDoubleJump { get; set; } = false;
+        public bool IsInvulnerable { get; set; } = false;
         
         // Combat Stats
         public float HealthMax { get; set; } = GameConstants.DefaultHealthMax;
@@ -67,7 +91,12 @@ namespace WUDemo.Components
         private float _dashCooldown = 0f;
         private float _parryTimer = 0f;
         private float _stunTimer = 0f;
+        private float _jumpCooldown = 0f;
+        private float _landingRecovery = 0f;
+        private float _iframeTimer = 0f;
         public float TelegraphTimer { get; set; } = 0f;
+        public float ComboWindow { get; set; } = 0f;
+        public int ComboCount { get; set; } = 0;
         
         // Input
         public FighterControls Controls { get; set; } = FighterControls.PlayerOne();
@@ -88,6 +117,20 @@ namespace WUDemo.Components
             if (_attackCooldown > 0) _attackCooldown -= dt;
             if (_dashCooldown > 0) _dashCooldown -= dt;
             if (_parryTimer > 0) _parryTimer -= dt;
+            if (_jumpCooldown > 0) _jumpCooldown -= dt;
+            if (_landingRecovery > 0) _landingRecovery -= dt;
+            if (_iframeTimer > 0) _iframeTimer -= dt;
+            if (ComboWindow > 0) 
+            {
+                ComboWindow -= dt;
+                if (ComboWindow <= 0) ComboCount = 0;
+            }
+            
+            // Update invulnerability
+            IsInvulnerable = _iframeTimer > 0 || (_dashTimer > 0 && _dashTimer > GameConstants.DashDuration * 0.2f);
+            
+            // Update sprite animation
+            FighterAnimations.UpdateFighterAnimation(this, dt);
             
             // Handle stun
             if (IsStunned)
@@ -128,9 +171,12 @@ namespace WUDemo.Components
             if (IsTelegraphing)
             {
                 TelegraphTimer -= dt;
-                if (TelegraphTimer <= 0)
+                
+                // Safety timeout - if telegraph has been going too long, cancel it
+                if (TelegraphTimer < -1f)
                 {
                     IsTelegraphing = false;
+                    CombatDebugger.Instance.LogSystem($"{Name}: Telegraph timeout - cancelling", Color.Red);
                 }
             }
             
@@ -182,6 +228,33 @@ namespace WUDemo.Components
                     );
                     break;
                     
+                case AnimationState.Dashing:
+                    float dashProgress = 1f - (_dashTimer / GameConstants.DashDuration);
+                    AnimationOffset = new Vector2(
+                        MathF.Sin(dashProgress * MathF.PI) * 20f * Facing,
+                        MathF.Sin(dashProgress * MathF.PI * 2) * -8f
+                    );
+                    break;
+                    
+                case AnimationState.Jumping:
+                    AnimationOffset = new Vector2(
+                        AnimationOffset.X,
+                        MathF.Sin(AnimationTimer * 10f) * 3f - 5f
+                    );
+                    break;
+                    
+                case AnimationState.Landing:
+                    AnimationOffset = new Vector2(
+                        AnimationOffset.X,
+                        MathF.Cos(AnimationTimer * 15f) * 4f + 3f
+                    );
+                    if (AnimationTimer > 0.2f)
+                    {
+                        CurrentAnimation = AnimationState.Idle;
+                        AnimationTimer = 0f;
+                    }
+                    break;
+                    
                 case AnimationState.Walking:
                     AnimationOffset = new Vector2(
                         AnimationOffset.X, 
@@ -202,7 +275,42 @@ namespace WUDemo.Components
         
         public bool CanAttack()
         {
-            return _attackTimer <= 0 && _attackCooldown <= 0 && !IsStunned && !IsTelegraphing;
+            return _attackTimer <= 0 && _attackCooldown <= 0 && !IsStunned && !IsTelegraphing && _landingRecovery <= 0;
+        }
+        
+        public bool CanJump()
+        {
+            return (IsGrounded || HasDoubleJump) && _jumpCooldown <= 0 && !IsStunned;
+        }
+        
+        public void StartJump()
+        {
+            if (!IsGrounded && HasDoubleJump)
+            {
+                HasDoubleJump = false;
+                Velocity = new Vector2(Velocity.X, -JumpForce * 0.85f);
+            }
+            else if (IsGrounded)
+            {
+                Velocity = new Vector2(Velocity.X, -JumpForce);
+                IsGrounded = false;
+                HasDoubleJump = true;
+            }
+            _jumpCooldown = 0.1f;
+            CurrentAnimation = AnimationState.Jumping;
+            AnimationTimer = 0f;
+        }
+        
+        public void Land()
+        {
+            IsGrounded = true;
+            HasDoubleJump = false;
+            _landingRecovery = 0.1f;
+            if (CurrentAnimation == AnimationState.Jumping || CurrentAnimation == AnimationState.Falling)
+            {
+                CurrentAnimation = AnimationState.Landing;
+                AnimationTimer = 0f;
+            }
         }
         
         public void StartTelegraph()
@@ -211,19 +319,43 @@ namespace WUDemo.Components
             {
                 IsTelegraphing = true;
                 TelegraphTimer = 0.35f;
+                CombatDebugger.Instance.LogSystem($"{Name}: Telegraph started (0.35s)", Color.Orange);
+            }
+            else
+            {
+                CombatDebugger.Instance.LogSystem($"{Name}: Telegraph failed - can't attack", Color.Red);
             }
         }
         
         public void StartAttack()
         {
-            if (!CanAttack()) return;
+            // Can attack if not already attacking and not stunned
+            // Don't check IsTelegraphing here since this is called after telegraph
+            if (_attackTimer > 0 || _attackCooldown > 0 || IsStunned || _landingRecovery > 0) 
+            {
+                CombatDebugger.Instance.LogSystem($"{Name}: StartAttack failed - " +
+                    $"attacking:{_attackTimer > 0} cooldown:{_attackCooldown > 0} stunned:{IsStunned} landing:{_landingRecovery > 0}", 
+                    Color.Red);
+                return;
+            }
             
+            ComboCount = ComboWindow > 0 ? ComboCount + 1 : 1;
+            ComboWindow = 0.5f;
+            
+            // Keep attack duration consistent for hit detection
             _attackTimer = GameConstants.AttackDuration;
-            _attackCooldown = GameConstants.AttackDuration;
+            _attackCooldown = GameConstants.AttackDuration * (ComboCount > 2 ? 0.8f : 1f);
             WasHitThisSwing = false;
             IsTelegraphing = false;
             CurrentAnimation = AnimationState.Attacking;
             AnimationTimer = 0f;
+            
+            CombatDebugger.Instance.LogSystem($"{Name}: Attack started successfully! (combo:{ComboCount})", Color.LightGreen);
+            
+            if (!IsGrounded)
+            {
+                Velocity = new Vector2(Velocity.X, Velocity.Y * 0.5f);
+            }
         }
         
         public bool IsHitActive()
@@ -242,9 +374,11 @@ namespace WUDemo.Components
         {
             _dashTimer = GameConstants.DashDuration;
             _dashCooldown = GameConstants.DashCooldown;
-            Velocity = new Vector2(Facing * 900f, Velocity.Y);
+            float dashSpeed = IsGrounded ? 1100f : 950f;
+            Velocity = new Vector2(Facing * dashSpeed, IsGrounded ? 0 : Velocity.Y * 0.3f);
             CurrentAnimation = AnimationState.Dashing;
             AnimationTimer = 0f;
+            _iframeTimer = GameConstants.DashDuration * 0.7f;
         }
         
         public void TriggerParryWindow()
@@ -283,6 +417,7 @@ namespace WUDemo.Components
             Velocity = new Vector2(Velocity.X * 0.3f, Velocity.Y);
             CurrentAnimation = AnimationState.Stunned;
             AnimationTimer = 0f;
+            CombatDebugger.Instance.LogStun(Name, duration);
         }
         
         public void GainRage(float amount)
@@ -294,6 +429,12 @@ namespace WUDemo.Components
         {
             return _attackTimer <= 0 && _attackCooldown > 0;
         }
+        
+        public void SetupSprite(Texture2D spriteSheet)
+        {
+            Sprite = FighterAnimations.CreateFighterSprite(spriteSheet);
+            Sprite.Tint = ColorBody;
+        }
     }
     
     public class FighterControls
@@ -304,6 +445,8 @@ namespace WUDemo.Components
         public Keys Block { get; set; }
         public Keys Dash { get; set; }
         
+        public Keys Jump { get; set; }
+        
         public static FighterControls PlayerOne()
         {
             return new FighterControls
@@ -313,6 +456,7 @@ namespace WUDemo.Components
                 Attack = Keys.J,
                 Block = Keys.K,
                 Dash = Keys.Space,
+                Jump = Keys.W,
             };
         }
         

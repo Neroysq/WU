@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using WUDemo.Components;
 using WUDemo.Core;
+using WUDemo.Debug;
 using WUDemo.Entities;
 using WUDemo.Systems;
 
@@ -25,6 +26,7 @@ namespace WUDemo.Scenes
         private float _timeScaleRecoverTimer = 0f;
         private string _feedbackMessage = "";
         private float _feedbackTimer = 0f;
+        private bool _isPaused = false;
         
         public event Action<bool> OnCombatEnd; // true = victory, false = defeat
         
@@ -48,6 +50,16 @@ namespace WUDemo.Scenes
             _player = player;
             _currentNode = node;
             _enemy = EnemyFactory.CreateEnemyForNode(node);
+            
+            // Initialize sprites if not already done
+            if (_player.Sprite == null)
+            {
+                _player.SetupSprite(_assets.GetTexture("character"));
+            }
+            if (_enemy.Sprite == null)
+            {
+                _enemy.SetupSprite(_assets.GetTexture("character"));
+            }
             
             // Reset positions
             _player.Position = new Vector2(360, GameConstants.GroundY);
@@ -82,6 +94,32 @@ namespace WUDemo.Scenes
         {
             float dtReal = (float)gameTime.ElapsedGameTime.TotalSeconds;
             
+            // Toggle debug mode
+            if (Pressed(kb, prevKb, Keys.OemTilde))
+            {
+                CombatDebugger.Instance.IsEnabled = !CombatDebugger.Instance.IsEnabled;
+            }
+            
+            // Toggle pause
+            if (Pressed(kb, prevKb, Keys.P))
+            {
+                _isPaused = !_isPaused;
+                CombatDebugger.Instance.LogSystem(_isPaused ? "COMBAT PAUSED" : "COMBAT RESUMED", 
+                    _isPaused ? Color.Orange : Color.LightGreen);
+            }
+            
+            // Always update debug system (works while paused)
+            CombatDebugger.Instance.Update(dtReal, _isPaused);
+            
+            // Update feedback timer (always runs)
+            if (_feedbackTimer > 0) _feedbackTimer -= dtReal;
+            
+            // Exit early if paused (but still allow end-of-combat input)
+            if (_isPaused && !_isPausedOnEnd)
+            {
+                return;
+            }
+            
             // Time scale recovery
             if (_timeScaleRecoverTimer > 0)
             {
@@ -90,9 +128,6 @@ namespace WUDemo.Scenes
             }
             
             float dt = dtReal * _timeScale;
-            
-            // Update feedback timer
-            if (_feedbackTimer > 0) _feedbackTimer -= dtReal;
             
             if (_isPausedOnEnd)
             {
@@ -132,9 +167,12 @@ namespace WUDemo.Scenes
                     "Boss Defeated (Enter)" : "Victory (Enter)";
             }
             
-            // Update systems
-            _camera.Update(dtReal);
-            _particleSystem.Update(dt);
+            // Update systems (only when not paused)
+            if (!_isPaused)
+            {
+                _camera.Update(dtReal);
+                _particleSystem.Update(dt);
+            }
         }
         
         public void Draw(SpriteBatch spriteBatch)
@@ -162,6 +200,15 @@ namespace WUDemo.Scenes
             }
             
             DrawEffects(spriteBatch);
+            
+            // Draw pause indicator
+            if (_isPaused)
+            {
+                DrawPauseIndicator(spriteBatch);
+            }
+            
+            // Draw debug information
+            CombatDebugger.Instance.Draw(spriteBatch, _assets.GetFont(), _player, _enemy, _isPaused);
             
             spriteBatch.End();
         }
@@ -196,6 +243,8 @@ namespace WUDemo.Scenes
         private void DrawFighter(SpriteBatch spriteBatch, Fighter fighter)
         {
             var animatedPos = fighter.Position + fighter.AnimationOffset;
+            
+            // Calculate body rect for effects and fallback rendering
             var bodyRect = new Rectangle(
                 (int)(animatedPos.X - fighter.HalfWidth),
                 (int)(animatedPos.Y - fighter.Height),
@@ -222,34 +271,51 @@ namespace WUDemo.Scenes
                 }
             }
             
-            // Draw character sprite
-            var sprite = _assets.GetTexture("character");
-            var spriteEffect = fighter.Facing > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            var spriteColor = fighter.ColorBody;
-            
-            // Animation color effects
-            if (fighter.CurrentAnimation == AnimationState.Attacking)
-                spriteColor = Color.Lerp(spriteColor, Color.Yellow, 0.3f);
-            else if (fighter.CurrentAnimation == AnimationState.Blocking)
-                spriteColor = Color.Lerp(spriteColor, Color.Cyan, 0.2f);
-            else if (fighter.CurrentAnimation == AnimationState.HitReaction)
-                spriteColor = Color.Lerp(spriteColor, Color.Red, 0.4f);
-            
-            // Outline glow
-            for (int ox = -1; ox <= 1; ox++)
+            // Invulnerability effect
+            if (fighter.IsInvulnerable)
             {
-                for (int oy = -1; oy <= 1; oy++)
+                float pulse = (float)Math.Sin(fighter.AnimationTimer * 20f) * 0.5f + 0.5f;
+                for (int i = 1; i <= 3; i++)
                 {
-                    if (ox == 0 && oy == 0) continue;
-                    var glowRect = new Rectangle(bodyRect.X + ox, bodyRect.Y + oy, bodyRect.Width, bodyRect.Height);
-                    spriteBatch.Draw(sprite, glowRect, null, new Color((byte)0, (byte)0, (byte)0, (byte)60), 
-                                   0f, Vector2.Zero, spriteEffect, 0f);
+                    var glowRect = new Rectangle(
+                        bodyRect.X - i * 3,
+                        bodyRect.Y - i * 3,
+                        bodyRect.Width + i * 6,
+                        bodyRect.Height + i * 6
+                    );
+                    var alpha = (byte)(80 * pulse / i);
+                    DrawRect(spriteBatch, glowRect, new Color((byte)100, (byte)200, (byte)255, alpha));
                 }
             }
             
-            spriteBatch.Draw(sprite, bodyRect, null, spriteColor, 0f, Vector2.Zero, spriteEffect, 0f);
+            // Draw character using AnimatedSprite if available, fallback to simple rectangle
+            if (fighter.Sprite != null)
+            {
+                var spriteEffect = fighter.Facing > 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
+                
+                // Draw shadow/outline
+                for (int ox = -1; ox <= 1; ox++)
+                {
+                    for (int oy = -1; oy <= 1; oy++)
+                    {
+                        if (ox == 0 && oy == 0) continue;
+                        var shadowTint = fighter.Sprite.Tint;
+                        fighter.Sprite.Tint = new Color(0, 0, 0, 60);
+                        fighter.Sprite.Draw(spriteBatch, animatedPos + new Vector2(ox, oy), spriteEffect);
+                        fighter.Sprite.Tint = shadowTint;
+                    }
+                }
+                
+                // Draw the sprite
+                fighter.Sprite.Draw(spriteBatch, animatedPos, spriteEffect);
+            }
+            else
+            {
+                // Fallback rectangle rendering if no sprite
+                DrawRect(spriteBatch, bodyRect, fighter.ColorBody);
+            }
             
-            // Weapon indicator
+            // Weapon indicator with combo effects
             if (fighter.IsHitActive())
             {
                 var weaponStart = new Vector2(
@@ -258,20 +324,63 @@ namespace WUDemo.Scenes
                 );
                 var weaponEnd = weaponStart + new Vector2(fighter.Facing * fighter.AttackRange, 0);
                 
+                Color weaponColor = fighter.ComboCount > 2 ? 
+                    new Color(255, 180, 100, 120) : new Color(210, 240, 255, 80);
+                int thickness = fighter.ComboCount > 2 ? 3 : 2;
+                
                 for (int i = -2; i <= 2; i++)
                 {
                     DrawLine(spriteBatch, 
                             new Point((int)weaponStart.X, (int)(weaponStart.Y + i)),
                             new Point((int)weaponEnd.X, (int)(weaponEnd.Y + i)),
-                            new Color(210, 240, 255, 80), 2);
+                            weaponColor, thickness);
+                }
+                
+                // Trail effect for combos
+                if (fighter.ComboCount > 1)
+                {
+                    for (int trail = 1; trail <= fighter.ComboCount; trail++)
+                    {
+                        var trailStart = weaponStart - new Vector2(fighter.Facing * trail * 15, trail * 3);
+                        var trailEnd = weaponEnd - new Vector2(fighter.Facing * trail * 20, trail * 3);
+                        var trailAlpha = (byte)(40 / trail);
+                        var trailColor = new Color((byte)255, (byte)200, (byte)100, trailAlpha);
+                        
+                        DrawLine(spriteBatch,
+                                new Point((int)trailStart.X, (int)trailStart.Y),
+                                new Point((int)trailEnd.X, (int)trailEnd.Y),
+                                trailColor, 1);
+                    }
                 }
             }
             
             // Stun indicator
             if (fighter.IsStunned)
             {
+                float stunPulse = (float)Math.Sin(fighter.AnimationTimer * 12f) * 0.5f + 0.5f;
                 var stunRect = new Rectangle(bodyRect.X, bodyRect.Y - 18, bodyRect.Width, 12);
-                DrawRect(spriteBatch, stunRect, new Color(255, 220, 0, 120));
+                DrawRect(spriteBatch, stunRect, new Color((byte)255, (byte)220, (byte)0, (byte)(120 * stunPulse)));
+                
+                // Stars around stunned character
+                for (int i = 0; i < 3; i++)
+                {
+                    float angle = fighter.AnimationTimer * 4f + i * 2.1f;
+                    var starPos = new Vector2(
+                        bodyRect.Center.X + MathF.Cos(angle) * 30,
+                        bodyRect.Y - 10 + MathF.Sin(angle) * 15
+                    );
+                    DrawRect(spriteBatch, 
+                            new Rectangle((int)starPos.X - 3, (int)starPos.Y - 3, 6, 6),
+                            new Color(255, 255, 100, 180));
+                }
+            }
+            
+            // Combo indicator
+            if (fighter.ComboCount > 1 && fighter.ComboWindow > 0)
+            {
+                var comboPos = new Vector2(bodyRect.Center.X - 20, bodyRect.Y - 40);
+                DrawText(spriteBatch, $"x{fighter.ComboCount}", (int)comboPos.X, (int)comboPos.Y,
+                        new Color(255, 200, 100));
             }
         }
         
@@ -286,7 +395,7 @@ namespace WUDemo.Scenes
             DrawBars(spriteBatch, _player, 30, 34);
             DrawBars(spriteBatch, _enemy, GameConstants.ViewWidth / 2 + 30, 34, true);
             
-            DrawText(spriteBatch, "A/D move | J attack | K block/parry | Space dash | R restart", 
+            DrawText(spriteBatch, "A/D move | W jump | J attack | K block/parry | Space dash | P pause | R restart", 
                     30, 124, new Color(180, 180, 190));
         }
         
@@ -305,12 +414,38 @@ namespace WUDemo.Scenes
                 
                 int w = (int)(width * Math.Clamp(pct, 0f, 1f));
                 var fill = new Rectangle(x, y + row * (barH + gap), w, barH);
+                
+                // Animate bar changes
+                if (row == 0 && pct < 0.3f) // Low health pulse
+                {
+                    float pulse = (float)Math.Sin(_timeScale * 8f) * 0.3f + 0.7f;
+                    color = new Color(
+                        (byte)(color.R * pulse + 50),
+                        (byte)(color.G * pulse),
+                        (byte)(color.B * pulse),
+                        color.A
+                    );
+                }
+                
                 DrawRect(spriteBatch, fill, color);
                 
                 if (pct > 0.95f)
                 {
                     var highlight = new Rectangle(x, y + row * (barH + gap), w, 2);
                     DrawRect(spriteBatch, highlight, Color.Lerp(color, Color.White, 0.6f));
+                }
+                
+                // Bar shine animation
+                if (row == 2 && fighter.RageCurrent >= fighter.RageMax * 0.8f)
+                {
+                    float shine = (float)Math.Sin(_timeScale * 4f) * 0.5f + 0.5f;
+                    var shineRect = new Rectangle(
+                        x + (int)(w * shine * 0.8f),
+                        y + row * (barH + gap),
+                        (int)(w * 0.2f),
+                        barH
+                    );
+                    DrawRect(spriteBatch, shineRect, new Color((byte)255, (byte)255, (byte)255, (byte)(40 * shine)));
                 }
             }
             
@@ -383,6 +518,45 @@ namespace WUDemo.Scenes
             if (font != null)
             {
                 spriteBatch.DrawString(font, text, new Vector2(x, y), color);
+            }
+        }
+        
+        private void DrawPauseIndicator(SpriteBatch spriteBatch)
+        {
+            // Draw semi-transparent overlay
+            var overlay = new Rectangle(0, 0, GameConstants.ViewWidth, GameConstants.ViewHeight);
+            DrawRect(spriteBatch, overlay, new Color(0, 0, 0, 100));
+            
+            // Draw pause text
+            var font = _assets.GetFont();
+            if (font != null)
+            {
+                string pauseText = "PAUSED";
+                var textSize = font.MeasureString(pauseText);
+                var textPos = new Vector2(
+                    (GameConstants.ViewWidth - textSize.X) / 2,
+                    (GameConstants.ViewHeight - textSize.Y) / 2 - 50
+                );
+                
+                // Draw text with outline
+                for (int ox = -2; ox <= 2; ox++)
+                {
+                    for (int oy = -2; oy <= 2; oy++)
+                    {
+                        if (ox == 0 && oy == 0) continue;
+                        spriteBatch.DrawString(font, pauseText, textPos + new Vector2(ox, oy), Color.Black);
+                    }
+                }
+                spriteBatch.DrawString(font, pauseText, textPos, Color.White);
+                
+                // Draw instructions
+                string instructionText = "Press P to resume | ` for debug | R to restart";
+                var instrSize = font.MeasureString(instructionText);
+                var instrPos = new Vector2(
+                    (GameConstants.ViewWidth - instrSize.X) / 2,
+                    textPos.Y + textSize.Y + 20
+                );
+                spriteBatch.DrawString(font, instructionText, instrPos, Color.LightGray);
             }
         }
         
