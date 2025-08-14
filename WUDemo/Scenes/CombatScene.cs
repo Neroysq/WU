@@ -17,6 +17,7 @@ namespace WUDemo.Scenes
         private MapNode _currentNode;
         private CombatSystem _combatSystem;
         private ParticleSystem _particleSystem;
+        private DamageNumberSystem _damageNumberSystem;
         private Camera2D _camera;
         private AssetManager _assets;
         
@@ -35,6 +36,7 @@ namespace WUDemo.Scenes
             _assets = assets;
             _combatSystem = new CombatSystem();
             _particleSystem = new ParticleSystem(GameConstants.MaxParticles);
+            _damageNumberSystem = new DamageNumberSystem();
             _camera = new Camera2D();
             
             // Wire up combat events
@@ -43,6 +45,8 @@ namespace WUDemo.Scenes
             _combatSystem.OnCameraShake += shake => _camera.AddShake(shake);
             _combatSystem.OnSlowMotion += TriggerSlowMo;
             _combatSystem.OnShowFeedback += ShowFeedback;
+            _combatSystem.OnDamageDealt += (pos, damage, isCritical) => 
+                _damageNumberSystem.SpawnDamageNumber(pos, damage, false, isCritical);
         }
         
         public void SetupCombat(Fighter player, MapNode node)
@@ -71,6 +75,7 @@ namespace WUDemo.Scenes
             _isPausedOnEnd = false;
             _endMessage = string.Empty;
             _particleSystem.Clear();
+            _damageNumberSystem.Clear();
             _camera.Reset();
         }
         
@@ -88,6 +93,7 @@ namespace WUDemo.Scenes
         public void OnExit()
         {
             _particleSystem.Clear();
+            _damageNumberSystem.Clear();
         }
         
         public void Update(GameTime gameTime, KeyboardState kb, KeyboardState prevKb)
@@ -143,7 +149,7 @@ namespace WUDemo.Scenes
             _combatSystem.UpdateFacing(_player, _enemy);
             
             // Update fighters
-            _combatSystem.UpdatePlayer(_player, kb, prevKb, dt);
+            _combatSystem.UpdatePlayer(_player, kb, prevKb, dt, _enemy);
             _combatSystem.UpdateAI(_enemy, _player, dt);
             
             // Resolve combat
@@ -172,6 +178,7 @@ namespace WUDemo.Scenes
             {
                 _camera.Update(dtReal);
                 _particleSystem.Update(dt);
+                _damageNumberSystem.Update(dt);
             }
         }
         
@@ -185,6 +192,7 @@ namespace WUDemo.Scenes
             DrawFighter(spriteBatch, _player);
             DrawFighter(spriteBatch, _enemy);
             _particleSystem.Draw(spriteBatch, _assets.Pixel);
+            _damageNumberSystem.Draw(spriteBatch, _assets.GetFont());
             
             spriteBatch.End();
             
@@ -405,8 +413,9 @@ namespace WUDemo.Scenes
             int barH = 16;
             int gap = 6;
             
-            void DrawBar(float pct, Color color, int row, string label)
+            void DrawBar(float current, float max, Color color, int row, string label)
             {
+                float pct = current / max;
                 var back = new Rectangle(x, y + row * (barH + gap), width, barH);
                 DrawRect(spriteBatch, new Rectangle(back.X - 1, back.Y - 1, back.Width + 2, back.Height + 2), 
                         new Color(60, 60, 70));
@@ -447,11 +456,25 @@ namespace WUDemo.Scenes
                     );
                     DrawRect(spriteBatch, shineRect, new Color((byte)255, (byte)255, (byte)255, (byte)(40 * shine)));
                 }
+                
+                // Draw numeric values
+                string valueText = $"{(int)current}/{(int)max}";
+                var font = _assets.GetFont();
+                if (font != null)
+                {
+                    var textSize = font.MeasureString(valueText);
+                    int textX = mirror ? x + width - (int)textSize.X - 4 : x + 4;
+                    int textY = y + row * (barH + gap) + 1;
+                    
+                    // Draw text shadow for better readability
+                    DrawText(spriteBatch, valueText, textX + 1, textY + 1, new Color(0, 0, 0, 180));
+                    DrawText(spriteBatch, valueText, textX, textY, Color.White);
+                }
             }
             
-            DrawBar(fighter.HealthCurrent / fighter.HealthMax, new Color(231, 76, 60), 0, "HP");
-            DrawBar(fighter.PostureCurrent / fighter.PostureMax, new Color(241, 196, 15), 1, "PST");
-            DrawBar(fighter.RageCurrent / fighter.RageMax, new Color(142, 68, 173), 2, "RGE");
+            DrawBar(fighter.HealthCurrent, fighter.HealthMax, new Color(231, 76, 60), 0, "HP");
+            DrawBar(fighter.PostureCurrent, fighter.PostureMax, new Color(241, 196, 15), 1, "PST");
+            DrawBar(fighter.RageCurrent, fighter.RageMax, new Color(142, 68, 173), 2, "RGE");
         }
         
         private void DrawFeedback(SpriteBatch spriteBatch)

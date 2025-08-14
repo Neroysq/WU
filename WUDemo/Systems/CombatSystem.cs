@@ -15,10 +15,11 @@ namespace WUDemo.Systems
         public event Action<float> OnCameraShake;
         public event Action<float, float> OnSlowMotion;
         public event Action<string, float> OnShowFeedback;
+        public event Action<Vector2, float, bool> OnDamageDealt; // position, damage, isCritical
         
-        public void UpdatePlayer(Fighter fighter, KeyboardState kb, KeyboardState prevKb, float dt)
+        public void UpdatePlayer(Fighter fighter, KeyboardState kb, KeyboardState prevKb, float dt, Fighter enemy = null)
         {
-            // Movement
+            // Movement input
             float move = 0f;
             if (kb.IsKeyDown(fighter.Controls.Left)) move -= 1f;
             if (kb.IsKeyDown(fighter.Controls.Right)) move += 1f;
@@ -27,10 +28,23 @@ namespace WUDemo.Systems
             float airControl = fighter.IsGrounded ? 0.25f : 0.12f;
             float targetSpeed = isTryingToMove ? move * fighter.MoveSpeed : 0f;
             
-            if (fighter.CurrentAnimation != AnimationState.Dashing)
+            // Prevent movement during attacks and certain states
+            bool canMove = fighter.CurrentAnimation != AnimationState.Dashing && 
+                          fighter.CurrentAnimation != AnimationState.Attacking &&
+                          fighter.CurrentAnimation != AnimationState.Stunned;
+            
+            if (canMove)
             {
                 fighter.Velocity = new Vector2(
                     MathHelper.Lerp(fighter.Velocity.X, targetSpeed, airControl),
+                    fighter.Velocity.Y
+                );
+            }
+            else if (fighter.CurrentAnimation == AnimationState.Attacking)
+            {
+                // Stop horizontal movement during attacks
+                fighter.Velocity = new Vector2(
+                    MathHelper.Lerp(fighter.Velocity.X, 0f, airControl * 2f),
                     fighter.Velocity.Y
                 );
             }
@@ -58,8 +72,29 @@ namespace WUDemo.Systems
             // Dash
             if (Pressed(kb, prevKb, fighter.Controls.Dash) && fighter.CanDash())
             {
-                fighter.StartDash();
-                CombatDebugger.Instance.LogMovement(fighter.Name, "DASH");
+                int dashDirection;
+                
+                // Determine dash direction based on input or enemy position
+                if (isTryingToMove)
+                {
+                    // Dash in the direction currently being pressed
+                    dashDirection = move > 0 ? 1 : -1;
+                    CombatDebugger.Instance.LogMovement(fighter.Name, $"DASH {(dashDirection > 0 ? "RIGHT" : "LEFT")}");
+                }
+                else if (enemy != null)
+                {
+                    // No direction pressed, dash toward enemy
+                    dashDirection = enemy.Position.X > fighter.Position.X ? 1 : -1;
+                    CombatDebugger.Instance.LogMovement(fighter.Name, $"DASH TOWARD ENEMY {(dashDirection > 0 ? "RIGHT" : "LEFT")}");
+                }
+                else
+                {
+                    // Fallback to current facing direction
+                    dashDirection = fighter.Facing;
+                    CombatDebugger.Instance.LogMovement(fighter.Name, "DASH");
+                }
+                
+                fighter.StartDash(dashDirection);
                 OnSpawnParticles?.Invoke(fighter.Position, 8, new Color(200, 200, 255));
                 OnCameraShake?.Invoke(3f);
             }
@@ -386,6 +421,11 @@ namespace WUDemo.Systems
                 
                 defender.HealthCurrent -= hpDamage;
                 defender.ApplyPostureDamage(postureDamage);
+                
+                // Spawn damage number
+                var damagePos = defender.Position + new Vector2(0, -defender.Height - 20);
+                bool isCritical = attacker.ComboCount > 2;
+                OnDamageDealt?.Invoke(damagePos, hpDamage, isCritical);
                 
                 // Log posture break if it happened
                 if (defender.PostureCurrent <= 0 && !defender.IsStunned)

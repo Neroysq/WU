@@ -117,9 +117,9 @@ namespace WUDemo
                 return;
             }
             
-            if (Pressed(kb, Keys.Left))
+            if (Pressed(kb, Keys.A))
                 _mapSelectionIdx = Math.Max(0, _mapSelectionIdx - 1);
-            if (Pressed(kb, Keys.Right))
+            if (Pressed(kb, Keys.D))
                 _mapSelectionIdx = Math.Min(nextNodes.Count - 1, _mapSelectionIdx + 1);
             
             if (Pressed(kb, Keys.Enter) || Pressed(kb, Keys.J))
@@ -284,7 +284,7 @@ namespace WUDemo
                 }
             }
             
-            DrawText("Map: Left/Right select | Enter to travel | R restart run", 
+            DrawText("Map: A/D select | Enter to travel | R restart run", 
                     30, 34, new Color(180, 180, 190));
             
             _spriteBatch.End();

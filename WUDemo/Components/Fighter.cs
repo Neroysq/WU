@@ -370,12 +370,16 @@ namespace WUDemo.Components
             return _dashTimer <= 0 && _dashCooldown <= 0 && !IsStunned;
         }
         
-        public void StartDash()
+        public void StartDash(int? direction = null)
         {
             _dashTimer = GameConstants.DashDuration;
             _dashCooldown = GameConstants.DashCooldown;
             float dashSpeed = IsGrounded ? 1100f : 950f;
-            Velocity = new Vector2(Facing * dashSpeed, IsGrounded ? 0 : Velocity.Y * 0.3f);
+            
+            // Use provided direction, or default to current facing
+            int dashDirection = direction ?? Facing;
+            Velocity = new Vector2(dashDirection * dashSpeed, IsGrounded ? 0 : Velocity.Y * 0.3f);
+            
             CurrentAnimation = AnimationState.Dashing;
             AnimationTimer = 0f;
             _iframeTimer = GameConstants.DashDuration * 0.7f;
