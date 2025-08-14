@@ -4,37 +4,39 @@
 ## Core Visual Identity
 
 ### Diorama Presentation Style
-WU adopts the distinctive **3D diorama stage** presentation pioneered by Artis Impact, where combat takes place on floating platform stages with painted backgrounds visible through a window frame. This creates a unique theatrical quality perfect for the dramatic duels of Wuxia fiction.
+WU will adopt the distinctive **3D diorama stage** presentation, where combat takes place on floating platform stages with painted backgrounds visible through a contextual Chinese-inspired frame. This creates a unique theatrical quality perfect for the dramatic duels of Wuxia fiction.
+
+**Current Implementation:** Basic geometric combat on simple platforms
+**Planned Evolution:** Full diorama presentation with atmospheric backgrounds
 
 **Key Elements:**
 - **Stage Platform**: Textured stone/wood platforms with visible depth and edges
-- **Window Frame**: Traditional Chinese window lattice patterns (窗花) replacing the tech borders
+- **Window Frame**: Chinese-inspired decorative elements that vary by battle context (traditional lattice, temple arches, natural formations, mystical portals)
 - **Background Paintings**: Scenic Chinese landscapes visible through the frame
 - **Theatrical Lighting**: Dramatic rim lighting emphasizing the stage-like nature
 
 ## Visual Style Guidelines
 
-### 1. **Pixel Art Specifications**
-- **Resolution**: Mid-to-high resolution pixel art (similar to Artis Impact)
+### 1. **Visual Progression Plan**
+**Current State:** Simple geometric shapes and bright colors for rapid prototyping
+**Target State:** Detailed pixel art with VINIK24 palette
+
+**Pixel Art Specifications (Target):**
+- **Resolution**: Mid-to-high resolution pixel art
 - **Character Size**: ~32-48 pixels tall for standard human characters
 - **Animation Framerate**: 12-15 FPS for smooth martial arts movements
-- **Color Depth**: Limited palette per sprite (8-12 colors) for cohesion
+- **Color Depth**: VINIK24 palette exclusively (24 colors maximum)
 
 ### 2. **Color Palette**
 
-#### Primary Palette - "Ink and Jade"
-- **Ink Black**: #1A1A1D (UI frames, silhouettes)
-- **Scroll White**: #F5F5DC (highlights, qi effects)
-- **Jade Green**: #00A86B (health, nature elements)
-- **Vermillion Red**: #E34234 (damage, rage, seals)
-- **Imperial Gold**: #FFD700 (treasures, special attacks)
-- **Mountain Blue**: #4A5F7A (posture, water elements)
+#### Primary Palette - "VINIK24"
+Adopting the VINIK24 palette (https://lospec.com/palette-list/vinik24) for its soft, contemplative tones that enhance the Wuxia atmosphere and provide connected color ramps essential for pixel art consistency.
 
-#### Environment Palettes
-- **Bamboo Forest**: Greens, soft yellows, morning mist whites
-- **Temple Grounds**: Reds, golds, weathered wood browns
-- **Mountain Peak**: Blues, grays, snow whites
-- **Demon Realm**: Purples, blacks, ethereal greens
+**Key Palette Applications:**
+- **Deep tones**: UI frames, character silhouettes
+- **Mid tones**: Character details, environmental elements
+- **Light tones**: Highlights, qi effects, atmospheric elements
+- **Accent colors**: Special attacks, status effects, interactive elements
 
 ### 3. **Stage/Platform Design**
 
@@ -73,10 +75,13 @@ Backgrounds are painted sceneries visible through the window frame:
 ### 5. **Character Design Philosophy**
 
 #### Player Characters
+**Current:** Simple geometric shapes (rectangles) with basic color coding
+**Planned:**
 - **Silhouette First**: Clear, readable shapes even in pure black
 - **Flowing Fabrics**: Robes and sashes with secondary animation
 - **Weapon Integration**: Weapons as extension of character design
 - **Stance Variety**: Each character has unique idle stance
+- **Color Scheme**: All character elements using VINIK24 palette
 
 #### Design Elements
 - Traditional Chinese clothing (Hanfu, martial robes)
@@ -129,14 +134,17 @@ Backgrounds are painted sceneries visible through the window frame:
 ### 8. **UI/HUD Design**
 
 #### Frame Design
-- **Window Frame**: Traditional Chinese wooden lattice
+- **Window Frame**: Contextual Chinese elements (temple archways, bamboo borders, mystical portals)
 - **Corner Decorations**: Dragon or phoenix motifs
 - **Border Pattern**: Cloud scrolls (云纹) or geometric patterns
 
 #### Health/Resource Bars
+**Current:** Simple colored bars (red health, yellow stamina, purple resource)
+**Planned:** 
 - **Container Style**: Bamboo segments or jade inlay
 - **Fill Effects**: Liquid ink for health, flowing energy for qi
 - **Typography**: Mix of pixel Chinese characters and numbers
+- **Colors**: All bars using VINIK24 palette tones
 
 #### Combat UI Elements
 - **Attack Indicators**: Red Chinese seals (印章) for danger
@@ -174,11 +182,17 @@ Backgrounds are painted sceneries visible through the window frame:
 
 ## Technical Specifications
 
-### Sprite Sheets
+### Development Phases
+**Phase 1 (Current):** Geometric prototyping with placeholder colors
+**Phase 2 (Next):** VINIK24 palette integration
+**Phase 3 (Final):** Full pixel art assets
+
+### Sprite Sheets (Target)
 - **Character Sprites**: 512x512 per character
 - **Effect Sprites**: 256x256 per effect type
 - **Environment Tiles**: 32x32 or 16x16 base tiles
 - **Background Layers**: 1280x720 minimum, 3-5 layers
+- **Palette Constraint**: All assets limited to VINIK24's 24 colors
 
 ### Performance Considerations
 - Maximum 100 particles on screen
