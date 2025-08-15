@@ -1,0 +1,31 @@
+{
+  "type": "Elite",
+  "name": "Elite Guard",
+  "description": "Skilled warrior with enhanced combat abilities",
+  
+  "moveSpeed": 400.0,
+  "jumpForce": 750.0,
+  "gravity": 2800.0,
+  
+  "healthMax": 130.0,
+  "postureMax": 120.0,
+  "postureRecoveryRate": 14.0,
+  
+  "attackDamage": 14.0,
+  "attackPostureDamage": 28.0,
+  "attackRange": 75.0,
+  "attackDuration": 0.35,
+  "telegraphDuration": 0.30,
+  
+  "aggressionLevel": 0.7,
+  "reactionTime": 0.2,
+  "attackCooldown": 1.0,
+  "blockChance": 0.35,
+  "dodgeChance": 0.25,
+  
+  "colorBody": "#FFAA6E",
+  "colorAccent": "#E65C00",
+  
+  "halfWidth": 24.0,
+  "height": 92.0
+}

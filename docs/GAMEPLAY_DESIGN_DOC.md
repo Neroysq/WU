@@ -29,6 +29,9 @@ Precise, responsive controls with satisfying feedback that makes every attack, p
 
 ## Combat System Design
 
+### **Core Combat Principle**
+The combat is intentionally **slow-paced** like Sekiro and souls-like games, emphasizing **thoughtful decision-making** and **meaningful interactions** with enemies rather than fast reflexes. Every action should feel deliberate and consequential, encouraging players to read opponents, time their moves carefully, and engage in tactical exchanges rather than button mashing.
+
 ### Core Mechanics
 
 #### **Martial Arts Trinity**

@@ -296,6 +296,23 @@ namespace WUDemo.Scenes
                 }
             }
             
+            // Parry effect
+            if (fighter.IsParrying)
+            {
+                float intensity = (float)Math.Sin(fighter.AnimationTimer * 25f) * 0.3f + 0.7f;
+                for (int i = 1; i <= 4; i++)
+                {
+                    var parryRect = new Rectangle(
+                        bodyRect.X - i * 2,
+                        bodyRect.Y - i * 2,
+                        bodyRect.Width + i * 4,
+                        bodyRect.Height + i * 4
+                    );
+                    var alpha = (byte)(120 * intensity / i);
+                    DrawRect(spriteBatch, parryRect, new Color((byte)255, (byte)255, (byte)100, alpha));
+                }
+            }
+            
             // Draw character using AnimatedSprite if available, fallback to simple rectangle
             if (fighter.Sprite != null)
             {

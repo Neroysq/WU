@@ -4,6 +4,7 @@ using Microsoft.Xna.Framework.Input;
 using System;
 using WUDemo.Components;
 using WUDemo.Core;
+using WUDemo.Data;
 using WUDemo.Entities;
 using WUDemo.Scenes;
 
@@ -43,6 +44,9 @@ namespace WUDemo
         
         protected override void Initialize()
         {
+            // Initialize the DataManager first to load all game data
+            DataManager.Initialize();
+            
             base.Initialize();
             StartNewRun();
         }
@@ -76,6 +80,13 @@ namespace WUDemo
             {
                 Exit();
                 return;
+            }
+            
+            // Reload data files with F5
+            if (Pressed(kb, Keys.F5))
+            {
+                DataManager.ReloadData();
+                Console.WriteLine("Reloaded all game data files");
             }
             
             // Global restart

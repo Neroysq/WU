@@ -1,0 +1,31 @@
+{
+  "type": "Boss",
+  "name": "Warlord",
+  "description": "Powerful boss with devastating attacks",
+  
+  "moveSpeed": 380.0,
+  "jumpForce": 800.0,
+  "gravity": 2800.0,
+  
+  "healthMax": 220.0,
+  "postureMax": 160.0,
+  "postureRecoveryRate": 18.0,
+  
+  "attackDamage": 18.0,
+  "attackPostureDamage": 35.0,
+  "attackRange": 85.0,
+  "attackDuration": 0.40,
+  "telegraphDuration": 0.35,
+  
+  "aggressionLevel": 0.85,
+  "reactionTime": 0.15,
+  "attackCooldown": 0.8,
+  "blockChance": 0.4,
+  "dodgeChance": 0.3,
+  
+  "colorBody": "#FF5A82",
+  "colorAccent": "#C80032",
+  
+  "halfWidth": 26.0,
+  "height": 96.0
+}

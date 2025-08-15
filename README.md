@@ -9,6 +9,7 @@ WU is a 2d action roguelike game that focuses on 1v1 combats.
 * The player choose a character and starts a run. 
 * Each run is in a format similar to Slay the Spire: 3 maps, each map is a graph that ends at a boss. Before the boss there are differnt nodes such as normal enemies, elite enemies, treasures, shops, events, and so on.
 * Each combat is a 1v1 combat, 2d scroll perspective like in Dead Cells and Blasphemous, but the combat resembles more like Sekiro, that the interactions between the enemy and the player is highly dynamic.
+* **Core Combat Principle**: The combat is intentionally slow-paced like Sekiro and souls-like games, emphasizing thoughtful decision-making and meaningful interactions with enemies rather than fast reflexes.
 * The character has initial movesets, but during the run, the character can replace or enhence the set. New moves are rewarded after a combat victory or events.
 * During the combat, the character has resources: posture, rage.
     * posture works like in Sekiro.

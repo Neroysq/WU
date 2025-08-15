@@ -1,0 +1,31 @@
+{
+  "type": "Basic",
+  "name": "Bandit",
+  "description": "Common enemy with basic combat abilities",
+  
+  "moveSpeed": 200.0,
+  "jumpForce": 700.0,
+  "gravity": 2800.0,
+  
+  "healthMax": 90.0,
+  "postureMax": 100.0,
+  "postureRecoveryRate": 10.0,
+  
+  "attackDamage": 10.0,
+  "attackPostureDamage": 24.0,
+  "attackRange": 68.0,
+  "attackDuration": 0.40,
+  "telegraphDuration": 0.35,
+  
+  "aggressionLevel": 0.5,
+  "reactionTime": 0.3,
+  "attackCooldown": 1.2,
+  "blockChance": 0.25,
+  "dodgeChance": 0.15,
+  
+  "colorBody": "#FF7878",
+  "colorAccent": "#D23C3C",
+  
+  "halfWidth": 22.0,
+  "height": 88.0
+}

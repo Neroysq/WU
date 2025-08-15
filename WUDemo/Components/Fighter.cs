@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
 using WUDemo.Core;
+using WUDemo.Data;
 using WUDemo.Debug;
 using WUDemo.Graphics;
 
@@ -77,6 +78,20 @@ namespace WUDemo.Components
         public float AttackRange { get; set; } = GameConstants.DefaultAttackRange;
         public float AttackDamage { get; set; } = GameConstants.DefaultAttackDamage;
         public float AttackPostureDamage { get; set; } = GameConstants.DefaultPostureDamage;
+        public float AttackDuration { get; set; } = GameConstants.AttackDuration;
+        public float AttackActiveStart { get; set; } = GameConstants.AttackActiveStart;
+        public float AttackActiveEnd { get; set; } = GameConstants.AttackActiveEnd;
+        
+        // Dash Properties
+        public float DashDuration { get; set; } = GameConstants.DashDuration;
+        public float DashCooldown { get; set; } = GameConstants.DashCooldown;
+        public float DashSpeed { get; set; } = 1100f;
+        public float AirDashSpeed { get; set; } = 950f;
+        
+        // Other Timing
+        public float ParryWindow { get; set; } = GameConstants.ParryWindow;
+        public float StunDuration { get; set; } = GameConstants.StunDuration;
+        public float ComboWindowDuration { get; set; } = 0.5f;
         
         // State Flags
         public bool IsBlocking { get; set; } = false;
@@ -127,7 +142,7 @@ namespace WUDemo.Components
             }
             
             // Update invulnerability
-            IsInvulnerable = _iframeTimer > 0 || (_dashTimer > 0 && _dashTimer > GameConstants.DashDuration * 0.2f);
+            IsInvulnerable = _iframeTimer > 0 || (_dashTimer > 0 && _dashTimer > DashDuration * 0.2f);
             
             // Update sprite animation
             FighterAnimations.UpdateFighterAnimation(this, dt);
@@ -190,7 +205,7 @@ namespace WUDemo.Components
             switch (CurrentAnimation)
             {
                 case AnimationState.Attacking:
-                    float attackProgress = 1f - (_attackTimer / GameConstants.AttackDuration);
+                    float attackProgress = 1f - (_attackTimer / AttackDuration);
                     AnimationOffset = new Vector2(
                         MathF.Sin(attackProgress * MathF.PI) * 15f * Facing, 
                         AnimationOffset.Y
@@ -229,7 +244,7 @@ namespace WUDemo.Components
                     break;
                     
                 case AnimationState.Dashing:
-                    float dashProgress = 1f - (_dashTimer / GameConstants.DashDuration);
+                    float dashProgress = 1f - (_dashTimer / DashDuration);
                     AnimationOffset = new Vector2(
                         MathF.Sin(dashProgress * MathF.PI) * 20f * Facing,
                         MathF.Sin(dashProgress * MathF.PI * 2) * -8f
@@ -340,11 +355,11 @@ namespace WUDemo.Components
             }
             
             ComboCount = ComboWindow > 0 ? ComboCount + 1 : 1;
-            ComboWindow = 0.5f;
+            ComboWindow = ComboWindowDuration;
             
             // Keep attack duration consistent for hit detection
-            _attackTimer = GameConstants.AttackDuration;
-            _attackCooldown = GameConstants.AttackDuration * (ComboCount > 2 ? 0.8f : 1f);
+            _attackTimer = AttackDuration;
+            _attackCooldown = AttackDuration * (ComboCount > 2 ? 0.8f : 1f);
             WasHitThisSwing = false;
             IsTelegraphing = false;
             CurrentAnimation = AnimationState.Attacking;
@@ -361,8 +376,8 @@ namespace WUDemo.Components
         public bool IsHitActive()
         {
             return _attackTimer > 0 && 
-                   _attackTimer <= (GameConstants.AttackDuration - GameConstants.AttackActiveStart) && 
-                   _attackTimer >= (GameConstants.AttackDuration - GameConstants.AttackActiveEnd);
+                   _attackTimer <= (AttackDuration - AttackActiveStart) && 
+                   _attackTimer >= (AttackDuration - AttackActiveEnd);
         }
         
         public bool CanDash()
@@ -372,9 +387,9 @@ namespace WUDemo.Components
         
         public void StartDash(int? direction = null)
         {
-            _dashTimer = GameConstants.DashDuration;
-            _dashCooldown = GameConstants.DashCooldown;
-            float dashSpeed = IsGrounded ? 1100f : 950f;
+            _dashTimer = DashDuration;
+            _dashCooldown = DashCooldown;
+            float dashSpeed = IsGrounded ? DashSpeed : AirDashSpeed;
             
             // Use provided direction, or default to current facing
             int dashDirection = direction ?? Facing;
@@ -382,13 +397,15 @@ namespace WUDemo.Components
             
             CurrentAnimation = AnimationState.Dashing;
             AnimationTimer = 0f;
-            _iframeTimer = GameConstants.DashDuration * 0.7f;
+            _iframeTimer = DashDuration * 0.7f;
         }
         
         public void TriggerParryWindow()
         {
-            _parryTimer = GameConstants.ParryWindow;
+            _parryTimer = ParryWindow;
         }
+        
+        public bool IsParrying => _parryTimer > 0;
         
         public bool ConsumeParryIfActive()
         {
@@ -406,7 +423,7 @@ namespace WUDemo.Components
             if (PostureCurrent <= 0)
             {
                 PostureCurrent = 0;
-                ApplyStun(GameConstants.StunDuration);
+                ApplyStun(StunDuration);
                 PostureCurrent = MathF.Min(PostureMax * 0.4f, PostureMax);
             }
         }
