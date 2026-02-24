@@ -1,67 +1,42 @@
 # WU (武)
 
-WU is a 2d action roguelike game that focuses on 1v1 combats. 
-* core highlights: satisfying sekiro-like combat, diverse build with great replayability, great unique art style.
-* It has a pixel art style. Inspirations: Dead Cells, Blasphemous 2, Katana ZERO, Celeste, Artis Impact.
-* It has smooth animations.
-* The background is set in acient China, and is mostly Wuxia vibes but also some Xianxia vibes.
-* Single-player PvE.
-* The player choose a character and starts a run. 
-* Each run is in a format similar to Slay the Spire: 3 maps, each map is a graph that ends at a boss. Before the boss there are differnt nodes such as normal enemies, elite enemies, treasures, shops, events, and so on.
-* Each combat is a 1v1 combat, 2d scroll perspective like in Dead Cells and Blasphemous, but the combat resembles more like Sekiro, that the interactions between the enemy and the player is highly dynamic.
-* **Core Combat Principle**: The combat is intentionally slow-paced like Sekiro and souls-like games, emphasizing thoughtful decision-making and meaningful interactions with enemies rather than fast reflexes.
-* The character has initial movesets, but during the run, the character can replace or enhence the set. New moves are rewarded after a combat victory or events.
-* During the combat, the character has resources: posture, rage.
-    * posture works like in Sekiro.
-    * Rage increase when making damage or got damaged, and can be used to cast powers. Powers are a kind of rewards during the run.
+WU is a 2D wuxia-themed action roguelike focused on deliberate 1v1 combat.
 
-## Roadmap
+## Engine
 
-* first demo: a playable run
-    * Create a detailed art style doc. Making sure all art assets follow it.
-    * Design the combat system
-        * one init character, with init moveset.
-        * Relics and potions
-        * Movesets and powers from differnt LIU (流派)
-        * enemy design
-* out-of-run system
-    * Differnt initial unlockable characters, each with differnt movesets
-    * unlockable events, enemies, relics, LIUs.
-* narritives
+- Godot Engine 4.x
 
-## Tech choices
+## Current Prototype
 
-* Monogames
-* Steam first, but mobile is also great.
+The repository now contains a single playable implementation in Godot:
 
-## Demo (MonoGame)
+- Run flow: `Map -> Combat -> Reward -> Game Over`
+- Core combat: attack, block/parry, dash, jump, posture/rage/health
+- Enemy AI with telegraphed attacks
+- JSON-driven gameplay tuning with live reload (`F5`)
 
-A minimal 2D 1v1 combat prototype is included using MonoGame DesktopGL.
+## Run
 
-Run locally:
+1. Install Godot 4.x.
+2. Open `WUGodot/project.godot`.
+3. Press Play.
 
-1. Ensure .NET SDK is installed (9.0+).
-2. If you're behind a local proxy, export it first:
-   
-   ```bash
-   export ALL_PROXY=http://127.0.0.1:8234
-   ```
-3. Launch the demo:
-   
-   ```bash
-   dotnet run --project WUDemo -c Debug
-   ```
+## Controls
 
-Controls:
-- A / D: move
-- J: light attack
-- K: block / quick-tap to parry during enemy red flash
-- Space: dash
-- R: restart
-- Esc: quit
+- `A / D`: move (map navigation and combat)
+- `W`: jump
+- `J`: attack / confirm
+- `K`: block / parry
+- `Space`: dash
+- `1 / 2`: choose reward
+- `P`: pause (combat)
+- `` ` ``: debug overlay toggle (combat)
+- `F5`: reload JSON data
+- `R`: restart run
+- `Esc`: quit
 
-Mechanics (prototype):
-- Health, Posture, Rage bars for both sides.
-- Blocking reduces HP damage but raises posture damage.
-- Parry (tap K just before the hit) stuns the attacker and damages posture.
-- Simple enemy AI telegraphs attacks with a red flash.
+## Repo Layout
+
+- `WUGodot/`: Godot project
+- `docs/GAMEPLAY_DESIGN_DOC.md`: gameplay vision and systems
+- `docs/ART_DESIGN_DOC.md`: visual direction and art pipeline
