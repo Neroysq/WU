@@ -15,6 +15,12 @@ This directory contains all modular game parameters in JSON format, allowing eas
 - `Settings/` - Global game settings
   - `GameSettings.json` - General game parameters
 
+- `Rewards/` - Reward pool definitions
+  - `DefaultRewards.json` - Default reward entries and effect values
+
+- `VisualProfiles/` - Animation/sprite profile mapping
+  - `DefaultProfiles.json` - Default visual profile definitions
+
 ## Character Parameters
 
 Character JSON files control:
@@ -23,6 +29,7 @@ Character JSON files control:
 - **Attack Properties**: attackDamage, attackPostureDamage, attackRange, timing
 - **Cooldowns**: dashDuration, dashCooldown, parryWindow, stunDuration, comboWindow
 - **Visual**: colorBody, colorAccent (hex format)
+- **Visual Profile**: `visualProfile` id used to resolve animation sets and render scaling
 - **Dimensions**: halfWidth, height
 
 ## Enemy Parameters
@@ -34,14 +41,32 @@ Enemy JSON files control:
 - **Attack Properties**: damage, posture damage, range, duration, telegraph
 - **AI Behavior**: aggressionLevel, reactionTime, blockChance, dodgeChance
 - **Visual**: colorBody, colorAccent
+- **Visual Profile**: `visualProfile` id used to resolve animation sets and render scaling
 - **Dimensions**: halfWidth, height
+
+## Visual Profiles
+
+Visual profile JSON controls:
+- `id`: profile identifier referenced by `visualProfile`
+- `animationSet`: path to an animation-set JSON in `res://assets/animations/`
+- `scale`: rendered sprite scale
+- `yOffset`: vertical render offset
+
+## Rewards
+
+Reward JSON files control:
+- `id`: unique reward identifier
+- `label`: UI label shown in the reward menu
+- `effect`: stat modified when chosen
+- `amount`: numeric value applied to that effect
 
 ## Game Settings
 
 Global settings control:
+- **Selection**: selectedCharacter
 - **Display**: viewWidth, viewHeight, targetFPS
 - **World**: groundY, worldBounds
-- **Combat**: postureRecoveryRate, parryWindow, stunDuration
+- **Combat**: postureRecoveryRate, parryWindow, stunDuration, move control, block multipliers, parry tuning
 - **Visual Effects**: cameraShakeDecay, timeScaleRecovery, maxParticles
 - **Damage Numbers**: lifetime, speed, gravity
 

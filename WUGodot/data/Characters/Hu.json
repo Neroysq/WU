@@ -1,6 +1,7 @@
 {
   "name": "Hu",
   "description": "Tiger - Balanced warrior with strong fundamentals",
+  "visualProfile": "player_humanoid",
   
   "moveSpeed": 420.0,
   "jumpForce": 750.0,

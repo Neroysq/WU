@@ -16,6 +16,7 @@ enum AnimationState {
 
 var name: String = "Fighter"
 var is_ai: bool = false
+var visual_profile_id: String = ""
 
 var color_body: Color = Color8(130, 160, 220)
 var color_accent: Color = Color8(90, 120, 190)
@@ -38,12 +39,51 @@ var is_grounded: bool = true
 var has_double_jump: bool = false
 var is_invulnerable: bool = false
 
-var health_max: float = GameConstants.DEFAULT_HEALTH_MAX
-var health_current: float = GameConstants.DEFAULT_HEALTH_MAX
-var posture_max: float = GameConstants.DEFAULT_POSTURE_MAX
-var posture_current: float = GameConstants.DEFAULT_POSTURE_MAX
-var rage_max: float = GameConstants.DEFAULT_RAGE_MAX
-var rage_current: float = 0.0
+var _health_max: float = GameConstants.DEFAULT_HEALTH_MAX
+var _health_current: float = GameConstants.DEFAULT_HEALTH_MAX
+var _posture_max: float = GameConstants.DEFAULT_POSTURE_MAX
+var _posture_current: float = GameConstants.DEFAULT_POSTURE_MAX
+var _rage_max: float = GameConstants.DEFAULT_RAGE_MAX
+var _rage_current: float = 0.0
+
+var health_max: float:
+	get:
+		return _health_max
+	set(value):
+		_health_max = maxf(value, 1.0)
+		_health_current = clampf(_health_current, 0.0, _health_max)
+
+var health_current: float:
+	get:
+		return _health_current
+	set(value):
+		_health_current = clampf(value, 0.0, health_max)
+
+var posture_max: float:
+	get:
+		return _posture_max
+	set(value):
+		_posture_max = maxf(value, 1.0)
+		_posture_current = clampf(_posture_current, 0.0, _posture_max)
+
+var posture_current: float:
+	get:
+		return _posture_current
+	set(value):
+		_posture_current = clampf(value, 0.0, posture_max)
+
+var rage_max: float:
+	get:
+		return _rage_max
+	set(value):
+		_rage_max = maxf(value, 1.0)
+		_rage_current = clampf(_rage_current, 0.0, _rage_max)
+
+var rage_current: float:
+	get:
+		return _rage_current
+	set(value):
+		_rage_current = clampf(value, 0.0, rage_max)
 
 var attack_range: float = GameConstants.DEFAULT_ATTACK_RANGE
 var attack_damage: float = GameConstants.DEFAULT_ATTACK_DAMAGE
@@ -60,6 +100,7 @@ var air_dash_speed: float = 950.0
 var parry_window: float = GameConstants.PARRY_WINDOW
 var stun_duration: float = GameConstants.STUN_DURATION
 var combo_window_duration: float = 0.5
+var posture_recovery_rate: float = GameConstants.POSTURE_RECOVERY_RATE
 
 var is_blocking: bool = false
 var is_stunned: bool = false
@@ -67,6 +108,7 @@ var is_telegraphing: bool = false
 var was_hit_this_swing: bool = false
 
 var telegraph_timer: float = 0.0
+var telegraph_duration: float = 0.35
 var combo_window: float = 0.0
 var combo_count: int = 0
 
@@ -91,7 +133,7 @@ var _iframe_timer: float = 0.0
 
 func update_timers(dt: float) -> void:
 	if not is_stunned:
-		posture_current = clampf(posture_current + GameConstants.POSTURE_RECOVERY_RATE * dt, 0.0, posture_max)
+		posture_current += posture_recovery_rate * dt
 
 	if _attack_cooldown > 0.0:
 		_attack_cooldown -= dt
@@ -209,7 +251,7 @@ func land() -> void:
 func start_telegraph() -> void:
 	if can_attack():
 		is_telegraphing = true
-		telegraph_timer = 0.35
+		telegraph_timer = telegraph_duration
 
 func start_attack() -> void:
 	if _attack_timer > 0.0 or _attack_cooldown > 0.0 or is_stunned or _landing_recovery > 0.0:

@@ -18,7 +18,8 @@ static func create_enemy_for_node(node: MapNode) -> Fighter:
 
 	var enemy: Fighter = Fighter.new()
 	enemy.name = str(enemy_data.get("name", "Enemy"))
-	enemy.position = Vector2(float(settings.get("viewWidth", 1280)) - 360.0, float(settings.get("groundY", 580.0)))
+	enemy.visual_profile_id = str(enemy_data.get("visualProfile", "enemy_humanoid_basic"))
+	enemy.position = Vector2(float(settings.get("viewWidth", 1920)) - 360.0, float(settings.get("groundY", 940.0)))
 	enemy.facing = -1
 	enemy.color_body = enemy_data.get("colorBody", Color8(255, 120, 120)) as Color
 	enemy.color_accent = enemy_data.get("colorAccent", Color8(210, 60, 60)) as Color
@@ -27,6 +28,7 @@ static func create_enemy_for_node(node: MapNode) -> Fighter:
 	enemy.health_current = enemy.health_max
 	enemy.posture_max = float(enemy_data.get("postureMax", 100.0))
 	enemy.posture_current = enemy.posture_max
+	enemy.posture_recovery_rate = float(enemy_data.get("postureRecoveryRate", settings.get("defaultPostureRecoveryRate", 12.0)))
 	enemy.attack_damage = float(enemy_data.get("attackDamage", 10.0))
 	enemy.attack_posture_damage = float(enemy_data.get("attackPostureDamage", 24.0))
 	enemy.attack_range = float(enemy_data.get("attackRange", 68.0))
@@ -36,20 +38,25 @@ static func create_enemy_for_node(node: MapNode) -> Fighter:
 	enemy.half_width = float(enemy_data.get("halfWidth", 22.0))
 	enemy.height = float(enemy_data.get("height", 88.0))
 	enemy.attack_duration = float(enemy_data.get("attackDuration", 0.40))
-	enemy.attack_active_start = 0.10
-	enemy.attack_active_end = 0.18
+	enemy.attack_active_start = float(enemy_data.get("attackActiveStart", 0.20))
+	enemy.attack_active_end = float(enemy_data.get("attackActiveEnd", 0.34))
+	enemy.telegraph_duration = float(enemy_data.get("telegraphDuration", 0.45))
 	enemy.parry_window = float(settings.get("parryWindow", 0.12))
 	enemy.stun_duration = float(settings.get("stunDuration", 0.7))
 	enemy.controls = Fighter.none_controls()
 	return enemy
 
-static func create_player() -> Fighter:
-	var character_data: Dictionary = DataManager.get_character("Hu")
+static func create_player(character_name: String = "") -> Fighter:
 	var settings: Dictionary = DataManager.get_game_settings()
+	var selected_character: String = character_name
+	if selected_character.is_empty():
+		selected_character = str(settings.get("selectedCharacter", "Hu"))
+	var character_data: Dictionary = DataManager.get_character(selected_character)
 
 	var player: Fighter = Fighter.new()
-	player.name = str(character_data.get("name", "Hu"))
-	player.position = Vector2(360.0, float(settings.get("groundY", 580.0)))
+	player.name = str(character_data.get("name", selected_character))
+	player.visual_profile_id = str(character_data.get("visualProfile", "player_humanoid"))
+	player.position = Vector2(360.0, float(settings.get("groundY", 940.0)))
 	player.facing = 1
 	player.color_body = character_data.get("colorBody", Color8(110, 185, 255)) as Color
 	player.color_accent = character_data.get("colorAccent", Color8(60, 120, 210)) as Color
@@ -62,6 +69,7 @@ static func create_player() -> Fighter:
 	player.posture_current = player.posture_max
 	player.rage_max = float(character_data.get("rageMax", 100.0))
 	player.rage_current = 0.0
+	player.posture_recovery_rate = float(character_data.get("postureRecoveryRate", settings.get("defaultPostureRecoveryRate", 12.0)))
 
 	player.attack_damage = float(character_data.get("attackDamage", 12.0))
 	player.attack_posture_damage = float(character_data.get("attackPostureDamage", 22.0))

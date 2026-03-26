@@ -11,6 +11,9 @@ var _combat_system: CombatSystem
 var _particle_system: ParticleSystem
 var _damage_number_system: DamageNumberSystem
 var _camera: Camera2DHelper
+var _asset_catalog: AssetCatalog
+var _player_visual: FighterVisual
+var _enemy_visual: FighterVisual
 
 var _is_paused_on_end: bool = false
 var _end_message: String = ""
@@ -21,13 +24,16 @@ var _feedback_timer: float = 0.0
 var _is_paused: bool = false
 var _debug_enabled: bool = false
 
-var _prev_keys: Dictionary = {}
+var _input_tracker: InputTracker = InputTracker.new()
 
 func _ready() -> void:
 	_combat_system = CombatSystem.new()
 	_particle_system = ParticleSystem.new(GameConstants.MAX_PARTICLES)
 	_damage_number_system = DamageNumberSystem.new()
 	_camera = Camera2DHelper.new()
+	_asset_catalog = AssetCatalog.new()
+	_player_visual = FighterVisual.new(_asset_catalog)
+	_enemy_visual = FighterVisual.new(_asset_catalog)
 
 	_combat_system.spawn_particles.connect(_on_spawn_particles)
 	_combat_system.camera_shake.connect(_on_camera_shake)
@@ -42,6 +48,8 @@ func setup_combat(player: Fighter, node: MapNode) -> void:
 	_player = player
 	_current_node = node
 	_enemy = EnemyFactory.create_enemy_for_node(node)
+	_player_visual.configure(DataManager.get_visual_profile(_player.visual_profile_id), _player)
+	_enemy_visual.configure(DataManager.get_visual_profile(_enemy.visual_profile_id), _enemy)
 
 	_player.position = Vector2(360.0, GameConstants.GROUND_Y)
 	_player.velocity = Vector2.ZERO
@@ -63,8 +71,8 @@ func setup_combat(player: Fighter, node: MapNode) -> void:
 	_damage_number_system.clear()
 	_camera.reset()
 
-	_prev_keys.clear()
-	_sync_prev_keys()
+	_input_tracker.clear()
+	_sync_input_tracker()
 
 	visible = true
 	set_process(true)
@@ -86,17 +94,17 @@ func _process(delta: float) -> void:
 	if _player == null or _enemy == null:
 		return
 
-	if _pressed(KEY_QUOTELEFT):
+	if _input_tracker.pressed_key(KEY_QUOTELEFT):
 		_debug_enabled = not _debug_enabled
 
-	if _pressed(KEY_P):
+	if _input_tracker.pressed_key(KEY_P):
 		_is_paused = not _is_paused
 
 	if _feedback_timer > 0.0:
 		_feedback_timer -= delta
 
 	if _is_paused and not _is_paused_on_end:
-		_sync_prev_keys()
+		_sync_input_tracker()
 		queue_redraw()
 		return
 
@@ -107,9 +115,9 @@ func _process(delta: float) -> void:
 	var dt: float = delta * _time_scale
 
 	if _is_paused_on_end:
-		if _pressed(KEY_ENTER) or _pressed(KEY_J):
+		if _input_tracker.pressed_key(KEY_ENTER) or _input_tracker.pressed_key(KEY_J):
 			emit_signal("combat_end", _player.health_current > 0.0)
-		_sync_prev_keys()
+		_sync_input_tracker()
 		queue_redraw()
 		return
 
@@ -136,8 +144,10 @@ func _process(delta: float) -> void:
 		_camera.update(delta)
 		_particle_system.update(dt)
 		_damage_number_system.update(dt)
+		_player_visual.update(_player, dt)
+		_enemy_visual.update(_enemy, dt)
 
-	_sync_prev_keys()
+	_sync_input_tracker()
 	queue_redraw()
 
 func _build_player_input() -> Dictionary:
@@ -158,10 +168,10 @@ func _build_player_input() -> Dictionary:
 
 	return {
 		"move": move,
-		"jump_pressed": _pressed(jump_key),
-		"dash_pressed": _pressed(dash_key),
-		"attack_pressed": _pressed(attack_key),
-		"block_pressed": _pressed(block_key),
+		"jump_pressed": _input_tracker.pressed_key(jump_key),
+		"dash_pressed": _input_tracker.pressed_key(dash_key),
+		"attack_pressed": _input_tracker.pressed_key(attack_key),
+		"block_pressed": _input_tracker.pressed_key(block_key),
 		"block_down": Input.is_key_pressed(block_key),
 	}
 
@@ -202,8 +212,8 @@ func _draw_mountain_layer(amplitude: int, frequency: float, base_y: int, color: 
 		draw_rect(Rect2(offset.x + float(x), offset.y + y, 6.0, GameConstants.GROUND_Y + 60.0 - y), color)
 
 func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
-	var animated_pos: Vector2 = fighter.position + fighter.animation_offset + camera_offset
-	var body_rect: Rect2 = Rect2(animated_pos.x - fighter.half_width, animated_pos.y - fighter.height, fighter.half_width * 2.0, fighter.height)
+	var visual: FighterVisual = _get_visual_for(fighter)
+	var body_rect: Rect2 = visual.get_body_rect(fighter, camera_offset)
 
 	if fighter.is_telegraphing:
 		var intensity: float = 0.5 + 0.5 * absf(sin(fighter.telegraph_timer * 15.0))
@@ -241,7 +251,7 @@ func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 			var alpha: int = int(120.0 * parry_intensity / float(i))
 			draw_rect(parry_rect, Color8(255, 255, 100, alpha), false)
 
-	draw_rect(body_rect, fighter.color_body, true)
+	visual.draw(self, fighter, camera_offset)
 
 	if fighter.is_hit_active():
 		var weapon_start: Vector2 = Vector2(fighter.position.x + float(fighter.facing) * fighter.half_width, fighter.position.y - fighter.height * 0.4) + camera_offset
@@ -380,12 +390,7 @@ func _measure_text(text: String, size: int = 16) -> int:
 		return text.length() * size / 2
 	return int(round(font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, size).x))
 
-func _pressed(keycode: int) -> bool:
-	var current: bool = Input.is_key_pressed(keycode)
-	var previous: bool = bool(_prev_keys.get(keycode, false))
-	return current and not previous
-
-func _sync_prev_keys() -> void:
+func _sync_input_tracker() -> void:
 	var keys: Array[int] = [KEY_QUOTELEFT, KEY_P, KEY_ENTER, KEY_J]
 	if _player != null:
 		var control_keys: Array[String] = ["left", "right", "attack", "block", "dash", "jump"]
@@ -393,8 +398,7 @@ func _sync_prev_keys() -> void:
 			var key: int = int(_player.controls.get(control, KEY_NONE))
 			if key != KEY_NONE and not keys.has(key):
 				keys.append(key)
-	for key in keys:
-		_prev_keys[key] = Input.is_key_pressed(key)
+	_input_tracker.sync_keys(keys)
 
 func _on_spawn_particles(position: Vector2, count: int, color: Color) -> void:
 	_particle_system.spawn_hit_sparks(position, count, color)
@@ -412,3 +416,8 @@ func _trigger_slow_mo(factor: float, duration: float) -> void:
 func _show_feedback(message: String, duration: float) -> void:
 	_feedback_message = message
 	_feedback_timer = duration
+
+func _get_visual_for(fighter: Fighter) -> FighterVisual:
+	if fighter.is_ai:
+		return _enemy_visual
+	return _player_visual

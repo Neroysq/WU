@@ -2,6 +2,7 @@
   "type": "Elite",
   "name": "Elite Guard",
   "description": "Skilled warrior with enhanced combat abilities",
+  "visualProfile": "enemy_humanoid_elite",
   
   "moveSpeed": 400.0,
   "jumpForce": 750.0,
@@ -14,8 +15,10 @@
   "attackDamage": 14.0,
   "attackPostureDamage": 28.0,
   "attackRange": 75.0,
-  "attackDuration": 0.35,
-  "telegraphDuration": 0.30,
+  "attackDuration": 0.56,
+  "attackActiveStart": 0.28,
+  "attackActiveEnd": 0.44,
+  "telegraphDuration": 0.48,
   
   "aggressionLevel": 0.7,
   "reactionTime": 0.2,

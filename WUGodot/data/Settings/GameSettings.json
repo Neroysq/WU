@@ -1,15 +1,23 @@
 {
-  "viewWidth": 1280,
-  "viewHeight": 720,
+  "selectedCharacter": "Hu",
+  "viewWidth": 1920,
+  "viewHeight": 1080,
   "targetFPS": 60,
   
-  "groundY": 580.0,
+  "groundY": 940.0,
   "worldBoundsLeft": 80.0,
-  "worldBoundsRight": 1200.0,
+  "worldBoundsRight": 1840.0,
   
   "defaultPostureRecoveryRate": 12.0,
   "parryWindow": 0.12,
   "stunDuration": 0.7,
+  "groundMoveControl": 0.25,
+  "airMoveControl": 0.12,
+  "attackMoveControlMultiplier": 2.0,
+  "blockHealthMultiplier": 0.2,
+  "blockPostureMultiplier": 1.6,
+  "parryPostureDamage": 55.0,
+  "parryStunDuration": 0.6,
   
   "cameraShakeDecay": 20.0,
   "timeScaleRecovery": 0.08,

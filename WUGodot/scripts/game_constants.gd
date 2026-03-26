@@ -1,11 +1,11 @@
 class_name GameConstants
 extends RefCounted
 
-const VIEW_WIDTH: int = 1280
-const VIEW_HEIGHT: int = 720
+const VIEW_WIDTH: int = 1920
+const VIEW_HEIGHT: int = 1080
 const TARGET_FPS: int = 60
 
-const GROUND_Y: float = 580.0
+const GROUND_Y: float = 940.0
 const WORLD_BOUNDS_LEFT: float = 80.0
 const WORLD_BOUNDS_RIGHT: float = VIEW_WIDTH - 80.0
 

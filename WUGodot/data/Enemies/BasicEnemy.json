@@ -2,6 +2,7 @@
   "type": "Basic",
   "name": "Bandit",
   "description": "Common enemy with basic combat abilities",
+  "visualProfile": "enemy_humanoid_basic",
   
   "moveSpeed": 200.0,
   "jumpForce": 700.0,
@@ -14,8 +15,10 @@
   "attackDamage": 10.0,
   "attackPostureDamage": 24.0,
   "attackRange": 68.0,
-  "attackDuration": 0.40,
-  "telegraphDuration": 0.35,
+  "attackDuration": 0.62,
+  "attackActiveStart": 0.30,
+  "attackActiveEnd": 0.48,
+  "telegraphDuration": 0.55,
   
   "aggressionLevel": 0.5,
   "reactionTime": 0.3,

@@ -1,0 +1,99 @@
+{
+  "setId": "character_humanoid_v1",
+  "meta": {
+    "pivot": "bottom_center",
+    "defaultScale": 2.2
+  },
+  "clips": {
+    "IDLE": {
+      "fps": 6.0,
+      "loop": true,
+      "frames": [
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/idle_0.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/idle_1.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/idle_0.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/idle_1.svg"}
+      ]
+    },
+    "WALKING": {
+      "fps": 9.0,
+      "loop": true,
+      "frames": [
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/walk_0.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/idle_0.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/walk_1.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/idle_1.svg"}
+      ]
+    },
+    "ATTACKING": {
+      "fps": 6.0,
+      "loop": false,
+      "frames": [
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/attack_0.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/attack_0.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/attack_1.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/attack_1.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/attack_2.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/attack_2.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/attack_3.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/attack_3.svg"}
+      ]
+    },
+    "HIT_REACTION": {
+      "fps": 10.0,
+      "loop": false,
+      "frames": [
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/hit_0.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/stunned_0.svg"}
+      ]
+    },
+    "BLOCKING": {
+      "fps": 8.0,
+      "loop": true,
+      "frames": [
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/block_0.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/idle_1.svg"}
+      ]
+    },
+    "STUNNED": {
+      "fps": 6.0,
+      "loop": true,
+      "frames": [
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/stunned_0.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/hit_0.svg"}
+      ]
+    },
+    "DASHING": {
+      "fps": 16.0,
+      "loop": true,
+      "frames": [
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/dash_0.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/walk_1.svg"}
+      ]
+    },
+    "JUMPING": {
+      "fps": 8.0,
+      "loop": false,
+      "frames": [
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/jump_0.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/idle_0.svg"}
+      ]
+    },
+    "FALLING": {
+      "fps": 8.0,
+      "loop": true,
+      "frames": [
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/fall_0.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/jump_0.svg"}
+      ]
+    },
+    "LANDING": {
+      "fps": 10.0,
+      "loop": false,
+      "frames": [
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/land_0.svg"},
+        {"path": "res://assets/sprites/characters/humanoid_placeholder/idle_0.svg"}
+      ]
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "rewards": [
+    {
+      "id": "atk_up",
+      "label": "+4 Attack Damage",
+      "effect": "attack_damage",
+      "amount": 4.0
+    },
+    {
+      "id": "posture_up",
+      "label": "+25 Posture Max",
+      "effect": "posture_max",
+      "amount": 25.0
+    },
+    {
+      "id": "posture_damage_up",
+      "label": "+6 Posture Damage",
+      "effect": "attack_posture_damage",
+      "amount": 6.0
+    },
+    {
+      "id": "move_speed_up",
+      "label": "+40 Move Speed",
+      "effect": "move_speed",
+      "amount": 40.0
+    }
+  ]
+}

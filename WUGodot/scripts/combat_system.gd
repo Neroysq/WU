@@ -13,17 +13,21 @@ func _init() -> void:
 	_rng.randomize()
 
 func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: Fighter = null) -> void:
+	var settings: Dictionary = DataManager.get_game_settings()
 	var move: float = float(input_state.get("move", 0.0))
 	var is_trying_to_move: bool = absf(move) > 0.01
 
-	var air_control: float = 0.25 if fighter.is_grounded else 0.12
+	var ground_move_control: float = float(settings.get("groundMoveControl", 0.25))
+	var air_move_control: float = float(settings.get("airMoveControl", 0.12))
+	var attack_move_control_multiplier: float = float(settings.get("attackMoveControlMultiplier", 2.0))
+	var move_control: float = ground_move_control if fighter.is_grounded else air_move_control
 	var target_speed: float = move * fighter.move_speed if is_trying_to_move else 0.0
 
 	var can_move: bool = fighter.current_animation != Fighter.AnimationState.DASHING and fighter.current_animation != Fighter.AnimationState.ATTACKING and fighter.current_animation != Fighter.AnimationState.STUNNED
 	if can_move:
-		fighter.velocity.x = lerp(fighter.velocity.x, target_speed, air_control)
+		fighter.velocity.x = lerp(fighter.velocity.x, target_speed, move_control)
 	elif fighter.current_animation == Fighter.AnimationState.ATTACKING:
-		fighter.velocity.x = lerp(fighter.velocity.x, 0.0, air_control * 2.0)
+		fighter.velocity.x = lerp(fighter.velocity.x, 0.0, move_control * attack_move_control_multiplier)
 
 	if fighter.is_grounded and is_trying_to_move and fighter.current_animation == Fighter.AnimationState.IDLE:
 		fighter.current_animation = Fighter.AnimationState.WALKING
@@ -146,6 +150,7 @@ func update_ai(ai: Fighter, target: Fighter, dt: float) -> void:
 		ai.is_grounded = false
 
 func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
+	var settings: Dictionary = DataManager.get_game_settings()
 	if not attacker.is_hit_active():
 		return
 	if defender.is_invulnerable:
@@ -159,8 +164,8 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 		attacker.was_hit_this_swing = true
 
 		if defender.consume_parry_if_active():
-			attacker.apply_posture_damage(55.0)
-			attacker.apply_stun(0.6)
+			attacker.apply_posture_damage(float(settings.get("parryPostureDamage", 55.0)))
+			attacker.apply_stun(float(settings.get("parryStunDuration", 0.6)))
 			defender.gain_rage(12.0)
 			emit_signal("camera_shake", 12.0)
 
@@ -179,8 +184,8 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 		var posture_damage: float = attacker.attack_posture_damage * combo_damage_bonus
 
 		if defender.is_blocking:
-			hp_damage *= 0.2
-			posture_damage *= 1.6
+			hp_damage *= float(settings.get("blockHealthMultiplier", 0.2))
+			posture_damage *= float(settings.get("blockPostureMultiplier", 1.6))
 			defender.gain_rage(6.0)
 			emit_signal("show_feedback", "BLOCKED", 0.5)
 		else:

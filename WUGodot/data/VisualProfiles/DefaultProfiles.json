@@ -1,0 +1,28 @@
+{
+  "profiles": [
+    {
+      "id": "player_humanoid",
+      "animationSet": "res://assets/animations/character_humanoid.json",
+      "scale": 2.2,
+      "yOffset": 0.0
+    },
+    {
+      "id": "enemy_humanoid_basic",
+      "animationSet": "res://assets/animations/character_humanoid.json",
+      "scale": 2.15,
+      "yOffset": 0.0
+    },
+    {
+      "id": "enemy_humanoid_elite",
+      "animationSet": "res://assets/animations/character_humanoid.json",
+      "scale": 2.3,
+      "yOffset": 0.0
+    },
+    {
+      "id": "enemy_humanoid_boss",
+      "animationSet": "res://assets/animations/character_humanoid.json",
+      "scale": 2.45,
+      "yOffset": 0.0
+    }
+  ]
+}

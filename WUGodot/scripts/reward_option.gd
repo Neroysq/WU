@@ -3,36 +3,39 @@ extends RefCounted
 
 var id: String = ""
 var label: String = ""
+var effect: String = ""
+var amount: float = 0.0
 
 func apply(fighter: Fighter) -> void:
-	match id:
-		"atk_up":
-			fighter.attack_damage += 4.0
-		"posture_up":
-			fighter.posture_max += 25.0
-			fighter.posture_current += 25.0
-		"rage_gain":
-			fighter.attack_posture_damage += 6.0
-		"dash_cd":
-			fighter.move_speed += 40.0
+	match effect:
+		"attack_damage":
+			fighter.attack_damage += amount
+		"posture_max":
+			fighter.posture_max += amount
+			fighter.posture_current += amount
+		"attack_posture_damage":
+			fighter.attack_posture_damage += amount
+		"move_speed":
+			fighter.move_speed += amount
 
 static func random(exclude: String = "") -> RewardOption:
-	var pool: Array[Dictionary] = [
-		{"id": "atk_up", "label": "+4 Attack Damage"},
-		{"id": "posture_up", "label": "+25 Posture Max"},
-		{"id": "rage_gain", "label": "+6 Posture Damage"},
-		{"id": "dash_cd", "label": "+40 Move Speed"},
-	]
+	var pool: Array[Dictionary] = DataManager.get_rewards()
+	var filtered_pool: Array[Dictionary] = []
+	for reward_data in pool:
+		if exclude.is_empty() or str(reward_data.get("id", "")) != exclude:
+			filtered_pool.append(reward_data)
+	if filtered_pool.is_empty():
+		filtered_pool = pool
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 	rng.randomize()
 
-	var pick: Dictionary = {}
-	while true:
-		pick = pool[rng.randi_range(0, pool.size() - 1)]
-		if exclude.is_empty() or pick["id"] != exclude:
-			break
+	var pick: Dictionary = filtered_pool[rng.randi_range(0, filtered_pool.size() - 1)]
+	return from_dictionary(pick)
 
+static func from_dictionary(data: Dictionary) -> RewardOption:
 	var option: RewardOption = RewardOption.new()
-	option.id = str(pick["id"])
-	option.label = str(pick["label"])
+	option.id = str(data.get("id", "reward"))
+	option.label = str(data.get("label", "Reward"))
+	option.effect = str(data.get("effect", ""))
+	option.amount = float(data.get("amount", 0.0))
 	return option
