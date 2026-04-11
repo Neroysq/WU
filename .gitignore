@@ -21,3 +21,6 @@ ehthumbs.db
 
 # Local art references
 docs/artref/
+
+# Superpowers brainstorming workspace
+.superpowers/
