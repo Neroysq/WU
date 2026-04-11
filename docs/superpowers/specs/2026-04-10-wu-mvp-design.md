@@ -69,7 +69,7 @@ Die, start over. Every run is different because the map is procedural, the techn
 06:15  Node 6: Ambush. 1v2 against bandits, ~3 min. Power-fantasy moment,
        your techniques shine. Reward.
 09:30  Node 7: Shop. Spend gold on a technique or an HP potion.
-10:00  Node 8: Chapter boss — Zhao Feng. ~4 min, 2-phase duel.
+10:00  Node 8: Chapter boss — Iron Bear (Xiong Tie). ~4 min, 2-phase duel.
 14:00  Victory → return to start screen. Try again for a different build path.
 ```
 
@@ -105,7 +105,7 @@ Rationale for tuning changes vs. current code:
 | --- | --- | --- | --- |
 | **Health (HP)** | Your life | Reduced on unblocked hits. Blocked hits reduce HP by 20%. | Death at 0. Main losing condition. |
 | **Posture** | Stamina-for-hit-trades | Fills from blocked hits, heavy attacks taken, parries against you, general pressure | When full → 0.8s stun → executable. Recovers at ~12/sec when not under pressure. |
-| **Rage** (optional for MVP) | Meta-resource | Fills from landing hits and taking hits (~10 per hit landed, ~4 per hit taken) | Consumed by D-type stance-swap techniques. If no D techniques ship in MVP, remove rage entirely; re-add in growth phase. **Current recommendation: ship 1-2 D techniques in MVP and keep rage as their activation gate.** |
+| **Rage** | Meta-resource | Fills from landing hits (~10 each), taking hits (~4 each), parry-landing (+15), heavy-landing (+8). Caps at 100. | Consumed by D-type stance-swap techniques. Full rage = one stance swap. Rage is kept in the MVP as the activation gate for the 2 D-type techniques shipping (see Section C). |
 
 The `Rage` meter infrastructure already exists in `WUGodot/scripts/fighter.gd:75-86`. Keeping it preserves the current UI and save format; it just becomes a meaningful resource instead of a cosmetic bar.
 
@@ -143,7 +143,7 @@ This is the most important technical discipline in the spec. Five rules, non-neg
 - Exact HP/damage values per enemy tier.
 - Exact frame counts for every enemy attack (each attack needs a timing table).
 - Exact hitstop values (0.05/0.10/0.15/0.18 are starting points — will need playtesting).
-- Rage numbers if rage stays in MVP.
+- Exact rage fill rates (values above are first-draft; tune during playtesting so a stance swap feels *earned* but not *rare*).
 
 ---
 
@@ -153,35 +153,18 @@ Techniques are the MVP's sole axis of build variety. Everything in this section 
 
 ### Technique categories
 
-Three categories, in rough order of frequency in the pool:
+Three categories, in rough order of frequency in the pool. The authoritative list of all 20 techniques is in "Full MVP technique pool" below; the descriptions here define what the category *is*, not what ships in it.
 
-**A. Passive augments (most common, ~60% of pool)**
-"Always on" modifiers that deform existing actions. No new buttons, no new resources.
+**A. Passive augments (most common, 60% of pool — 12 of 20)**
+"Always on" modifiers that deform existing actions. No new buttons, no new resources. Examples: a dash that ends in a sword stab, light attacks that stagger on hit, heavy attacks that apply bleed.
 
-Examples:
-- *Descending Leaf* — your dash ends in a sword stab dealing 8 damage.
-- *Iron Palm* — light attacks have a 20% chance to stagger on hit.
-- *Widow's Kiss* — heavy attacks apply a 3-second bleed (1.5 damage/sec).
-- *Sparrow Wing* — first light attack after a dash has +30% damage.
-- *Stone Posture* — blocking reduces incoming damage by an additional 10%.
+**B. Conditional triggers (30% of pool — 6 of 20)**
+Fire on specific combat moments. Reward mechanical play. Create "earned" feelings. Examples: a guaranteed posture break after a perfect parry, healing on posture break, damage bonus when below 30% HP.
 
-**B. Conditional triggers (less common, ~30% of pool)**
-Fire on specific combat moments. Reward mechanical play. Create "earned" feelings.
+**D. Stance swaps (rare, 2 of 20)**
+Replace your base moveset with a new kit. Massive per-pickup transformation. Very wuxia. Costs full rage to activate. Only one stance can be equipped at a time — picking a new one replaces the old. MVP ships two: *Drunken Form (醉拳)* and *Tiger Stance (虎形)* — see the full pool below for their exact effects.
 
-Examples:
-- *Mountain's Echo* — after a perfect parry, your next attack is a guaranteed posture break.
-- *Breath of Returning Spring* — on successful posture break, restore 15 HP.
-- *Flowing Water* — after dashing through an attack, your next attack heals 5 HP.
-- *Thousand-Mile Gaze* — after killing an enemy, gain 3 seconds of +50% move speed.
-
-**D. Stance swaps (rare, 2-3 in MVP pool)**
-Replace your base moveset with a new kit. Massive per-pickup transformation. Very wuxia.
-
-Examples for MVP:
-- *Drunken Form (醉拳)* — your dash becomes an evasive roll with extended i-frames. Light attacks become stumbling strikes with unpredictable angles. Heavy attacks lock you into a slow recovery but deal +40% damage and break posture harder. Costs full rage to activate; lasts until you take 20 HP of damage.
-- *Tiger Stance (虎形)* — light attacks become clawing three-hit combos at higher speed. Block costs more posture but reflects 10% damage back. Heavy attack becomes a forward leap-strike covering more distance. Costs full rage to activate; lasts 15 seconds.
-
-Stance swaps are exclusive — only one active at a time. Picking a new one replaces the old.
+**No C-type (active-ability with cooldown) techniques in MVP.** C-type would add a new button and a new resource on top of rage, and is deferred to Milestone 5 (Qi Cultivation).
 
 ### Technique slots and stacking
 
@@ -214,18 +197,71 @@ Rerolling is *not* available in MVP. Shops can be entered multiple times in diff
 
 ### MVP pool size and composition
 
-- **~12 A-type (passive augments)** — cover all action categories (attack/defense/movement)
-- **~6 B-type (conditional triggers)** — distributed across parry/kill/dash/posture-break triggers
+- **12 A-type (passive augments)** — cover all action categories (attack/defense/movement)
+- **6 B-type (conditional triggers)** — distributed across parry/kill/dash/posture-break triggers
 - **2 D-type (stance swaps)** — Drunken Form + Tiger Stance
 - **Total: 20 techniques**
 
 A typical run picks up 6-8 techniques, so ~30-40% of the pool is experienced per run. Two full runs feel notably different; 5-10 runs feel *substantially* different. This is enough variety to prove the core thesis without requiring a content treadmill.
 
+### Full MVP technique pool (authoritative list)
+
+All 20 techniques for the MVP are authored below. Names are wuxia-flavored (Chinese characters in parens for art and text-render reference). Numbers are first-draft tuning targets — they will be revisited during implementation playtesting, but they give the pool a concrete shape.
+
+**A-type — Passive augments (12)**
+
+| # | Name | Effect | Category |
+| --- | --- | --- | --- |
+| A1 | **Descending Leaf (落葉)** | Dash ends in a sword stab dealing 8 damage in a short forward arc. | Movement→Attack |
+| A2 | **Iron Palm (鐵掌)** | Light attacks have a 20% chance to stagger on hit (interrupts enemy wind-up). | Attack |
+| A3 | **Widow's Kiss (寡婦吻)** | Heavy attacks apply a 3-second bleed, dealing 1.5 damage/sec. | Attack |
+| A4 | **Sparrow Wing (雀翼)** | First light attack within 0.6s after a dash has +30% damage. | Movement→Attack |
+| A5 | **Stone Posture (石身勢)** | Blocking reduces incoming damage by an additional 10% (on top of base 80% reduction). | Defense |
+| A6 | **Heart of Bamboo (竹心)** | +15 max posture. | Defense |
+| A7 | **Crane Step (鶴步)** | +15% ground move speed. | Movement |
+| A8 | **Mountain Root (山根)** | Posture recovery rate +25% when not under pressure. | Defense |
+| A9 | **Cloud Hands (雲手)** | Parry window extended from 0.15s to 0.18s. | Defense |
+| A10 | **Twin Dragons (雙龍)** | Heavy attacks now have a follow-through second hit at 50% damage on the same commit animation. | Attack |
+| A11 | **Wind in the Sleeves (袖中風)** | Dash distance +25% and dash cooldown –0.15s. | Movement |
+| A12 | **Inkstone Discipline (墨石定)** | +20 max HP. | Defense |
+
+Pool balance: 4 attack mods (A2, A3, A10, plus A1 hybrid), 5 defense/survivability mods (A5, A6, A8, A9, A12), 3 movement mods (A4, A7, A11), with A1 and A4 straddling the movement↔attack line. Overlap is intentional — dash-into-attack techniques combine across categories instead of siloing.
+
+**B-type — Conditional triggers (6)**
+
+| # | Name | Effect | Trigger |
+| --- | --- | --- | --- |
+| B1 | **Mountain's Echo (山谷回響)** | Your next attack after a successful perfect parry is a guaranteed posture break. | Parry |
+| B2 | **Breath of Returning Spring (回春氣)** | On successful posture break, restore 15 HP. | Posture break |
+| B3 | **Flowing Water (流水意)** | After dashing through an attack (i-frames during enemy hit-active), your next attack heals 5 HP on connect. | Dash-through |
+| B4 | **Thousand-Mile Gaze (千里眼)** | After killing an enemy, gain 3 seconds of +50% move speed. | Kill |
+| B5 | **Scar of the Past (舊傷)** | When below 30% HP, all damage dealt is +25%. | Low-HP state |
+| B6 | **Phoenix Rising (鳳凰起)** | On lethal damage, instead heal to 20% HP and gain 2 seconds of invincibility. Once per run. | Lethal damage (one-shot save) |
+
+Pool balance: parry (B1), posture break (B2), dash (B3), kill (B4), HP-state (B5), lethal save (B6). Every major combat event has a trigger technique attached, so every playstyle finds something that rewards it.
+
+**D-type — Stance swaps (2)**
+
+| # | Name | Effect | Cost / Duration |
+| --- | --- | --- | --- |
+| D1 | **Drunken Form (醉拳)** | Dash becomes an evasive roll with extended i-frames (0.20s → 0.28s). Light attacks become stumbling strikes with unpredictable angles that slip past blocks. Heavy attacks lock you into slower recovery but deal +40% damage and break posture harder. | Costs full rage to activate. Lasts until you take 20 HP of damage. |
+| D2 | **Tiger Stance (虎形)** | Light attacks become clawing three-hit combos at +20% speed. Block costs more posture but reflects 10% damage back to the attacker. Heavy attack becomes a forward leap-strike covering +50% distance. | Costs full rage to activate. Lasts 15 seconds. |
+
+Stance swaps are exclusive: picking a new D replaces the current one. Only one D can be equipped at a time. Rage is the activation gate and is the sole reason the rage meter exists in the MVP.
+
+### Rage — role in MVP
+
+Rage is kept in the MVP **only as the activation gate for D-type techniques**. The meter infrastructure already exists in `WUGodot/scripts/fighter.gd`. Tuning:
+
+- Rage fills from landing hits (~10/hit) and taking hits (~4/hit). Full bar = 100.
+- If no D technique is equipped, the rage bar still fills but serves no purpose. This is acceptable — it's a visual indicator of aggression that becomes meaningful if the player picks up a D-technique later in the run. In future milestones, rage will also gate C-type (active ability) techniques.
+- Parry posture damage and heavy attacks also grant rage (+15 per parry, +8 per heavy landing).
+
 ### Economy
 
 - **Gold** — single currency in MVP. Earned from fights (duel: ~15, elite: ~30, ambush: ~25, boss: ~100). Spent at shops and some events.
 - **Shop pricing** — techniques 20-50g (rarer = more expensive), HP potion 20g (heals 30% max HP), posture potion 15g (heals 50% max posture), remove-technique 25g (removes a technique from your loadout — lets you cut dead weight).
-- **No qi/mana in MVP.** Rage is the only meta-resource and only exists if D techniques ship.
+- **No qi/mana in MVP.** Rage is the only meta-resource and its sole purpose is gating D-type techniques.
 
 ### Synergies
 
@@ -267,13 +303,13 @@ Enemy content load: 5 archetypes × ~4 attacks each × ~4-6 frames per attack ph
 
 ### Boss (1 for MVP)
 
-**"The Smiling Blade" — Zhao Feng (笑刀 赵锋)**
-A former sect elder turned jianghu mercenary. Wears a wide straw hat that shadows his face except for a perpetual smile. His signature move is *Thousand-Mile Slash*, a long-range thrust that lunges half the screen.
+**"Iron Bear" — Xiong Tie (熊鐵)**
+A massive former bandit chieftain turned warlord of a stretch of jianghu road. His surname 熊 means "bear" and his given name 鐵 means "iron" — his nickname "Iron Bear" emerges from the characters themselves. Bare-chested under an open robe, a heavy iron staff across his shoulders, a scar running diagonally across his ribs. Slow, deliberate, crushing — the opposite of the precise duelist. Where most Chapter 1 enemies test your parry timing, Xiong Tie forces you to respect *space* and *commitment* — he cannot be traded with, and many of his attacks must be dashed, not parried.
 
-- **2 phases.** Phase 1 at 100% HP, phase 2 triggers at 50% HP (dialog beat: *"You're better than I thought. Let me try."*).
+- **2 phases.** Phase 1 at 100% HP, phase 2 triggers at 50% HP. At phase transition he shrugs off his robe, roars, and his attack recovery shortens by ~20%. Dialog beat: *"You still breathe. Good. I was just warming up."*
 - **6 attack patterns total** across both phases (4 in P1, 4 in P2, 2 shared).
-- **1 unparryable grab** — if it connects, it deals 25% max HP damage (meaningful but not instant-kill). Teaches the player: some attacks can't be parried.
-- **Signature move: Thousand-Mile Slash.** Long wind-up (0.6s), screen-covering thrust, unblockable, must be dashed. Used once per phase.
+- **1 unparryable grab — "Bear Crush."** A wide-reach lunging grab that, if it connects, deals 25% max HP damage (meaningful but not instant-kill). Red-flash telegraph. Teaches the player: some attacks can't be parried.
+- **Signature move — "Mountain-Breaker Stance (破山勢)."** Xiong Tie plants his feet wide, roars, and lunges in a shoulder-charge across half the screen. Unblockable, unparryable, must be dashed. Long wind-up (~0.7s) with a distinctive low-stance silhouette. Used once per phase.
 - **Fight length:** 3-5 minutes.
 - **Reward:** 100 gold + guaranteed legendary technique (drawn from a special pool of ~4 "boss legendary" techniques that only drop here).
 
@@ -290,7 +326,7 @@ Boss content load: ~40-60 silhouette frames.
 | **Event** | 2-3 per map | Story choice with outcome. |
 | **Shop** | 1-2 per map | Spend gold on stock. |
 | **Rest** | 1-2 per map | Heal 30% HP or upgrade a technique. |
-| **Boss** | 1 (end of chapter) | Zhao Feng, 2-phase duel. |
+| **Boss** | 1 (end of chapter) | Xiong Tie ("Iron Bear"), 2-phase duel. |
 
 Generated map has ~15 nodes and ~4 paths. Any one player path visits ~7-8 nodes including the boss. Map generation should guarantee: at least 1 master node reachable on every path, at least 1 rest node reachable on every path, boss always reachable.
 
@@ -353,15 +389,16 @@ This is a *real* MVP content load but it's scoped to be shippable. Everything la
 4. Input buffering (0.15s).
 5. Animation-frame-event-driven hit windows (refactor from current parallel-timer approach in `combat_system.gd`).
 6. Posture system (kept; already implemented).
-7. Rage system (kept as the activation gate for D-type techniques; if D techniques get cut from MVP, remove rage entirely).
-8. 5 enemy archetypes + 1 boss as specified in Section D.
-9. 20 techniques (12 A-type, 6 B-type, 2 D-type) + acquisition flow.
+7. Rage system (confirmed IN — serves as the activation gate for the 2 D-type techniques).
+8. 5 enemy archetypes + 1 boss ("Iron Bear" Xiong Tie) as specified in Section D.
+9. 20 techniques authored in Section C (12 A-type, 6 B-type, 2 D-type) + acquisition flow.
 10. Gold economy + shop node type.
 11. 6 events.
 12. Silhouette art for all characters, enemies, boss, arena backgrounds.
 13. Combat SFX (impact, whoosh, parry, break, footstep, etc.) and 2 music loops (combat + ambient).
 14. Single playable character (Hu) with no character select.
-15. Full run flow: main menu → start run → Chapter 1 map → combat/events → reward → map → boss → victory/defeat → restart.
+15. Keyboard input only.
+16. Full run flow: main menu → start run → Chapter 1 map → combat/events → reward → map → boss → victory/defeat → restart.
 
 ### What is explicitly OUT of MVP
 
@@ -381,6 +418,8 @@ This is a *real* MVP content load but it's scoped to be shippable. Everything la
 | Explicit synergy-aware techniques | Implicit synergies first | Milestone 4 or later |
 | Active-ability techniques with cooldowns (C-type) | Adds new button + new resource | Milestone 5 (with cultivation) |
 | Reroll option in shops | Adds an extra economy layer | Growth |
+| Tutorial node / forced-parry onboarding | Trust players to learn through pattern repetition | Never (by design) |
+| Controller / gamepad support | Keyboard-only MVP; input abstraction is straightforward to add later | Post-Milestone 1 polish |
 
 ### Growth ladder (ordered post-MVP milestones)
 
@@ -470,7 +509,7 @@ These are the things that require playtesting, not design. They belong in the im
 - Implement shop system.
 - Add heavy-attack, block-held, and dash-direction handling to player input.
 - Add color-coded attack telegraph VFX (silver for parryable, red for perilous).
-- Add the `Rage` consumption for D-type techniques (or remove rage if D cut).
+- Add `Rage` consumption for the 2 D-type stance-swap techniques (Drunken Form, Tiger Stance).
 
 **Code changes this design will NOT require** (things already in good shape):
 - The JSON data loading pipeline (`data_manager.gd`) — reuse it for new data types.
@@ -482,14 +521,14 @@ These are the things that require playtesting, not design. They belong in the im
 
 ---
 
-## Open questions for user review
+## Decisions resolved during user review (2026-04-11)
 
-Before this spec is ready to become an implementation plan, the following are worth the user confirming:
+Five open questions from the first draft of this spec were resolved in review:
 
-1. **Rage in/out of MVP?** Keep rage as a meaningful D-technique resource, or drop rage for MVP and re-add in Milestone 5 with qi? Recommendation: **keep** and ship 2 D-techniques that use it.
-2. **Specific MVP technique flavors?** The examples given in Section C are placeholders for flavor. A full pool of 20 named techniques needs to be authored during implementation — is there interest in drafting the pool names/effects now as part of the spec, or leave it to implementation?
-3. **Chapter 1 boss name.** "The Smiling Blade — Zhao Feng" is a placeholder. Do you have an existing named character from your wuxia inspiration, or is this a place to invent one fresh?
-4. **Single chapter or opening tutorial?** Does Chapter 1's first node need to be a "tutorial duel" that forces the player to use parry once successfully, or should we trust players to learn from Master encounters and event text alone? Recommendation: **trust players** — modern roguelikes generally don't hard-tutorial, and a tutorial node adds scope. But if you prefer a gentle guide, we flag it.
-5. **Input device support in MVP.** Current code is keyboard-only. Should MVP include controller support, or is that post-MVP polish?
+1. **Rage in MVP.** Rage is kept as the activation gate for the 2 D-type techniques shipping in MVP (Drunken Form and Tiger Stance). Section B's resource table and Section C's technique list reflect this.
+2. **Full 20-technique pool authored now.** The complete named list (A1–A12, B1–B6, D1–D2) is in Section C as part of the spec, not deferred to implementation. Naming and effects are locked at the design level; exact numbers will be tuned during playtesting.
+3. **Chapter 1 boss is "Iron Bear" — Xiong Tie (熊鐵).** A brute-force warlord with crushing heavy attacks, contrasting the precise duelists that fill the rest of Chapter 1. Section D describes the fight.
+4. **No tutorial node in MVP.** Players learn through pattern repetition, the same way Sekiro and modern roguelikes teach. "Tutorial node / forced-parry onboarding" is listed in the OUT-of-MVP table with the note "Never (by design)."
+5. **Keyboard input only in MVP.** Controller / gamepad support is post-MVP polish, slotted after Milestone 1. Listed in the OUT-of-MVP table.
 
-Once these are resolved, the spec is implementation-ready and we can move to writing the implementation plan.
+With these decisions locked, the spec is implementation-ready. Next step: invoke `superpowers:writing-plans` to convert this into a phased implementation plan.
