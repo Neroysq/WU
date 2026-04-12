@@ -9,17 +9,17 @@ const GROUND_Y: float = 940.0
 const WORLD_BOUNDS_LEFT: float = 80.0
 const WORLD_BOUNDS_RIGHT: float = VIEW_WIDTH - 80.0
 
-const DEFAULT_MOVE_SPEED: float = 420.0
+const DEFAULT_MOVE_SPEED: float = 320.0
 const DEFAULT_ATTACK_RANGE: float = 72.0
 const DEFAULT_ATTACK_DAMAGE: float = 12.0
 const DEFAULT_POSTURE_DAMAGE: float = 22.0
 
-const ATTACK_DURATION: float = 0.35
-const ATTACK_ACTIVE_START: float = 0.10
-const ATTACK_ACTIVE_END: float = 0.18
-const DASH_DURATION: float = 0.16
-const DASH_COOLDOWN: float = 0.60
-const PARRY_WINDOW: float = 0.12
+const DASH_DURATION: float = 0.22
+const DASH_COOLDOWN: float = 0.80
+const DASH_STARTUP_END: float = 0.04
+const DASH_IFRAME_END: float = 0.18
+const DASH_RECOVERY_END: float = 0.22
+const PARRY_WINDOW: float = 0.15
 const STUN_DURATION: float = 0.7
 
 const DEFAULT_HEALTH_MAX: float = 100.0

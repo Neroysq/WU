@@ -1,11 +1,14 @@
 class_name CombatSystem
 extends RefCounted
 
+const AttackCatalogScript = preload("res://scripts/attack_catalog.gd")
+
 signal spawn_particles(position: Vector2, count: int, color: Color)
 signal camera_shake(amount: float)
 signal slow_motion(factor: float, duration: float)
 signal show_feedback(message: String, duration: float)
 signal damage_dealt(position: Vector2, damage: float, is_critical: bool)
+signal hitstop(duration: float)
 
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
@@ -47,9 +50,14 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 		emit_signal("spawn_particles", fighter.position, 8, Color8(200, 200, 255))
 		emit_signal("camera_shake", 3.0)
 
-	if bool(input_state.get("attack_pressed", false)) and fighter.can_attack():
-		fighter.start_attack()
-		var attack_pos: Vector2 = Vector2(fighter.position.x + float(fighter.facing) * fighter.half_width, fighter.position.y - fighter.height * 0.4)
+	var attack_pos: Vector2 = Vector2(fighter.position.x + float(fighter.facing) * fighter.half_width, fighter.position.y - fighter.height * 0.4)
+	if bool(input_state.get("heavy_pressed", false)) and fighter.can_attack():
+		fighter.start_heavy_attack()
+		emit_signal("spawn_particles", attack_pos, 16, Color8(240, 220, 255))
+		emit_signal("camera_shake", 4.5)
+		emit_signal("show_feedback", "HEAVY", 0.4)
+	elif bool(input_state.get("light_pressed", false)) and fighter.can_attack():
+		fighter.start_light_attack()
 		var particle_count: int = 6 + fighter.combo_count * 2
 		var attack_color: Color = Color8(255, 180, 100) if fighter.combo_count > 2 else Color8(255, 255, 200)
 		emit_signal("spawn_particles", attack_pos, particle_count, attack_color)
@@ -70,6 +78,9 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 	elif (not fighter.is_blocking) and was_blocking and fighter.current_animation == Fighter.AnimationState.BLOCKING:
 		fighter.current_animation = Fighter.AnimationState.IDLE
 		fighter.animation_timer = 0.0
+
+	if bool(input_state.get("stance_pressed", false)):
+		fighter.on_stance_input()
 
 	if not fighter.is_grounded:
 		fighter.velocity.y += fighter.gravity * dt
@@ -120,9 +131,10 @@ func update_ai(ai: Fighter, target: Fighter, dt: float) -> void:
 			else:
 				ai.velocity.x = lerp(ai.velocity.x, 0.0, 0.3)
 
-			var attack_chance: float = 0.25 * aggression_multiplier
-			if ai.can_attack() and _rng.randf() < attack_chance:
-				ai.start_telegraph()
+			if ai.can_attack() and ai._ai_decision_timer <= 0.0 and _rng.randf() < 0.25 * aggression_multiplier:
+				var next_attack: Variant = AttackCatalogScript.bandit_thrust_perilous() if _rng.randf() < 0.30 else AttackCatalogScript.bandit_slash()
+				ai._start_attack_with(next_attack)
+				ai._ai_decision_timer = 0.25
 
 			if target.is_hit_active() and _rng.randf() < 0.4:
 				ai.is_blocking = true
@@ -130,10 +142,8 @@ func update_ai(ai: Fighter, target: Fighter, dt: float) -> void:
 			else:
 				ai.is_blocking = false
 
-	if ai.is_telegraphing and ai.telegraph_timer <= 0.0:
-		ai.start_attack()
-		if ai.combo_count > 0 and _rng.randf() < 0.3 * aggression_multiplier:
-			ai.combo_window = 0.4
+	if ai._attack_state.is_active() and ai._attack_state.elapsed < 0.01 and ai.combo_count > 0 and _rng.randf() < 0.3 * aggression_multiplier:
+		ai.combo_window = 0.4
 
 	if not ai.is_grounded:
 		ai.velocity.y += ai.gravity * dt
@@ -156,17 +166,21 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 	if defender.is_invulnerable:
 		return
 
-	var in_range: bool = absf(defender.position.x - attacker.position.x) <= attacker.attack_range + defender.half_width
+	var attack_def: Variant = attacker._attack_state.def
+	var attack_is_perilous: bool = attack_def != null and not attack_def.is_parryable
+	var attack_range: float = attack_def.range_units if attack_def != null else attacker.attack_range
+
+	var in_range: bool = absf(defender.position.x - attacker.position.x) <= attack_range + defender.half_width
 	var vertical_range: bool = absf(defender.position.y - attacker.position.y) <= defender.height + 20.0
 	var facing_correct: bool = (-1 if defender.position.x - attacker.position.x < 0.0 else 1) == attacker.facing
 
 	if in_range and vertical_range and facing_correct and not attacker.was_hit_this_swing:
 		attacker.was_hit_this_swing = true
 
-		if defender.consume_parry_if_active():
+		if defender.consume_parry_if_active() and not attack_is_perilous:
 			attacker.apply_posture_damage(float(settings.get("parryPostureDamage", 55.0)))
 			attacker.apply_stun(float(settings.get("parryStunDuration", 0.6)))
-			defender.gain_rage(12.0)
+			defender.gain_rage(15.0)
 			emit_signal("camera_shake", 12.0)
 
 			var parry_pos: Vector2 = defender.position + Vector2(float(defender.facing) * -6.0, -defender.height + 24.0)
@@ -176,34 +190,50 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 				emit_signal("spawn_particles", spark_pos, 2, Color8(255, 230, 90))
 
 			emit_signal("slow_motion", 0.55, 0.30)
+			emit_signal("hitstop", 0.15)
 			emit_signal("show_feedback", "PARRY!", 0.8)
 			return
 
 		var combo_damage_bonus: float = 1.0 + float(attacker.combo_count - 1) * 0.15
-		var hp_damage: float = attacker.attack_damage * combo_damage_bonus
-		var posture_damage: float = attacker.attack_posture_damage * combo_damage_bonus
+		var hp_damage: float = (attack_def.damage if attack_def != null else attacker.attack_damage) * combo_damage_bonus
+		var posture_damage: float = (attack_def.posture_damage if attack_def != null else attacker.attack_posture_damage) * combo_damage_bonus
 
-		if defender.is_blocking:
+		if defender.is_blocking and not attack_is_perilous:
 			hp_damage *= float(settings.get("blockHealthMultiplier", 0.2))
 			posture_damage *= float(settings.get("blockPostureMultiplier", 1.6))
 			defender.gain_rage(6.0)
 			emit_signal("show_feedback", "BLOCKED", 0.5)
+		elif defender.is_blocking and attack_is_perilous:
+			emit_signal("show_feedback", "UNBLOCKABLE!", 0.6)
 		else:
 			emit_signal("show_feedback", "HIT", 0.3)
 
 		defender.health_current -= hp_damage
+
+		var will_posture_break: bool = (defender.posture_current - posture_damage) <= 0.0 and not defender.is_stunned
 		defender.apply_posture_damage(posture_damage)
 
+		if will_posture_break:
+			emit_signal("hitstop", 0.18)
+			emit_signal("camera_shake", 18.0)
+			emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height), 24, Color8(255, 220, 60))
+			emit_signal("show_feedback", "破", 0.9)
+
 		var damage_pos: Vector2 = defender.position + Vector2(0.0, -defender.height - 20.0)
-		var is_critical: bool = attacker.combo_count > 2
+		var is_critical: bool = attacker.combo_count > 2 or (attack_def != null and attack_def.is_heavy)
 		emit_signal("damage_dealt", damage_pos, hp_damage, is_critical)
 
-		var knockback: float = 150.0 if defender.is_blocking else 300.0
+		var base_knockback: float = attack_def.knockback_units if attack_def != null else 300.0
+		if defender.is_blocking and not attack_is_perilous:
+			base_knockback *= 0.5
 		if not defender.is_grounded:
-			knockback *= 1.3
-		defender.velocity = Vector2(float(attacker.facing) * knockback, -100.0 if defender.is_grounded else defender.velocity.y - 200.0)
+			base_knockback *= 1.3
+		defender.velocity = Vector2(float(attacker.facing) * base_knockback, -100.0 if defender.is_grounded else defender.velocity.y - 200.0)
 
-		attacker.gain_rage(10.0 + attacker.combo_count * 2.0)
+		var attacker_rage_gain: float = 10.0
+		if attack_def != null and attack_def.is_heavy:
+			attacker_rage_gain += 8.0
+		attacker.gain_rage(attacker_rage_gain)
 		defender.gain_rage(4.0)
 
 		if not defender.is_stunned:
@@ -212,7 +242,9 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 
 		defender.health_current = maxf(defender.health_current, 0.0)
 
-		emit_signal("camera_shake", 6.0)
+		var shake_amount: float = 12.0 if (attack_def != null and attack_def.is_heavy) else 4.0
+		emit_signal("camera_shake", shake_amount)
+		emit_signal("hitstop", 0.10 if (attack_def != null and attack_def.is_heavy) else 0.05)
 		emit_signal("spawn_particles", defender.position + Vector2(float(defender.facing) * -4.0, -defender.height + 28.0), 10, Color8(255, 190, 160))
 
 func update_facing(player: Fighter, enemy: Fighter) -> void:

@@ -1,6 +1,9 @@
 class_name CombatScene
 extends Node2D
 
+const CombatDebugOverlayScript = preload("res://scripts/combat_debug_overlay.gd")
+const InputBufferScript = preload("res://scripts/input_buffer.gd")
+
 signal combat_end(victory: bool)
 
 var _player: Fighter
@@ -18,13 +21,18 @@ var _enemy_visual: FighterVisual
 var _is_paused_on_end: bool = false
 var _end_message: String = ""
 var _time_scale: float = 1.0
-var _time_scale_recover_timer: float = 0.0
+var _hitstop_timer: float = 0.0
+var _slow_mo_timer: float = 0.0
+var _slow_mo_factor: float = 1.0
 var _feedback_message: String = ""
 var _feedback_timer: float = 0.0
 var _is_paused: bool = false
 var _debug_enabled: bool = false
+var _heavy_committed_attack: bool = false
 
 var _input_tracker: InputTracker = InputTracker.new()
+var _input_buffer: Variant = InputBufferScript.new()
+var _debug_overlay: Variant = CombatDebugOverlayScript.new()
 
 func _ready() -> void:
 	_combat_system = CombatSystem.new()
@@ -40,6 +48,7 @@ func _ready() -> void:
 	_combat_system.slow_motion.connect(_trigger_slow_mo)
 	_combat_system.show_feedback.connect(_show_feedback)
 	_combat_system.damage_dealt.connect(_on_damage_dealt)
+	_combat_system.hitstop.connect(_trigger_hitstop)
 
 	set_process(false)
 	visible = false
@@ -51,13 +60,12 @@ func setup_combat(player: Fighter, node: MapNode) -> void:
 	_player_visual.configure(DataManager.get_visual_profile(_player.visual_profile_id), _player)
 	_enemy_visual.configure(DataManager.get_visual_profile(_enemy.visual_profile_id), _enemy)
 
+	_player.reset_for_combat()
+	_enemy.reset_for_combat()
 	_player.position = Vector2(360.0, GameConstants.GROUND_Y)
-	_player.velocity = Vector2.ZERO
-	_player.is_stunned = false
-	_player.is_blocking = false
-	_player.was_hit_this_swing = false
-	_player.combo_window = 0.0
-	_player.combo_count = 0
+	_enemy.position = Vector2(1560.0, GameConstants.GROUND_Y)
+	_player.facing = 1
+	_enemy.facing = -1
 
 	_is_paused_on_end = false
 	_end_message = ""
@@ -65,13 +73,17 @@ func setup_combat(player: Fighter, node: MapNode) -> void:
 	_feedback_message = ""
 	_feedback_timer = 0.0
 	_time_scale = 1.0
-	_time_scale_recover_timer = 0.0
+	_hitstop_timer = 0.0
+	_slow_mo_timer = 0.0
+	_slow_mo_factor = 1.0
+	_heavy_committed_attack = false
 
 	_particle_system.clear()
 	_damage_number_system.clear()
 	_camera.reset()
 
 	_input_tracker.clear()
+	_input_buffer.clear()
 	_sync_input_tracker()
 
 	visible = true
@@ -80,7 +92,9 @@ func setup_combat(player: Fighter, node: MapNode) -> void:
 
 func on_enter() -> void:
 	_time_scale = 1.0
-	_time_scale_recover_timer = 0.0
+	_hitstop_timer = 0.0
+	_slow_mo_timer = 0.0
+	_slow_mo_factor = 1.0
 
 func on_exit() -> void:
 	_particle_system.clear()
@@ -108,9 +122,18 @@ func _process(delta: float) -> void:
 		queue_redraw()
 		return
 
-	if _time_scale_recover_timer > 0.0:
-		_time_scale_recover_timer -= delta
-		_time_scale = lerp(_time_scale, 1.0, GameConstants.TIME_SCALE_RECOVERY)
+	if _hitstop_timer > 0.0:
+		_hitstop_timer -= delta
+		_time_scale = 0.0
+	elif _slow_mo_timer > 0.0:
+		_slow_mo_timer -= delta
+		_time_scale = _slow_mo_factor
+	else:
+		if _time_scale < 1.0:
+			_time_scale = lerp(_time_scale, 1.0, GameConstants.TIME_SCALE_RECOVERY)
+			if _time_scale > 0.99:
+				_time_scale = 1.0
+		_slow_mo_factor = 1.0
 
 	var dt: float = delta * _time_scale
 
@@ -122,6 +145,10 @@ func _process(delta: float) -> void:
 		return
 
 	_combat_system.update_facing(_player, _enemy)
+
+	var attack_key: int = int(_player.controls.get("attack", KEY_J))
+	_input_tracker.update_hold_timers([attack_key], delta)
+	_input_buffer.advance(delta)
 
 	var input_state: Dictionary = _build_player_input()
 	_combat_system.update_player(_player, input_state, dt, _enemy)
@@ -157,6 +184,41 @@ func _build_player_input() -> Dictionary:
 	var dash_key: int = int(_player.controls.get("dash", KEY_SPACE))
 	var attack_key: int = int(_player.controls.get("attack", KEY_J))
 	var block_key: int = int(_player.controls.get("block", KEY_K))
+	var stance_key: int = int(_player.controls.get("stance", KEY_NONE))
+
+	if _input_tracker.pressed_key(jump_key):
+		_input_buffer.record("jump")
+	if _input_tracker.pressed_key(dash_key):
+		_input_buffer.record("dash")
+	if _input_tracker.pressed_key(block_key):
+		_input_buffer.record("parry")
+	if stance_key != KEY_NONE and _input_tracker.pressed_key(stance_key):
+		_input_buffer.record("stance")
+
+	var attack_press_edge: bool = _input_tracker.pressed_key(attack_key)
+	var attack_release_edge: bool = _input_tracker.released_key(attack_key)
+	var attack_held: bool = Input.is_key_pressed(attack_key)
+	var attack_hold: float = _input_tracker.hold_duration(attack_key)
+
+	if attack_press_edge:
+		_heavy_committed_attack = false
+
+	if attack_held and attack_hold >= 0.25 and not _heavy_committed_attack:
+		_input_buffer.record("heavy")
+		_heavy_committed_attack = true
+
+	if attack_release_edge and not _heavy_committed_attack:
+		_input_buffer.record("light")
+	if attack_release_edge:
+		_heavy_committed_attack = false
+
+	var can_act_now: bool = _player.can_attack()
+	var jump_pressed: bool = _input_buffer.consume("jump") if _player.can_jump() else false
+	var dash_pressed: bool = _input_buffer.consume("dash") if _player.can_dash() else false
+	var parry_pressed: bool = _input_buffer.consume("parry")
+	var light_pressed: bool = _input_buffer.consume("light") if can_act_now else false
+	var heavy_pressed: bool = _input_buffer.consume("heavy") if can_act_now else false
+	var stance_pressed: bool = _input_buffer.consume("stance")
 
 	var left_down: bool = Input.is_key_pressed(left_key)
 	var right_down: bool = Input.is_key_pressed(right_key)
@@ -168,11 +230,15 @@ func _build_player_input() -> Dictionary:
 
 	return {
 		"move": move,
-		"jump_pressed": _input_tracker.pressed_key(jump_key),
-		"dash_pressed": _input_tracker.pressed_key(dash_key),
-		"attack_pressed": _input_tracker.pressed_key(attack_key),
-		"block_pressed": _input_tracker.pressed_key(block_key),
+		"jump_pressed": jump_pressed,
+		"dash_pressed": dash_pressed,
+		"light_pressed": light_pressed,
+		"heavy_pressed": heavy_pressed,
+		"block_pressed": parry_pressed,
 		"block_down": Input.is_key_pressed(block_key),
+		"stance_pressed": stance_pressed,
+		"attack_holding": attack_held,
+		"attack_hold_duration": attack_hold,
 	}
 
 func _draw() -> void:
@@ -215,8 +281,11 @@ func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 	var visual: FighterVisual = _get_visual_for(fighter)
 	var body_rect: Rect2 = visual.get_body_rect(fighter, camera_offset)
 
-	if fighter.is_telegraphing:
-		var intensity: float = 0.5 + 0.5 * absf(sin(fighter.telegraph_timer * 15.0))
+	var telegraph_color: Color = fighter.current_telegraph_color()
+	if telegraph_color.a > 0.0:
+		var def: Variant = fighter._attack_state.def
+		var windup_progress: float = clampf(fighter._attack_state.elapsed / maxf(def.windup_end, 0.001), 0.0, 1.0)
+		var intensity: float = 0.4 + 0.6 * windup_progress
 		for size in range(1, 5):
 			var outline: Rect2 = Rect2(
 				body_rect.position.x - size * 2.0,
@@ -224,8 +293,8 @@ func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 				body_rect.size.x + size * 4.0,
 				body_rect.size.y + size * 4.0
 			)
-			var alpha: int = int(80.0 * intensity / float(size))
-			draw_rect(outline, Color8(255, 50, 50, alpha), false)
+			var flash_color: Color = Color(telegraph_color.r, telegraph_color.g, telegraph_color.b, telegraph_color.a * intensity / float(size))
+			draw_rect(outline, flash_color, false)
 
 	if fighter.is_invulnerable:
 		var pulse: float = sin(fighter.animation_timer * 20.0) * 0.5 + 0.5
@@ -255,8 +324,9 @@ func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 
 	if fighter.is_hit_active():
 		var weapon_start: Vector2 = Vector2(fighter.position.x + float(fighter.facing) * fighter.half_width, fighter.position.y - fighter.height * 0.4) + camera_offset
-		var weapon_end: Vector2 = weapon_start + Vector2(float(fighter.facing) * fighter.attack_range, 0.0)
-		var slash_color: Color = Color8(255, 198, 120, 180) if fighter.combo_count > 2 else Color8(200, 220, 255, 140)
+		var weapon_end: Vector2 = weapon_start + Vector2(float(fighter.facing) * fighter.current_attack_range(), 0.0)
+		var attack_def: Variant = fighter._attack_state.def
+		var slash_color: Color = Color8(255, 198, 120, 180) if attack_def != null and attack_def.is_heavy else Color8(200, 220, 255, 140)
 		draw_line(weapon_start, weapon_end, slash_color, 3.0)
 		if fighter.combo_count > 1:
 			for trail in range(1, fighter.combo_count + 1):
@@ -281,7 +351,7 @@ func _draw_hud() -> void:
 	_draw_bars(_player, 34, 36, false)
 	_draw_bars(_enemy, GameConstants.VIEW_WIDTH / 2 + 34, 36, true)
 
-	_draw_text("A/D move  W jump  J attack  K block/parry  Space dash  P pause  R restart", 36, 128, Color8(170, 170, 186), 14)
+	_draw_text("A/D move  W jump  J tap/hold  K block/parry  Space dash  L stance  P pause  R restart", 36, 128, Color8(170, 170, 186), 14)
 
 func _draw_bars(fighter: Fighter, x: int, y: int, mirror: bool) -> void:
 	var width: int = GameConstants.VIEW_WIDTH / 2 - 76
@@ -371,12 +441,7 @@ func _draw_pause_indicator() -> void:
 	_draw_text("Press P to resume | ` for debug | R to restart", GameConstants.VIEW_WIDTH * 0.5 - 185.0, GameConstants.VIEW_HEIGHT * 0.5 + 10.0, Color.LIGHT_GRAY, 14)
 
 func _draw_debug_overlay() -> void:
-	draw_rect(Rect2(14, 14, 460, 138), Color(0, 0, 0, 0.55), true)
-	_draw_text("DEBUG", 24, 34, Color.LIME_GREEN, 18)
-	_draw_text("Player: HP %.1f  PST %.1f  Rage %.1f  State %s" % [_player.health_current, _player.posture_current, _player.rage_current, Fighter.AnimationState.keys()[_player.current_animation]], 24, 58, Color.WHITE, 14)
-	_draw_text("Enemy:  HP %.1f  PST %.1f  Rage %.1f  State %s" % [_enemy.health_current, _enemy.posture_current, _enemy.rage_current, Fighter.AnimationState.keys()[_enemy.current_animation]], 24, 80, Color.WHITE, 14)
-	_draw_text("Player Pos %.0f,%.0f  Vel %.0f,%.0f" % [_player.position.x, _player.position.y, _player.velocity.x, _player.velocity.y], 24, 102, Color.LIGHT_BLUE, 13)
-	_draw_text("Enemy Pos %.0f,%.0f  Vel %.0f,%.0f" % [_enemy.position.x, _enemy.position.y, _enemy.velocity.x, _enemy.velocity.y], 24, 122, Color.LIGHT_CORAL, 13)
+	_debug_overlay.draw(self, _player, _enemy, _input_buffer)
 
 func _draw_text(text: String, x: float, y: float, color: Color, size: int = 16) -> void:
 	var font: Font = ThemeDB.fallback_font
@@ -393,9 +458,8 @@ func _measure_text(text: String, size: int = 16) -> int:
 func _sync_input_tracker() -> void:
 	var keys: Array[int] = [KEY_QUOTELEFT, KEY_P, KEY_ENTER, KEY_J]
 	if _player != null:
-		var control_keys: Array[String] = ["left", "right", "attack", "block", "dash", "jump"]
-		for control in control_keys:
-			var key: int = int(_player.controls.get(control, KEY_NONE))
+		for control_name in _player.controls.keys():
+			var key: int = int(_player.controls[control_name])
 			if key != KEY_NONE and not keys.has(key):
 				keys.append(key)
 	_input_tracker.sync_keys(keys)
@@ -410,8 +474,11 @@ func _on_damage_dealt(position: Vector2, damage: float, is_critical: bool) -> vo
 	_damage_number_system.spawn_damage_number(position, damage, false, is_critical)
 
 func _trigger_slow_mo(factor: float, duration: float) -> void:
-	_time_scale = clampf(factor, 0.3, 1.0)
-	_time_scale_recover_timer = maxf(_time_scale_recover_timer, duration)
+	_slow_mo_factor = clampf(factor, 0.0, 1.0)
+	_slow_mo_timer = maxf(_slow_mo_timer, duration)
+
+func _trigger_hitstop(duration: float) -> void:
+	_hitstop_timer = maxf(_hitstop_timer, duration)
 
 func _show_feedback(message: String, duration: float) -> void:
 	_feedback_message = message

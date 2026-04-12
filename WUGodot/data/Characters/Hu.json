@@ -3,7 +3,7 @@
   "description": "Tiger - Balanced warrior with strong fundamentals",
   "visualProfile": "player_humanoid",
   
-  "moveSpeed": 420.0,
+  "moveSpeed": 320.0,
   "jumpForce": 750.0,
   "gravity": 2800.0,
   "dashSpeed": 1100.0,
@@ -17,13 +17,10 @@
   "attackDamage": 12.0,
   "attackPostureDamage": 22.0,
   "attackRange": 72.0,
-  "attackDuration": 0.35,
-  "attackActiveStart": 0.10,
-  "attackActiveEnd": 0.18,
   
-  "dashDuration": 0.16,
-  "dashCooldown": 0.60,
-  "parryWindow": 0.12,
+  "dashDuration": 0.22,
+  "dashCooldown": 0.80,
+  "parryWindow": 0.15,
   "stunDuration": 0.7,
   "comboWindow": 0.5,
   

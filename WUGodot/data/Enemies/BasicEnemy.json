@@ -15,10 +15,6 @@
   "attackDamage": 10.0,
   "attackPostureDamage": 24.0,
   "attackRange": 68.0,
-  "attackDuration": 0.62,
-  "attackActiveStart": 0.30,
-  "attackActiveEnd": 0.48,
-  "telegraphDuration": 0.55,
   
   "aggressionLevel": 0.5,
   "reactionTime": 0.3,

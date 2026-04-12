@@ -1,6 +1,10 @@
 class_name Fighter
 extends RefCounted
 
+const AttackCatalogScript = preload("res://scripts/attack_catalog.gd")
+const AttackDefinitionScript = preload("res://scripts/attack_definition.gd")
+const AttackStateScript = preload("res://scripts/attack_state.gd")
+
 enum AnimationState {
 	IDLE,
 	WALKING,
@@ -88,9 +92,7 @@ var rage_current: float:
 var attack_range: float = GameConstants.DEFAULT_ATTACK_RANGE
 var attack_damage: float = GameConstants.DEFAULT_ATTACK_DAMAGE
 var attack_posture_damage: float = GameConstants.DEFAULT_POSTURE_DAMAGE
-var attack_duration: float = GameConstants.ATTACK_DURATION
-var attack_active_start: float = GameConstants.ATTACK_ACTIVE_START
-var attack_active_end: float = GameConstants.ATTACK_ACTIVE_END
+var _attack_state: Variant = AttackStateScript.new()
 
 var dash_duration: float = GameConstants.DASH_DURATION
 var dash_cooldown: float = GameConstants.DASH_COOLDOWN
@@ -104,11 +106,8 @@ var posture_recovery_rate: float = GameConstants.POSTURE_RECOVERY_RATE
 
 var is_blocking: bool = false
 var is_stunned: bool = false
-var is_telegraphing: bool = false
 var was_hit_this_swing: bool = false
 
-var telegraph_timer: float = 0.0
-var telegraph_duration: float = 0.35
 var combo_window: float = 0.0
 var combo_count: int = 0
 
@@ -119,9 +118,9 @@ var controls: Dictionary = {
 	"block": KEY_K,
 	"dash": KEY_SPACE,
 	"jump": KEY_W,
+	"stance": KEY_L,
 }
 
-var _attack_timer: float = 0.0
 var _attack_cooldown: float = 0.0
 var _dash_timer: float = 0.0
 var _dash_cooldown: float = 0.0
@@ -129,7 +128,30 @@ var _parry_timer: float = 0.0
 var _stun_timer: float = 0.0
 var _jump_cooldown: float = 0.0
 var _landing_recovery: float = 0.0
-var _iframe_timer: float = 0.0
+var _ai_decision_timer: float = 0.0
+
+func reset_for_combat() -> void:
+	velocity = Vector2.ZERO
+	animation_offset = Vector2.ZERO
+	animation_timer = 0.0
+	current_animation = AnimationState.IDLE
+	is_grounded = true
+	has_double_jump = false
+	is_invulnerable = false
+	is_blocking = false
+	is_stunned = false
+	was_hit_this_swing = false
+	combo_window = 0.0
+	combo_count = 0
+	_attack_state.clear()
+	_attack_cooldown = 0.0
+	_dash_timer = 0.0
+	_dash_cooldown = 0.0
+	_parry_timer = 0.0
+	_stun_timer = 0.0
+	_jump_cooldown = 0.0
+	_landing_recovery = 0.0
+	_ai_decision_timer = 0.0
 
 func update_timers(dt: float) -> void:
 	if not is_stunned:
@@ -145,15 +167,13 @@ func update_timers(dt: float) -> void:
 		_jump_cooldown -= dt
 	if _landing_recovery > 0.0:
 		_landing_recovery -= dt
-	if _iframe_timer > 0.0:
-		_iframe_timer -= dt
+	if _ai_decision_timer > 0.0:
+		_ai_decision_timer -= dt
 
 	if combo_window > 0.0:
 		combo_window -= dt
 		if combo_window <= 0.0:
 			combo_count = 0
-
-	is_invulnerable = _iframe_timer > 0.0 or (_dash_timer > 0.0 and _dash_timer > dash_duration * 0.2)
 
 	if is_stunned:
 		_stun_timer -= dt
@@ -161,24 +181,22 @@ func update_timers(dt: float) -> void:
 			is_stunned = false
 			current_animation = AnimationState.IDLE
 
-	if _attack_timer > 0.0:
-		_attack_timer -= dt
-		if _attack_timer <= 0.0:
-			_attack_timer = 0.0
+	if _attack_state.is_active():
+		var events: Dictionary = _attack_state.advance(dt)
+		if bool(events.get("finished", false)):
 			was_hit_this_swing = false
-			current_animation = AnimationState.IDLE
+			if current_animation == AnimationState.ATTACKING:
+				current_animation = AnimationState.IDLE
 
 	if _dash_timer > 0.0:
 		_dash_timer -= dt
 		if _dash_timer <= 0.0:
 			_dash_timer = 0.0
 			velocity.x *= 0.3
-			current_animation = AnimationState.IDLE
+			if current_animation == AnimationState.DASHING:
+				current_animation = AnimationState.IDLE
 
-	if is_telegraphing:
-		telegraph_timer -= dt
-		if telegraph_timer < -1.0:
-			is_telegraphing = false
+	is_invulnerable = _compute_is_invulnerable()
 
 	_update_animation(dt)
 
@@ -187,7 +205,7 @@ func _update_animation(dt: float) -> void:
 
 	match current_animation:
 		AnimationState.ATTACKING:
-			var attack_progress: float = 1.0 - (_attack_timer / maxf(attack_duration, 0.001))
+			var attack_progress: float = _attack_state.progress()
 			animation_offset.x = sin(attack_progress * PI) * 15.0 * float(facing)
 		AnimationState.HIT_REACTION:
 			animation_offset.x = cos(animation_timer * 20.0) * 8.0 * float(-facing)
@@ -221,8 +239,38 @@ func _update_animation(dt: float) -> void:
 		_:
 			animation_offset = animation_offset.lerp(Vector2.ZERO, 0.15)
 
+func _compute_is_invulnerable() -> bool:
+	if _dash_timer <= 0.0:
+		return false
+	var dash_elapsed: float = dash_duration - _dash_timer
+	return dash_elapsed >= GameConstants.DASH_STARTUP_END and dash_elapsed < GameConstants.DASH_IFRAME_END
+
+func dash_phase_label() -> String:
+	if _dash_timer <= 0.0:
+		return "idle"
+	var dash_elapsed: float = dash_duration - _dash_timer
+	if dash_elapsed < GameConstants.DASH_STARTUP_END:
+		return "startup"
+	if dash_elapsed < GameConstants.DASH_IFRAME_END:
+		return "iframes"
+	return "recovery"
+
+func current_attack_range() -> float:
+	if _attack_state.is_active() and _attack_state.def != null:
+		return _attack_state.def.range_units
+	return attack_range
+
+func current_telegraph_color() -> Color:
+	if not _attack_state.is_active():
+		return Color(0.0, 0.0, 0.0, 0.0)
+	if _attack_state.phase() != AttackDefinitionScript.Phase.WINDUP:
+		return Color(0.0, 0.0, 0.0, 0.0)
+	if _attack_state.def != null and _attack_state.def.is_perilous:
+		return Color8(227, 66, 52, 220)
+	return Color8(220, 220, 240, 200)
+
 func can_attack() -> bool:
-	return _attack_timer <= 0.0 and _attack_cooldown <= 0.0 and not is_stunned and not is_telegraphing and _landing_recovery <= 0.0
+	return not _attack_state.is_active() and _attack_cooldown <= 0.0 and _dash_timer <= 0.0 and not is_stunned and _landing_recovery <= 0.0
 
 func can_jump() -> bool:
 	return (is_grounded or has_double_jump) and _jump_cooldown <= 0.0 and not is_stunned
@@ -248,22 +296,22 @@ func land() -> void:
 		current_animation = AnimationState.LANDING
 		animation_timer = 0.0
 
-func start_telegraph() -> void:
-	if can_attack():
-		is_telegraphing = true
-		telegraph_timer = telegraph_duration
+func start_light_attack() -> void:
+	_start_attack_with(AttackCatalogScript.hu_light())
 
-func start_attack() -> void:
-	if _attack_timer > 0.0 or _attack_cooldown > 0.0 or is_stunned or _landing_recovery > 0.0:
+func start_heavy_attack() -> void:
+	_start_attack_with(AttackCatalogScript.hu_heavy())
+
+func _start_attack_with(definition: Variant) -> void:
+	if not can_attack():
 		return
 
 	combo_count = combo_count + 1 if combo_window > 0.0 else 1
 	combo_window = combo_window_duration
 
-	_attack_timer = attack_duration
-	_attack_cooldown = attack_duration * (0.8 if combo_count > 2 else 1.0)
+	_attack_state.start(definition)
+	_attack_cooldown = definition.duration * (0.8 if combo_count > 2 else 1.0)
 	was_hit_this_swing = false
-	is_telegraphing = false
 	current_animation = AnimationState.ATTACKING
 	animation_timer = 0.0
 
@@ -271,10 +319,10 @@ func start_attack() -> void:
 		velocity.y *= 0.5
 
 func is_hit_active() -> bool:
-	return _attack_timer > 0.0 and _attack_timer <= (attack_duration - attack_active_start) and _attack_timer >= (attack_duration - attack_active_end)
+	return _attack_state.is_hit_active()
 
 func can_dash() -> bool:
-	return _dash_timer <= 0.0 and _dash_cooldown <= 0.0 and not is_stunned
+	return _dash_timer <= 0.0 and _dash_cooldown <= 0.0 and not _attack_state.is_active() and not is_stunned
 
 func start_dash(direction: int = 999) -> void:
 	_dash_timer = dash_duration
@@ -284,7 +332,6 @@ func start_dash(direction: int = 999) -> void:
 	velocity = Vector2(float(dash_direction) * speed, 0.0 if is_grounded else velocity.y * 0.3)
 	current_animation = AnimationState.DASHING
 	animation_timer = 0.0
-	_iframe_timer = dash_duration * 0.7
 
 func trigger_parry_window() -> void:
 	_parry_timer = parry_window
@@ -308,9 +355,8 @@ func apply_posture_damage(amount: float) -> void:
 func apply_stun(duration: float) -> void:
 	is_stunned = true
 	_stun_timer = duration
-	_attack_timer = 0.0
+	_attack_state.clear()
 	_attack_cooldown = 0.25
-	is_telegraphing = false
 	velocity.x *= 0.3
 	current_animation = AnimationState.STUNNED
 	animation_timer = 0.0
@@ -319,7 +365,10 @@ func gain_rage(amount: float) -> void:
 	rage_current = clampf(rage_current + amount, 0.0, rage_max)
 
 func is_in_recovery() -> bool:
-	return _attack_timer <= 0.0 and _attack_cooldown > 0.0
+	return not _attack_state.is_active() and _attack_cooldown > 0.0
+
+func on_stance_input() -> void:
+	print("[fighter] stance input (no D-type equipped yet)")
 
 static func player_controls() -> Dictionary:
 	return {
@@ -329,6 +378,7 @@ static func player_controls() -> Dictionary:
 		"block": KEY_K,
 		"dash": KEY_SPACE,
 		"jump": KEY_W,
+		"stance": KEY_L,
 	}
 
 static func none_controls() -> Dictionary:
@@ -339,4 +389,5 @@ static func none_controls() -> Dictionary:
 		"block": KEY_NONE,
 		"dash": KEY_NONE,
 		"jump": KEY_NONE,
+		"stance": KEY_NONE,
 	}
