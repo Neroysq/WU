@@ -26,6 +26,7 @@ var _slow_mo_timer: float = 0.0
 var _slow_mo_factor: float = 1.0
 var _feedback_message: String = ""
 var _feedback_timer: float = 0.0
+var _feedback_frame: int = -1
 var _is_paused: bool = false
 var _debug_enabled: bool = false
 var _heavy_committed_attack: bool = false
@@ -72,6 +73,7 @@ func setup_combat(player: Fighter, node: MapNode) -> void:
 	_is_paused = false
 	_feedback_message = ""
 	_feedback_timer = 0.0
+	_feedback_frame = -1
 	_time_scale = 1.0
 	_hitstop_timer = 0.0
 	_slow_mo_timer = 0.0
@@ -512,6 +514,13 @@ func _trigger_hitstop(duration: float) -> void:
 	_hitstop_timer = maxf(_hitstop_timer, duration)
 
 func _show_feedback(message: String, duration: float) -> void:
+	var frame: int = Engine.get_process_frames()
+	if _feedback_frame == frame and not _feedback_message.is_empty():
+		if _feedback_message.find(message) == -1:
+			_feedback_message = "%s | %s" % [_feedback_message, message]
+		_feedback_timer = maxf(_feedback_timer, duration)
+		return
+	_feedback_frame = frame
 	_feedback_message = message
 	_feedback_timer = duration
 

@@ -215,9 +215,9 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 			attacker.apply_posture_damage(float(settings.get("parryPostureDamage", 55.0)))
 			attacker.apply_stun(float(settings.get("parryStunDuration", 0.6)))
 			defender.gain_rage(15.0)
-			if defender.technique_engine != null and defender.technique_engine.has("B1"):
+			var armed_echo: bool = defender.technique_engine != null and defender.technique_engine.has("B1")
+			if armed_echo:
 				defender.technique_engine.set_echo()
-				emit_signal("show_feedback", "ECHO!", 0.5)
 			emit_signal("camera_shake", 12.0)
 
 			var parry_pos: Vector2 = defender.position + Vector2(float(defender.facing) * -6.0, -defender.height + 24.0)
@@ -229,6 +229,8 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 			emit_signal("slow_motion", 0.55, 0.30)
 			emit_signal("hitstop", 0.15)
 			emit_signal("show_feedback", "PARRY!", 0.8)
+			if armed_echo:
+				emit_signal("show_feedback", "ECHO!", 0.5)
 			return
 
 		var combo_damage_bonus: float = 1.0 + float(attacker.combo_count - 1) * 0.15
@@ -256,7 +258,6 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 				hp_damage *= 0.5
 			posture_damage *= float(settings.get("blockPostureMultiplier", 1.6))
 			if defender.technique_engine != null and defender.technique_engine.is_stance_active() and defender.technique_engine.active_stance() == "D2":
-				posture_damage *= 1.5
 				var base_damage: float = (attack_def.damage if attack_def != null else attacker.attack_damage) * combo_damage_bonus
 				var reflect_damage: float = base_damage * 0.10
 				attacker.health_current -= reflect_damage
