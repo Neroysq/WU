@@ -275,7 +275,7 @@ Rage is kept in the MVP **only as the activation gate for D-type techniques**. T
 
 ### Economy
 
-- **Gold** — single currency in MVP. Earned from fights (duel: ~15, elite: ~30, ambush: ~25, boss: ~100). Spent at shops and some events.
+- **Gold** — single currency in MVP. Earned from non-boss fights (duel: ~15, elite: ~30, ambush: ~25). Spent at shops and some events. The chapter boss grants **no gold** in MVP — boss victory ends the run, so any end-of-run payout would be unspendable. The "gold earned" line on the Victory screen is the accumulated total from in-run fights and is presented as summary/score data, not a final payout.
 - **Shop pricing** — techniques 20-50g (rarer = more expensive), HP potion 20g (heals 30% max HP), posture potion 15g (heals 50% max posture), remove-technique 25g (removes a technique from your loadout — lets you cut dead weight).
 - **No qi/mana in MVP.** Rage is the only meta-resource and its sole purpose is gating D-type techniques.
 
