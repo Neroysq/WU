@@ -64,16 +64,28 @@ Die, start over. Every run is different because the map is procedural, the techn
 00:15  Node 1: Duel against bandit. Sekiro-paced fight, ~2 min. Reward: pick 1 of 3.
 02:30  Node 2: Event — villager asks for help. Pay HP for gold, or walk on.
 02:50  Node 3: Duel against wandering ronin. ~2.5 min. Reward.
-05:35  Node 4: Rest — heal 30% HP or upgrade one technique.
+05:35  Node 4: Rest — heal 40% HP, or remove one technique from your loadout.
 05:50  Node 5: Master — pick 1 of 3 rare techniques.
 06:15  Node 6: Ambush. 1v2 against bandits, ~3 min. Power-fantasy moment,
        your techniques shine. Reward.
 09:30  Node 7: Shop. Spend gold on a technique or an HP potion.
 10:00  Node 8: Chapter boss — Iron Bear (Xiong Tie). ~4 min, 2-phase duel.
-14:00  Victory → return to start screen. Try again for a different build path.
+14:00  Boss defeated → Victory screen (run summary + "To Be Continued") →
+       return to main menu. Try again for a different build path.
 ```
 
 Smooth run ~14-15 minutes; tough run with longer fights and route diversions stretches to ~25 minutes. Target range: **15-25 minutes per run**. This is roughly Slay the Spire's Act 1 length, adjusted for real-time combat taking longer per fight than turn-based.
+
+### Victory flow (MVP)
+
+Defeating the Chapter 1 boss ends the run. Chapter 1 is the entire MVP — there is no continuation to Chapter 2, no meta-currency, no ascension. The victory flow is intentionally minimal:
+
+1. **Boss death beat.** On the killing blow, combat time slows to 0.2x for 1.0s, particles and calligraphy ink burst around Xiong Tie, a final posture-break kanji flashes. No dialog.
+2. **Victory screen (static).** A scroll-style panel fades in showing: run duration, final HP%, gold earned, and the list of techniques acquired. A wuxia-flavored title — e.g., *"The Wanderer Emerges"* (江湖初顯).
+3. **"To Be Continued..."** A single line at the bottom: *"The road beyond the bamboo leads deeper into the jianghu..."* This is a lightweight teaser for Chapter 2 / Milestone 2 and sets expectations that the run genuinely ends here.
+4. **Return to main menu.** Single button ("Return"). Clicking returns the player to the start screen where they can begin a fresh run.
+
+Death flow (any losing fight) is symmetrical: slow-mo death beat → simple "Defeated" screen → "Return" button → main menu.
 
 ---
 
@@ -92,6 +104,9 @@ Combat is the load-bearing system of the entire game. Everything else (technique
 | Block | K (held) | — | — | Hold to reduce damage to 20% and convert 80% of damage to posture fill. Releases on key-up. |
 | Parry | K (tap) | 0.15s window | — | Fires on K press. 0.15s window of "perfect deflect." Successful parry: attacker takes 55 posture damage, 0.6s stun, 0.3s slow-mo on player. |
 | Dash | Space | 0.22s | Startup 0.04s → i-frames 0.14s → recovery 0.04s | Cooldown 0.80s. Directional: facing-based on ground, horizontal-biased in air. |
+| Stance (D-type activation) | L (tap) | Instant | — | Only functional when a D-type technique is equipped AND rage is full. Consumes 100 rage, activates the equipped stance swap (Drunken Form or Tiger Stance). Does nothing otherwise. See note below on why this is a dedicated key, not a combo. |
+
+**Note on the stance key.** MVP adds one dedicated key (L) for stance activation. This is not a contradiction of the "no C-type / no new button" rule from Section C: that rule existed to avoid adding a new *resource* (C-types would need cooldowns and qi). The stance key reuses the existing rage meter, only has meaning when a D-type is equipped (which is rare — ~10% of the pool), and is a single binary action with no cooldown UI. One key is strictly cheaper UX than the multi-slot active-ability system C-types would require. Players who never pick up a D-type never press L, and it never appears in tooltips.
 
 Rationale for tuning changes vs. current code:
 - Current light attack is 0.35s — too short for Sekiro pace. Moved to 0.50s to give telegraph room.
@@ -191,7 +206,8 @@ Techniques enter the loadout through:
 | Master encounter | A/B/D pool, rare-weighted | 3 random | Free (pick 1) |
 | Event (some) | Specific technique or pool | 1 specific | Variable (HP, gold, or free) |
 | Shop | A/B pool | 3 random | 20-50 gold each |
-| Boss reward | D pool or legendary A/B | 1 guaranteed legendary | Free |
+
+The chapter boss does **not** grant a technique reward in MVP. Defeating Xiong Tie ends the run (Chapter 1 is the whole MVP). Boss rewards re-enter at Milestone 2 when Chapter 2 ships and mid-run progression continues past the first boss. See Section D for the full boss flow.
 
 Rerolling is *not* available in MVP. Shops can be entered multiple times in different nodes but stock is fixed per-node.
 
@@ -244,7 +260,7 @@ Pool balance: parry (B1), posture break (B2), dash (B3), kill (B4), HP-state (B5
 
 | # | Name | Effect | Cost / Duration |
 | --- | --- | --- | --- |
-| D1 | **Drunken Form (醉拳)** | Dash becomes an evasive roll with extended i-frames (0.20s → 0.28s). Light attacks become stumbling strikes with unpredictable angles that slip past blocks. Heavy attacks lock you into slower recovery but deal +40% damage and break posture harder. | Costs full rage to activate. Lasts until you take 20 HP of damage. |
+| D1 | **Drunken Form (醉拳)** | Dash total duration extends from 0.22s to 0.30s and the i-frame phase grows from 0.14s to 0.22s (becoming an evasive roll). Light attacks become stumbling strikes with unpredictable angles that slip past blocks. Heavy attacks lock you into slower recovery but deal +40% damage and break posture harder. | Costs full rage to activate. Lasts until you take 20 HP of damage. |
 | D2 | **Tiger Stance (虎形)** | Light attacks become clawing three-hit combos at +20% speed. Block costs more posture but reflects 10% damage back to the attacker. Heavy attack becomes a forward leap-strike covering +50% distance. | Costs full rage to activate. Lasts 15 seconds. |
 
 Stance swaps are exclusive: picking a new D replaces the current one. Only one D can be equipped at a time. Rage is the activation gate and is the sole reason the rage meter exists in the MVP.
@@ -269,12 +285,17 @@ For MVP: **rely on implicit synergies**, not explicit ones. Implicit = "my techn
 
 Design rule: **every technique should combine interestingly with at least 3 others**, checked manually during pool design. The "interesting combination" test is: does having both techniques produce a play pattern that neither alone produces? If yes, ship it.
 
+### Duplicate-technique policy (MVP)
+
+**One-copy-only.** A technique can appear at most once in a run's loadout. Any reward offer, shop roll, or master pool filters out techniques the player already owns before rolling. If a filter would leave fewer than 3 candidates in an offer, the remaining slots are filled from the lowest-rarity bucket to avoid dead slots.
+
+Rationale: two-stacking opens thorny questions (does *Descending Leaf* stack to two dash-stabs? does *Iron Palm* roll two 20% checks or one 40%? does A9 Cloud Hands extend the parry window to 0.21s?), and the answers don't improve MVP variety — they create testing burden. One-copy-only keeps each pickup decision meaningful and keeps the balance space small. Stacking is a deliberate growth lever for a later milestone if it turns out to be missed.
+
 ### Open questions (flagged for implementation phase)
 
-- Exact rarity weights per source
-- Exact cost curves
-- Whether to allow the same technique to appear twice in a run (stack?) or one-copy-only
-- Whether a dedicated "insight" currency earned from masters should exist as a secondary currency, separate from gold
+- Exact rarity weights per source.
+- Exact cost curves.
+- Whether a dedicated "insight" currency earned from masters should exist as a secondary currency, separate from gold (kept open — probably remove for MVP, but revisit if gold economy feels flat).
 
 ---
 
@@ -311,7 +332,7 @@ A massive former bandit chieftain turned warlord of a stretch of jianghu road. H
 - **1 unparryable grab — "Bear Crush."** A wide-reach lunging grab that, if it connects, deals 25% max HP damage (meaningful but not instant-kill). Red-flash telegraph. Teaches the player: some attacks can't be parried.
 - **Signature move — "Mountain-Breaker Stance (破山勢)."** Xiong Tie plants his feet wide, roars, and lunges in a shoulder-charge across half the screen. Unblockable, unparryable, must be dashed. Long wind-up (~0.7s) with a distinctive low-stance silhouette. Used once per phase.
 - **Fight length:** 3-5 minutes.
-- **Reward:** 100 gold + guaranteed legendary technique (drawn from a special pool of ~4 "boss legendary" techniques that only drop here).
+- **Reward:** No in-run reward. Defeating Xiong Tie ends the run — Chapter 1 is the entire MVP. On boss death the game transitions to the Victory screen (see Section A) and then returns to the main menu. There is no legendary drop in MVP because there is no further combat to spend it on; legendary drops re-enter when Chapter 2 ships (Milestone 2).
 
 Boss content load: ~40-60 silhouette frames.
 
@@ -322,13 +343,13 @@ Boss content load: ~40-60 silhouette frames.
 | **Duel** | 5-7 per map | 1v1 standard fight. Std reward. |
 | **Elite Duel** | 1-2 per map | 1v1 harder fight. Rare-weighted reward. |
 | **Ambush** | 1-2 per map | 1v2 or 1v3 gauntlet. Power fantasy moment. |
-| **Master** | 0-1 per map | Pick 1 of 3 rare techniques (free). |
+| **Master** | Exactly 1 per map | Pick 1 of 3 rare techniques (free). Always reachable from every route by map-gen guarantee. |
 | **Event** | 2-3 per map | Story choice with outcome. |
 | **Shop** | 1-2 per map | Spend gold on stock. |
-| **Rest** | 1-2 per map | Heal 30% HP or upgrade a technique. |
+| **Rest** | 1-2 per map | Heal 40% HP, or remove one technique from your loadout. |
 | **Boss** | 1 (end of chapter) | Xiong Tie ("Iron Bear"), 2-phase duel. |
 
-Generated map has ~15 nodes and ~4 paths. Any one player path visits ~7-8 nodes including the boss. Map generation should guarantee: at least 1 master node reachable on every path, at least 1 rest node reachable on every path, boss always reachable.
+Generated map has ~15 nodes and ~4 paths. Any one player path visits ~7-8 nodes including the boss. Map generation guarantees: exactly 1 master node reachable from every path (the master sits on a forced convergence column by design, mirroring Slay the Spire's late-act convergence), at least 1 rest node reachable on every path, and the boss always reachable. The single master-per-map is a deliberate choice for MVP — it guarantees every run gets at least one rare-technique shot without requiring the player to min-max routing.
 
 ### Events (6 for MVP)
 
@@ -383,22 +404,22 @@ This is a *real* MVP content load but it's scoped to be shippable. Everything la
 
 ### What ships in the MVP (authoritative inclusion list)
 
-1. Chapter 1 fully playable with procedural map generation, 15 nodes, all 8 node types.
-2. Core combat: light attack, heavy attack, block, parry, dash, jump.
+1. Chapter 1 fully playable with procedural map generation, ~15 nodes, all 8 node types, exactly 1 master node reachable from every path.
+2. Core combat: light attack, heavy attack, block, parry, dash, jump, stance activation (L key, only meaningful when D-type equipped).
 3. Sekiro-pace tuning as specified in Section B.
 4. Input buffering (0.15s).
 5. Animation-frame-event-driven hit windows (refactor from current parallel-timer approach in `combat_system.gd`).
 6. Posture system (kept; already implemented).
-7. Rage system (confirmed IN — serves as the activation gate for the 2 D-type techniques).
-8. 5 enemy archetypes + 1 boss ("Iron Bear" Xiong Tie) as specified in Section D.
-9. 20 techniques authored in Section C (12 A-type, 6 B-type, 2 D-type) + acquisition flow.
+7. Rage system (confirmed IN — serves as the activation gate for the 2 D-type techniques via L key).
+8. 5 enemy archetypes + 1 boss ("Iron Bear" Xiong Tie) as specified in Section D. Boss victory ends the run and transitions to the Victory screen (see Section A). No in-run boss reward.
+9. 20 techniques authored in Section C (12 A-type, 6 B-type, 2 D-type) + acquisition flow + one-copy-only duplicate policy.
 10. Gold economy + shop node type.
 11. 6 events.
 12. Silhouette art for all characters, enemies, boss, arena backgrounds.
 13. Combat SFX (impact, whoosh, parry, break, footstep, etc.) and 2 music loops (combat + ambient).
 14. Single playable character (Hu) with no character select.
 15. Keyboard input only.
-16. Full run flow: main menu → start run → Chapter 1 map → combat/events → reward → map → boss → victory/defeat → restart.
+16. Full run flow: main menu → start run → Chapter 1 map → combat/events → reward → map → boss → Victory/Defeat screen → main menu.
 
 ### What is explicitly OUT of MVP
 
@@ -523,7 +544,9 @@ These are the things that require playtesting, not design. They belong in the im
 
 ## Decisions resolved during user review (2026-04-11)
 
-Five open questions from the first draft of this spec were resolved in review:
+### First user review pass
+
+Five open questions from the first draft of this spec were resolved:
 
 1. **Rage in MVP.** Rage is kept as the activation gate for the 2 D-type techniques shipping in MVP (Drunken Form and Tiger Stance). Section B's resource table and Section C's technique list reflect this.
 2. **Full 20-technique pool authored now.** The complete named list (A1–A12, B1–B6, D1–D2) is in Section C as part of the spec, not deferred to implementation. Naming and effects are locked at the design level; exact numbers will be tuned during playtesting.
@@ -531,4 +554,16 @@ Five open questions from the first draft of this spec were resolved in review:
 4. **No tutorial node in MVP.** Players learn through pattern repetition, the same way Sekiro and modern roguelikes teach. "Tutorial node / forced-parry onboarding" is listed in the OUT-of-MVP table with the note "Never (by design)."
 5. **Keyboard input only in MVP.** Controller / gamepad support is post-MVP polish, slotted after Milestone 1. Listed in the OUT-of-MVP table.
 
-With these decisions locked, the spec is implementation-ready. Next step: invoke `superpowers:writing-plans` to convert this into a phased implementation plan.
+### Second user review pass (consistency + blocking gaps)
+
+A subsequent review found five concrete consistency and specification gaps. All were resolved:
+
+1. **Boss reward removed.** Because Chapter 1 victory ends the run, the previous "100 gold + legendary technique" reward was unusable and the "~4 boss legendary pool" was never authored. Section D now documents no in-run boss reward; Section A adds an explicit Victory flow (boss death beat → scroll-style run summary → "To Be Continued" teaser → main menu). Legendary drops re-enter at Milestone 2 when Chapter 2 ships.
+2. **Stance activation input defined.** Section B now specifies a dedicated **L key** for D-type activation. L is only functional when a D-type is equipped AND rage is full, reuses the existing rage meter, and does not require the cooldown/resource UI that ruled out C-types. Rationale is documented inline in Section B.
+3. **Rest node redefined.** Removed the undefined "upgrade a technique" option. Rest now offers exactly two choices: heal 40% HP, or remove one technique from the loadout. No upgrade system in MVP.
+4. **Master node contradiction fixed.** Changed from "0-1 per map" (which contradicted "always reachable from every path") to **"exactly 1 per map, always reachable from every path"** via a forced convergence column in map-gen. Guarantees every run gets a rare-technique shot.
+5. **Drunken Form timing aligned with base dash.** Fixed D1 to reference the Section B base numbers explicitly: dash duration extends from 0.22s to 0.30s, i-frame phase grows from 0.14s to 0.22s. No longer references the incorrect 0.20s→0.28s numbers.
+
+Additionally, the **duplicate-technique policy** — previously an open implementation question — was resolved to **one-copy-only**, with already-owned techniques filtered out of all offer sources. See Section C for the rationale.
+
+With these resolutions locked, the spec is implementation-ready. Next step: invoke `superpowers:writing-plans` to convert this into a phased implementation plan.
