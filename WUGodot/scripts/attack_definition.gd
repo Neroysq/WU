@@ -19,6 +19,7 @@ var is_perilous: bool = false
 var is_parryable: bool = true
 var range_units: float = 72.0
 var knockback_units: float = 300.0
+var ignores_block: bool = false
 
 func phase_at(elapsed: float) -> int:
 	if elapsed < windup_end:

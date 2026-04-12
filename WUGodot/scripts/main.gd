@@ -13,8 +13,7 @@ var _current_scene: int = SceneType.MAP
 var _run_state: RunState
 var _player: Fighter
 var _map_selection_idx: int = 0
-var _reward1: RewardOption
-var _reward2: RewardOption
+var _rewards: Array = []
 var _reward_selection_idx: int = 0
 var _end_message: String = ""
 var _game_over_hover_restart: bool = false
@@ -37,8 +36,7 @@ func start_new_run() -> void:
 	_current_scene = SceneType.MAP
 	_map_selection_idx = 0
 	_reward_selection_idx = 0
-	_reward1 = null
-	_reward2 = null
+	_rewards.clear()
 	_end_message = ""
 	_game_over_hover_restart = false
 	_input_tracker.clear()
@@ -97,14 +95,14 @@ func _update_map() -> void:
 		_travel_to_node(chosen)
 
 func _update_reward() -> void:
-	if _reward1 == null or _reward2 == null:
-		_reward1 = RewardOption.random()
-		_reward2 = RewardOption.random(_reward1.id)
+	if _rewards.is_empty():
+		_rewards = _generate_technique_rewards(3)
 
+	var max_idx: int = _rewards.size() - 1
 	if _input_tracker.pressed_key(KEY_A) or _input_tracker.pressed_key(KEY_LEFT):
-		_reward_selection_idx = 0
+		_reward_selection_idx = maxi(0, _reward_selection_idx - 1)
 	if _input_tracker.pressed_key(KEY_D) or _input_tracker.pressed_key(KEY_RIGHT):
-		_reward_selection_idx = 1
+		_reward_selection_idx = mini(max_idx, _reward_selection_idx + 1)
 
 	if _input_tracker.pressed_key(KEY_1) or _input_tracker.pressed_key(KEY_KP_1):
 		_apply_reward_by_index(0)
@@ -112,6 +110,10 @@ func _update_reward() -> void:
 	if _input_tracker.pressed_key(KEY_2) or _input_tracker.pressed_key(KEY_KP_2):
 		_apply_reward_by_index(1)
 		return
+	if _input_tracker.pressed_key(KEY_3) or _input_tracker.pressed_key(KEY_KP_3):
+		if _rewards.size() > 2:
+			_apply_reward_by_index(2)
+			return
 
 	var hovered_idx: int = _get_hovered_reward_index()
 	if hovered_idx >= 0:
@@ -121,6 +123,19 @@ func _update_reward() -> void:
 		_apply_reward_by_index(_reward_selection_idx)
 	elif hovered_idx >= 0 and _input_tracker.pressed_mouse(MOUSE_BUTTON_LEFT):
 		_apply_reward_by_index(hovered_idx)
+
+func _generate_technique_rewards(count: int) -> Array:
+	var owned_ids: Array[String] = []
+	if _player.technique_engine != null:
+		owned_ids = _player.technique_engine.technique_ids()
+	var rewards: Array = []
+	var used_ids: Array[String] = owned_ids.duplicate()
+	for i in range(count):
+		var reward: RewardOption = RewardOption.random_technique(used_ids)
+		rewards.append(reward)
+		if reward.technique_id != "":
+			used_ids.append(reward.technique_id)
+	return rewards
 
 func _update_game_over() -> void:
 	var restart_rect: Rect2 = _get_restart_button_rect()
@@ -148,17 +163,11 @@ func _travel_to_node(chosen: MapNode) -> void:
 			_current_scene = SceneType.COMBAT
 
 func _apply_reward_by_index(index: int) -> void:
-	var selected: RewardOption = null
-	if index == 0:
-		selected = _reward1
-	else:
-		selected = _reward2
-	if selected == null:
+	if index < 0 or index >= _rewards.size():
 		return
-
+	var selected: RewardOption = _rewards[index]
 	selected.apply(_player)
-	_reward1 = null
-	_reward2 = null
+	_rewards.clear()
 	_reward_selection_idx = 0
 	_current_scene = SceneType.MAP
 
@@ -232,21 +241,20 @@ func _draw_reward() -> void:
 	_draw_background()
 
 	var panel: Rect2 = _get_reward_panel_rect()
-	var box1: Rect2 = _get_reward_box_rect(0)
-	var box2: Rect2 = _get_reward_box_rect(1)
 	_draw_panel(panel)
-	_draw_text("Choose Reward", panel.position.x + 26.0, panel.position.y + 40.0, Color(0.95, 0.95, 0.98, 0.95), 24)
-	_draw_text("Arrows, 1/2, Enter or click", panel.position.x + 26.0, panel.position.y + 68.0, Color(0.72, 0.74, 0.78, 0.85), 15)
+	_draw_text("Choose Technique", panel.position.x + 26.0, panel.position.y + 40.0, Color(0.95, 0.95, 0.98, 0.95), 24)
+	_draw_text("Arrows, 1/2/3, Enter or click", panel.position.x + 26.0, panel.position.y + 68.0, Color(0.72, 0.74, 0.78, 0.85), 15)
 
-	var reward1_label: String = "..."
-	if _reward1 != null:
-		reward1_label = _reward1.label
-	var reward2_label: String = "..."
-	if _reward2 != null:
-		reward2_label = _reward2.label
-
-	_draw_reward_option(box1, reward1_label, _reward_selection_idx == 0)
-	_draw_reward_option(box2, reward2_label, _reward_selection_idx == 1)
+	for i in range(_rewards.size()):
+		var box: Rect2 = _get_reward_box_rect(i)
+		var reward_label: String = "..."
+		var reward_desc: String = ""
+		if i < _rewards.size():
+			reward_label = _rewards[i].label
+			if _rewards[i].technique_id != "":
+				var tech_data: Dictionary = DataManager.get_technique(_rewards[i].technique_id)
+				reward_desc = str(tech_data.get("description", ""))
+		_draw_reward_option_with_desc(box, reward_label, reward_desc, _reward_selection_idx == i)
 
 func _draw_game_over() -> void:
 	_draw_background()
@@ -283,6 +291,18 @@ func _draw_reward_option(rect: Rect2, label: String, selected: bool) -> void:
 	_draw_text(label, rect.position.x + 18.0, rect.position.y + 54.0, Color(0.90, 0.92, 0.96, 0.95), 18)
 	if selected:
 		_draw_menu_cursor(Vector2(rect.position.x - 16.0, rect.position.y + 54.0))
+
+func _draw_reward_option_with_desc(rect: Rect2, label: String, description: String, selected: bool) -> void:
+	var border: Color = Color(1.0, 1.0, 1.0, 0.12)
+	if selected:
+		border = Color(0.92, 0.93, 0.98, 0.92)
+	draw_rect(rect, Color(0.09, 0.10, 0.12, 0.85), true)
+	draw_rect(rect, border, false, 2.0)
+	_draw_text(label, rect.position.x + 18.0, rect.position.y + 36.0, Color(0.90, 0.92, 0.96, 0.95), 18)
+	if description != "":
+		_draw_text(description, rect.position.x + 18.0, rect.position.y + 62.0, Color(0.68, 0.70, 0.74, 0.85), 13)
+	if selected:
+		_draw_menu_cursor(Vector2(rect.position.x - 16.0, rect.position.y + 36.0))
 
 func _draw_menu_cursor(position: Vector2) -> void:
 	var pulse: float = 0.5 + 0.5 * sin(_cursor_flash * 8.0)
@@ -323,27 +343,26 @@ func _get_hovered_map_index(next_nodes: Array[MapNode]) -> int:
 	return -1
 
 func _get_reward_panel_rect() -> Rect2:
-	var width: float = minf(960.0, float(GameConstants.VIEW_WIDTH) - 320.0)
-	var height: float = 230.0
+	var width: float = minf(1200.0, float(GameConstants.VIEW_WIDTH) - 200.0)
+	var height: float = 260.0
 	return Rect2((float(GameConstants.VIEW_WIDTH) - width) * 0.5, (float(GameConstants.VIEW_HEIGHT) - height) * 0.5 - 20.0, width, height)
 
 func _get_reward_box_rect(index: int) -> Rect2:
 	var panel: Rect2 = _get_reward_panel_rect()
-	var gap: float = 24.0
-	var box_width: float = (panel.size.x - gap * 3.0) * 0.5
-	var box_height: float = 104.0
+	var count: int = maxi(_rewards.size(), 1)
+	var gap: float = 20.0
+	var box_width: float = (panel.size.x - gap * float(count + 1)) / float(count)
+	var box_height: float = 120.0
 	var x: float = panel.position.x + gap + float(index) * (box_width + gap)
 	var y: float = panel.position.y + 96.0
 	return Rect2(x, y, box_width, box_height)
 
 func _get_hovered_reward_index() -> int:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
-	var box1: Rect2 = _get_reward_box_rect(0)
-	if box1.has_point(mouse_pos):
-		return 0
-	var box2: Rect2 = _get_reward_box_rect(1)
-	if box2.has_point(mouse_pos):
-		return 1
+	for i in range(_rewards.size()):
+		var box: Rect2 = _get_reward_box_rect(i)
+		if box.has_point(mouse_pos):
+			return i
 	return -1
 
 func _get_game_over_panel_rect() -> Rect2:
@@ -403,8 +422,10 @@ func _sync_input_tracker() -> void:
 		KEY_J,
 		KEY_1,
 		KEY_2,
+		KEY_3,
 		KEY_KP_1,
-		KEY_KP_2
+		KEY_KP_2,
+		KEY_KP_3,
 	]
 	_input_tracker.sync_keys(keys)
 	_input_tracker.sync_mouse_buttons([MOUSE_BUTTON_LEFT])

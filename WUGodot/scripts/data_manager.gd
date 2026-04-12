@@ -6,9 +6,11 @@ static var _enemies: Dictionary = {}
 static var _visual_profiles: Dictionary = {}
 static var _game_settings: Dictionary = {}
 static var _rewards: Array[Dictionary] = []
+static var _techniques: Dictionary = {}
 
 static func initialize() -> void:
 	_load_game_settings()
+	_load_techniques()
 	_load_rewards()
 	_load_visual_profiles()
 	_load_characters()
@@ -20,6 +22,7 @@ static func reload_data() -> void:
 	_visual_profiles.clear()
 	_game_settings.clear()
 	_rewards.clear()
+	_techniques.clear()
 	initialize()
 
 static func get_character(name: String) -> Dictionary:
@@ -49,6 +52,43 @@ static func get_rewards() -> Array[Dictionary]:
 	if rewards.is_empty():
 		rewards.append(_default_reward_data())
 	return rewards
+
+static func get_technique(id: String) -> Dictionary:
+	if _techniques.has(id):
+		return (_techniques[id] as Dictionary).duplicate(true)
+	return {}
+
+static func get_all_techniques() -> Dictionary:
+	return _techniques.duplicate(true)
+
+static func _load_techniques() -> void:
+	var dir: DirAccess = DirAccess.open("res://data/Techniques")
+	if dir == null:
+		return
+
+	dir.list_dir_begin()
+	while true:
+		var file_name: String = dir.get_next()
+		if file_name.is_empty():
+			break
+		if dir.current_is_dir():
+			continue
+		if file_name.get_extension().to_lower() != "json":
+			continue
+
+		var root: Dictionary = _load_json_file("res://data/Techniques/%s" % file_name)
+		var raw_techniques: Array = []
+		if typeof(root.get("techniques", [])) == TYPE_ARRAY:
+			raw_techniques = root.get("techniques", []) as Array
+
+		for entry in raw_techniques:
+			if typeof(entry) != TYPE_DICTIONARY:
+				continue
+			var tech_id: String = str((entry as Dictionary).get("id", ""))
+			if tech_id.is_empty():
+				continue
+			_techniques[tech_id] = (entry as Dictionary).duplicate(true)
+	dir.list_dir_end()
 
 static func _load_game_settings() -> void:
 	var base: Dictionary = _default_game_settings()

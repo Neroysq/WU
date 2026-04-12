@@ -156,6 +156,8 @@ func _process(delta: float) -> void:
 
 	_combat_system.resolve_hits(_player, _enemy)
 	_combat_system.resolve_hits(_enemy, _player)
+	_combat_system.tick_effects(_player, dt)
+	_combat_system.tick_effects(_enemy, dt)
 
 	_combat_system.clamp_world_bounds(_player)
 	_combat_system.clamp_world_bounds(_enemy)
@@ -164,6 +166,8 @@ func _process(delta: float) -> void:
 		_is_paused_on_end = true
 		_end_message = "Defeat (Enter: continue)"
 	elif _enemy.health_current <= 0.0:
+		if _player.technique_engine != null:
+			_player.technique_engine.on_kill(_player)
 		_is_paused_on_end = true
 		_end_message = "Boss Defeated (Enter)" if _current_node.node_type == MapNode.NodeType.BOSS else "Victory (Enter)"
 
@@ -342,6 +346,11 @@ func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 	if fighter.combo_count > 1 and fighter.combo_window > 0.0:
 		_draw_text("x%d" % fighter.combo_count, body_rect.position.x + body_rect.size.x * 0.5 - 12.0, body_rect.position.y - 40.0, Color8(255, 200, 100), 16)
 
+	if fighter.bleed_timer > 0.0:
+		var bleed_pulse: float = sin(fighter.animation_timer * 8.0) * 0.4 + 0.6
+		var bleed_rect: Rect2 = Rect2(body_rect.position.x, body_rect.end.y + 4.0, body_rect.size.x, 4.0)
+		draw_rect(bleed_rect, Color8(180, 30, 30, int(160.0 * bleed_pulse)), true)
+
 func _draw_hud() -> void:
 	var left_panel: Rect2 = Rect2(20, 18, GameConstants.VIEW_WIDTH / 2 - 40, 98)
 	var right_panel: Rect2 = Rect2(GameConstants.VIEW_WIDTH / 2 + 20, 18, GameConstants.VIEW_WIDTH / 2 - 40, 98)
@@ -352,6 +361,28 @@ func _draw_hud() -> void:
 	_draw_bars(_enemy, GameConstants.VIEW_WIDTH / 2 + 34, 36, true)
 
 	_draw_text("A/D move  W jump  J tap/hold  K block/parry  Space dash  L stance  P pause  R restart", 36, 128, Color8(170, 170, 186), 14)
+	if _player != null and _player.technique_engine != null:
+		var tech_ids: Array[String] = _player.technique_engine.technique_ids()
+		if not tech_ids.is_empty():
+			var tech_y: float = 148.0
+			_draw_text("Techniques:", 36.0, tech_y, Color8(200, 195, 180), 14)
+			tech_y += 18.0
+			for tech_id in tech_ids:
+				var tech_data: Dictionary = DataManager.get_technique(tech_id)
+				var display: String = "%s %s" % [str(tech_data.get("name_cn", tech_id)), str(tech_data.get("name_en", ""))]
+				var tech_color: Color = Color8(170, 175, 165)
+				if tech_id.begins_with("D"):
+					tech_color = Color8(255, 200, 50)
+				elif tech_id.begins_with("B"):
+					tech_color = Color8(140, 200, 255)
+				_draw_text(display, 36.0, tech_y, tech_color, 13)
+				tech_y += 16.0
+
+		if _player.technique_engine.is_stance_active():
+			var stance_id: String = _player.technique_engine.active_stance()
+			var stance_label: String = "醉拳" if stance_id == "D1" else "虎形"
+			var pulse: float = sin(_player.animation_timer * 6.0) * 0.3 + 0.7
+			_draw_text("STANCE: %s" % stance_label, 36.0, 104.0, Color(1.0, 0.85, 0.3, pulse), 16)
 
 func _draw_bars(fighter: Fighter, x: int, y: int, mirror: bool) -> void:
 	var width: int = GameConstants.VIEW_WIDTH / 2 - 76

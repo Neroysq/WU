@@ -80,7 +80,18 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 		fighter.animation_timer = 0.0
 
 	if bool(input_state.get("stance_pressed", false)):
-		fighter.on_stance_input()
+		if fighter.on_stance_input():
+			var stance_name: String = ""
+			if fighter.technique_engine != null:
+				match fighter.technique_engine.active_stance():
+					"D1":
+						stance_name = "醉拳 DRUNKEN FORM"
+					"D2":
+						stance_name = "虎形 TIGER STANCE"
+			emit_signal("camera_shake", 10.0)
+			emit_signal("slow_motion", 0.6, 0.3)
+			emit_signal("show_feedback", stance_name, 0.8)
+			emit_signal("spawn_particles", fighter.position, 20, Color8(255, 200, 50))
 
 	if not fighter.is_grounded:
 		fighter.velocity.y += fighter.gravity * dt
@@ -88,8 +99,30 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 			fighter.current_animation = Fighter.AnimationState.FALLING
 			fighter.animation_timer = 0.0
 
+	var was_dashing: bool = fighter._dash_timer > 0.0
 	fighter.update_timers(dt)
+	var dash_just_ended: bool = was_dashing and fighter._dash_timer <= 0.0
+
+	if dash_just_ended and fighter.technique_engine != null:
+		fighter.technique_engine.on_dash_end()
+		if fighter.technique_engine.has("A1") and enemy != null:
+			var stab_range: float = 60.0
+			var dist: float = absf(enemy.position.x - fighter.position.x)
+			if dist <= stab_range + enemy.half_width:
+				var facing_enemy: bool = (1 if enemy.position.x > fighter.position.x else -1) == fighter.facing
+				if facing_enemy:
+					enemy.health_current -= 8.0
+					enemy.health_current = maxf(enemy.health_current, 0.0)
+					emit_signal("damage_dealt", enemy.position + Vector2(0.0, -enemy.height - 20.0), 8.0, false)
+					emit_signal("spawn_particles", enemy.position + Vector2(0.0, -enemy.height * 0.5), 6, Color8(255, 180, 100))
+					emit_signal("show_feedback", "落葉!", 0.4)
 	fighter.position += fighter.velocity * dt
+
+	if fighter.is_invulnerable and enemy != null and enemy.is_hit_active():
+		var dist: float = absf(enemy.position.x - fighter.position.x)
+		var in_attack_zone: bool = dist <= enemy.current_attack_range() + fighter.half_width
+		if in_attack_zone and fighter.technique_engine != null:
+			fighter.technique_engine.on_dash_through()
 
 	if fighter.position.y >= GameConstants.GROUND_Y:
 		if (not fighter.is_grounded) and fighter.velocity.y > 100.0:
@@ -168,6 +201,7 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 
 	var attack_def: Variant = attacker._attack_state.def
 	var attack_is_perilous: bool = attack_def != null and not attack_def.is_parryable
+	var attack_ignores_block: bool = attack_def != null and attack_def.ignores_block
 	var attack_range: float = attack_def.range_units if attack_def != null else attacker.attack_range
 
 	var in_range: bool = absf(defender.position.x - attacker.position.x) <= attack_range + defender.half_width
@@ -181,6 +215,9 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 			attacker.apply_posture_damage(float(settings.get("parryPostureDamage", 55.0)))
 			attacker.apply_stun(float(settings.get("parryStunDuration", 0.6)))
 			defender.gain_rage(15.0)
+			if defender.technique_engine != null and defender.technique_engine.has("B1"):
+				defender.technique_engine.set_echo()
+				emit_signal("show_feedback", "ECHO!", 0.5)
 			emit_signal("camera_shake", 12.0)
 
 			var parry_pos: Vector2 = defender.position + Vector2(float(defender.facing) * -6.0, -defender.height + 24.0)
@@ -197,18 +234,54 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 		var combo_damage_bonus: float = 1.0 + float(attacker.combo_count - 1) * 0.15
 		var hp_damage: float = (attack_def.damage if attack_def != null else attacker.attack_damage) * combo_damage_bonus
 		var posture_damage: float = (attack_def.posture_damage if attack_def != null else attacker.attack_posture_damage) * combo_damage_bonus
+		if attacker.technique_engine != null and attacker.technique_engine.has("B5"):
+			if attacker.health_current <= attacker.health_max * 0.3:
+				hp_damage *= 1.25
+				posture_damage *= 1.25
+		if attacker.technique_engine != null and attacker.technique_engine.has("A4"):
+			if attack_def != null and not attack_def.is_heavy and attacker.technique_engine.has_sparrow_bonus():
+				hp_damage *= 1.30
+				attacker.technique_engine.consume_sparrow()
+				emit_signal("show_feedback", "雀翼!", 0.4)
+		if attacker.technique_engine != null and attacker.technique_engine.consume_echo():
+			posture_damage = defender.posture_current + 1.0
+			emit_signal("show_feedback", "山谷回響!", 0.6)
+		if attacker.technique_engine != null and attacker.technique_engine.consume_flowing_water():
+			attacker.health_current = minf(attacker.health_current + 5.0, attacker.health_max)
+			emit_signal("show_feedback", "流水!", 0.5)
 
-		if defender.is_blocking and not attack_is_perilous:
+		if defender.is_blocking and not attack_is_perilous and not attack_ignores_block:
 			hp_damage *= float(settings.get("blockHealthMultiplier", 0.2))
+			if defender.technique_engine != null and defender.technique_engine.has("A5"):
+				hp_damage *= 0.5
 			posture_damage *= float(settings.get("blockPostureMultiplier", 1.6))
+			if defender.technique_engine != null and defender.technique_engine.is_stance_active() and defender.technique_engine.active_stance() == "D2":
+				posture_damage *= 1.5
+				var base_damage: float = (attack_def.damage if attack_def != null else attacker.attack_damage) * combo_damage_bonus
+				var reflect_damage: float = base_damage * 0.10
+				attacker.health_current -= reflect_damage
+				attacker.health_current = maxf(attacker.health_current, 0.0)
+				emit_signal("damage_dealt", attacker.position + Vector2(0.0, -attacker.height - 20.0), reflect_damage, false)
 			defender.gain_rage(6.0)
 			emit_signal("show_feedback", "BLOCKED", 0.5)
 		elif defender.is_blocking and attack_is_perilous:
 			emit_signal("show_feedback", "UNBLOCKABLE!", 0.6)
+		elif defender.is_blocking and attack_ignores_block:
+			emit_signal("show_feedback", "SLIPPED!", 0.5)
 		else:
 			emit_signal("show_feedback", "HIT", 0.3)
 
 		defender.health_current -= hp_damage
+		if attacker.technique_engine != null and attacker.technique_engine.has("A3"):
+			if attack_def != null and attack_def.is_heavy:
+				defender.bleed_timer = 3.0
+				defender.bleed_dps = 1.5
+		if defender.health_current <= 0.0 and defender.technique_engine != null:
+			if defender.technique_engine.check_lethal_save(defender):
+				emit_signal("camera_shake", 16.0)
+				emit_signal("slow_motion", 0.4, 0.5)
+				emit_signal("show_feedback", "鳳凰起!", 0.8)
+				emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height * 0.5), 24, Color8(255, 120, 40))
 
 		var will_posture_break: bool = (defender.posture_current - posture_damage) <= 0.0 and not defender.is_stunned
 		defender.apply_posture_damage(posture_damage)
@@ -218,6 +291,10 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 			emit_signal("camera_shake", 18.0)
 			emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height), 24, Color8(255, 220, 60))
 			emit_signal("show_feedback", "破", 0.9)
+			if attacker.technique_engine != null:
+				attacker.technique_engine.on_posture_break(attacker)
+				if attacker.technique_engine.has("B2"):
+					emit_signal("show_feedback", "回春!", 0.6)
 
 		var damage_pos: Vector2 = defender.position + Vector2(0.0, -defender.height - 20.0)
 		var is_critical: bool = attacker.combo_count > 2 or (attack_def != null and attack_def.is_heavy)
@@ -239,6 +316,11 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 		if not defender.is_stunned:
 			defender.current_animation = Fighter.AnimationState.HIT_REACTION
 			defender.animation_timer = 0.0
+		if attacker.technique_engine != null and attacker.technique_engine.roll_stagger():
+			if attack_def != null and not attack_def.is_heavy and defender._attack_state.is_active():
+				defender._attack_state.clear()
+				defender._attack_cooldown = 0.3
+				emit_signal("show_feedback", "STAGGER!", 0.4)
 
 		defender.health_current = maxf(defender.health_current, 0.0)
 
@@ -246,6 +328,18 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 		emit_signal("camera_shake", shake_amount)
 		emit_signal("hitstop", 0.10 if (attack_def != null and attack_def.is_heavy) else 0.05)
 		emit_signal("spawn_particles", defender.position + Vector2(float(defender.facing) * -4.0, -defender.height + 28.0), 10, Color8(255, 190, 160))
+		if attacker.technique_engine != null and attacker.technique_engine.has("A10"):
+			if attack_def != null and attack_def.is_heavy:
+				var twin_damage: float = hp_damage * 0.5
+				defender.health_current -= twin_damage
+				defender.health_current = maxf(defender.health_current, 0.0)
+				var twin_pos: Vector2 = defender.position + Vector2(float(defender.facing) * -8.0, -defender.height - 30.0)
+				emit_signal("damage_dealt", twin_pos, twin_damage, true)
+				emit_signal("spawn_particles", twin_pos, 8, Color8(255, 200, 100))
+		if defender.technique_engine != null and defender.technique_engine.is_stance_active():
+			if defender.technique_engine.on_stance_damage(hp_damage, defender):
+				emit_signal("show_feedback", "STANCE BROKEN!", 0.6)
+				emit_signal("camera_shake", 8.0)
 
 func update_facing(player: Fighter, enemy: Fighter) -> void:
 	player.facing = 1 if player.position.x <= enemy.position.x else -1
@@ -253,3 +347,15 @@ func update_facing(player: Fighter, enemy: Fighter) -> void:
 
 func clamp_world_bounds(fighter: Fighter) -> void:
 	fighter.position.x = clampf(fighter.position.x, GameConstants.WORLD_BOUNDS_LEFT, GameConstants.WORLD_BOUNDS_RIGHT)
+
+func tick_effects(fighter: Fighter, dt: float) -> void:
+	if fighter.bleed_timer > 0.0:
+		var bleed_damage: float = fighter.bleed_dps * dt
+		fighter.health_current -= bleed_damage
+		fighter.health_current = maxf(fighter.health_current, 0.0)
+		fighter.bleed_timer -= dt
+		if fighter.bleed_timer <= 0.0:
+			fighter.bleed_timer = 0.0
+			fighter.bleed_dps = 0.0
+		if bleed_damage > 0.1:
+			emit_signal("damage_dealt", fighter.position + Vector2(0.0, -fighter.height - 20.0), bleed_damage, false)

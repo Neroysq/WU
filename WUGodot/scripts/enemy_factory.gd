@@ -1,6 +1,8 @@
 class_name EnemyFactory
 extends RefCounted
 
+const TechniqueEngineScript = preload("res://scripts/technique_engine.gd")
+
 static func create_enemy_for_node(node: MapNode) -> Fighter:
 	var enemy_type: String = "Basic"
 	match node.node_type:
@@ -82,4 +84,5 @@ static func create_player(character_name: String = "") -> Fighter:
 	player.parry_window = float(character_data.get("parryWindow", 0.15))
 	player.stun_duration = float(character_data.get("stunDuration", 0.7))
 	player.combo_window_duration = float(character_data.get("comboWindow", 0.5))
+	player.technique_engine = TechniqueEngineScript.new()
 	return player

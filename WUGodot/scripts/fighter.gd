@@ -93,9 +93,11 @@ var attack_range: float = GameConstants.DEFAULT_ATTACK_RANGE
 var attack_damage: float = GameConstants.DEFAULT_ATTACK_DAMAGE
 var attack_posture_damage: float = GameConstants.DEFAULT_POSTURE_DAMAGE
 var _attack_state: Variant = AttackStateScript.new()
+var technique_engine: Variant = null
 
 var dash_duration: float = GameConstants.DASH_DURATION
 var dash_cooldown: float = GameConstants.DASH_COOLDOWN
+var dash_iframe_end: float = GameConstants.DASH_IFRAME_END
 var dash_speed: float = 1100.0
 var air_dash_speed: float = 950.0
 
@@ -107,6 +109,8 @@ var posture_recovery_rate: float = GameConstants.POSTURE_RECOVERY_RATE
 var is_blocking: bool = false
 var is_stunned: bool = false
 var was_hit_this_swing: bool = false
+var bleed_timer: float = 0.0
+var bleed_dps: float = 0.0
 
 var combo_window: float = 0.0
 var combo_count: int = 0
@@ -129,6 +133,7 @@ var _stun_timer: float = 0.0
 var _jump_cooldown: float = 0.0
 var _landing_recovery: float = 0.0
 var _ai_decision_timer: float = 0.0
+var _phoenix_invuln_timer: float = 0.0
 
 func reset_for_combat() -> void:
 	velocity = Vector2.ZERO
@@ -152,6 +157,12 @@ func reset_for_combat() -> void:
 	_jump_cooldown = 0.0
 	_landing_recovery = 0.0
 	_ai_decision_timer = 0.0
+	bleed_timer = 0.0
+	bleed_dps = 0.0
+	_phoenix_invuln_timer = 0.0
+	if technique_engine != null:
+		technique_engine.deactivate_stance(self)
+		technique_engine.reset_combat_state(self)
 
 func update_timers(dt: float) -> void:
 	if not is_stunned:
@@ -169,6 +180,10 @@ func update_timers(dt: float) -> void:
 		_landing_recovery -= dt
 	if _ai_decision_timer > 0.0:
 		_ai_decision_timer -= dt
+	if _phoenix_invuln_timer > 0.0:
+		_phoenix_invuln_timer -= dt
+	if technique_engine != null:
+		technique_engine.update(dt, self)
 
 	if combo_window > 0.0:
 		combo_window -= dt
@@ -185,7 +200,13 @@ func update_timers(dt: float) -> void:
 		var events: Dictionary = _attack_state.advance(dt)
 		if bool(events.get("finished", false)):
 			was_hit_this_swing = false
-			if current_animation == AnimationState.ATTACKING:
+			# D2 Tiger Stance: auto-chain light attacks into a 3-hit combo.
+			if technique_engine != null and technique_engine.active_stance() == "D2" \
+					and _attack_state.def != null and _attack_state.def.id == "tiger_light" \
+					and combo_count < 3:
+				combo_window = combo_window_duration
+				start_light_attack()
+			elif current_animation == AnimationState.ATTACKING:
 				current_animation = AnimationState.IDLE
 
 	if _dash_timer > 0.0:
@@ -240,10 +261,12 @@ func _update_animation(dt: float) -> void:
 			animation_offset = animation_offset.lerp(Vector2.ZERO, 0.15)
 
 func _compute_is_invulnerable() -> bool:
+	if _phoenix_invuln_timer > 0.0:
+		return true
 	if _dash_timer <= 0.0:
 		return false
 	var dash_elapsed: float = dash_duration - _dash_timer
-	return dash_elapsed >= GameConstants.DASH_STARTUP_END and dash_elapsed < GameConstants.DASH_IFRAME_END
+	return dash_elapsed >= GameConstants.DASH_STARTUP_END and dash_elapsed < dash_iframe_end
 
 func dash_phase_label() -> String:
 	if _dash_timer <= 0.0:
@@ -251,7 +274,7 @@ func dash_phase_label() -> String:
 	var dash_elapsed: float = dash_duration - _dash_timer
 	if dash_elapsed < GameConstants.DASH_STARTUP_END:
 		return "startup"
-	if dash_elapsed < GameConstants.DASH_IFRAME_END:
+	if dash_elapsed < dash_iframe_end:
 		return "iframes"
 	return "recovery"
 
@@ -297,10 +320,16 @@ func land() -> void:
 		animation_timer = 0.0
 
 func start_light_attack() -> void:
-	_start_attack_with(AttackCatalogScript.hu_light())
+	var override: Variant = null
+	if technique_engine != null:
+		override = technique_engine.get_light_override()
+	_start_attack_with(override if override != null else AttackCatalogScript.hu_light())
 
 func start_heavy_attack() -> void:
-	_start_attack_with(AttackCatalogScript.hu_heavy())
+	var override: Variant = null
+	if technique_engine != null:
+		override = technique_engine.get_heavy_override()
+	_start_attack_with(override if override != null else AttackCatalogScript.hu_heavy())
 
 func _start_attack_with(definition: Variant) -> void:
 	if not can_attack():
@@ -367,8 +396,10 @@ func gain_rage(amount: float) -> void:
 func is_in_recovery() -> bool:
 	return not _attack_state.is_active() and _attack_cooldown > 0.0
 
-func on_stance_input() -> void:
-	print("[fighter] stance input (no D-type equipped yet)")
+func on_stance_input() -> bool:
+	if technique_engine == null:
+		return false
+	return technique_engine.activate_stance(self)
 
 static func player_controls() -> Dictionary:
 	return {

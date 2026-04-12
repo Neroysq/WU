@@ -5,8 +5,13 @@ var id: String = ""
 var label: String = ""
 var effect: String = ""
 var amount: float = 0.0
+var technique_id: String = ""
 
 func apply(fighter: Fighter) -> void:
+	if effect == "technique":
+		if fighter.technique_engine != null and not technique_id.is_empty():
+			fighter.technique_engine.add(technique_id, fighter)
+		return
 	match effect:
 		"attack_damage":
 			fighter.attack_damage += amount
@@ -38,4 +43,23 @@ static func from_dictionary(data: Dictionary) -> RewardOption:
 	option.label = str(data.get("label", "Reward"))
 	option.effect = str(data.get("effect", ""))
 	option.amount = float(data.get("amount", 0.0))
+	option.technique_id = str(data.get("technique_id", ""))
+	return option
+
+static func random_technique(owned_ids: Array[String]) -> RewardOption:
+	var all_techniques: Dictionary = DataManager.get_all_techniques()
+	var pool: Array[Dictionary] = []
+	for tech_id in all_techniques.keys():
+		if not owned_ids.has(str(tech_id)):
+			pool.append(all_techniques[tech_id] as Dictionary)
+	if pool.is_empty():
+		return random()
+	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+	rng.randomize()
+	var pick: Dictionary = pool[rng.randi_range(0, pool.size() - 1)]
+	var option: RewardOption = RewardOption.new()
+	option.id = str(pick.get("id", ""))
+	option.label = "%s (%s)" % [str(pick.get("name_en", "")), str(pick.get("name_cn", ""))]
+	option.effect = "technique"
+	option.technique_id = option.id
 	return option
