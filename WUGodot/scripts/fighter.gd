@@ -94,6 +94,9 @@ var attack_damage: float = GameConstants.DEFAULT_ATTACK_DAMAGE
 var attack_posture_damage: float = GameConstants.DEFAULT_POSTURE_DAMAGE
 var _attack_state: Variant = AttackStateScript.new()
 var technique_engine: Variant = null
+var ai_brain: Variant = null
+var boss_controller: Variant = null
+var archetype_id: String = ""
 
 var dash_duration: float = GameConstants.DASH_DURATION
 var dash_cooldown: float = GameConstants.DASH_COOLDOWN
@@ -111,6 +114,8 @@ var is_stunned: bool = false
 var was_hit_this_swing: bool = false
 var bleed_timer: float = 0.0
 var bleed_dps: float = 0.0
+var is_grabbed: bool = false
+var _grab_timer: float = 0.0
 
 var combo_window: float = 0.0
 var combo_count: int = 0
@@ -160,6 +165,8 @@ func reset_for_combat() -> void:
 	bleed_timer = 0.0
 	bleed_dps = 0.0
 	_phoenix_invuln_timer = 0.0
+	is_grabbed = false
+	_grab_timer = 0.0
 	if technique_engine != null:
 		technique_engine.deactivate_stance(self)
 		technique_engine.reset_combat_state(self)
@@ -182,6 +189,10 @@ func update_timers(dt: float) -> void:
 		_ai_decision_timer -= dt
 	if _phoenix_invuln_timer > 0.0:
 		_phoenix_invuln_timer -= dt
+	if _grab_timer > 0.0:
+		_grab_timer -= dt
+		if _grab_timer <= 0.0:
+			is_grabbed = false
 	if technique_engine != null:
 		technique_engine.update(dt, self)
 
@@ -293,10 +304,10 @@ func current_telegraph_color() -> Color:
 	return Color8(220, 220, 240, 200)
 
 func can_attack() -> bool:
-	return not _attack_state.is_active() and _attack_cooldown <= 0.0 and _dash_timer <= 0.0 and not is_stunned and _landing_recovery <= 0.0
+	return not _attack_state.is_active() and _attack_cooldown <= 0.0 and _dash_timer <= 0.0 and not is_stunned and _landing_recovery <= 0.0 and not is_grabbed
 
 func can_jump() -> bool:
-	return (is_grounded or has_double_jump) and _jump_cooldown <= 0.0 and not is_stunned
+	return (is_grounded or has_double_jump) and _jump_cooldown <= 0.0 and not is_stunned and not is_grabbed
 
 func start_jump() -> void:
 	if not is_grounded and has_double_jump:
@@ -351,7 +362,7 @@ func is_hit_active() -> bool:
 	return _attack_state.is_hit_active()
 
 func can_dash() -> bool:
-	return _dash_timer <= 0.0 and _dash_cooldown <= 0.0 and not _attack_state.is_active() and not is_stunned
+	return _dash_timer <= 0.0 and _dash_cooldown <= 0.0 and not _attack_state.is_active() and not is_stunned and not is_grabbed
 
 func start_dash(direction: int = 999) -> void:
 	_dash_timer = dash_duration

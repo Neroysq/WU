@@ -2,24 +2,22 @@ class_name EnemyFactory
 extends RefCounted
 
 const TechniqueEngineScript = preload("res://scripts/technique_engine.gd")
+const AiBrainScript = preload("res://scripts/ai_brain.gd")
+const BossControllerScript = preload("res://scripts/boss_controller.gd")
 
 static func create_enemy_for_node(node: MapNode) -> Fighter:
-	var enemy_type: String = "Basic"
-	match node.node_type:
-		MapNode.NodeType.BATTLE:
-			enemy_type = "Basic"
-		MapNode.NodeType.ELITE:
-			enemy_type = "Elite"
-		MapNode.NodeType.BOSS:
-			enemy_type = "Boss"
-		_:
-			enemy_type = "Basic"
+	var archetype: String = _pick_archetype_for_node(node)
+	return create_enemy_by_archetype(archetype)
 
-	var enemy_data: Dictionary = DataManager.get_enemy(enemy_type)
+static func create_enemy_by_archetype(archetype: String) -> Fighter:
+	var enemy_data: Dictionary = DataManager.get_enemy(archetype)
+	if enemy_data.is_empty():
+		enemy_data = DataManager.get_enemy("bandit_swordsman")
 	var settings: Dictionary = DataManager.get_game_settings()
 
 	var enemy: Fighter = Fighter.new()
 	enemy.name = str(enemy_data.get("name", "Enemy"))
+	enemy.archetype_id = str(enemy_data.get("archetype", archetype))
 	enemy.visual_profile_id = str(enemy_data.get("visualProfile", "enemy_humanoid_basic"))
 	enemy.position = Vector2(float(settings.get("viewWidth", 1920)) - 360.0, float(settings.get("groundY", 940.0)))
 	enemy.facing = -1
@@ -42,7 +40,33 @@ static func create_enemy_for_node(node: MapNode) -> Fighter:
 	enemy.parry_window = float(settings.get("parryWindow", 0.12))
 	enemy.stun_duration = float(settings.get("stunDuration", 0.7))
 	enemy.controls = Fighter.none_controls()
+	enemy.ai_brain = AiBrainScript.from_enemy_data(enemy_data)
+
+	if str(enemy_data.get("difficulty", "")) == "boss":
+		enemy.boss_controller = BossControllerScript.new()
+
 	return enemy
+
+static func _pick_archetype_for_node(node: MapNode) -> String:
+	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+	rng.randomize()
+	match node.node_type:
+		MapNode.NodeType.BATTLE:
+			var pool: Array[String] = DataManager.get_enemy_archetypes_for_difficulty("easy")
+			var medium: Array[String] = DataManager.get_enemy_archetypes_for_difficulty("medium")
+			pool.append_array(medium)
+			if pool.is_empty():
+				return "bandit_swordsman"
+			return pool[rng.randi_range(0, pool.size() - 1)]
+		MapNode.NodeType.ELITE:
+			var pool: Array[String] = DataManager.get_enemy_archetypes_for_difficulty("hard")
+			if pool.is_empty():
+				return "sect_disciple"
+			return pool[rng.randi_range(0, pool.size() - 1)]
+		MapNode.NodeType.BOSS:
+			return "iron_bear"
+		_:
+			return "bandit_swordsman"
 
 static func create_player(character_name: String = "") -> Fighter:
 	var settings: Dictionary = DataManager.get_game_settings()

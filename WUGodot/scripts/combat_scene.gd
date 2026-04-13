@@ -353,6 +353,16 @@ func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 		var bleed_rect: Rect2 = Rect2(body_rect.position.x, body_rect.end.y + 4.0, body_rect.size.x, 4.0)
 		draw_rect(bleed_rect, Color8(180, 30, 30, int(160.0 * bleed_pulse)), true)
 
+	if fighter.is_grabbed:
+		var grab_pulse: float = sin(fighter.animation_timer * 15.0) * 0.5 + 0.5
+		var grab_rect: Rect2 = Rect2(
+			body_rect.position.x - 4.0,
+			body_rect.position.y - 4.0,
+			body_rect.size.x + 8.0,
+			body_rect.size.y + 8.0
+		)
+		draw_rect(grab_rect, Color8(255, 60, 40, int(120.0 * grab_pulse)), false, 3.0)
+
 func _draw_hud() -> void:
 	var left_panel: Rect2 = Rect2(20, 18, GameConstants.VIEW_WIDTH / 2 - 40, 98)
 	var right_panel: Rect2 = Rect2(GameConstants.VIEW_WIDTH / 2 + 20, 18, GameConstants.VIEW_WIDTH / 2 - 40, 98)
@@ -361,6 +371,18 @@ func _draw_hud() -> void:
 
 	_draw_bars(_player, 34, 36, false)
 	_draw_bars(_enemy, GameConstants.VIEW_WIDTH / 2 + 34, 36, true)
+	var enemy_name: String = _enemy.name
+	if not _enemy.archetype_id.is_empty():
+		var enemy_data: Dictionary = DataManager.get_enemy(_enemy.archetype_id)
+		var cn: String = str(enemy_data.get("name_cn", ""))
+		if not cn.is_empty():
+			enemy_name = "%s %s" % [cn, _enemy.name]
+	_draw_text(enemy_name, GameConstants.VIEW_WIDTH / 2 + 34, 30, Color8(210, 200, 190), 14)
+
+	if _enemy.boss_controller != null:
+		var phase_text: String = "Phase %d" % _enemy.boss_controller.current_phase
+		var phase_color: Color = Color8(255, 180, 60) if _enemy.boss_controller.current_phase == 2 else Color8(200, 195, 190)
+		_draw_text(phase_text, GameConstants.VIEW_WIDTH - 120, 30, phase_color, 14)
 
 	_draw_text("A/D move  W jump  J tap/hold  K block/parry  Space dash  L stance  P pause  R restart", 36, 128, Color8(170, 170, 186), 14)
 	if _player != null and _player.technique_engine != null:

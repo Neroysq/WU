@@ -2,6 +2,7 @@ class_name CombatSystem
 extends RefCounted
 
 const AttackCatalogScript = preload("res://scripts/attack_catalog.gd")
+const AttackDefinitionScript = preload("res://scripts/attack_definition.gd")
 
 signal spawn_particles(position: Vector2, count: int, color: Color)
 signal camera_shake(amount: float)
@@ -26,13 +27,13 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 	var move_control: float = ground_move_control if fighter.is_grounded else air_move_control
 	var target_speed: float = move * fighter.move_speed if is_trying_to_move else 0.0
 
-	var can_move: bool = fighter.current_animation != Fighter.AnimationState.DASHING and fighter.current_animation != Fighter.AnimationState.ATTACKING and fighter.current_animation != Fighter.AnimationState.STUNNED
+	var can_move: bool = fighter.current_animation != Fighter.AnimationState.DASHING and fighter.current_animation != Fighter.AnimationState.ATTACKING and fighter.current_animation != Fighter.AnimationState.STUNNED and not fighter.is_grabbed
 	if can_move:
 		fighter.velocity.x = lerp(fighter.velocity.x, target_speed, move_control)
 	elif fighter.current_animation == Fighter.AnimationState.ATTACKING:
 		fighter.velocity.x = lerp(fighter.velocity.x, 0.0, move_control * attack_move_control_multiplier)
 
-	if fighter.is_grounded and is_trying_to_move and fighter.current_animation == Fighter.AnimationState.IDLE:
+	if fighter.is_grounded and is_trying_to_move and fighter.current_animation == Fighter.AnimationState.IDLE and not fighter.is_grabbed:
 		fighter.current_animation = Fighter.AnimationState.WALKING
 		fighter.animation_timer = 0.0
 
@@ -142,41 +143,38 @@ func update_ai(ai: Fighter, target: Fighter, dt: float) -> void:
 
 	var distance: float = target.position.x - ai.position.x
 	var abs_distance: float = absf(distance)
-	var direction: float = -1.0 if distance < 0.0 else 1.0
-	var vertical_diff: float = target.position.y - ai.position.y
+	var direction: float = signf(distance)
 
-	var aggression_multiplier: float = 1.2 + (1.0 - ai.health_current / maxf(ai.health_max, 0.001)) * 0.5
+	if ai.boss_controller != null:
+		ai.boss_controller.update_cooldowns(dt)
+		if ai.boss_controller.check_phase_transition(ai):
+			emit_signal("camera_shake", 20.0)
+			emit_signal("slow_motion", 0.4, 0.6)
+			emit_signal("show_feedback", "「還在呼吸。好。我剛熱身。」", 1.2)
+			emit_signal("spawn_particles", ai.position + Vector2(0.0, -ai.height * 0.5), 30, Color8(255, 140, 40))
 
-	if ai.is_in_recovery() or ai.is_stunned:
-		var retreat_speed: float = 0.0 if ai.is_stunned else -direction * ai.move_speed * 0.4
-		ai.velocity.x = lerp(ai.velocity.x, retreat_speed, 0.2)
+	if ai.ai_brain != null:
+		ai.ai_brain.update_cooldowns(dt)
+		var action: Dictionary = ai.ai_brain.decide(ai, target)
+		_execute_ai_action(ai, target, action, dt, direction)
 	else:
-		if abs_distance > ai.attack_range * 0.9:
-			ai.velocity.x = lerp(ai.velocity.x, direction * ai.move_speed * aggression_multiplier, 0.3)
-			if vertical_diff < -50.0 and ai.can_jump() and _rng.randf() < 0.1:
-				ai.start_jump()
-			if abs_distance > 200.0 and ai.can_dash() and _rng.randf() < 0.05 * aggression_multiplier:
-				ai.start_dash()
-				emit_signal("spawn_particles", ai.position, 8, Color8(255, 100, 100))
-		else:
-			if _rng.randf() < 0.02 * aggression_multiplier:
-				ai.velocity.x = lerp(ai.velocity.x, -direction * ai.move_speed * 0.8, 0.3)
-			else:
-				ai.velocity.x = lerp(ai.velocity.x, 0.0, 0.3)
+		_execute_legacy_ai(ai, target, dt, direction, abs_distance)
 
-			if ai.can_attack() and ai._ai_decision_timer <= 0.0 and _rng.randf() < 0.25 * aggression_multiplier:
-				var next_attack: Variant = AttackCatalogScript.bandit_thrust_perilous() if _rng.randf() < 0.30 else AttackCatalogScript.bandit_slash()
-				ai._start_attack_with(next_attack)
-				ai._ai_decision_timer = 0.25
+	if ai.archetype_id == "masked_assassin" and not ai.is_stunned and not ai._attack_state.is_active():
+		var tp_chance: float = ai.ai_brain.teleport_chance if ai.ai_brain != null else 0.08
+		if abs_distance > 200.0 and ai.ai_brain != null and ai.ai_brain._rng.randf() < tp_chance:
+			var behind_offset: float = -direction * 120.0
+			var teleport_x: float = target.position.x + behind_offset
+			teleport_x = clampf(teleport_x, GameConstants.WORLD_BOUNDS_LEFT + 40.0, GameConstants.WORLD_BOUNDS_RIGHT - 40.0)
+			ai.position.x = teleport_x
+			emit_signal("spawn_particles", ai.position + Vector2(0.0, -ai.height * 0.5), 12, Color8(80, 60, 120))
+			emit_signal("show_feedback", "!", 0.3)
 
-			if target.is_hit_active() and _rng.randf() < 0.4:
-				ai.is_blocking = true
-				ai.trigger_parry_window()
-			else:
-				ai.is_blocking = false
-
-	if ai._attack_state.is_active() and ai._attack_state.elapsed < 0.01 and ai.combo_count > 0 and _rng.randf() < 0.3 * aggression_multiplier:
-		ai.combo_window = 0.4
+	if ai._attack_state.is_active() and ai._attack_state.def != null:
+		var lunge: float = ai._attack_state.def.forward_lunge
+		if lunge > 0.0 and ai._attack_state.phase() == AttackDefinitionScript.Phase.WINDUP:
+			var lunge_speed: float = lunge / maxf(ai._attack_state.def.windup_end, 0.01)
+			ai.velocity.x = float(ai.facing) * lunge_speed
 
 	if not ai.is_grounded:
 		ai.velocity.y += ai.gravity * dt
@@ -191,6 +189,69 @@ func update_ai(ai: Fighter, target: Fighter, dt: float) -> void:
 		ai.is_grounded = true
 	else:
 		ai.is_grounded = false
+
+func _execute_ai_action(ai: Fighter, target: Fighter, action: Dictionary, dt: float, direction: float) -> void:
+	ai.is_blocking = false
+
+	var action_type: String = str(action.get("type", "idle"))
+	match action_type:
+		"attack":
+			if ai.can_attack():
+				var attack_id: String = str(action.get("attack_id", ""))
+				if ai.boss_controller != null:
+					var phase_table: Array[String] = ai.boss_controller.get_phase_attack_table()
+					if not phase_table.is_empty() and ai.ai_brain != null:
+						var boss_distance: float = absf(target.position.x - ai.position.x)
+						attack_id = ai.ai_brain.pick_attack_from_table(phase_table, boss_distance)
+					if attack_id == "bear_crush_grab" and not ai.boss_controller.can_use_bear_crush():
+						attack_id = "bear_swipe"
+					elif attack_id == "bear_crush_grab":
+						ai.boss_controller.consume_bear_crush()
+					if ai.boss_controller.can_use_mountain_breaker() and ai.ai_brain != null and ai.ai_brain._rng.randf() < 0.15:
+						attack_id = "mountain_breaker"
+						ai.boss_controller.consume_mountain_breaker()
+				var atk_def: Variant = ai.ai_brain.get_attack_def(attack_id) if ai.ai_brain != null else null
+				if atk_def != null:
+					if ai.boss_controller != null and ai.boss_controller.current_phase == 2:
+						var recovery: float = atk_def.duration - atk_def.active_end
+						atk_def.duration = atk_def.active_end + recovery * 0.8
+					ai._start_attack_with(atk_def)
+					ai._ai_decision_timer = 0.2
+					var attack_pos: Vector2 = ai.position + Vector2(float(ai.facing) * ai.half_width, -ai.height * 0.4)
+					emit_signal("spawn_particles", attack_pos, 6, Color8(255, 120, 100))
+		"block":
+			ai.is_blocking = true
+			ai.trigger_parry_window()
+		"move":
+			var move_dir: float = float(action.get("direction", direction))
+			ai.velocity.x = lerp(ai.velocity.x, move_dir * ai.move_speed, 0.3)
+		"dash":
+			if ai.can_dash():
+				var dash_dir: int = int(signf(float(action.get("direction", direction))))
+				ai.start_dash(dash_dir)
+				emit_signal("spawn_particles", ai.position, 8, Color8(255, 100, 100))
+		_:
+			ai.velocity.x = lerp(ai.velocity.x, 0.0, 0.2)
+
+func _execute_legacy_ai(ai: Fighter, target: Fighter, dt: float, direction: float, abs_distance: float) -> void:
+	var aggression_multiplier: float = 1.2 + (1.0 - ai.health_current / maxf(ai.health_max, 0.001)) * 0.5
+	if ai.is_in_recovery() or ai.is_stunned:
+		var retreat_speed: float = 0.0 if ai.is_stunned else -direction * ai.move_speed * 0.4
+		ai.velocity.x = lerp(ai.velocity.x, retreat_speed, 0.2)
+	else:
+		if abs_distance > ai.attack_range * 0.9:
+			ai.velocity.x = lerp(ai.velocity.x, direction * ai.move_speed * aggression_multiplier, 0.3)
+		else:
+			ai.velocity.x = lerp(ai.velocity.x, 0.0, 0.3)
+			if ai.can_attack() and ai._ai_decision_timer <= 0.0 and _rng.randf() < 0.25 * aggression_multiplier:
+				var next_attack: Variant = AttackCatalogScript.bandit_thrust_perilous() if _rng.randf() < 0.30 else AttackCatalogScript.bandit_slash()
+				ai._start_attack_with(next_attack)
+				ai._ai_decision_timer = 0.25
+			if target.is_hit_active() and _rng.randf() < 0.4:
+				ai.is_blocking = true
+				ai.trigger_parry_window()
+			else:
+				ai.is_blocking = false
 
 func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 	var settings: Dictionary = DataManager.get_game_settings()
@@ -210,6 +271,27 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 
 	if in_range and vertical_range and facing_correct and not attacker.was_hit_this_swing:
 		attacker.was_hit_this_swing = true
+
+		var attack_is_grab: bool = attack_def != null and attack_def.is_grab
+		if attack_is_grab:
+			var grab_damage: float = defender.health_max * 0.25
+			defender.health_current -= grab_damage
+			defender.health_current = maxf(defender.health_current, 0.0)
+			defender.is_grabbed = true
+			defender._grab_timer = 0.6
+			defender.velocity = Vector2.ZERO
+			emit_signal("damage_dealt", defender.position + Vector2(0.0, -defender.height - 20.0), grab_damage, true)
+			emit_signal("camera_shake", 14.0)
+			emit_signal("hitstop", 0.15)
+			emit_signal("show_feedback", "CRUSH!", 0.7)
+			emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height * 0.5), 16, Color8(255, 100, 60))
+			if defender.health_current <= 0.0 and defender.technique_engine != null:
+				if defender.technique_engine.check_lethal_save(defender):
+					emit_signal("camera_shake", 16.0)
+					emit_signal("slow_motion", 0.4, 0.5)
+					emit_signal("show_feedback", "鳳凰起!", 0.8)
+					emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height * 0.5), 24, Color8(255, 120, 40))
+			return
 
 		if defender.consume_parry_if_active() and not attack_is_perilous:
 			attacker.apply_posture_damage(float(settings.get("parryPostureDamage", 55.0)))

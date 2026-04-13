@@ -6,6 +6,8 @@ const _TEST_MODULES: Array[String] = [
 	"res://tests/test_input_buffer.gd",
 	"res://tests/test_technique.gd",
 	"res://tests/test_technique_engine.gd",
+	"res://tests/test_ai_brain.gd",
+	"res://tests/test_boss_controller.gd",
 ]
 
 var _passed: int = 0

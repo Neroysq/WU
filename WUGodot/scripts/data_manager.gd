@@ -61,6 +61,14 @@ static func get_technique(id: String) -> Dictionary:
 static func get_all_techniques() -> Dictionary:
 	return _techniques.duplicate(true)
 
+static func get_enemy_archetypes_for_difficulty(difficulty: String) -> Array[String]:
+	var result: Array[String] = []
+	for key in _enemies.keys():
+		var data: Dictionary = _enemies[key] as Dictionary
+		if str(data.get("difficulty", "")) == difficulty:
+			result.append(str(key))
+	return result
+
 static func _load_techniques() -> void:
 	var dir: DirAccess = DirAccess.open("res://data/Techniques")
 	if dir == null:
@@ -212,14 +220,15 @@ static func _load_enemies() -> void:
 		if file_name.get_extension().to_lower() != "json":
 			continue
 		var enemy_data: Dictionary = _load_json_file("res://data/Enemies/%s" % file_name)
-		if not enemy_data.has("type"):
+		var archetype: String = str(enemy_data.get("archetype", enemy_data.get("type", "")))
+		if archetype.is_empty():
 			continue
 		var normalized: Dictionary = _default_enemy_data()
 		for key in enemy_data.keys():
 			normalized[key] = enemy_data[key]
 		normalized["colorBody"] = _parse_color(normalized.get("colorBody", "#FF7878"), Color8(255, 120, 120))
 		normalized["colorAccent"] = _parse_color(normalized.get("colorAccent", "#D23C3C"), Color8(210, 60, 60))
-		_enemies[str(normalized["type"])] = normalized
+		_enemies[archetype] = normalized
 	dir.list_dir_end()
 
 static func _load_json_file(path: String) -> Dictionary:
