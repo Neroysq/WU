@@ -30,6 +30,8 @@ var _feedback_frame: int = -1
 var _is_paused: bool = false
 var _debug_enabled: bool = false
 var _heavy_committed_attack: bool = false
+var _boss_death_timer: float = 0.0
+var _boss_death_triggered: bool = false
 
 var _input_tracker: InputTracker = InputTracker.new()
 var _input_buffer: Variant = InputBufferScript.new()
@@ -79,6 +81,8 @@ func setup_combat(player: Fighter, node: MapNode) -> void:
 	_slow_mo_timer = 0.0
 	_slow_mo_factor = 1.0
 	_heavy_committed_attack = false
+	_boss_death_timer = 0.0
+	_boss_death_triggered = false
 
 	_particle_system.clear()
 	_damage_number_system.clear()
@@ -146,6 +150,23 @@ func _process(delta: float) -> void:
 		queue_redraw()
 		return
 
+	if _boss_death_triggered:
+		_boss_death_timer -= delta
+		if _boss_death_timer <= 0.0:
+			_boss_death_triggered = false
+			_is_paused_on_end = true
+			_end_message = "Boss Defeated (Enter)"
+			_sync_input_tracker()
+			queue_redraw()
+			return
+		if not _is_paused:
+			_camera.update(delta)
+			_particle_system.update(dt)
+			_damage_number_system.update(dt)
+		_sync_input_tracker()
+		queue_redraw()
+		return
+
 	_combat_system.update_facing(_player, _enemy)
 
 	var attack_key: int = int(_player.controls.get("attack", KEY_J))
@@ -170,8 +191,17 @@ func _process(delta: float) -> void:
 	elif _enemy.health_current <= 0.0:
 		if _player.technique_engine != null:
 			_player.technique_engine.on_kill(_player)
-		_is_paused_on_end = true
-		_end_message = "Boss Defeated (Enter)" if _current_node.node_type == MapNode.NodeType.BOSS else "Victory (Enter)"
+		if _current_node.node_type == MapNode.NodeType.BOSS:
+			_boss_death_triggered = true
+			_boss_death_timer = 1.0
+			_trigger_slow_mo(0.2, 1.0)
+			_on_camera_shake(20.0)
+			_show_feedback("破山!", 1.2)
+			_particle_system.spawn_hit_sparks(_enemy.position + Vector2(0.0, -_enemy.height * 0.5), 40, Color8(255, 200, 80))
+			_particle_system.spawn_hit_sparks(_enemy.position + Vector2(0.0, -_enemy.height * 0.3), 20, Color8(255, 120, 40))
+		else:
+			_is_paused_on_end = true
+			_end_message = "Victory (Enter)"
 
 	if not _is_paused:
 		_camera.update(delta)

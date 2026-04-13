@@ -4,6 +4,7 @@ const EventRunnerScript = preload("res://scripts/event_runner.gd")
 const ShopGeneratorScript = preload("res://scripts/shop_generator.gd")
 
 enum SceneType {
+	MAIN_MENU,
 	MAP,
 	COMBAT,
 	REWARD,
@@ -11,12 +12,13 @@ enum SceneType {
 	SHOP,
 	REST,
 	FORGET_TECHNIQUE,
+	VICTORY,
 	GAME_OVER,
 }
 
 @onready var _combat_scene: CombatScene = $CombatScene
 
-var _current_scene: int = SceneType.MAP
+var _current_scene: int = SceneType.MAIN_MENU
 var _run_state: RunState
 var _player: Fighter
 var _map_selection_idx: int = 0
@@ -37,6 +39,10 @@ var _shop_message_timer: float = 0.0
 var _forget_selection_idx: int = 0
 var _rest_choice_idx: int = 0
 var _combat_gold_multiplier: int = 1
+var _run_start_time: float = 0.0
+var _run_end_time: float = 0.0
+var _run_gold_earned: int = 0
+var _run_techniques_acquired: Array[String] = []
 
 var _input_tracker: InputTracker = InputTracker.new()
 var _cursor_flash: float = 0.0
@@ -45,8 +51,9 @@ func _ready() -> void:
 	Engine.max_fps = GameConstants.TARGET_FPS
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	DataManager.initialize()
-	start_new_run()
+	_current_scene = SceneType.MAIN_MENU
 	_combat_scene.combat_end.connect(_on_combat_end)
+	_combat_scene.deactivate()
 	queue_redraw()
 	_sync_input_tracker()
 
@@ -72,6 +79,10 @@ func start_new_run() -> void:
 	_forget_selection_idx = 0
 	_rest_choice_idx = 0
 	_combat_gold_multiplier = 1
+	_run_start_time = Time.get_ticks_msec() / 1000.0
+	_run_end_time = 0.0
+	_run_gold_earned = 0
+	_run_techniques_acquired.clear()
 	_input_tracker.clear()
 	_combat_scene.on_exit()
 	_combat_scene.deactivate()
@@ -80,20 +91,22 @@ func _process(delta: float) -> void:
 	_cursor_flash += delta
 
 	if Input.is_key_pressed(KEY_ESCAPE):
-		if _current_scene == SceneType.MAP or _current_scene == SceneType.GAME_OVER:
+		if _current_scene == SceneType.MAIN_MENU or _current_scene == SceneType.MAP or _current_scene == SceneType.GAME_OVER:
 			get_tree().quit()
 			return
 
 	if _input_tracker.pressed_key(KEY_F5):
 		DataManager.reload_data()
 
-	if _input_tracker.pressed_key(KEY_R):
+	if _input_tracker.pressed_key(KEY_R) and (_current_scene == SceneType.MAP or _current_scene == SceneType.COMBAT):
 		start_new_run()
 		_sync_input_tracker()
 		queue_redraw()
 		return
 
 	match _current_scene:
+		SceneType.MAIN_MENU:
+			_update_main_menu()
 		SceneType.MAP:
 			_update_map()
 		SceneType.COMBAT:
@@ -108,11 +121,18 @@ func _process(delta: float) -> void:
 			_update_rest()
 		SceneType.FORGET_TECHNIQUE:
 			_update_forget_technique()
+		SceneType.VICTORY:
+			_update_victory()
 		SceneType.GAME_OVER:
 			_update_game_over()
 
 	_sync_input_tracker()
 	queue_redraw()
+
+func _update_main_menu() -> void:
+	if _accept_pressed() or _input_tracker.pressed_mouse(MOUSE_BUTTON_LEFT):
+		start_new_run()
+		_current_scene = SceneType.MAP
 
 func _update_map() -> void:
 	var next_nodes: Array[MapNode] = _run_state.get_available_next()
@@ -243,6 +263,10 @@ func _update_shop(delta: float) -> void:
 		_shop_message = str(result.get("message", ""))
 		_shop_message_timer = 2.0
 		if bool(result.get("success", false)):
+			if str(item.get("type", "")) == "technique":
+				var bought_id: String = str(item.get("technique_id", ""))
+				if not bought_id.is_empty() and not _run_techniques_acquired.has(bought_id):
+					_run_techniques_acquired.append(bought_id)
 			if bool(result.get("open_forget", false)):
 				_shop_items.remove_at(_shop_selection_idx)
 				_shop_selection_idx = mini(_shop_selection_idx, maxi(_shop_items.size() - 1, 0))
@@ -299,13 +323,13 @@ func _update_forget_technique() -> void:
 		_run_state.mark_current_node_cleared()
 		_current_scene = SceneType.MAP
 
-func _update_game_over() -> void:
-	var restart_rect: Rect2 = _get_restart_button_rect()
-	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
-	_game_over_hover_restart = restart_rect.has_point(mouse_pos)
+func _update_victory() -> void:
+	if _accept_pressed() or _input_tracker.pressed_mouse(MOUSE_BUTTON_LEFT):
+		_current_scene = SceneType.MAIN_MENU
 
-	if _accept_pressed() or (_game_over_hover_restart and _input_tracker.pressed_mouse(MOUSE_BUTTON_LEFT)):
-		start_new_run()
+func _update_game_over() -> void:
+	if _accept_pressed() or _input_tracker.pressed_mouse(MOUSE_BUTTON_LEFT):
+		_current_scene = SceneType.MAIN_MENU
 
 func _travel_to_node(chosen: MapNode) -> void:
 	_run_state.advance_to(chosen.id)
@@ -431,12 +455,17 @@ func _resolve_event_choice(index: int) -> void:
 		var passed_test: bool = rng.randf() < 0.5
 		_event_result = _event_runner.apply_timing_result(passed_test, _player)
 	_event_showing_result = true
+	var granted: String = str(_event_result.get("granted_technique", ""))
+	if not granted.is_empty() and not _run_techniques_acquired.has(granted):
+		_run_techniques_acquired.append(granted)
 
 func _apply_reward_by_index(index: int) -> void:
 	if index < 0 or index >= _rewards.size():
 		return
 	var selected: RewardOption = _rewards[index]
 	selected.apply(_player)
+	if selected.technique_id != "" and not _run_techniques_acquired.has(selected.technique_id):
+		_run_techniques_acquired.append(selected.technique_id)
 	_run_state.mark_current_node_cleared()
 	_rewards.clear()
 	_reward_selection_idx = 0
@@ -457,7 +486,9 @@ func _on_combat_end(victory: bool) -> void:
 					base_gold = 10
 				MapNode.NodeType.BOSS:
 					base_gold = 0
-		_player.gold += base_gold * _combat_gold_multiplier
+		var gold_gained: int = base_gold * _combat_gold_multiplier
+		_player.gold += gold_gained
+		_run_gold_earned += gold_gained
 
 		if node != null and node.node_type == MapNode.NodeType.AMBUSH:
 			node.ambush_remaining -= 1
@@ -469,16 +500,19 @@ func _on_combat_end(victory: bool) -> void:
 
 		_run_state.mark_current_node_cleared()
 		if node != null and node.node_type == MapNode.NodeType.BOSS:
-			_current_scene = SceneType.GAME_OVER
-			_end_message = "Victory! Run Complete!"
+			_run_end_time = Time.get_ticks_msec() / 1000.0
+			_current_scene = SceneType.VICTORY
 		else:
 			_current_scene = SceneType.REWARD
 	else:
+		_run_end_time = Time.get_ticks_msec() / 1000.0
 		_current_scene = SceneType.GAME_OVER
-		_end_message = "Defeat..."
+		_end_message = "Defeated"
 
 func _draw() -> void:
 	match _current_scene:
+		SceneType.MAIN_MENU:
+			_draw_main_menu()
 		SceneType.MAP:
 			_draw_map()
 		SceneType.COMBAT:
@@ -493,8 +527,30 @@ func _draw() -> void:
 			_draw_rest()
 		SceneType.FORGET_TECHNIQUE:
 			_draw_forget_technique()
+		SceneType.VICTORY:
+			_draw_victory()
 		SceneType.GAME_OVER:
 			_draw_game_over()
+
+func _draw_main_menu() -> void:
+	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), Color8(10, 10, 14), true)
+
+	var center_x: float = float(GameConstants.VIEW_WIDTH) * 0.5
+	var title_y: float = float(GameConstants.VIEW_HEIGHT) * 0.3
+
+	_draw_text("武", center_x - 40.0, title_y, Color(0.95, 0.92, 0.85, 0.95), 80)
+	_draw_text("W U", center_x - 30.0, title_y + 60.0, Color(0.7, 0.68, 0.62, 0.8), 28)
+	_draw_text("A Sekiro-paced wuxia duel roguelike", center_x - 180.0, title_y + 110.0, Color(0.55, 0.54, 0.5, 0.7), 16)
+
+	var prompt_pulse: float = 0.5 + 0.5 * sin(_cursor_flash * 4.0)
+	_draw_text("Press Enter to begin", center_x - 100.0, float(GameConstants.VIEW_HEIGHT) * 0.65, Color(0.8, 0.78, 0.7, prompt_pulse), 20)
+	_draw_text("Chapter 1: Jianghu", center_x - 80.0, float(GameConstants.VIEW_HEIGHT) - 80.0, Color(0.4, 0.38, 0.35, 0.5), 14)
+
+	var border_color: Color = Color(0.3, 0.28, 0.22, 0.3)
+	draw_rect(Rect2(60.0, 60.0, float(GameConstants.VIEW_WIDTH) - 120.0, 2.0), border_color)
+	draw_rect(Rect2(60.0, float(GameConstants.VIEW_HEIGHT) - 62.0, float(GameConstants.VIEW_WIDTH) - 120.0, 2.0), border_color)
+	draw_rect(Rect2(60.0, 60.0, 2.0, float(GameConstants.VIEW_HEIGHT) - 120.0), border_color)
+	draw_rect(Rect2(float(GameConstants.VIEW_WIDTH) - 62.0, 60.0, 2.0, float(GameConstants.VIEW_HEIGHT) - 120.0), border_color)
 
 func _draw_map() -> void:
 	_draw_background()
@@ -655,21 +711,85 @@ func _draw_forget_technique() -> void:
 		y += 44.0
 	_draw_text("W/S to browse, Enter to forget, Q to cancel", panel.position.x + 26.0, panel.end.y - 30.0, Color(0.6, 0.62, 0.66, 0.7), 14)
 
-func _draw_game_over() -> void:
-	_draw_background()
-	var panel: Rect2 = _get_game_over_panel_rect()
-	_draw_panel(panel)
-	_draw_text(_end_message, panel.position.x + 26.0, panel.position.y + 48.0, Color(0.95, 0.95, 0.98, 0.95), 26)
-	_draw_text("Press Enter / click to restart", panel.position.x + 26.0, panel.position.y + 78.0, Color(0.72, 0.74, 0.78, 0.85), 15)
+func _draw_victory() -> void:
+	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), Color8(12, 11, 16), true)
 
-	var restart_rect: Rect2 = _get_restart_button_rect()
-	var border: Color = Color(0.6, 0.62, 0.68, 0.4)
-	if _game_over_hover_restart:
-		border = Color(0.9, 0.92, 0.98, 0.95)
-	draw_rect(restart_rect, Color(0.06, 0.07, 0.08, 0.88), true)
-	draw_rect(restart_rect, border, false, 2.0)
-	_draw_text("Restart Run", restart_rect.position.x + 28.0, restart_rect.position.y + 34.0, Color(0.9, 0.92, 0.96, 0.95), 18)
-	_draw_menu_cursor(restart_rect.position + Vector2(-14.0, 30.0))
+	var center_x: float = float(GameConstants.VIEW_WIDTH) * 0.5
+	var scroll: Rect2 = Rect2(center_x - 340.0, 80.0, 680.0, float(GameConstants.VIEW_HEIGHT) - 160.0)
+	draw_rect(scroll, Color8(28, 26, 22, 240), true)
+	var gold: Color = GameConstants.COLOR_GOLD_DARK
+	draw_rect(Rect2(scroll.position.x, scroll.position.y, scroll.size.x, 3.0), gold)
+	draw_rect(Rect2(scroll.position.x, scroll.end.y - 3.0, scroll.size.x, 3.0), gold)
+	draw_rect(Rect2(scroll.position.x, scroll.position.y, 3.0, scroll.size.y), gold)
+	draw_rect(Rect2(scroll.end.x - 3.0, scroll.position.y, 3.0, scroll.size.y), gold)
+
+	var y: float = scroll.position.y + 50.0
+	var left: float = scroll.position.x + 40.0
+
+	_draw_text("江湖初顯", center_x - 60.0, y, Color(0.95, 0.88, 0.65, 0.95), 36)
+	y += 40.0
+	_draw_text("The Wanderer Emerges", center_x - 100.0, y, Color(0.75, 0.72, 0.65, 0.8), 18)
+	y += 60.0
+
+	draw_rect(Rect2(left, y, scroll.size.x - 80.0, 1.0), Color(0.5, 0.45, 0.35, 0.4))
+	y += 30.0
+
+	var run_duration: float = _run_end_time - _run_start_time
+	var minutes: int = int(run_duration) / 60
+	var seconds: int = int(run_duration) % 60
+	_draw_text("Run Duration", left, y, Color(0.6, 0.58, 0.52, 0.7), 14)
+	_draw_text("%d:%02d" % [minutes, seconds], left + 200.0, y, Color(0.9, 0.88, 0.8, 0.9), 16)
+	y += 30.0
+
+	var hp_pct: int = int(round(_player.health_current / maxf(_player.health_max, 1.0) * 100.0))
+	_draw_text("Final HP", left, y, Color(0.6, 0.58, 0.52, 0.7), 14)
+	_draw_text("%d%%" % hp_pct, left + 200.0, y, Color(0.9, 0.88, 0.8, 0.9), 16)
+	y += 30.0
+
+	_draw_text("Gold Earned", left, y, Color(0.6, 0.58, 0.52, 0.7), 14)
+	_draw_text("%d" % _run_gold_earned, left + 200.0, y, Color(1.0, 0.85, 0.3, 0.9), 16)
+	y += 40.0
+
+	draw_rect(Rect2(left, y, scroll.size.x - 80.0, 1.0), Color(0.5, 0.45, 0.35, 0.4))
+	y += 20.0
+	_draw_text("Techniques Mastered", left, y, Color(0.6, 0.58, 0.52, 0.7), 14)
+	y += 24.0
+
+	if _run_techniques_acquired.is_empty():
+		_draw_text("(none)", left + 20.0, y, Color(0.5, 0.48, 0.44, 0.6), 14)
+		y += 20.0
+	else:
+		for tech_id in _run_techniques_acquired:
+			var tech_data: Dictionary = DataManager.get_technique(tech_id)
+			var cn: String = str(tech_data.get("name_cn", ""))
+			var en: String = str(tech_data.get("name_en", tech_id))
+			_draw_text("%s %s" % [cn, en], left + 20.0, y, Color(0.85, 0.82, 0.75, 0.85), 15)
+			y += 22.0
+
+	y = scroll.end.y - 80.0
+	draw_rect(Rect2(left, y, scroll.size.x - 80.0, 1.0), Color(0.5, 0.45, 0.35, 0.4))
+	y += 20.0
+	_draw_text("The road beyond the bamboo leads deeper into the jianghu...", left, y, Color(0.5, 0.48, 0.42, 0.6), 13)
+
+	var pulse: float = 0.5 + 0.5 * sin(_cursor_flash * 4.0)
+	_draw_text("Press Enter to return", center_x - 90.0, scroll.end.y + 30.0, Color(0.7, 0.68, 0.6, pulse), 16)
+
+func _draw_game_over() -> void:
+	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), Color8(14, 10, 10), true)
+
+	var center_x: float = float(GameConstants.VIEW_WIDTH) * 0.5
+	var center_y: float = float(GameConstants.VIEW_HEIGHT) * 0.5
+
+	_draw_text("敗", center_x - 30.0, center_y - 60.0, Color(0.6, 0.2, 0.15, 0.8), 60)
+	_draw_text("Defeated", center_x - 50.0, center_y + 10.0, Color(0.7, 0.3, 0.25, 0.7), 22)
+
+	var run_duration: float = _run_end_time - _run_start_time
+	var minutes: int = int(run_duration) / 60
+	var seconds: int = int(run_duration) % 60
+	_draw_text("Time: %d:%02d" % [minutes, seconds], center_x - 50.0, center_y + 60.0, Color(0.5, 0.45, 0.4, 0.6), 14)
+
+	var pulse: float = 0.5 + 0.5 * sin(_cursor_flash * 4.0)
+	_draw_text("Press Enter to return", center_x - 90.0, center_y + 120.0, Color(0.6, 0.55, 0.5, pulse), 16)
 
 func _draw_background() -> void:
 	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), Color8(14, 15, 18), true)
