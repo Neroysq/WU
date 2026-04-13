@@ -97,6 +97,7 @@ var technique_engine: Variant = null
 var ai_brain: Variant = null
 var boss_controller: Variant = null
 var archetype_id: String = ""
+var gold: int = 0
 
 var dash_duration: float = GameConstants.DASH_DURATION
 var dash_cooldown: float = GameConstants.DASH_COOLDOWN

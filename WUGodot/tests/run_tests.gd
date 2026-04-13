@@ -8,6 +8,8 @@ const _TEST_MODULES: Array[String] = [
 	"res://tests/test_technique_engine.gd",
 	"res://tests/test_ai_brain.gd",
 	"res://tests/test_boss_controller.gd",
+	"res://tests/test_event_runner.gd",
+	"res://tests/test_map_generator.gd",
 ]
 
 var _passed: int = 0

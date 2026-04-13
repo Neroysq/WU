@@ -1,0 +1,92 @@
+{
+  "events": [
+    {
+      "id": "roadside_villager",
+      "title": "Roadside Villager",
+      "title_cn": "路邊村民",
+      "text": "A villager waves you down from the roadside. \"Please, traveler. Bandits took my cart just ahead. Help me, and I'll share what they stole.\"",
+      "choices": [
+        {"label": "Help the villager", "outcome": "help"},
+        {"label": "Ignore and continue", "outcome": "ignore"}
+      ],
+      "outcomes": {
+        "help": {"gold": 30, "hp": -10, "message": "You drive off the bandits but take a few cuts. The villager shares 30 gold."},
+        "ignore": {"message": "You keep walking. The villager's voice fades behind you."}
+      }
+    },
+    {
+      "id": "travelling_merchant",
+      "title": "Travelling Merchant",
+      "title_cn": "行商",
+      "text": "A merchant with a heavy pack nods at you. \"I carry rare goods from distant schools. Care to trade?\"",
+      "choices": [
+        {"label": "Trade", "outcome": "trade"},
+        {"label": "Leave", "outcome": "leave"}
+      ],
+      "outcomes": {
+        "trade": {"open_shop": true, "shop_rarity_boost": true, "message": "The merchant spreads out wares of unusual quality."},
+        "leave": {"message": "You nod politely and move on."}
+      }
+    },
+    {
+      "id": "shrine_offering",
+      "title": "Shrine Offering",
+      "title_cn": "祠堂供品",
+      "text": "A weathered roadside shrine still burns with incense. The air hums with martial intent.",
+      "choices": [
+        {"label": "Offer gold (30g)", "outcome": "gold"},
+        {"label": "Offer blood (10 HP)", "outcome": "blood"},
+        {"label": "Leave", "outcome": "leave"}
+      ],
+      "outcomes": {
+        "gold": {"gold": -30, "grant_technique": "random", "message": "The shrine glows. A technique crystallizes in your mind."},
+        "blood": {"hp": -10, "grant_technique": "random", "message": "Blood stains the stone. Knowledge floods your thoughts."},
+        "leave": {"message": "You bow and continue on your way."}
+      }
+    },
+    {
+      "id": "drunken_master",
+      "title": "Drunken Master",
+      "title_cn": "醉師",
+      "text": "An old man sits on a rock, sipping from a gourd. \"Think you're fast? Press J three times in rhythm. Get it right and I'll teach you something.\"",
+      "choices": [
+        {"label": "Accept the test", "outcome": "test"},
+        {"label": "Decline", "outcome": "decline"}
+      ],
+      "outcomes": {
+        "test": {
+          "timing_test": true,
+          "pass": {"grant_technique": "random_B", "message": "The old man grins. \"Not bad.\" He shares a secret technique."},
+          "fail": {"hp": -15, "message": "The old man cracks your forehead with his gourd. \"Too slow!\""}
+        },
+        "decline": {"message": "The old man shrugs and takes another sip."}
+      }
+    },
+    {
+      "id": "bandit_camp",
+      "title": "Bandit Camp",
+      "title_cn": "匪營",
+      "text": "Smoke rises from behind the trees. A bandit camp lies ahead, poorly guarded but full of stolen supplies.",
+      "choices": [
+        {"label": "Sneak past", "outcome": "sneak"},
+        {"label": "Infiltrate", "outcome": "infiltrate"}
+      ],
+      "outcomes": {
+        "sneak": {"message": "You slip past without a sound."},
+        "infiltrate": {"trigger_combat": true, "combat_gold_multiplier": 2, "message": "You charge in. The bandits scramble for weapons."}
+      }
+    },
+    {
+      "id": "abandoned_scroll",
+      "title": "Abandoned Scroll",
+      "title_cn": "遺卷",
+      "text": "A scroll lies half-buried in the dirt, its seal broken. The calligraphy describes a martial technique.",
+      "choices": [
+        {"label": "Read the scroll", "outcome": "read"}
+      ],
+      "outcomes": {
+        "read": {"grant_technique": "random_A", "message": "You study the scroll's teachings. A new technique takes root."}
+      }
+    }
+  ]
+}

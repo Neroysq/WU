@@ -8,98 +8,111 @@ var max_tier: int = 0
 static func create_simple_three_tier() -> RunState:
 	return create_procedural_run()
 
-static func create_procedural_run(seed: int = -1) -> RunState:
+static func create_procedural_run(seed_value: int = -1) -> RunState:
 	var run: RunState = RunState.new()
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-	if seed >= 0:
-		rng.seed = seed
+	if seed_value >= 0:
+		rng.seed = seed_value
 	else:
 		rng.randomize()
 
-	var tier_nodes: Array = []
 	var next_id: int = 0
+	var tier_nodes: Array = []
 
-	var start_node: MapNode = MapNode.new(next_id, 0, MapNode.NodeType.EVENT, [])
-	run.nodes.append(start_node)
-	tier_nodes.append([start_node])
+	var start: MapNode = MapNode.new(next_id, 0, MapNode.NodeType.EVENT, [])
+	run.nodes.append(start)
+	tier_nodes.append([start])
 	next_id += 1
 
-	var middle_tier_count: int = rng.randi_range(2, 3)
-	for tier in range(1, middle_tier_count + 1):
-		var node_count: int = 2 if tier == middle_tier_count else rng.randi_range(2, 3)
-		var tier_bucket: Array = []
-		for node_index in range(node_count):
-			var node_type: int = _pick_node_type_for_tier(rng, tier, middle_tier_count, node_index)
-			var node: MapNode = MapNode.new(next_id, tier, node_type, [])
-			run.nodes.append(node)
-			tier_bucket.append(node)
+	for tier in range(1, 6):
+		var bucket: Array = []
+		if tier == 3:
+			var master: MapNode = MapNode.new(next_id, tier, MapNode.NodeType.MASTER, [])
+			run.nodes.append(master)
+			bucket.append(master)
 			next_id += 1
-		tier_nodes.append(tier_bucket)
+		elif tier == 5:
+			var rest: MapNode = MapNode.new(next_id, tier, MapNode.NodeType.REST, [])
+			run.nodes.append(rest)
+			bucket.append(rest)
+			next_id += 1
+		else:
+			var node_count: int = 3 if tier <= 2 else rng.randi_range(3, 4)
+			for idx in range(node_count):
+				var node_type: int = _pick_node_type(rng, tier, idx)
+				var node: MapNode = MapNode.new(next_id, tier, node_type, [])
+				run.nodes.append(node)
+				bucket.append(node)
+				next_id += 1
+		tier_nodes.append(bucket)
 
-	var boss_tier: int = middle_tier_count + 1
-	var boss_node: MapNode = MapNode.new(next_id, boss_tier, MapNode.NodeType.BOSS, [])
-	run.nodes.append(boss_node)
-	tier_nodes.append([boss_node])
+	var boss: MapNode = MapNode.new(next_id, 6, MapNode.NodeType.BOSS, [])
+	run.nodes.append(boss)
+	tier_nodes.append([boss])
 
-	for tier_index in range(tier_nodes.size() - 1):
-		var previous_tier_nodes: Array = tier_nodes[tier_index] as Array
-		var next_tier_nodes: Array = tier_nodes[tier_index + 1] as Array
-		_connect_tiers(previous_tier_nodes, next_tier_nodes, rng)
+	for tier_idx in range(tier_nodes.size() - 1):
+		_connect_tiers(tier_nodes[tier_idx] as Array, tier_nodes[tier_idx + 1] as Array, rng)
 
-	run.current_node_id = start_node.id
-	run.max_tier = boss_tier
+	run.current_node_id = start.id
+	run.max_tier = 6
 	return run
 
-static func _pick_node_type_for_tier(rng: RandomNumberGenerator, tier: int, middle_tier_count: int, node_index: int) -> int:
-	if tier == middle_tier_count:
-		if node_index == 0:
+static func _pick_node_type(rng: RandomNumberGenerator, tier: int, idx: int) -> int:
+	if tier == 4:
+		if idx == 0:
 			return MapNode.NodeType.ELITE
-		if rng.randf() < 0.45:
-			return MapNode.NodeType.BATTLE
-		return MapNode.NodeType.TREASURE if rng.randf() < 0.5 else MapNode.NodeType.EVENT
+		if idx == 1:
+			return MapNode.NodeType.SHOP
+		var late_pool: Array[int] = [
+			MapNode.NodeType.BATTLE,
+			MapNode.NodeType.EVENT,
+			MapNode.NodeType.SHOP,
+		]
+		return int(late_pool[rng.randi_range(0, late_pool.size() - 1)])
 
-	if node_index == 0:
+	if idx == 0:
 		return MapNode.NodeType.BATTLE
 
-	var pool: Array[int] = [
-		MapNode.NodeType.BATTLE,
-		MapNode.NodeType.EVENT,
-		MapNode.NodeType.TREASURE,
-	]
-	return int(pool[rng.randi_range(0, pool.size() - 1)])
+	var roll: float = rng.randf()
+	if roll < 0.4:
+		return MapNode.NodeType.BATTLE
+	if roll < 0.6:
+		return MapNode.NodeType.EVENT
+	if roll < 0.75:
+		return MapNode.NodeType.AMBUSH
+	if roll < 0.85:
+		return MapNode.NodeType.SHOP
+	return MapNode.NodeType.ELITE
 
-static func _connect_tiers(previous_nodes: Array, next_nodes: Array, rng: RandomNumberGenerator) -> void:
+static func _connect_tiers(prev_nodes: Array, next_nodes: Array, rng: RandomNumberGenerator) -> void:
 	var incoming: Dictionary = {}
-	for next_node_variant in next_nodes:
-		var next_node: MapNode = next_node_variant as MapNode
+	for next_variant in next_nodes:
+		var next_node: MapNode = next_variant as MapNode
 		incoming[next_node.id] = 0
 
-	for previous_index in range(previous_nodes.size()):
-		var previous_node: MapNode = previous_nodes[previous_index] as MapNode
-		previous_node.next_ids.clear()
-
-		var anchor_index: int = int(round(float(previous_index) * float(maxi(next_nodes.size() - 1, 0)) / float(maxi(previous_nodes.size() - 1, 1))))
-		var target_indices: Array[int] = [anchor_index]
-		if next_nodes.size() > 1 and rng.randf() < 0.45:
-			var neighbor_offset: int = -1 if rng.randf() < 0.5 else 1
-			var neighbor_index: int = clampi(anchor_index + neighbor_offset, 0, next_nodes.size() - 1)
-			if not target_indices.has(neighbor_index):
-				target_indices.append(neighbor_index)
-
-		for target_index in target_indices:
-			var target_node: MapNode = next_nodes[target_index] as MapNode
-			previous_node.next_ids.append(target_node.id)
+	for prev_idx in range(prev_nodes.size()):
+		var prev_node: MapNode = prev_nodes[prev_idx] as MapNode
+		prev_node.next_ids.clear()
+		var anchor: int = int(round(float(prev_idx) * float(maxi(next_nodes.size() - 1, 0)) / float(maxi(prev_nodes.size() - 1, 1))))
+		var targets: Array[int] = [anchor]
+		if next_nodes.size() > 1 and rng.randf() < 0.5:
+			var offset: int = -1 if rng.randf() < 0.5 else 1
+			var neighbor: int = clampi(anchor + offset, 0, next_nodes.size() - 1)
+			if not targets.has(neighbor):
+				targets.append(neighbor)
+		for target_idx in targets:
+			var target_node: MapNode = next_nodes[target_idx] as MapNode
+			prev_node.next_ids.append(target_node.id)
 			incoming[target_node.id] = int(incoming.get(target_node.id, 0)) + 1
 
-	for next_index in range(next_nodes.size()):
-		var candidate_node: MapNode = next_nodes[next_index] as MapNode
-		if int(incoming.get(candidate_node.id, 0)) > 0:
+	for next_idx in range(next_nodes.size()):
+		var candidate: MapNode = next_nodes[next_idx] as MapNode
+		if int(incoming.get(candidate.id, 0)) > 0:
 			continue
-
-		var source_index: int = clampi(next_index, 0, previous_nodes.size() - 1)
-		var source_node: MapNode = previous_nodes[source_index] as MapNode
-		if not source_node.next_ids.has(candidate_node.id):
-			source_node.next_ids.append(candidate_node.id)
+		var source_idx: int = clampi(next_idx, 0, prev_nodes.size() - 1)
+		var source: MapNode = prev_nodes[source_idx] as MapNode
+		if not source.next_ids.has(candidate.id):
+			source.next_ids.append(candidate.id)
 
 func get_node(node_id: int) -> MapNode:
 	for node in nodes:

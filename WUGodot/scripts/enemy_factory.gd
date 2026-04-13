@@ -58,6 +58,13 @@ static func _pick_archetype_for_node(node: MapNode) -> String:
 			if pool.is_empty():
 				return "bandit_swordsman"
 			return pool[rng.randi_range(0, pool.size() - 1)]
+		MapNode.NodeType.AMBUSH:
+			var pool: Array[String] = DataManager.get_enemy_archetypes_for_difficulty("easy")
+			var medium: Array[String] = DataManager.get_enemy_archetypes_for_difficulty("medium")
+			pool.append_array(medium)
+			if pool.is_empty():
+				return "bandit_swordsman"
+			return pool[rng.randi_range(0, pool.size() - 1)]
 		MapNode.NodeType.ELITE:
 			var pool: Array[String] = DataManager.get_enemy_archetypes_for_difficulty("hard")
 			if pool.is_empty():

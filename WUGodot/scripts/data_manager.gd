@@ -7,10 +7,12 @@ static var _visual_profiles: Dictionary = {}
 static var _game_settings: Dictionary = {}
 static var _rewards: Array[Dictionary] = []
 static var _techniques: Dictionary = {}
+static var _events: Array[Dictionary] = []
 
 static func initialize() -> void:
 	_load_game_settings()
 	_load_techniques()
+	_load_events()
 	_load_rewards()
 	_load_visual_profiles()
 	_load_characters()
@@ -23,6 +25,7 @@ static func reload_data() -> void:
 	_game_settings.clear()
 	_rewards.clear()
 	_techniques.clear()
+	_events.clear()
 	initialize()
 
 static func get_character(name: String) -> Dictionary:
@@ -69,6 +72,27 @@ static func get_enemy_archetypes_for_difficulty(difficulty: String) -> Array[Str
 			result.append(str(key))
 	return result
 
+static func get_events() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for event_data in _events:
+		result.append((event_data as Dictionary).duplicate(true))
+	return result
+
+static func get_event_by_id(event_id: String) -> Dictionary:
+	for event_data in _events:
+		var candidate: Dictionary = event_data as Dictionary
+		if str(candidate.get("id", "")) == event_id:
+			return candidate.duplicate(true)
+	return {}
+
+static func get_random_event(rng: RandomNumberGenerator = null) -> Dictionary:
+	if _events.is_empty():
+		return {}
+	var roll_rng: RandomNumberGenerator = rng if rng != null else RandomNumberGenerator.new()
+	if rng == null:
+		roll_rng.randomize()
+	return (_events[roll_rng.randi_range(0, _events.size() - 1)] as Dictionary).duplicate(true)
+
 static func _load_techniques() -> void:
 	var dir: DirAccess = DirAccess.open("res://data/Techniques")
 	if dir == null:
@@ -96,6 +120,35 @@ static func _load_techniques() -> void:
 			if tech_id.is_empty():
 				continue
 			_techniques[tech_id] = (entry as Dictionary).duplicate(true)
+	dir.list_dir_end()
+
+static func _load_events() -> void:
+	var dir: DirAccess = DirAccess.open("res://data/Events")
+	if dir == null:
+		return
+
+	dir.list_dir_begin()
+	while true:
+		var file_name: String = dir.get_next()
+		if file_name.is_empty():
+			break
+		if dir.current_is_dir():
+			continue
+		if file_name.get_extension().to_lower() != "json":
+			continue
+
+		var root: Dictionary = _load_json_file("res://data/Events/%s" % file_name)
+		var raw_events: Array = []
+		if typeof(root.get("events", [])) == TYPE_ARRAY:
+			raw_events = root.get("events", []) as Array
+
+		for entry in raw_events:
+			if typeof(entry) != TYPE_DICTIONARY:
+				continue
+			var event_id: String = str((entry as Dictionary).get("id", ""))
+			if event_id.is_empty():
+				continue
+			_events.append((entry as Dictionary).duplicate(true))
 	dir.list_dir_end()
 
 static func _load_game_settings() -> void:
