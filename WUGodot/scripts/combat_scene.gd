@@ -3,6 +3,7 @@ extends Node2D
 
 const CombatDebugOverlayScript = preload("res://scripts/combat_debug_overlay.gd")
 const InputBufferScript = preload("res://scripts/input_buffer.gd")
+const BackgroundRendererScript = preload("res://scripts/visual/background_renderer.gd")
 
 signal combat_end(victory: bool)
 
@@ -17,6 +18,7 @@ var _camera: Camera2DHelper
 var _asset_catalog: AssetCatalog
 var _player_visual: FighterVisual
 var _enemy_visual: FighterVisual
+var _background: Variant = null
 
 var _is_paused_on_end: bool = false
 var _end_message: String = ""
@@ -45,6 +47,7 @@ func _ready() -> void:
 	_asset_catalog = AssetCatalog.new()
 	_player_visual = FighterVisual.new(_asset_catalog)
 	_enemy_visual = FighterVisual.new(_asset_catalog)
+	_background = BackgroundRendererScript.new()
 
 	_combat_system.spawn_particles.connect(_on_spawn_particles)
 	_combat_system.camera_shake.connect(_on_camera_shake)
@@ -60,6 +63,9 @@ func setup_combat(player: Fighter, node: MapNode) -> void:
 	_player = player
 	_current_node = node
 	_enemy = EnemyFactory.create_enemy_for_node(node)
+	var arena_id: String = "chapter1_boss_clearing" if node.node_type == MapNode.NodeType.BOSS else "chapter1_bamboo_dusk"
+	if _background != null:
+		_background.set_arena(arena_id)
 	_player_visual.configure(DataManager.get_visual_profile(_player.visual_profile_id), _player)
 	_enemy_visual.configure(DataManager.get_visual_profile(_enemy.visual_profile_id), _enemy)
 
@@ -191,14 +197,14 @@ func _process(delta: float) -> void:
 	elif _enemy.health_current <= 0.0:
 		if _player.technique_engine != null:
 			_player.technique_engine.on_kill(_player)
-		if _current_node.node_type == MapNode.NodeType.BOSS:
-			_boss_death_triggered = true
-			_boss_death_timer = 1.0
-			_trigger_slow_mo(0.2, 1.0)
-			_on_camera_shake(20.0)
-			_show_feedback("破山!", 1.2)
-			_particle_system.spawn_hit_sparks(_enemy.position + Vector2(0.0, -_enemy.height * 0.5), 40, Color8(255, 200, 80))
-			_particle_system.spawn_hit_sparks(_enemy.position + Vector2(0.0, -_enemy.height * 0.3), 20, Color8(255, 120, 40))
+			if _current_node.node_type == MapNode.NodeType.BOSS:
+				_boss_death_triggered = true
+				_boss_death_timer = 1.0
+				_trigger_slow_mo(0.2, 1.0)
+				_on_camera_shake(20.0)
+				_show_feedback("破山!", 1.2)
+				_particle_system.spawn_hit_sparks(_enemy.position + Vector2(0.0, -_enemy.height * 0.5), 40, GameConstants.COLOR_GOLD_BRIGHT)
+				_particle_system.spawn_hit_sparks(_enemy.position + Vector2(0.0, -_enemy.height * 0.3), 20, GameConstants.COLOR_CRIMSON)
 		else:
 			_is_paused_on_end = true
 			_end_message = "Victory (Enter)"
@@ -301,17 +307,11 @@ func _draw() -> void:
 		_draw_debug_overlay()
 
 func _draw_arena(offset: Vector2) -> void:
-	draw_rect(Rect2(offset.x, offset.y, GameConstants.VIEW_WIDTH, GameConstants.GROUND_Y + 200.0), Color8(18, 14, 28))
-	_draw_mountain_layer(40, 0.010, int(GameConstants.GROUND_Y - 140.0), Color8(24, 22, 44), offset)
-	_draw_mountain_layer(28, 0.014, int(GameConstants.GROUND_Y - 100.0), Color8(32, 28, 54), offset)
-	_draw_mountain_layer(16, 0.020, int(GameConstants.GROUND_Y - 70.0), Color8(44, 38, 70), offset)
-	_draw_window_frame(offset)
+	if _background != null:
+		_background.draw(self, offset, {})
+	else:
+		draw_rect(Rect2(offset.x, offset.y, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), GameConstants.COLOR_INK_BLACK)
 	_draw_platform(offset)
-
-func _draw_mountain_layer(amplitude: int, frequency: float, base_y: int, color: Color, offset: Vector2) -> void:
-	for x in range(0, GameConstants.VIEW_WIDTH, 6):
-		var y: float = float(base_y) + sin(float(x) * frequency) * float(amplitude)
-		draw_rect(Rect2(offset.x + float(x), offset.y + y, 6.0, GameConstants.GROUND_Y + 60.0 - y), color)
 
 func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 	var visual: FighterVisual = _get_visual_for(fighter)
@@ -342,7 +342,7 @@ func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 				body_rect.size.y + i * 6.0
 			)
 			var alpha: int = int(80.0 * pulse / float(i))
-			draw_rect(glow, Color8(100, 200, 255, alpha), false)
+			draw_rect(glow, Color(GameConstants.COLOR_LIGHT_BLUE.r, GameConstants.COLOR_LIGHT_BLUE.g, GameConstants.COLOR_LIGHT_BLUE.b, float(alpha) / 255.0), false)
 
 	if fighter.is_parrying():
 		var parry_intensity: float = sin(fighter.animation_timer * 25.0) * 0.3 + 0.7
@@ -354,7 +354,7 @@ func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 				body_rect.size.y + i * 4.0
 			)
 			var alpha: int = int(120.0 * parry_intensity / float(i))
-			draw_rect(parry_rect, Color8(255, 255, 100, alpha), false)
+			draw_rect(parry_rect, Color(GameConstants.COLOR_GOLD_BRIGHT.r, GameConstants.COLOR_GOLD_BRIGHT.g, GameConstants.COLOR_GOLD_BRIGHT.b, float(alpha) / 255.0), false)
 
 	visual.draw(self, fighter, camera_offset)
 
@@ -362,26 +362,27 @@ func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 		var weapon_start: Vector2 = Vector2(fighter.position.x + float(fighter.facing) * fighter.half_width, fighter.position.y - fighter.height * 0.4) + camera_offset
 		var weapon_end: Vector2 = weapon_start + Vector2(float(fighter.facing) * fighter.current_attack_range(), 0.0)
 		var attack_def: Variant = fighter._attack_state.def
-		var slash_color: Color = Color8(255, 198, 120, 180) if attack_def != null and attack_def.is_heavy else Color8(200, 220, 255, 140)
+		var slash_color: Color = Color(GameConstants.COLOR_SKIN_WARM.r, GameConstants.COLOR_SKIN_WARM.g, GameConstants.COLOR_SKIN_WARM.b, 180.0 / 255.0) if attack_def != null and attack_def.is_heavy else Color(GameConstants.COLOR_LIGHT_BLUE.r, GameConstants.COLOR_LIGHT_BLUE.g, GameConstants.COLOR_LIGHT_BLUE.b, 140.0 / 255.0)
 		draw_line(weapon_start, weapon_end, slash_color, 3.0)
 		if fighter.combo_count > 1:
 			for trail in range(1, fighter.combo_count + 1):
 				var trail_start: Vector2 = weapon_start - Vector2(float(fighter.facing) * trail * 15.0, float(trail) * 3.0)
 				var trail_end: Vector2 = weapon_end - Vector2(float(fighter.facing) * trail * 20.0, float(trail) * 3.0)
-				draw_line(trail_start, trail_end, Color8(255, 200, 100, int(40.0 / float(trail))), 1.0)
+				var trail_alpha: float = clampf(40.0 / float(trail) / 255.0, 0.0, 1.0)
+				draw_line(trail_start, trail_end, Color(GameConstants.COLOR_IMPERIAL_GOLD.r, GameConstants.COLOR_IMPERIAL_GOLD.g, GameConstants.COLOR_IMPERIAL_GOLD.b, trail_alpha), 1.0)
 
-	if fighter.is_stunned:
-		var stun_pulse: float = sin(fighter.animation_timer * 12.0) * 0.5 + 0.5
-		var stun_rect: Rect2 = Rect2(body_rect.position.x, body_rect.position.y - 18.0, body_rect.size.x, 12.0)
-		draw_rect(stun_rect, Color8(255, 220, 0, int(120.0 * stun_pulse)), true)
+		if fighter.is_stunned:
+			var stun_pulse: float = sin(fighter.animation_timer * 12.0) * 0.5 + 0.5
+			var stun_rect: Rect2 = Rect2(body_rect.position.x, body_rect.position.y - 18.0, body_rect.size.x, 12.0)
+			draw_rect(stun_rect, Color(GameConstants.COLOR_IMPERIAL_GOLD.r, GameConstants.COLOR_IMPERIAL_GOLD.g, GameConstants.COLOR_IMPERIAL_GOLD.b, 120.0 * stun_pulse / 255.0), true)
 
 	if fighter.combo_count > 1 and fighter.combo_window > 0.0:
-		_draw_text("x%d" % fighter.combo_count, body_rect.position.x + body_rect.size.x * 0.5 - 12.0, body_rect.position.y - 40.0, Color8(255, 200, 100), 16)
+		_draw_text("x%d" % fighter.combo_count, body_rect.position.x + body_rect.size.x * 0.5 - 12.0, body_rect.position.y - 40.0, GameConstants.COLOR_IMPERIAL_GOLD, 16)
 
 	if fighter.bleed_timer > 0.0:
 		var bleed_pulse: float = sin(fighter.animation_timer * 8.0) * 0.4 + 0.6
 		var bleed_rect: Rect2 = Rect2(body_rect.position.x, body_rect.end.y + 4.0, body_rect.size.x, 4.0)
-		draw_rect(bleed_rect, Color8(180, 30, 30, int(160.0 * bleed_pulse)), true)
+		draw_rect(bleed_rect, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 160.0 * bleed_pulse / 255.0), true)
 
 	if fighter.is_grabbed:
 		var grab_pulse: float = sin(fighter.animation_timer * 15.0) * 0.5 + 0.5
@@ -391,7 +392,7 @@ func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 			body_rect.size.x + 8.0,
 			body_rect.size.y + 8.0
 		)
-		draw_rect(grab_rect, Color8(255, 60, 40, int(120.0 * grab_pulse)), false, 3.0)
+		draw_rect(grab_rect, Color(GameConstants.COLOR_CRIMSON.r, GameConstants.COLOR_CRIMSON.g, GameConstants.COLOR_CRIMSON.b, 120.0 * grab_pulse / 255.0), false, 3.0)
 
 func _draw_hud() -> void:
 	var left_panel: Rect2 = Rect2(20, 18, GameConstants.VIEW_WIDTH / 2 - 40, 98)
@@ -407,28 +408,28 @@ func _draw_hud() -> void:
 		var cn: String = str(enemy_data.get("name_cn", ""))
 		if not cn.is_empty():
 			enemy_name = "%s %s" % [cn, _enemy.name]
-	_draw_text(enemy_name, GameConstants.VIEW_WIDTH / 2 + 34, 30, Color8(210, 200, 190), 14)
+	_draw_text(enemy_name, GameConstants.VIEW_WIDTH / 2 + 34, 30, GameConstants.COLOR_TEXT_HEADING, 14)
 
 	if _enemy.boss_controller != null:
 		var phase_text: String = "Phase %d" % _enemy.boss_controller.current_phase
-		var phase_color: Color = Color8(255, 180, 60) if _enemy.boss_controller.current_phase == 2 else Color8(200, 195, 190)
+		var phase_color: Color = GameConstants.COLOR_TEXT_ACCENT if _enemy.boss_controller.current_phase == 2 else GameConstants.COLOR_TEXT_SUBHEADING
 		_draw_text(phase_text, GameConstants.VIEW_WIDTH - 120, 30, phase_color, 14)
 
-	_draw_text("A/D move  W jump  J tap/hold  K block/parry  Space dash  L stance  P pause  R restart", 36, 128, Color8(170, 170, 186), 14)
+	_draw_text("A/D move  W jump  J tap/hold  K block/parry  Space dash  L stance  P pause  R restart", 36, 128, GameConstants.COLOR_TEXT_CAPTION, 14)
 	if _player != null and _player.technique_engine != null:
 		var tech_ids: Array[String] = _player.technique_engine.technique_ids()
 		if not tech_ids.is_empty():
 			var tech_y: float = 148.0
-			_draw_text("Techniques:", 36.0, tech_y, Color8(200, 195, 180), 14)
+			_draw_text("技藝 Techniques:", 36.0, tech_y, GameConstants.COLOR_TEXT_SUBHEADING, 14)
 			tech_y += 18.0
 			for tech_id in tech_ids:
 				var tech_data: Dictionary = DataManager.get_technique(tech_id)
 				var display: String = "%s %s" % [str(tech_data.get("name_cn", tech_id)), str(tech_data.get("name_en", ""))]
-				var tech_color: Color = Color8(170, 175, 165)
+				var tech_color: Color = GameConstants.COLOR_LIGHT_BLUE
 				if tech_id.begins_with("D"):
-					tech_color = Color8(255, 200, 50)
+					tech_color = GameConstants.COLOR_GOLD_BRIGHT
 				elif tech_id.begins_with("B"):
-					tech_color = Color8(140, 200, 255)
+					tech_color = GameConstants.COLOR_SKY_BLUE
 				_draw_text(display, 36.0, tech_y, tech_color, 13)
 				tech_y += 16.0
 
@@ -436,16 +437,16 @@ func _draw_hud() -> void:
 			var stance_id: String = _player.technique_engine.active_stance()
 			var stance_label: String = "醉拳" if stance_id == "D1" else "虎形"
 			var pulse: float = sin(_player.animation_timer * 6.0) * 0.3 + 0.7
-			_draw_text("STANCE: %s" % stance_label, 36.0, 104.0, Color(1.0, 0.85, 0.3, pulse), 16)
+			_draw_text("STANCE: %s" % stance_label, 36.0, 104.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, pulse), 16)
 
 func _draw_bars(fighter: Fighter, x: int, y: int, mirror: bool) -> void:
 	var width: int = GameConstants.VIEW_WIDTH / 2 - 76
 	var bar_h: int = 16
 	var gap: int = 8
 
-	_draw_single_bar(fighter.health_current, fighter.health_max, x, y, width, bar_h, GameConstants.COLOR_VERMILLION_RED, mirror)
-	_draw_single_bar(fighter.posture_current, fighter.posture_max, x, y + (bar_h + gap), width, bar_h, GameConstants.COLOR_IMPERIAL_GOLD, mirror)
-	_draw_single_bar(fighter.rage_current, fighter.rage_max, x, y + (bar_h + gap) * 2, width, bar_h, GameConstants.COLOR_JADE_GREEN, mirror)
+	_draw_single_bar(fighter.health_current, fighter.health_max, x, y, width, bar_h, GameConstants.COLOR_HEALTH, mirror)
+	_draw_single_bar(fighter.posture_current, fighter.posture_max, x, y + (bar_h + gap), width, bar_h, GameConstants.COLOR_POSTURE, mirror)
+	_draw_single_bar(fighter.rage_current, fighter.rage_max, x, y + (bar_h + gap) * 2, width, bar_h, GameConstants.COLOR_RAGE, mirror)
 
 func _draw_single_bar(current: float, max_value: float, x: int, y: int, width: int, bar_h: int, color: Color, mirror: bool) -> void:
 	var pct: float = clampf(current / maxf(max_value, 0.001), 0.0, 1.0)
@@ -460,18 +461,18 @@ func _draw_single_bar(current: float, max_value: float, x: int, y: int, width: i
 		var text_width: int = _measure_text(value_text, 14)
 		text_x = x + width - text_width - 4
 	_draw_text(value_text, text_x + 1, y + 13, Color(0, 0, 0, 0.7), 14)
-	_draw_text(value_text, text_x, y + 12, GameConstants.COLOR_SCROLL_WHITE, 14)
+	_draw_text(value_text, text_x, y + 12, GameConstants.COLOR_TEXT_HEADING, 14)
 
 func _draw_feedback() -> void:
 	if _feedback_timer <= 0.0:
 		return
 	var alpha: float = clampf(_feedback_timer, 0.0, 1.0)
-	_draw_text(_feedback_message, GameConstants.VIEW_WIDTH * 0.5 - 50.0, 200.0, Color(1.0, 0.95, 0.55, alpha), 20)
+	_draw_text(_feedback_message, GameConstants.VIEW_WIDTH * 0.5 - 50.0, 200.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, alpha), 20)
 
 func _draw_end_message() -> void:
 	var rect: Rect2 = Rect2((GameConstants.VIEW_WIDTH - 420) / 2, (GameConstants.VIEW_HEIGHT - 120) / 2 - 24, 420, 120)
 	_draw_panel(rect)
-	_draw_text(_end_message, rect.position.x + 28.0, rect.position.y + 42.0, GameConstants.COLOR_SCROLL_WHITE, 20)
+	_draw_text(_end_message, rect.position.x + 28.0, rect.position.y + 42.0, GameConstants.COLOR_TEXT_HEADING, 20)
 
 func _draw_effects() -> void:
 	var border: int = 30
@@ -484,46 +485,37 @@ func _draw_effects() -> void:
 func _draw_platform(offset: Vector2) -> void:
 	var platform_y: int = int(GameConstants.GROUND_Y) + 20
 	var top: int = platform_y - 16
-	draw_rect(Rect2(offset.x, offset.y + top, GameConstants.VIEW_WIDTH, 6), Color8(76, 62, 48))
-	draw_rect(Rect2(offset.x, offset.y + top + 6, GameConstants.VIEW_WIDTH, 10), Color8(58, 46, 36))
-	draw_rect(Rect2(offset.x, offset.y + platform_y, GameConstants.VIEW_WIDTH, 220), Color8(16, 12, 18))
+	draw_rect(Rect2(offset.x, offset.y + top, GameConstants.VIEW_WIDTH, 6), GameConstants.COLOR_PANEL_BORDER)
+	draw_rect(Rect2(offset.x, offset.y + top + 6, GameConstants.VIEW_WIDTH, 10), GameConstants.COLOR_MOUNTAIN_BLUE)
+	draw_rect(Rect2(offset.x, offset.y + platform_y, GameConstants.VIEW_WIDTH, 220), GameConstants.COLOR_INK_BLACK)
 	for x in range(0, GameConstants.VIEW_WIDTH, 18):
 		var jitter: int = (x * 13) % 6
-		draw_rect(Rect2(offset.x + x, offset.y + top + 4 + jitter, 10, 2), Color8(96, 78, 62))
-
-func _draw_window_frame(offset: Vector2) -> void:
-	var margin: int = 26
-	var thickness: int = 12
-	var frame_color: Color = Color8(22, 18, 24, 220)
-	var trim: Color = GameConstants.COLOR_GOLD_DARK
-
-	draw_rect(Rect2(offset.x + margin, offset.y + margin, GameConstants.VIEW_WIDTH - margin * 2, thickness), frame_color)
-	draw_rect(Rect2(offset.x + margin, offset.y + GameConstants.VIEW_HEIGHT - margin - thickness, GameConstants.VIEW_WIDTH - margin * 2, thickness), frame_color)
-	draw_rect(Rect2(offset.x + margin, offset.y + margin, thickness, GameConstants.VIEW_HEIGHT - margin * 2), frame_color)
-	draw_rect(Rect2(offset.x + GameConstants.VIEW_WIDTH - margin - thickness, offset.y + margin, thickness, GameConstants.VIEW_HEIGHT - margin * 2), frame_color)
-
-	draw_rect(Rect2(offset.x + margin, offset.y + margin, GameConstants.VIEW_WIDTH - margin * 2, 2), trim)
-	draw_rect(Rect2(offset.x + margin, offset.y + GameConstants.VIEW_HEIGHT - margin - 2, GameConstants.VIEW_WIDTH - margin * 2, 2), trim)
-	draw_rect(Rect2(offset.x + margin, offset.y + margin, 2, GameConstants.VIEW_HEIGHT - margin * 2), trim)
-	draw_rect(Rect2(offset.x + GameConstants.VIEW_WIDTH - margin - 2, offset.y + margin, 2, GameConstants.VIEW_HEIGHT - margin * 2), trim)
+		draw_rect(Rect2(offset.x + x, offset.y + top + 4 + jitter, 10, 2), GameConstants.COLOR_INK_MID)
 
 func _draw_panel(rect: Rect2) -> void:
-	draw_rect(rect, Color8(16, 14, 18, 200), true)
-	draw_rect(Rect2(rect.position.x, rect.position.y, rect.size.x, 2), GameConstants.COLOR_GOLD_DARK)
-	draw_rect(Rect2(rect.position.x, rect.end.y - 2, rect.size.x, 2), GameConstants.COLOR_GOLD_DARK)
-	draw_rect(Rect2(rect.position.x, rect.position.y, 2, rect.size.y), GameConstants.COLOR_GOLD_DARK)
-	draw_rect(Rect2(rect.end.x - 2, rect.position.y, 2, rect.size.y), GameConstants.COLOR_GOLD_DARK)
-	draw_rect(Rect2(rect.position.x + 2, rect.position.y + 2, rect.size.x - 4, 1), Color8(70, 60, 80, 120))
+	draw_rect(rect, Color(GameConstants.COLOR_PANEL_BG.r, GameConstants.COLOR_PANEL_BG.g, GameConstants.COLOR_PANEL_BG.b, 0.92), true)
+	draw_rect(rect, GameConstants.COLOR_PANEL_BORDER, false, 2.0)
+	draw_rect(Rect2(rect.position.x + 2.0, rect.position.y, rect.size.x - 4.0, 1.0), GameConstants.COLOR_PANEL_ACCENT)
+	var cm: float = 6.0
+	var cc: Color = GameConstants.COLOR_PANEL_BORDER
+	draw_rect(Rect2(rect.position.x - 1.0, rect.position.y - 1.0, cm, 1.0), cc)
+	draw_rect(Rect2(rect.position.x - 1.0, rect.position.y - 1.0, 1.0, cm), cc)
+	draw_rect(Rect2(rect.end.x - cm + 1.0, rect.position.y - 1.0, cm, 1.0), cc)
+	draw_rect(Rect2(rect.end.x, rect.position.y - 1.0, 1.0, cm), cc)
+	draw_rect(Rect2(rect.position.x - 1.0, rect.end.y, cm, 1.0), cc)
+	draw_rect(Rect2(rect.position.x - 1.0, rect.end.y - cm + 1.0, 1.0, cm), cc)
+	draw_rect(Rect2(rect.end.x - cm + 1.0, rect.end.y, cm, 1.0), cc)
+	draw_rect(Rect2(rect.end.x, rect.end.y - cm + 1.0, 1.0, cm), cc)
 
 func _draw_bar_frame(rect: Rect2) -> void:
-	draw_rect(Rect2(rect.position.x - 1, rect.position.y - 1, rect.size.x + 2, rect.size.y + 2), GameConstants.COLOR_GOLD_DARK)
-	draw_rect(rect, Color8(14, 12, 16), true)
-	draw_rect(Rect2(rect.position.x, rect.position.y, rect.size.x, 2), Color8(60, 52, 66))
+	draw_rect(Rect2(rect.position.x - 1, rect.position.y - 1, rect.size.x + 2, rect.size.y + 2), GameConstants.COLOR_PANEL_BORDER)
+	draw_rect(rect, GameConstants.COLOR_INK_BLACK, true)
+	draw_rect(Rect2(rect.position.x, rect.position.y, rect.size.x, 1), GameConstants.COLOR_PANEL_ACCENT)
 
 func _draw_pause_indicator() -> void:
 	draw_rect(Rect2(0, 0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), Color(0, 0, 0, 0.4), true)
-	_draw_text("PAUSED", GameConstants.VIEW_WIDTH * 0.5 - 55.0, GameConstants.VIEW_HEIGHT * 0.5 - 30.0, Color.WHITE, 28)
-	_draw_text("Press P to resume | ` for debug | R to restart", GameConstants.VIEW_WIDTH * 0.5 - 185.0, GameConstants.VIEW_HEIGHT * 0.5 + 10.0, Color.LIGHT_GRAY, 14)
+	_draw_text("PAUSED", GameConstants.VIEW_WIDTH * 0.5 - 55.0, GameConstants.VIEW_HEIGHT * 0.5 - 30.0, GameConstants.COLOR_TEXT_HEADING, 28)
+	_draw_text("Press P to resume | ` for debug | R to restart", GameConstants.VIEW_WIDTH * 0.5 - 185.0, GameConstants.VIEW_HEIGHT * 0.5 + 10.0, GameConstants.COLOR_TEXT_BODY, 14)
 
 func _draw_debug_overlay() -> void:
 	_debug_overlay.draw(self, _player, _enemy, _input_buffer)

@@ -27,10 +27,10 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 	var move_control: float = ground_move_control if fighter.is_grounded else air_move_control
 	var target_speed: float = move * fighter.move_speed if is_trying_to_move else 0.0
 
-	var can_move: bool = fighter.current_animation != Fighter.AnimationState.DASHING and fighter.current_animation != Fighter.AnimationState.ATTACKING and fighter.current_animation != Fighter.AnimationState.STUNNED and not fighter.is_grabbed
+	var can_move: bool = fighter.current_animation != Fighter.AnimationState.DASHING and fighter.current_animation != Fighter.AnimationState.ATTACKING_LIGHT and fighter.current_animation != Fighter.AnimationState.ATTACKING_HEAVY and fighter.current_animation != Fighter.AnimationState.STUNNED and not fighter.is_grabbed
 	if can_move:
 		fighter.velocity.x = lerp(fighter.velocity.x, target_speed, move_control)
-	elif fighter.current_animation == Fighter.AnimationState.ATTACKING:
+	elif fighter.current_animation == Fighter.AnimationState.ATTACKING_LIGHT or fighter.current_animation == Fighter.AnimationState.ATTACKING_HEAVY:
 		fighter.velocity.x = lerp(fighter.velocity.x, 0.0, move_control * attack_move_control_multiplier)
 
 	if fighter.is_grounded and is_trying_to_move and fighter.current_animation == Fighter.AnimationState.IDLE and not fighter.is_grabbed:
@@ -39,7 +39,7 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 
 	if bool(input_state.get("jump_pressed", false)) and fighter.can_jump():
 		fighter.start_jump()
-		emit_signal("spawn_particles", fighter.position + Vector2(0, 5), 12, Color8(180, 200, 255))
+		emit_signal("spawn_particles", fighter.position + Vector2(0, 5), 12, GameConstants.COLOR_LIGHT_BLUE)
 
 	if bool(input_state.get("dash_pressed", false)) and fighter.can_dash():
 		var dash_direction: int = fighter.facing
@@ -48,19 +48,19 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 		elif enemy != null:
 			dash_direction = 1 if enemy.position.x > fighter.position.x else -1
 		fighter.start_dash(dash_direction)
-		emit_signal("spawn_particles", fighter.position, 8, Color8(200, 200, 255))
+		emit_signal("spawn_particles", fighter.position, 8, GameConstants.COLOR_LIGHT_BLUE)
 		emit_signal("camera_shake", 3.0)
 
 	var attack_pos: Vector2 = Vector2(fighter.position.x + float(fighter.facing) * fighter.half_width, fighter.position.y - fighter.height * 0.4)
 	if bool(input_state.get("heavy_pressed", false)) and fighter.can_attack():
 		fighter.start_heavy_attack()
-		emit_signal("spawn_particles", attack_pos, 16, Color8(240, 220, 255))
+		emit_signal("spawn_particles", attack_pos, 16, GameConstants.COLOR_EARTH_LIGHT)
 		emit_signal("camera_shake", 4.5)
 		emit_signal("show_feedback", "HEAVY", 0.4)
 	elif bool(input_state.get("light_pressed", false)) and fighter.can_attack():
 		fighter.start_light_attack()
 		var particle_count: int = 6 + fighter.combo_count * 2
-		var attack_color: Color = Color8(255, 180, 100) if fighter.combo_count > 2 else Color8(255, 255, 200)
+		var attack_color: Color = GameConstants.COLOR_IMPERIAL_GOLD if fighter.combo_count > 2 else GameConstants.COLOR_GOLD_BRIGHT
 		emit_signal("spawn_particles", attack_pos, particle_count, attack_color)
 		emit_signal("camera_shake", 2.0 + fighter.combo_count * 0.5)
 		if fighter.combo_count > 2:
@@ -89,10 +89,10 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 						stance_name = "醉拳 DRUNKEN FORM"
 					"D2":
 						stance_name = "虎形 TIGER STANCE"
-			emit_signal("camera_shake", 10.0)
-			emit_signal("slow_motion", 0.6, 0.3)
-			emit_signal("show_feedback", stance_name, 0.8)
-			emit_signal("spawn_particles", fighter.position, 20, Color8(255, 200, 50))
+				emit_signal("camera_shake", 10.0)
+				emit_signal("slow_motion", 0.6, 0.3)
+				emit_signal("show_feedback", stance_name, 0.8)
+				emit_signal("spawn_particles", fighter.position, 20, GameConstants.COLOR_GOLD_BRIGHT)
 
 	if not fighter.is_grounded:
 		fighter.velocity.y += fighter.gravity * dt
@@ -115,7 +115,7 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 					enemy.health_current -= 8.0
 					enemy.health_current = maxf(enemy.health_current, 0.0)
 					emit_signal("damage_dealt", enemy.position + Vector2(0.0, -enemy.height - 20.0), 8.0, false)
-					emit_signal("spawn_particles", enemy.position + Vector2(0.0, -enemy.height * 0.5), 6, Color8(255, 180, 100))
+					emit_signal("spawn_particles", enemy.position + Vector2(0.0, -enemy.height * 0.5), 6, GameConstants.COLOR_IMPERIAL_GOLD)
 					emit_signal("show_feedback", "落葉!", 0.4)
 	fighter.position += fighter.velocity * dt
 
@@ -128,7 +128,7 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 	if fighter.position.y >= GameConstants.GROUND_Y:
 		if (not fighter.is_grounded) and fighter.velocity.y > 100.0:
 			fighter.land()
-			emit_signal("spawn_particles", Vector2(fighter.position.x, GameConstants.GROUND_Y + 5.0), 8, Color8(140, 120, 100))
+			emit_signal("spawn_particles", Vector2(fighter.position.x, GameConstants.GROUND_Y + 5.0), 8, GameConstants.COLOR_INK_MID)
 		fighter.position.y = GameConstants.GROUND_Y
 		fighter.velocity.y = 0.0
 		fighter.is_grounded = true
@@ -151,7 +151,7 @@ func update_ai(ai: Fighter, target: Fighter, dt: float) -> void:
 			emit_signal("camera_shake", 20.0)
 			emit_signal("slow_motion", 0.4, 0.6)
 			emit_signal("show_feedback", "「還在呼吸。好。我剛熱身。」", 1.2)
-			emit_signal("spawn_particles", ai.position + Vector2(0.0, -ai.height * 0.5), 30, Color8(255, 140, 40))
+			emit_signal("spawn_particles", ai.position + Vector2(0.0, -ai.height * 0.5), 30, GameConstants.COLOR_IMPERIAL_GOLD)
 
 	if ai.ai_brain != null:
 		ai.ai_brain.update_cooldowns(dt)
@@ -167,7 +167,7 @@ func update_ai(ai: Fighter, target: Fighter, dt: float) -> void:
 			var teleport_x: float = target.position.x + behind_offset
 			teleport_x = clampf(teleport_x, GameConstants.WORLD_BOUNDS_LEFT + 40.0, GameConstants.WORLD_BOUNDS_RIGHT - 40.0)
 			ai.position.x = teleport_x
-			emit_signal("spawn_particles", ai.position + Vector2(0.0, -ai.height * 0.5), 12, Color8(80, 60, 120))
+			emit_signal("spawn_particles", ai.position + Vector2(0.0, -ai.height * 0.5), 12, GameConstants.COLOR_PURPLE_DARK)
 			emit_signal("show_feedback", "!", 0.3)
 
 	if ai._attack_state.is_active() and ai._attack_state.def != null:
@@ -218,7 +218,7 @@ func _execute_ai_action(ai: Fighter, target: Fighter, action: Dictionary, dt: fl
 					ai._start_attack_with(atk_def)
 					ai._ai_decision_timer = 0.2
 					var attack_pos: Vector2 = ai.position + Vector2(float(ai.facing) * ai.half_width, -ai.height * 0.4)
-					emit_signal("spawn_particles", attack_pos, 6, Color8(255, 120, 100))
+					emit_signal("spawn_particles", attack_pos, 6, GameConstants.COLOR_EARTH_LIGHT)
 		"block":
 			ai.is_blocking = true
 			ai.trigger_parry_window()
@@ -229,7 +229,7 @@ func _execute_ai_action(ai: Fighter, target: Fighter, action: Dictionary, dt: fl
 			if ai.can_dash():
 				var dash_dir: int = int(signf(float(action.get("direction", direction))))
 				ai.start_dash(dash_dir)
-				emit_signal("spawn_particles", ai.position, 8, Color8(255, 100, 100))
+				emit_signal("spawn_particles", ai.position, 8, GameConstants.COLOR_VERMILLION_RED)
 		_:
 			ai.velocity.x = lerp(ai.velocity.x, 0.0, 0.2)
 
@@ -284,13 +284,13 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 			emit_signal("camera_shake", 14.0)
 			emit_signal("hitstop", 0.15)
 			emit_signal("show_feedback", "CRUSH!", 0.7)
-			emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height * 0.5), 16, Color8(255, 100, 60))
+			emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height * 0.5), 16, GameConstants.COLOR_CRIMSON)
 			if defender.health_current <= 0.0 and defender.technique_engine != null:
 				if defender.technique_engine.check_lethal_save(defender):
 					emit_signal("camera_shake", 16.0)
 					emit_signal("slow_motion", 0.4, 0.5)
 					emit_signal("show_feedback", "鳳凰起!", 0.8)
-					emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height * 0.5), 24, Color8(255, 120, 40))
+					emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height * 0.5), 24, GameConstants.COLOR_IMPERIAL_GOLD)
 			return
 
 		if defender.consume_parry_if_active() and not attack_is_perilous:
@@ -306,7 +306,7 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 			for i in range(24):
 				var angle: float = (float(i) / 24.0) * TAU
 				var spark_pos: Vector2 = parry_pos + Vector2(cos(angle), sin(angle)) * 30.0
-				emit_signal("spawn_particles", spark_pos, 2, Color8(255, 230, 90))
+				emit_signal("spawn_particles", spark_pos, 2, GameConstants.COLOR_GOLD_BRIGHT)
 
 			emit_signal("slow_motion", 0.55, 0.30)
 			emit_signal("hitstop", 0.15)
@@ -364,7 +364,7 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 				emit_signal("camera_shake", 16.0)
 				emit_signal("slow_motion", 0.4, 0.5)
 				emit_signal("show_feedback", "鳳凰起!", 0.8)
-				emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height * 0.5), 24, Color8(255, 120, 40))
+				emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height * 0.5), 24, GameConstants.COLOR_IMPERIAL_GOLD)
 
 		var will_posture_break: bool = (defender.posture_current - posture_damage) <= 0.0 and not defender.is_stunned
 		defender.apply_posture_damage(posture_damage)
@@ -372,7 +372,7 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 		if will_posture_break:
 			emit_signal("hitstop", 0.18)
 			emit_signal("camera_shake", 18.0)
-			emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height), 24, Color8(255, 220, 60))
+			emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height), 24, GameConstants.COLOR_GOLD_BRIGHT)
 			emit_signal("show_feedback", "破", 0.9)
 			if attacker.technique_engine != null:
 				attacker.technique_engine.on_posture_break(attacker)
@@ -410,7 +410,7 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 		var shake_amount: float = 12.0 if (attack_def != null and attack_def.is_heavy) else 4.0
 		emit_signal("camera_shake", shake_amount)
 		emit_signal("hitstop", 0.10 if (attack_def != null and attack_def.is_heavy) else 0.05)
-		emit_signal("spawn_particles", defender.position + Vector2(float(defender.facing) * -4.0, -defender.height + 28.0), 10, Color8(255, 190, 160))
+		emit_signal("spawn_particles", defender.position + Vector2(float(defender.facing) * -4.0, -defender.height + 28.0), 10, GameConstants.COLOR_IMPERIAL_GOLD)
 		if attacker.technique_engine != null and attacker.technique_engine.has("A10"):
 			if attack_def != null and attack_def.is_heavy:
 				var twin_damage: float = hp_damage * 0.5
@@ -418,7 +418,7 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 				defender.health_current = maxf(defender.health_current, 0.0)
 				var twin_pos: Vector2 = defender.position + Vector2(float(defender.facing) * -8.0, -defender.height - 30.0)
 				emit_signal("damage_dealt", twin_pos, twin_damage, true)
-				emit_signal("spawn_particles", twin_pos, 8, Color8(255, 200, 100))
+				emit_signal("spawn_particles", twin_pos, 8, GameConstants.COLOR_GOLD_BRIGHT)
 		if defender.technique_engine != null and defender.technique_engine.is_stance_active():
 			if defender.technique_engine.on_stance_damage(hp_damage, defender):
 				emit_signal("show_feedback", "STANCE BROKEN!", 0.6)

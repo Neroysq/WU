@@ -3,7 +3,7 @@
   "name": "Wandering Ronin",
   "name_cn": "浪人",
   "difficulty": "medium",
-  "visualProfile": "enemy_humanoid_elite",
+  "visualProfile": "enemy_humanoid_ronin",
   "moveSpeed": 300.0,
   "jumpForce": 750.0,
   "gravity": 2800.0,

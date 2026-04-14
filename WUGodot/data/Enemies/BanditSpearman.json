@@ -3,7 +3,7 @@
   "name": "Bandit Spearman",
   "name_cn": "匪槍",
   "difficulty": "easy",
-  "visualProfile": "enemy_humanoid_basic",
+  "visualProfile": "enemy_humanoid_basic_spear",
   "moveSpeed": 180.0,
   "jumpForce": 650.0,
   "gravity": 2800.0,

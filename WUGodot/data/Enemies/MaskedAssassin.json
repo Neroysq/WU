@@ -3,7 +3,7 @@
   "name": "Masked Assassin",
   "name_cn": "面刺客",
   "difficulty": "hard",
-  "visualProfile": "enemy_humanoid_elite",
+  "visualProfile": "enemy_humanoid_assassin",
   "moveSpeed": 420.0,
   "jumpForce": 800.0,
   "gravity": 2800.0,

@@ -111,11 +111,23 @@ func get_body_rect(fighter: Fighter, camera_offset: Vector2) -> Rect2:
 	return Rect2(anchor.x - width * 0.5, anchor.y - height, width, height)
 
 func _resolve_state(fighter: Fighter) -> String:
-	var raw_state: String = str(Fighter.AnimationState.keys()[fighter.current_animation]).to_upper()
+	var state_index: int = fighter.current_animation
+	var raw_state: String = ""
+	match state_index:
+		Fighter.AnimationState.ATTACKING_LIGHT:
+			raw_state = "ATTACKING_LIGHT"
+		Fighter.AnimationState.ATTACKING_HEAVY:
+			raw_state = "ATTACKING_HEAVY"
+		_:
+			raw_state = str(Fighter.AnimationState.keys()[state_index]).to_upper()
+
 	if _animation_set.has_clip(raw_state):
 		return raw_state
 
 	match raw_state:
+		"ATTACKING_LIGHT", "ATTACKING_HEAVY":
+			if _animation_set.has_clip("ATTACKING"):
+				return "ATTACKING"
 		"FALLING":
 			if _animation_set.has_clip("JUMPING"):
 				return "JUMPING"

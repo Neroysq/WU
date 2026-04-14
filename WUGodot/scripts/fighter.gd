@@ -8,7 +8,8 @@ const AttackStateScript = preload("res://scripts/attack_state.gd")
 enum AnimationState {
 	IDLE,
 	WALKING,
-	ATTACKING,
+	ATTACKING_LIGHT,
+	ATTACKING_HEAVY,
 	HIT_REACTION,
 	BLOCKING,
 	STUNNED,
@@ -218,7 +219,7 @@ func update_timers(dt: float) -> void:
 					and combo_count < 3:
 				combo_window = combo_window_duration
 				start_light_attack()
-			elif current_animation == AnimationState.ATTACKING:
+			elif current_animation == AnimationState.ATTACKING_LIGHT or current_animation == AnimationState.ATTACKING_HEAVY:
 				current_animation = AnimationState.IDLE
 
 	if _dash_timer > 0.0:
@@ -237,7 +238,7 @@ func _update_animation(dt: float) -> void:
 	animation_timer += dt
 
 	match current_animation:
-		AnimationState.ATTACKING:
+		AnimationState.ATTACKING_LIGHT, AnimationState.ATTACKING_HEAVY:
 			var attack_progress: float = _attack_state.progress()
 			animation_offset.x = sin(attack_progress * PI) * 15.0 * float(facing)
 		AnimationState.HIT_REACTION:
@@ -301,8 +302,8 @@ func current_telegraph_color() -> Color:
 	if _attack_state.phase() != AttackDefinitionScript.Phase.WINDUP:
 		return Color(0.0, 0.0, 0.0, 0.0)
 	if _attack_state.def != null and _attack_state.def.is_perilous:
-		return Color8(227, 66, 52, 220)
-	return Color8(220, 220, 240, 200)
+		return Color(GameConstants.COLOR_CRIMSON.r, GameConstants.COLOR_CRIMSON.g, GameConstants.COLOR_CRIMSON.b, 0.86)
+	return Color(GameConstants.COLOR_PAPER.r, GameConstants.COLOR_PAPER.g, GameConstants.COLOR_PAPER.b, 0.78)
 
 func can_attack() -> bool:
 	return not _attack_state.is_active() and _attack_cooldown <= 0.0 and _dash_timer <= 0.0 and not is_stunned and _landing_recovery <= 0.0 and not is_grabbed
@@ -353,7 +354,7 @@ func _start_attack_with(definition: Variant) -> void:
 	_attack_state.start(definition)
 	_attack_cooldown = definition.duration * (0.8 if combo_count > 2 else 1.0)
 	was_hit_this_swing = false
-	current_animation = AnimationState.ATTACKING
+	current_animation = AnimationState.ATTACKING_HEAVY if definition.is_heavy else AnimationState.ATTACKING_LIGHT
 	animation_timer = 0.0
 
 	if not is_grounded:

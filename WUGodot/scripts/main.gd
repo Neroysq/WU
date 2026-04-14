@@ -533,24 +533,38 @@ func _draw() -> void:
 			_draw_game_over()
 
 func _draw_main_menu() -> void:
-	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), Color8(10, 10, 14), true)
+	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), GameConstants.COLOR_INK_BLACK, true)
 
 	var center_x: float = float(GameConstants.VIEW_WIDTH) * 0.5
 	var title_y: float = float(GameConstants.VIEW_HEIGHT) * 0.3
 
-	_draw_text("武", center_x - 40.0, title_y, Color(0.95, 0.92, 0.85, 0.95), 80)
-	_draw_text("W U", center_x - 30.0, title_y + 60.0, Color(0.7, 0.68, 0.62, 0.8), 28)
-	_draw_text("A Sekiro-paced wuxia duel roguelike", center_x - 180.0, title_y + 110.0, Color(0.55, 0.54, 0.5, 0.7), 16)
+	_draw_text("武", center_x - 40.0, title_y, GameConstants.COLOR_TEXT_HEADING, 80)
+	_draw_text("WU", center_x - 22.0, title_y + 60.0, GameConstants.COLOR_TEXT_SUBHEADING, 28)
+	_draw_text("A Sekiro-paced wuxia duel roguelike", center_x - 180.0, title_y + 110.0, GameConstants.COLOR_TEXT_CAPTION, 16)
 
 	var prompt_pulse: float = 0.5 + 0.5 * sin(_cursor_flash * 4.0)
-	_draw_text("Press Enter to begin", center_x - 100.0, float(GameConstants.VIEW_HEIGHT) * 0.65, Color(0.8, 0.78, 0.7, prompt_pulse), 20)
-	_draw_text("Chapter 1: Jianghu", center_x - 80.0, float(GameConstants.VIEW_HEIGHT) - 80.0, Color(0.4, 0.38, 0.35, 0.5), 14)
+	_draw_text(
+		"Press Enter to begin",
+		center_x - 100.0,
+		float(GameConstants.VIEW_HEIGHT) * 0.65,
+		Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, prompt_pulse),
+		20
+	)
+	_draw_text("第一章 江湖", center_x - 55.0, float(GameConstants.VIEW_HEIGHT) - 80.0, GameConstants.COLOR_TEXT_CAPTION, 14)
 
-	var border_color: Color = Color(0.3, 0.28, 0.22, 0.3)
-	draw_rect(Rect2(60.0, 60.0, float(GameConstants.VIEW_WIDTH) - 120.0, 2.0), border_color)
-	draw_rect(Rect2(60.0, float(GameConstants.VIEW_HEIGHT) - 62.0, float(GameConstants.VIEW_WIDTH) - 120.0, 2.0), border_color)
-	draw_rect(Rect2(60.0, 60.0, 2.0, float(GameConstants.VIEW_HEIGHT) - 120.0), border_color)
-	draw_rect(Rect2(float(GameConstants.VIEW_WIDTH) - 62.0, 60.0, 2.0, float(GameConstants.VIEW_HEIGHT) - 120.0), border_color)
+	var cm: float = 12.0
+	var cc: Color = GameConstants.COLOR_PANEL_BORDER
+	var m: float = 60.0
+	var w: float = float(GameConstants.VIEW_WIDTH)
+	var h: float = float(GameConstants.VIEW_HEIGHT)
+	draw_rect(Rect2(m, m, cm, 1.0), cc)
+	draw_rect(Rect2(m, m, 1.0, cm), cc)
+	draw_rect(Rect2(w - m - cm, m, cm, 1.0), cc)
+	draw_rect(Rect2(w - m - 1.0, m, 1.0, cm), cc)
+	draw_rect(Rect2(m, h - m - 1.0, cm, 1.0), cc)
+	draw_rect(Rect2(m, h - m - cm, 1.0, cm), cc)
+	draw_rect(Rect2(w - m - cm, h - m - 1.0, cm, 1.0), cc)
+	draw_rect(Rect2(w - m - 1.0, h - m - cm, 1.0, cm), cc)
 
 func _draw_map() -> void:
 	_draw_background()
@@ -568,7 +582,12 @@ func _draw_map() -> void:
 				continue
 			var from_pos: Vector2 = _get_map_node_position(node, tiers, top, tier_height)
 			var to_pos: Vector2 = _get_map_node_position(target, tiers, top, tier_height)
-			draw_line(from_pos, to_pos, Color(1.0, 1.0, 1.0, 0.12), 2.0)
+			draw_line(
+				from_pos,
+				to_pos,
+				Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.3),
+				2.0
+			)
 
 	for node in _run_state.nodes:
 		var pos: Vector2 = _get_map_node_position(node, tiers, top, tier_height)
@@ -580,25 +599,26 @@ func _draw_map() -> void:
 		if next_nodes.has(node):
 			var idx: int = next_nodes.find(node)
 			if idx == _map_selection_idx:
-				draw_arc(pos, 20.0, 0.0, TAU, 40, Color(0.95, 0.95, 1.0, 0.8), 2.0, true)
+				draw_arc(pos, 20.0, 0.0, TAU, 40, GameConstants.COLOR_PANEL_ACCENT, 2.0, true)
 				_draw_menu_cursor(pos + Vector2(-26.0, 4.0))
 
-	_draw_text("Path Select", 60.0, 74.0, Color(0.95, 0.95, 0.98, 0.95), 28)
-	_draw_text("Gold: %d" % _player.gold, GameConstants.VIEW_WIDTH - 200.0, 74.0, Color(1.0, 0.85, 0.3, 0.95), 20)
-	_draw_text("Arrows/A-D to move, Enter/J or click to travel", 60.0, 106.0, Color(0.72, 0.74, 0.78, 0.85), 16)
+	_draw_text("江湖", 60.0, 74.0, GameConstants.COLOR_TEXT_HEADING, 28)
+	_draw_text("Path Select", 128.0, 74.0, GameConstants.COLOR_TEXT_SUBHEADING, 18)
+	_draw_text("Gold: %d" % _player.gold, GameConstants.VIEW_WIDTH - 200.0, 74.0, GameConstants.COLOR_TEXT_ACCENT, 20)
+	_draw_text("Arrows/A-D to move, Enter/J or click to travel", 60.0, 106.0, GameConstants.COLOR_TEXT_CAPTION, 16)
 
 	if not next_nodes.is_empty():
 		var selected_node: MapNode = next_nodes[_map_selection_idx]
 		var selected_label: String = _get_node_type_label(selected_node.node_type)
-		_draw_text("Selected: %s" % selected_label, 60.0, GameConstants.VIEW_HEIGHT - 54.0, Color(0.88, 0.90, 0.95, 0.9), 18)
+		_draw_text("Selected: %s" % selected_label, 60.0, GameConstants.VIEW_HEIGHT - 54.0, GameConstants.COLOR_TEXT_BODY, 18)
 
 func _draw_reward() -> void:
 	_draw_background()
 
 	var panel: Rect2 = _get_reward_panel_rect()
 	_draw_panel(panel)
-	_draw_text("Choose Technique", panel.position.x + 26.0, panel.position.y + 40.0, Color(0.95, 0.95, 0.98, 0.95), 24)
-	_draw_text("Arrows, 1/2/3, Enter or click", panel.position.x + 26.0, panel.position.y + 68.0, Color(0.72, 0.74, 0.78, 0.85), 15)
+	_draw_text("擇法 Choose Technique", panel.position.x + 26.0, panel.position.y + 40.0, GameConstants.COLOR_TEXT_HEADING, 24)
+	_draw_text("Arrows, 1/2/3, Enter or click", panel.position.x + 26.0, panel.position.y + 68.0, GameConstants.COLOR_TEXT_CAPTION, 15)
 
 	for i in range(_rewards.size()):
 		var box: Rect2 = _get_reward_box_rect(i)
@@ -623,32 +643,32 @@ func _draw_event() -> void:
 	var title_cn: String = _event_runner.get_title_cn()
 	if not title_cn.is_empty():
 		title = "%s %s" % [title_cn, title]
-	_draw_text(title, panel.position.x + 26.0, panel.position.y + 40.0, Color(0.95, 0.95, 0.98, 0.95), 24)
-	_draw_text(_event_runner.get_text(), panel.position.x + 26.0, panel.position.y + 80.0, Color(0.78, 0.80, 0.84, 0.9), 15)
+	_draw_text(title, panel.position.x + 26.0, panel.position.y + 40.0, GameConstants.COLOR_TEXT_HEADING, 24)
+	_draw_text(_event_runner.get_text(), panel.position.x + 26.0, panel.position.y + 80.0, GameConstants.COLOR_TEXT_BODY, 15)
 
 	if _event_showing_result:
-		_draw_text(str(_event_result.get("message", "")), panel.position.x + 26.0, panel.position.y + 160.0, Color(0.9, 0.85, 0.6, 0.95), 16)
-		_draw_text("Press Enter to continue", panel.position.x + 26.0, panel.end.y - 40.0, Color(0.6, 0.62, 0.66, 0.7), 14)
+		_draw_text(str(_event_result.get("message", "")), panel.position.x + 26.0, panel.position.y + 160.0, GameConstants.COLOR_TEXT_ACCENT, 16)
+		_draw_text("Press Enter to continue", panel.position.x + 26.0, panel.end.y - 40.0, GameConstants.COLOR_TEXT_CAPTION, 14)
 	else:
 		var y: float = panel.position.y + 160.0
 		for i in range(_event_choices.size()):
 			var choice: Dictionary = _event_choices[i]
 			var label: String = "%d. %s" % [i + 1, str(choice.get("label", "..."))]
-			var color: Color = Color(0.92, 0.93, 0.98, 0.95) if i == _event_choice_idx else Color(0.6, 0.62, 0.66, 0.8)
+			var color: Color = GameConstants.COLOR_TEXT_HEADING if i == _event_choice_idx else GameConstants.COLOR_TEXT_CAPTION
 			if i == _event_choice_idx:
 				_draw_menu_cursor(Vector2(panel.position.x + 10.0, y))
 			_draw_text(label, panel.position.x + 40.0, y, color, 17)
 			y += 30.0
 		if _shop_message_timer > 0.0:
-			_draw_text(_shop_message, panel.position.x + 26.0, panel.end.y - 60.0, Color(0.9, 0.5, 0.4, 0.95), 15)
-		_draw_text("W/S or 1-3 to choose, Enter to confirm", panel.position.x + 26.0, panel.end.y - 40.0, Color(0.6, 0.62, 0.66, 0.7), 14)
+			_draw_text(_shop_message, panel.position.x + 26.0, panel.end.y - 60.0, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.95), 15)
+		_draw_text("W/S or 1-3 to choose, Enter to confirm", panel.position.x + 26.0, panel.end.y - 40.0, GameConstants.COLOR_TEXT_CAPTION, 14)
 
 func _draw_shop() -> void:
 	_draw_background()
 	var panel: Rect2 = Rect2(160.0, 60.0, float(GameConstants.VIEW_WIDTH) - 320.0, float(GameConstants.VIEW_HEIGHT) - 120.0)
 	_draw_panel(panel)
-	_draw_text("Shop", panel.position.x + 26.0, panel.position.y + 40.0, Color(0.95, 0.95, 0.98, 0.95), 24)
-	_draw_text("Gold: %d" % _player.gold, panel.position.x + 200.0, panel.position.y + 40.0, Color(1.0, 0.85, 0.3, 0.95), 20)
+	_draw_text("商鋪 Shop", panel.position.x + 26.0, panel.position.y + 40.0, GameConstants.COLOR_TEXT_HEADING, 24)
+	_draw_text("Gold: %d" % _player.gold, panel.position.x + 200.0, panel.position.y + 40.0, GameConstants.COLOR_TEXT_ACCENT, 20)
 
 	var y: float = panel.position.y + 80.0
 	for i in range(_shop_items.size()):
@@ -658,41 +678,42 @@ func _draw_shop() -> void:
 		var desc: String = str(item.get("description", ""))
 		var can_afford: bool = _player.gold >= price
 		var selected: bool = i == _shop_selection_idx
-		var text_color: Color = Color(0.92, 0.93, 0.98, 0.95) if selected else Color(0.6, 0.62, 0.66, 0.8)
+		var text_color: Color = GameConstants.COLOR_TEXT_HEADING if selected else GameConstants.COLOR_TEXT_CAPTION
 		if not can_afford:
-			text_color = Color(0.5, 0.3, 0.3, 0.7)
+			text_color = Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.5)
 		if selected:
 			_draw_menu_cursor(Vector2(panel.position.x + 10.0, y))
 		_draw_text("%s - %dg" % [label, price], panel.position.x + 40.0, y, text_color, 16)
-		_draw_text(desc, panel.position.x + 40.0, y + 18.0, Color(0.55, 0.57, 0.6, 0.7), 13)
+		_draw_text(desc, panel.position.x + 40.0, y + 18.0, GameConstants.COLOR_TEXT_CAPTION, 13)
 		y += 48.0
 
-	if _shop_message_timer > 0.0:
-		_draw_text(_shop_message, panel.position.x + 26.0, panel.end.y - 60.0, Color(0.9, 0.85, 0.6, 0.95), 16)
-	_draw_text("W/S to browse, Enter to buy, Q to leave", panel.position.x + 26.0, panel.end.y - 30.0, Color(0.6, 0.62, 0.66, 0.7), 14)
+		if _shop_message_timer > 0.0:
+			_draw_text(_shop_message, panel.position.x + 26.0, panel.end.y - 60.0, GameConstants.COLOR_TEXT_ACCENT, 16)
+		_draw_text("W/S to browse, Enter to buy, Q or Esc to leave", panel.position.x + 26.0, panel.end.y - 30.0, GameConstants.COLOR_TEXT_CAPTION, 14)
 
 func _draw_rest() -> void:
 	_draw_background()
 	var panel: Rect2 = Rect2(400.0, 260.0, float(GameConstants.VIEW_WIDTH) - 800.0, 300.0)
 	_draw_panel(panel)
-	_draw_text("Rest Site", panel.position.x + 26.0, panel.position.y + 40.0, Color(0.95, 0.95, 0.98, 0.95), 24)
-	_draw_text("HP: %d/%d" % [int(round(_player.health_current)), int(round(_player.health_max))], panel.position.x + 26.0, panel.position.y + 70.0, Color(0.8, 0.82, 0.86, 0.85), 15)
+	_draw_text("歇息 Rest Site", panel.position.x + 26.0, panel.position.y + 40.0, GameConstants.COLOR_TEXT_HEADING, 24)
+	_draw_text("HP: %d/%d" % [int(round(_player.health_current)), int(round(_player.health_max))], panel.position.x + 26.0, panel.position.y + 70.0, GameConstants.COLOR_TEXT_BODY, 15)
 
 	var choices: Array[String] = ["Heal (40% max HP)", "Remove a technique"]
 	var y: float = panel.position.y + 110.0
 	for i in range(choices.size()):
 		var color: Color = Color(0.92, 0.93, 0.98, 0.95) if i == _rest_choice_idx else Color(0.6, 0.62, 0.66, 0.8)
+		color = GameConstants.COLOR_TEXT_HEADING if i == _rest_choice_idx else GameConstants.COLOR_TEXT_CAPTION
 		if i == _rest_choice_idx:
 			_draw_menu_cursor(Vector2(panel.position.x + 10.0, y))
 		_draw_text(choices[i], panel.position.x + 40.0, y, color, 17)
 		y += 30.0
-	_draw_text("W/S to choose, Enter to confirm", panel.position.x + 26.0, panel.end.y - 30.0, Color(0.6, 0.62, 0.66, 0.7), 14)
+	_draw_text("W/S to choose, Enter to confirm", panel.position.x + 26.0, panel.end.y - 30.0, GameConstants.COLOR_TEXT_CAPTION, 14)
 
 func _draw_forget_technique() -> void:
 	_draw_background()
 	var panel: Rect2 = Rect2(400.0, 160.0, float(GameConstants.VIEW_WIDTH) - 800.0, 500.0)
 	_draw_panel(panel)
-	_draw_text("Forget Technique", panel.position.x + 26.0, panel.position.y + 40.0, Color(0.95, 0.95, 0.98, 0.95), 24)
+	_draw_text("忘招 Forget Technique", panel.position.x + 26.0, panel.position.y + 40.0, GameConstants.COLOR_TEXT_HEADING, 24)
 
 	if _player.technique_engine == null:
 		return
@@ -703,21 +724,21 @@ func _draw_forget_technique() -> void:
 		var display: String = "%s %s" % [str(tech_data.get("name_cn", technique_ids[i])), str(tech_data.get("name_en", ""))]
 		var desc: String = str(tech_data.get("description", ""))
 		var selected: bool = i == _forget_selection_idx
-		var color: Color = Color(0.92, 0.93, 0.98, 0.95) if selected else Color(0.6, 0.62, 0.66, 0.8)
+		var color: Color = GameConstants.COLOR_VERMILLION_RED if selected else GameConstants.COLOR_TEXT_CAPTION
 		if selected:
 			_draw_menu_cursor(Vector2(panel.position.x + 10.0, y))
 		_draw_text(display, panel.position.x + 40.0, y, color, 16)
-		_draw_text(desc, panel.position.x + 40.0, y + 18.0, Color(0.55, 0.57, 0.6, 0.7), 13)
+		_draw_text(desc, panel.position.x + 40.0, y + 18.0, GameConstants.COLOR_TEXT_CAPTION, 13)
 		y += 44.0
-	_draw_text("W/S to browse, Enter to forget, Q to cancel", panel.position.x + 26.0, panel.end.y - 30.0, Color(0.6, 0.62, 0.66, 0.7), 14)
+	_draw_text("W/S to browse, Enter to forget, Q or Esc to cancel", panel.position.x + 26.0, panel.end.y - 30.0, GameConstants.COLOR_TEXT_CAPTION, 14)
 
 func _draw_victory() -> void:
-	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), Color8(12, 11, 16), true)
+	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), GameConstants.COLOR_INK_BLACK, true)
 
 	var center_x: float = float(GameConstants.VIEW_WIDTH) * 0.5
 	var scroll: Rect2 = Rect2(center_x - 340.0, 80.0, 680.0, float(GameConstants.VIEW_HEIGHT) - 160.0)
-	draw_rect(scroll, Color8(28, 26, 22, 240), true)
-	var gold: Color = GameConstants.COLOR_GOLD_DARK
+	draw_rect(scroll, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 240.0 / 255.0), true)
+	var gold: Color = GameConstants.COLOR_IMPERIAL_GOLD
 	draw_rect(Rect2(scroll.position.x, scroll.position.y, scroll.size.x, 3.0), gold)
 	draw_rect(Rect2(scroll.position.x, scroll.end.y - 3.0, scroll.size.x, 3.0), gold)
 	draw_rect(Rect2(scroll.position.x, scroll.position.y, 3.0, scroll.size.y), gold)
@@ -726,96 +747,109 @@ func _draw_victory() -> void:
 	var y: float = scroll.position.y + 50.0
 	var left: float = scroll.position.x + 40.0
 
-	_draw_text("江湖初顯", center_x - 60.0, y, Color(0.95, 0.88, 0.65, 0.95), 36)
+	_draw_text("江湖初顯", center_x - 60.0, y, GameConstants.COLOR_TEXT_HEADING, 36)
 	y += 40.0
-	_draw_text("The Wanderer Emerges", center_x - 100.0, y, Color(0.75, 0.72, 0.65, 0.8), 18)
+	_draw_text("The Wanderer Emerges", center_x - 100.0, y, GameConstants.COLOR_TEXT_SUBHEADING, 18)
 	y += 60.0
 
-	draw_rect(Rect2(left, y, scroll.size.x - 80.0, 1.0), Color(0.5, 0.45, 0.35, 0.4))
+	draw_rect(Rect2(left, y, scroll.size.x - 80.0, 1.0), Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.4))
 	y += 30.0
 
 	var run_duration: float = _run_end_time - _run_start_time
 	var minutes: int = int(run_duration) / 60
 	var seconds: int = int(run_duration) % 60
-	_draw_text("Run Duration", left, y, Color(0.6, 0.58, 0.52, 0.7), 14)
-	_draw_text("%d:%02d" % [minutes, seconds], left + 200.0, y, Color(0.9, 0.88, 0.8, 0.9), 16)
+	_draw_text("Run Duration", left, y, GameConstants.COLOR_TEXT_CAPTION, 14)
+	_draw_text("%d:%02d" % [minutes, seconds], left + 200.0, y, GameConstants.COLOR_TEXT_HEADING, 16)
 	y += 30.0
 
 	var hp_pct: int = int(round(_player.health_current / maxf(_player.health_max, 1.0) * 100.0))
-	_draw_text("Final HP", left, y, Color(0.6, 0.58, 0.52, 0.7), 14)
-	_draw_text("%d%%" % hp_pct, left + 200.0, y, Color(0.9, 0.88, 0.8, 0.9), 16)
+	_draw_text("Final HP", left, y, GameConstants.COLOR_TEXT_CAPTION, 14)
+	_draw_text("%d%%" % hp_pct, left + 200.0, y, GameConstants.COLOR_TEXT_HEADING, 16)
 	y += 30.0
 
-	_draw_text("Gold Earned", left, y, Color(0.6, 0.58, 0.52, 0.7), 14)
-	_draw_text("%d" % _run_gold_earned, left + 200.0, y, Color(1.0, 0.85, 0.3, 0.9), 16)
+	_draw_text("Gold Earned", left, y, GameConstants.COLOR_TEXT_CAPTION, 14)
+	_draw_text("%d" % _run_gold_earned, left + 200.0, y, GameConstants.COLOR_TEXT_ACCENT, 16)
 	y += 40.0
 
-	draw_rect(Rect2(left, y, scroll.size.x - 80.0, 1.0), Color(0.5, 0.45, 0.35, 0.4))
+	draw_rect(Rect2(left, y, scroll.size.x - 80.0, 1.0), Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.4))
 	y += 20.0
-	_draw_text("Techniques Mastered", left, y, Color(0.6, 0.58, 0.52, 0.7), 14)
+	_draw_text("Techniques Acquired", left, y, GameConstants.COLOR_TEXT_CAPTION, 14)
 	y += 24.0
 
 	if _run_techniques_acquired.is_empty():
-		_draw_text("(none)", left + 20.0, y, Color(0.5, 0.48, 0.44, 0.6), 14)
+		_draw_text("(none)", left + 20.0, y, GameConstants.COLOR_TEXT_CAPTION, 14)
 		y += 20.0
 	else:
 		for tech_id in _run_techniques_acquired:
 			var tech_data: Dictionary = DataManager.get_technique(tech_id)
 			var cn: String = str(tech_data.get("name_cn", ""))
 			var en: String = str(tech_data.get("name_en", tech_id))
-			_draw_text("%s %s" % [cn, en], left + 20.0, y, Color(0.85, 0.82, 0.75, 0.85), 15)
+			_draw_text("%s %s" % [cn, en], left + 20.0, y, GameConstants.COLOR_TEXT_BODY, 15)
 			y += 22.0
 
 	y = scroll.end.y - 80.0
-	draw_rect(Rect2(left, y, scroll.size.x - 80.0, 1.0), Color(0.5, 0.45, 0.35, 0.4))
+	draw_rect(Rect2(left, y, scroll.size.x - 80.0, 1.0), Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.4))
 	y += 20.0
-	_draw_text("The road beyond the bamboo leads deeper into the jianghu...", left, y, Color(0.5, 0.48, 0.42, 0.6), 13)
+	_draw_text("The road beyond the bamboo leads deeper into the jianghu...", left, y, GameConstants.COLOR_TEXT_CAPTION, 13)
 
 	var pulse: float = 0.5 + 0.5 * sin(_cursor_flash * 4.0)
-	_draw_text("Press Enter to return", center_x - 90.0, scroll.end.y + 30.0, Color(0.7, 0.68, 0.6, pulse), 16)
+	_draw_text("Press Enter to return", center_x - 90.0, scroll.end.y + 30.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, pulse), 16)
 
 func _draw_game_over() -> void:
-	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), Color8(14, 10, 10), true)
+	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), GameConstants.COLOR_INK_BLACK, true)
+	draw_rect(
+		Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT),
+		Color(GameConstants.COLOR_EARTH_DARK.r, GameConstants.COLOR_EARTH_DARK.g, GameConstants.COLOR_EARTH_DARK.b, 0.2),
+		true
+	)
 
 	var center_x: float = float(GameConstants.VIEW_WIDTH) * 0.5
 	var center_y: float = float(GameConstants.VIEW_HEIGHT) * 0.5
 
-	_draw_text("敗", center_x - 30.0, center_y - 60.0, Color(0.6, 0.2, 0.15, 0.8), 60)
-	_draw_text("Defeated", center_x - 50.0, center_y + 10.0, Color(0.7, 0.3, 0.25, 0.7), 22)
+	_draw_text("敗", center_x - 30.0, center_y - 60.0, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.8), 60)
+	_draw_text("Defeated", center_x - 50.0, center_y + 10.0, Color(GameConstants.COLOR_MAROON.r, GameConstants.COLOR_MAROON.g, GameConstants.COLOR_MAROON.b, 0.7), 22)
 
 	var run_duration: float = _run_end_time - _run_start_time
 	var minutes: int = int(run_duration) / 60
 	var seconds: int = int(run_duration) % 60
-	_draw_text("Time: %d:%02d" % [minutes, seconds], center_x - 50.0, center_y + 60.0, Color(0.5, 0.45, 0.4, 0.6), 14)
+	_draw_text("Time: %d:%02d" % [minutes, seconds], center_x - 50.0, center_y + 60.0, GameConstants.COLOR_TEXT_CAPTION, 14)
 
 	var pulse: float = 0.5 + 0.5 * sin(_cursor_flash * 4.0)
-	_draw_text("Press Enter to return", center_x - 90.0, center_y + 120.0, Color(0.6, 0.55, 0.5, pulse), 16)
+	_draw_text("Press Enter to return", center_x - 90.0, center_y + 120.0, Color(GameConstants.COLOR_TEXT_CAPTION.r, GameConstants.COLOR_TEXT_CAPTION.g, GameConstants.COLOR_TEXT_CAPTION.b, pulse), 16)
 
 func _draw_background() -> void:
-	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), Color8(14, 15, 18), true)
-	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, 1.0), Color(1.0, 1.0, 1.0, 0.08), true)
-	draw_rect(Rect2(0.0, GameConstants.VIEW_HEIGHT - 1.0, GameConstants.VIEW_WIDTH, 1.0), Color(1.0, 1.0, 1.0, 0.08), true)
+	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), GameConstants.COLOR_INK_BLACK, true)
 
 func _draw_panel(rect: Rect2) -> void:
-	draw_rect(rect, Color(0.05, 0.06, 0.08, 0.88), true)
-	draw_rect(rect, Color(1.0, 1.0, 1.0, 0.10), false, 2.0)
-	draw_line(rect.position + Vector2(0.0, 2.0), rect.position + Vector2(rect.size.x, 2.0), Color(1.0, 1.0, 1.0, 0.16), 1.0)
+	draw_rect(rect, Color(GameConstants.COLOR_PANEL_BG.r, GameConstants.COLOR_PANEL_BG.g, GameConstants.COLOR_PANEL_BG.b, 0.92), true)
+	draw_rect(rect, GameConstants.COLOR_PANEL_BORDER, false, 2.0)
+	draw_rect(Rect2(rect.position.x + 2.0, rect.position.y, rect.size.x - 4.0, 1.0), GameConstants.COLOR_PANEL_ACCENT)
+	var cm: float = 6.0
+	var cc: Color = GameConstants.COLOR_PANEL_BORDER
+	draw_rect(Rect2(rect.position.x - 1.0, rect.position.y - 1.0, cm, 1.0), cc)
+	draw_rect(Rect2(rect.position.x - 1.0, rect.position.y - 1.0, 1.0, cm), cc)
+	draw_rect(Rect2(rect.end.x - cm + 1.0, rect.position.y - 1.0, cm, 1.0), cc)
+	draw_rect(Rect2(rect.end.x, rect.position.y - 1.0, 1.0, cm), cc)
+	draw_rect(Rect2(rect.position.x - 1.0, rect.end.y, cm, 1.0), cc)
+	draw_rect(Rect2(rect.position.x - 1.0, rect.end.y - cm + 1.0, 1.0, cm), cc)
+	draw_rect(Rect2(rect.end.x - cm + 1.0, rect.end.y, cm, 1.0), cc)
+	draw_rect(Rect2(rect.end.x, rect.end.y - cm + 1.0, 1.0, cm), cc)
 
 func _draw_reward_option_with_desc(rect: Rect2, label: String, description: String, selected: bool) -> void:
-	var border: Color = Color(1.0, 1.0, 1.0, 0.12)
+	var border: Color = Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.3)
 	if selected:
-		border = Color(0.92, 0.93, 0.98, 0.92)
-	draw_rect(rect, Color(0.09, 0.10, 0.12, 0.85), true)
+		border = GameConstants.COLOR_PANEL_ACCENT
+	draw_rect(rect, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.85), true)
 	draw_rect(rect, border, false, 2.0)
-	_draw_text(label, rect.position.x + 18.0, rect.position.y + 36.0, Color(0.90, 0.92, 0.96, 0.95), 18)
+	_draw_text(label, rect.position.x + 18.0, rect.position.y + 36.0, GameConstants.COLOR_TEXT_HEADING, 18)
 	if description != "":
-		_draw_text(description, rect.position.x + 18.0, rect.position.y + 62.0, Color(0.68, 0.70, 0.74, 0.85), 13)
+		_draw_text(description, rect.position.x + 18.0, rect.position.y + 62.0, GameConstants.COLOR_TEXT_CAPTION, 13)
 	if selected:
 		_draw_menu_cursor(Vector2(rect.position.x - 16.0, rect.position.y + 36.0))
 
 func _draw_menu_cursor(position: Vector2) -> void:
 	var pulse: float = 0.5 + 0.5 * sin(_cursor_flash * 8.0)
-	var cursor_color: Color = Color(1.0, 1.0, 1.0, 0.55 + 0.35 * pulse)
+	var cursor_color: Color = Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, 0.55 + 0.35 * pulse)
 	draw_circle(position, 2.5 + pulse, cursor_color)
 	draw_line(position + Vector2(-10.0, -4.0), position + Vector2(-2.0, 0.0), cursor_color, 2.0)
 	draw_line(position + Vector2(-10.0, 4.0), position + Vector2(-2.0, 0.0), cursor_color, 2.0)
@@ -886,23 +920,23 @@ func _get_restart_button_rect() -> Rect2:
 func _get_node_color(node_type: int) -> Color:
 	match node_type:
 		MapNode.NodeType.BATTLE:
-			return Color8(104, 186, 255)
+			return GameConstants.COLOR_MISTY_BLUE
 		MapNode.NodeType.ELITE:
-			return Color8(255, 165, 115)
+			return GameConstants.COLOR_EARTH_LIGHT
 		MapNode.NodeType.AMBUSH:
-			return Color8(255, 100, 100)
+			return GameConstants.COLOR_VERMILLION_RED
 		MapNode.NodeType.MASTER:
-			return Color8(200, 160, 255)
+			return GameConstants.COLOR_PURPLE_MID
 		MapNode.NodeType.EVENT:
-			return Color8(182, 194, 214)
+			return GameConstants.COLOR_LIGHT_BLUE
 		MapNode.NodeType.SHOP:
-			return Color8(248, 224, 142)
+			return GameConstants.COLOR_GOLD_BRIGHT
 		MapNode.NodeType.REST:
-			return Color8(120, 220, 160)
+			return GameConstants.COLOR_JADE_GREEN
 		MapNode.NodeType.BOSS:
-			return Color8(255, 105, 128)
+			return GameConstants.COLOR_CRIMSON
 		_:
-			return Color8(210, 210, 220)
+			return GameConstants.COLOR_PAPER
 
 func _get_node_type_label(node_type: int) -> String:
 	match node_type:
