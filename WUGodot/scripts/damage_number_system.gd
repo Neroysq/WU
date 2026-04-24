@@ -48,7 +48,9 @@ func update(dt: float) -> void:
 			_damage_numbers[i] = number
 
 func draw(canvas: CanvasItem, offset: Vector2 = Vector2.ZERO) -> void:
-	var font: Font = ThemeDB.fallback_font
+	var font: Font = Fonts.body_font()
+	if font == null:
+		font = ThemeDB.fallback_font
 	if font == null:
 		return
 

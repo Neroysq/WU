@@ -51,7 +51,9 @@ func _fmt(value: float) -> String:
 	return "%d" % int(round(value))
 
 func _text(canvas: CanvasItem, text: String, x: float, y: float, color: Color, size: int) -> void:
-	var font: Font = ThemeDB.fallback_font
+	var font: Font = Fonts.body_font()
+	if font == null:
+		font = ThemeDB.fallback_font
 	if font == null:
 		return
 	canvas.draw_string(font, Vector2(x, y), text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, size, color)

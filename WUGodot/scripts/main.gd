@@ -533,46 +533,40 @@ func _draw() -> void:
 			_draw_game_over()
 
 func _draw_main_menu() -> void:
-	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), GameConstants.COLOR_INK_BLACK, true)
+	_draw_background()
+	_draw_bamboo_silhouettes(float(GameConstants.VIEW_HEIGHT) - 32.0, 0.55)
+	_draw_scene_frame(48.0)
 
 	var center_x: float = float(GameConstants.VIEW_WIDTH) * 0.5
-	var title_y: float = float(GameConstants.VIEW_HEIGHT) * 0.3
+	var title_y: float = float(GameConstants.VIEW_HEIGHT) * 0.28
+	var title_panel: Rect2 = Rect2(center_x - 260.0, title_y - 92.0, 520.0, 248.0)
+	_draw_panel(title_panel)
 
-	_draw_text("武", center_x - 40.0, title_y, GameConstants.COLOR_TEXT_HEADING, 80)
-	_draw_text("WU", center_x - 22.0, title_y + 60.0, GameConstants.COLOR_TEXT_SUBHEADING, 28)
-	_draw_text("A Sekiro-paced wuxia duel roguelike", center_x - 180.0, title_y + 110.0, GameConstants.COLOR_TEXT_CAPTION, 16)
+	_draw_centered_text("武", center_x, title_y, GameConstants.COLOR_TEXT_HEADING, 132, true)
+	_draw_centered_text("WU", center_x, title_y + 72.0, GameConstants.COLOR_TEXT_SUBHEADING, 36, true)
+	_draw_centered_text("The Wanderer Emerges", center_x, title_y + 122.0, GameConstants.COLOR_TEXT_BODY, 20)
+	_draw_centered_text("A Sekiro-paced wuxia duel roguelike", center_x, title_y + 152.0, GameConstants.COLOR_TEXT_HINT, 16)
 
-	var prompt_pulse: float = 0.5 + 0.5 * sin(_cursor_flash * 4.0)
-	_draw_text(
+	var prompt_pulse: float = 0.55 + 0.45 * sin(_cursor_flash * 4.0)
+	_draw_centered_text(
 		"Press Enter to begin",
-		center_x - 100.0,
-		float(GameConstants.VIEW_HEIGHT) * 0.65,
+		center_x,
+		float(GameConstants.VIEW_HEIGHT) * 0.89,
 		Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, prompt_pulse),
-		20
+		24
 	)
-	_draw_text("第一章 江湖", center_x - 55.0, float(GameConstants.VIEW_HEIGHT) - 80.0, GameConstants.COLOR_TEXT_CAPTION, 14)
-
-	var cm: float = 12.0
-	var cc: Color = GameConstants.COLOR_PANEL_BORDER
-	var m: float = 60.0
-	var w: float = float(GameConstants.VIEW_WIDTH)
-	var h: float = float(GameConstants.VIEW_HEIGHT)
-	draw_rect(Rect2(m, m, cm, 1.0), cc)
-	draw_rect(Rect2(m, m, 1.0, cm), cc)
-	draw_rect(Rect2(w - m - cm, m, cm, 1.0), cc)
-	draw_rect(Rect2(w - m - 1.0, m, 1.0, cm), cc)
-	draw_rect(Rect2(m, h - m - 1.0, cm, 1.0), cc)
-	draw_rect(Rect2(m, h - m - cm, 1.0, cm), cc)
-	draw_rect(Rect2(w - m - cm, h - m - 1.0, cm, 1.0), cc)
-	draw_rect(Rect2(w - m - 1.0, h - m - cm, 1.0, cm), cc)
+	_draw_centered_text("第一章 江湖", center_x, float(GameConstants.VIEW_HEIGHT) - 78.0, GameConstants.COLOR_TEXT_BODY, 18, true)
+	_draw_centered_text("Bamboo roads, wandering blades, and a debt still unpaid", center_x, float(GameConstants.VIEW_HEIGHT) - 48.0, GameConstants.COLOR_TEXT_HINT, 15)
 
 func _draw_map() -> void:
 	_draw_background()
+	_draw_map_wash()
+	_draw_bamboo_silhouettes(float(GameConstants.VIEW_HEIGHT) - 6.0, 0.38)
 
 	var next_nodes: Array[MapNode] = _run_state.get_available_next()
 	var tiers: int = _run_state.max_tier + 1
-	var top: int = 160
-	var bottom: int = GameConstants.VIEW_HEIGHT - 170
+	var top: int = 180
+	var bottom: int = GameConstants.VIEW_HEIGHT - 200
 	var tier_height: int = int((bottom - top) / maxi(1, tiers - 1))
 
 	for node in _run_state.nodes:
@@ -582,43 +576,58 @@ func _draw_map() -> void:
 				continue
 			var from_pos: Vector2 = _get_map_node_position(node, tiers, top, tier_height)
 			var to_pos: Vector2 = _get_map_node_position(target, tiers, top, tier_height)
-			draw_line(
-				from_pos,
-				to_pos,
-				Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.3),
-				2.0
-			)
+			var base_color: Color = Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.28)
+			var brush_color: Color = Color(GameConstants.COLOR_TEXT_HINT.r, GameConstants.COLOR_TEXT_HINT.g, GameConstants.COLOR_TEXT_HINT.b, 0.12)
+			var normal: Vector2 = (to_pos - from_pos).normalized().orthogonal() * 2.0
+			draw_line(from_pos, to_pos, base_color, 4.0)
+			draw_line(from_pos + normal, to_pos + normal, brush_color, 2.0)
+			draw_line(from_pos - normal * 0.5, to_pos - normal * 0.5, brush_color, 1.0)
 
 	for node in _run_state.nodes:
 		var pos: Vector2 = _get_map_node_position(node, tiers, top, tier_height)
 		var node_color: Color = _get_node_color(node.node_type)
 		if node.cleared:
 			node_color = node_color.darkened(0.55)
+		draw_circle(pos, 22.0, Color(node_color.r, node_color.g, node_color.b, 0.14))
 		draw_circle(pos, 12.0, node_color)
+		draw_circle(pos, 5.0, Color(GameConstants.COLOR_SCROLL_WHITE.r, GameConstants.COLOR_SCROLL_WHITE.g, GameConstants.COLOR_SCROLL_WHITE.b, 0.5))
 
 		if next_nodes.has(node):
 			var idx: int = next_nodes.find(node)
 			if idx == _map_selection_idx:
-				draw_arc(pos, 20.0, 0.0, TAU, 40, GameConstants.COLOR_PANEL_ACCENT, 2.0, true)
-				_draw_menu_cursor(pos + Vector2(-26.0, 4.0))
+				var ring_pulse: float = 2.0 + sin(_cursor_flash * 6.0) * 1.5
+				draw_arc(pos, 22.0 + ring_pulse, 0.0, TAU, 48, GameConstants.COLOR_PANEL_ACCENT, 3.0, true)
+				draw_arc(pos, 30.0 + ring_pulse, 0.0, TAU, 48, Color(GameConstants.COLOR_PANEL_ACCENT.r, GameConstants.COLOR_PANEL_ACCENT.g, GameConstants.COLOR_PANEL_ACCENT.b, 0.22), 2.0, true)
+				_draw_menu_cursor(pos + Vector2(-34.0, 6.0))
 
-	_draw_text("江湖", 60.0, 74.0, GameConstants.COLOR_TEXT_HEADING, 28)
-	_draw_text("Path Select", 128.0, 74.0, GameConstants.COLOR_TEXT_SUBHEADING, 18)
-	_draw_text("Gold: %d" % _player.gold, GameConstants.VIEW_WIDTH - 200.0, 74.0, GameConstants.COLOR_TEXT_ACCENT, 20)
-	_draw_text("Arrows/A-D to move, Enter/J or click to travel", 60.0, 106.0, GameConstants.COLOR_TEXT_CAPTION, 16)
+	var header: Rect2 = Rect2(42.0, 34.0, float(GameConstants.VIEW_WIDTH) - 84.0, 92.0)
+	_draw_panel(header)
+	_draw_text("江湖", 74.0, 78.0, GameConstants.COLOR_TEXT_HEADING, 32, true)
+	_draw_text("Path Select", 144.0, 78.0, GameConstants.COLOR_TEXT_SUBHEADING, 20)
+	_draw_text("Gold: %d" % _player.gold, GameConstants.VIEW_WIDTH - 220.0, 78.0, GameConstants.COLOR_TEXT_ACCENT, 22)
+	_draw_text("Arrows / A-D to move · Enter / J or click to travel", 74.0, 106.0, GameConstants.COLOR_TEXT_BODY, 16)
 
 	if not next_nodes.is_empty():
 		var selected_node: MapNode = next_nodes[_map_selection_idx]
 		var selected_label: String = _get_node_type_label(selected_node.node_type)
-		_draw_text("Selected: %s" % selected_label, 60.0, GameConstants.VIEW_HEIGHT - 54.0, GameConstants.COLOR_TEXT_BODY, 18)
+		var footer: Rect2 = Rect2(42.0, float(GameConstants.VIEW_HEIGHT) - 116.0, float(GameConstants.VIEW_WIDTH) - 84.0, 64.0)
+		_draw_panel(footer)
+		_draw_text("Selected Route", footer.position.x + 26.0, footer.position.y + 34.0, GameConstants.COLOR_TEXT_HINT, 15)
+		_draw_text(selected_label, footer.position.x + 26.0, footer.position.y + 56.0, GameConstants.COLOR_TEXT_HEADING, 22)
+		_draw_text("Branches narrow after the master's gate and rest shrine.", footer.end.x - 420.0, footer.position.y + 46.0, GameConstants.COLOR_TEXT_BODY, 15)
 
 func _draw_reward() -> void:
 	_draw_background()
+	_draw_modal_backdrop()
 
 	var panel: Rect2 = _get_reward_panel_rect()
 	_draw_panel(panel)
-	_draw_text("擇法 Choose Technique", panel.position.x + 26.0, panel.position.y + 40.0, GameConstants.COLOR_TEXT_HEADING, 24)
-	_draw_text("Arrows, 1/2/3, Enter or click", panel.position.x + 26.0, panel.position.y + 68.0, GameConstants.COLOR_TEXT_CAPTION, 15)
+	var header_bar: Rect2 = Rect2(panel.position.x + 18.0, panel.position.y + 18.0, panel.size.x - 36.0, 54.0)
+	draw_rect(header_bar, Color(GameConstants.COLOR_GOLD_DARK.r, GameConstants.COLOR_GOLD_DARK.g, GameConstants.COLOR_GOLD_DARK.b, 0.28), true)
+	draw_rect(header_bar, Color(GameConstants.COLOR_PANEL_ACCENT.r, GameConstants.COLOR_PANEL_ACCENT.g, GameConstants.COLOR_PANEL_ACCENT.b, 0.8), false, 1.0)
+	_draw_text("得技", header_bar.position.x + 18.0, header_bar.position.y + 28.0, GameConstants.COLOR_TEXT_HEADING, 24, true)
+	_draw_text("Technique Acquired", header_bar.position.x + 18.0, header_bar.position.y + 48.0, GameConstants.COLOR_TEXT_BODY, 17)
+	_draw_text("Arrows, 1/2/3, Enter or click", panel.position.x + 26.0, panel.position.y + 92.0, GameConstants.COLOR_TEXT_HINT, 15)
 
 	for i in range(_rewards.size()):
 		var box: Rect2 = _get_reward_box_rect(i)
@@ -633,7 +642,8 @@ func _draw_reward() -> void:
 
 func _draw_event() -> void:
 	_draw_background()
-	var panel: Rect2 = Rect2(160.0, 100.0, float(GameConstants.VIEW_WIDTH) - 320.0, float(GameConstants.VIEW_HEIGHT) - 200.0)
+	_draw_modal_backdrop()
+	var panel: Rect2 = Rect2(360.0, 186.0, float(GameConstants.VIEW_WIDTH) - 720.0, 420.0 if _event_showing_result else 500.0)
 	_draw_panel(panel)
 
 	if _event_runner == null:
@@ -643,34 +653,41 @@ func _draw_event() -> void:
 	var title_cn: String = _event_runner.get_title_cn()
 	if not title_cn.is_empty():
 		title = "%s %s" % [title_cn, title]
-	_draw_text(title, panel.position.x + 26.0, panel.position.y + 40.0, GameConstants.COLOR_TEXT_HEADING, 24)
-	_draw_text(_event_runner.get_text(), panel.position.x + 26.0, panel.position.y + 80.0, GameConstants.COLOR_TEXT_BODY, 15)
+	_draw_text(title, panel.position.x + 32.0, panel.position.y + 48.0, GameConstants.COLOR_TEXT_HEADING, 28, true)
+	draw_rect(Rect2(panel.position.x + 32.0, panel.position.y + 64.0, panel.size.x - 64.0, 1.0), Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.55))
+	var body_bottom: float = _draw_text_block(_event_runner.get_text(), panel.position.x + 32.0, panel.position.y + 106.0, panel.size.x - 64.0, 28.0, GameConstants.COLOR_TEXT_BODY, 18)
 
 	if _event_showing_result:
-		_draw_text(str(_event_result.get("message", "")), panel.position.x + 26.0, panel.position.y + 160.0, GameConstants.COLOR_TEXT_ACCENT, 16)
-		_draw_text("Press Enter to continue", panel.position.x + 26.0, panel.end.y - 40.0, GameConstants.COLOR_TEXT_CAPTION, 14)
+		_draw_text_block(str(_event_result.get("message", "")), panel.position.x + 32.0, body_bottom + 34.0, panel.size.x - 64.0, 30.0, GameConstants.COLOR_TEXT_ACCENT, 19)
+		_draw_text("Press Enter to continue", panel.position.x + 32.0, panel.end.y - 34.0, GameConstants.COLOR_TEXT_HINT, 15)
 	else:
-		var y: float = panel.position.y + 160.0
+		var y: float = body_bottom + 36.0
 		for i in range(_event_choices.size()):
 			var choice: Dictionary = _event_choices[i]
 			var label: String = "%d. %s" % [i + 1, str(choice.get("label", "..."))]
-			var color: Color = GameConstants.COLOR_TEXT_HEADING if i == _event_choice_idx else GameConstants.COLOR_TEXT_CAPTION
+			var row: Rect2 = Rect2(panel.position.x + 20.0, y - 24.0, panel.size.x - 40.0, 44.0)
+			var selected: bool = i == _event_choice_idx
+			draw_rect(row, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.72), true)
+			draw_rect(row, GameConstants.COLOR_PANEL_ACCENT if selected else Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.5), false, 1.0)
+			var color: Color = GameConstants.COLOR_TEXT_HEADING if selected else GameConstants.COLOR_TEXT_BODY
 			if i == _event_choice_idx:
-				_draw_menu_cursor(Vector2(panel.position.x + 10.0, y))
-			_draw_text(label, panel.position.x + 40.0, y, color, 17)
-			y += 30.0
+				_draw_menu_cursor(Vector2(panel.position.x + 12.0, y - 2.0))
+			_draw_text(label, panel.position.x + 48.0, y + 4.0, color, 18)
+			y += 56.0
 		if _shop_message_timer > 0.0:
-			_draw_text(_shop_message, panel.position.x + 26.0, panel.end.y - 60.0, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.95), 15)
-		_draw_text("W/S or 1-3 to choose, Enter to confirm", panel.position.x + 26.0, panel.end.y - 40.0, GameConstants.COLOR_TEXT_CAPTION, 14)
+			_draw_text(_shop_message, panel.position.x + 32.0, panel.end.y - 62.0, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.95), 16)
+		_draw_text("W/S or 1-3 to choose, Enter to confirm", panel.position.x + 32.0, panel.end.y - 34.0, GameConstants.COLOR_TEXT_HINT, 15)
 
 func _draw_shop() -> void:
 	_draw_background()
-	var panel: Rect2 = Rect2(160.0, 60.0, float(GameConstants.VIEW_WIDTH) - 320.0, float(GameConstants.VIEW_HEIGHT) - 120.0)
+	_draw_modal_backdrop()
+	var panel: Rect2 = Rect2(300.0, 122.0, float(GameConstants.VIEW_WIDTH) - 600.0, 580.0)
 	_draw_panel(panel)
-	_draw_text("商鋪 Shop", panel.position.x + 26.0, panel.position.y + 40.0, GameConstants.COLOR_TEXT_HEADING, 24)
-	_draw_text("Gold: %d" % _player.gold, panel.position.x + 200.0, panel.position.y + 40.0, GameConstants.COLOR_TEXT_ACCENT, 20)
+	_draw_text("商鋪 Shop", panel.position.x + 32.0, panel.position.y + 48.0, GameConstants.COLOR_TEXT_HEADING, 28, true)
+	_draw_text("Gold: %d" % _player.gold, panel.end.x - 180.0, panel.position.y + 48.0, GameConstants.COLOR_TEXT_ACCENT, 24)
+	draw_rect(Rect2(panel.position.x + 32.0, panel.position.y + 64.0, panel.size.x - 64.0, 1.0), Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.55))
 
-	var y: float = panel.position.y + 80.0
+	var y: float = panel.position.y + 114.0
 	for i in range(_shop_items.size()):
 		var item: Dictionary = _shop_items[i]
 		var label: String = str(item.get("label", "???"))
@@ -678,62 +695,100 @@ func _draw_shop() -> void:
 		var desc: String = str(item.get("description", ""))
 		var can_afford: bool = _player.gold >= price
 		var selected: bool = i == _shop_selection_idx
-		var text_color: Color = GameConstants.COLOR_TEXT_HEADING if selected else GameConstants.COLOR_TEXT_CAPTION
+		var row: Rect2 = Rect2(panel.position.x + 24.0, y - 28.0, panel.size.x - 48.0, 70.0)
+		var text_color: Color = GameConstants.COLOR_TEXT_HEADING if selected else GameConstants.COLOR_TEXT_BODY
+		var price_color: Color = GameConstants.COLOR_TEXT_ACCENT if can_afford else Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.8)
+		draw_rect(row, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.76), true)
+		draw_rect(row, GameConstants.COLOR_PANEL_ACCENT if selected else Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.42), false, 1.0)
 		if not can_afford:
-			text_color = Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.5)
+			text_color = GameConstants.COLOR_TEXT_DISABLED
 		if selected:
-			_draw_menu_cursor(Vector2(panel.position.x + 10.0, y))
-		_draw_text("%s - %dg" % [label, price], panel.position.x + 40.0, y, text_color, 16)
-		_draw_text(desc, panel.position.x + 40.0, y + 18.0, GameConstants.COLOR_TEXT_CAPTION, 13)
-		y += 48.0
+			_draw_menu_cursor(Vector2(panel.position.x + 16.0, y - 2.0))
+		_draw_text(label, panel.position.x + 52.0, y + 2.0, text_color, 19)
+		if not can_afford:
+			var chip_rect: Rect2 = Rect2(row.end.x - 214.0, y - 18.0, 92.0, 24.0)
+			draw_rect(chip_rect, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.16), true)
+			draw_rect(chip_rect, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.75), false, 1.0)
+			_draw_text("Need Gold", chip_rect.position.x + 10.0, chip_rect.position.y + 17.0, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.95), 13)
+		_draw_text("%dg" % price, row.end.x - 88.0, y + 2.0, price_color, 20)
+		_draw_text(desc, panel.position.x + 52.0, y + 28.0, GameConstants.COLOR_TEXT_HINT if can_afford else GameConstants.COLOR_TEXT_DISABLED, 14)
+		y += 82.0
 
-		if _shop_message_timer > 0.0:
-			_draw_text(_shop_message, panel.position.x + 26.0, panel.end.y - 60.0, GameConstants.COLOR_TEXT_ACCENT, 16)
-		_draw_text("W/S to browse, Enter to buy, Q or Esc to leave", panel.position.x + 26.0, panel.end.y - 30.0, GameConstants.COLOR_TEXT_CAPTION, 14)
+	if _shop_message_timer > 0.0:
+		_draw_text(_shop_message, panel.position.x + 32.0, panel.end.y - 58.0, GameConstants.COLOR_TEXT_ACCENT, 17)
+	_draw_text("W/S to browse, Enter to buy, Q or Esc to leave", panel.position.x + 32.0, panel.end.y - 28.0, GameConstants.COLOR_TEXT_HINT, 15)
 
 func _draw_rest() -> void:
 	_draw_background()
-	var panel: Rect2 = Rect2(400.0, 260.0, float(GameConstants.VIEW_WIDTH) - 800.0, 300.0)
+	_draw_modal_backdrop()
+	var panel: Rect2 = Rect2(520.0, 260.0, float(GameConstants.VIEW_WIDTH) - 1040.0, 280.0)
 	_draw_panel(panel)
-	_draw_text("歇息 Rest Site", panel.position.x + 26.0, panel.position.y + 40.0, GameConstants.COLOR_TEXT_HEADING, 24)
-	_draw_text("HP: %d/%d" % [int(round(_player.health_current)), int(round(_player.health_max))], panel.position.x + 26.0, panel.position.y + 70.0, GameConstants.COLOR_TEXT_BODY, 15)
+	_draw_text("歇息 Rest Site", panel.position.x + 32.0, panel.position.y + 48.0, GameConstants.COLOR_TEXT_HEADING, 28, true)
+	_draw_text("HP: %d/%d" % [int(round(_player.health_current)), int(round(_player.health_max))], panel.position.x + 32.0, panel.position.y + 78.0, GameConstants.COLOR_TEXT_BODY, 18)
 
+	var can_remove: bool = _player.technique_engine != null and not _player.technique_engine.technique_ids().is_empty()
 	var choices: Array[String] = ["Heal (40% max HP)", "Remove a technique"]
-	var y: float = panel.position.y + 110.0
+	var choice_hints: Array[String] = [
+		"Recover and steady yourself before the next road.",
+		"Forget one technique and lighten the loadout."
+	]
+	var y: float = panel.position.y + 126.0
 	for i in range(choices.size()):
-		var color: Color = Color(0.92, 0.93, 0.98, 0.95) if i == _rest_choice_idx else Color(0.6, 0.62, 0.66, 0.8)
-		color = GameConstants.COLOR_TEXT_HEADING if i == _rest_choice_idx else GameConstants.COLOR_TEXT_CAPTION
-		if i == _rest_choice_idx:
-			_draw_menu_cursor(Vector2(panel.position.x + 10.0, y))
-		_draw_text(choices[i], panel.position.x + 40.0, y, color, 17)
-		y += 30.0
-	_draw_text("W/S to choose, Enter to confirm", panel.position.x + 26.0, panel.end.y - 30.0, GameConstants.COLOR_TEXT_CAPTION, 14)
+		var row: Rect2 = Rect2(panel.position.x + 20.0, y - 28.0, panel.size.x - 40.0, 64.0)
+		var selected: bool = i == _rest_choice_idx
+		var enabled: bool = i == 0 or can_remove
+		var border_color: Color = GameConstants.COLOR_PANEL_ACCENT if selected and enabled else Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.5)
+		var label_color: Color = GameConstants.COLOR_TEXT_HEADING if enabled else GameConstants.COLOR_TEXT_DISABLED
+		var hint_color: Color = GameConstants.COLOR_TEXT_HINT if enabled else GameConstants.COLOR_TEXT_DISABLED
+		draw_rect(row, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.76), true)
+		draw_rect(row, border_color, false, 1.0)
+		if selected:
+			_draw_menu_cursor(Vector2(panel.position.x + 12.0, y))
+		_draw_text(choices[i], panel.position.x + 48.0, y + 2.0, label_color, 19)
+		_draw_text(choice_hints[i], panel.position.x + 48.0, y + 26.0, hint_color, 14)
+		if not enabled:
+			var chip_rect: Rect2 = Rect2(row.end.x - 84.0, y - 18.0, 64.0, 24.0)
+			draw_rect(chip_rect, Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.18), true)
+			draw_rect(chip_rect, Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.65), false, 1.0)
+			_draw_text("Locked", chip_rect.position.x + 10.0, chip_rect.position.y + 17.0, GameConstants.COLOR_TEXT_HINT, 13)
+			draw_line(Vector2(panel.position.x + 48.0, y - 6.0), Vector2(panel.position.x + 232.0, y - 6.0), Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.75), 1.0)
+		y += 74.0
+	_draw_text("W/S to choose, Enter to confirm", panel.position.x + 32.0, panel.end.y - 28.0, GameConstants.COLOR_TEXT_HINT, 15)
 
 func _draw_forget_technique() -> void:
 	_draw_background()
-	var panel: Rect2 = Rect2(400.0, 160.0, float(GameConstants.VIEW_WIDTH) - 800.0, 500.0)
+	_draw_modal_backdrop()
+	var technique_count: int = 0
+	if _player.technique_engine != null:
+		technique_count = _player.technique_engine.technique_ids().size()
+	var panel_height: float = clampf(210.0 + float(technique_count) * 72.0, 320.0, 560.0)
+	var panel: Rect2 = Rect2(420.0, (float(GameConstants.VIEW_HEIGHT) - panel_height) * 0.5, float(GameConstants.VIEW_WIDTH) - 840.0, panel_height)
 	_draw_panel(panel)
-	_draw_text("忘招 Forget Technique", panel.position.x + 26.0, panel.position.y + 40.0, GameConstants.COLOR_TEXT_HEADING, 24)
+	_draw_text("忘招 Forget Technique", panel.position.x + 32.0, panel.position.y + 48.0, GameConstants.COLOR_TEXT_HEADING, 28, true)
 
 	if _player.technique_engine == null:
 		return
 	var technique_ids: Array[String] = _player.technique_engine.technique_ids()
-	var y: float = panel.position.y + 80.0
+	var y: float = panel.position.y + 100.0
 	for i in range(technique_ids.size()):
 		var tech_data: Dictionary = DataManager.get_technique(technique_ids[i])
 		var display: String = "%s %s" % [str(tech_data.get("name_cn", technique_ids[i])), str(tech_data.get("name_en", ""))]
 		var desc: String = str(tech_data.get("description", ""))
 		var selected: bool = i == _forget_selection_idx
-		var color: Color = GameConstants.COLOR_VERMILLION_RED if selected else GameConstants.COLOR_TEXT_CAPTION
+		var row: Rect2 = Rect2(panel.position.x + 20.0, y - 28.0, panel.size.x - 40.0, 62.0)
+		var color: Color = GameConstants.COLOR_VERMILLION_RED if selected else GameConstants.COLOR_TEXT_BODY
+		draw_rect(row, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.76), true)
+		draw_rect(row, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.9) if selected else Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.42), false, 1.0)
 		if selected:
-			_draw_menu_cursor(Vector2(panel.position.x + 10.0, y))
-		_draw_text(display, panel.position.x + 40.0, y, color, 16)
-		_draw_text(desc, panel.position.x + 40.0, y + 18.0, GameConstants.COLOR_TEXT_CAPTION, 13)
-		y += 44.0
-	_draw_text("W/S to browse, Enter to forget, Q or Esc to cancel", panel.position.x + 26.0, panel.end.y - 30.0, GameConstants.COLOR_TEXT_CAPTION, 14)
+			_draw_menu_cursor(Vector2(panel.position.x + 12.0, y))
+		_draw_text(display, panel.position.x + 48.0, y + 2.0, color, 18)
+		_draw_text(desc, panel.position.x + 48.0, y + 26.0, GameConstants.COLOR_TEXT_HINT, 14)
+		y += 72.0
+	_draw_text("W/S to browse, Enter to forget, Q or Esc to cancel", panel.position.x + 32.0, panel.end.y - 28.0, GameConstants.COLOR_TEXT_HINT, 15)
 
 func _draw_victory() -> void:
-	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), GameConstants.COLOR_INK_BLACK, true)
+	_draw_background()
+	_draw_modal_backdrop()
 
 	var center_x: float = float(GameConstants.VIEW_WIDTH) * 0.5
 	var scroll: Rect2 = Rect2(center_x - 340.0, 80.0, 680.0, float(GameConstants.VIEW_HEIGHT) - 160.0)
@@ -747,9 +802,9 @@ func _draw_victory() -> void:
 	var y: float = scroll.position.y + 50.0
 	var left: float = scroll.position.x + 40.0
 
-	_draw_text("江湖初顯", center_x - 60.0, y, GameConstants.COLOR_TEXT_HEADING, 36)
+	_draw_centered_text("江湖初顯", center_x, y, GameConstants.COLOR_TEXT_HEADING, 40, true)
 	y += 40.0
-	_draw_text("The Wanderer Emerges", center_x - 100.0, y, GameConstants.COLOR_TEXT_SUBHEADING, 18)
+	_draw_centered_text("The Wanderer Emerges", center_x, y, GameConstants.COLOR_TEXT_SUBHEADING, 19)
 	y += 60.0
 
 	draw_rect(Rect2(left, y, scroll.size.x - 80.0, 1.0), Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.4))
@@ -790,35 +845,43 @@ func _draw_victory() -> void:
 	y = scroll.end.y - 80.0
 	draw_rect(Rect2(left, y, scroll.size.x - 80.0, 1.0), Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.4))
 	y += 20.0
-	_draw_text("The road beyond the bamboo leads deeper into the jianghu...", left, y, GameConstants.COLOR_TEXT_CAPTION, 13)
+	_draw_text("The road beyond the bamboo leads deeper into the jianghu...", left, y, GameConstants.COLOR_TEXT_BODY, 15, true)
 
 	var pulse: float = 0.5 + 0.5 * sin(_cursor_flash * 4.0)
-	_draw_text("Press Enter to return", center_x - 90.0, scroll.end.y + 30.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, pulse), 16)
+	_draw_centered_text("Press Enter to return", center_x, scroll.end.y + 30.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, pulse), 18)
 
 func _draw_game_over() -> void:
-	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), GameConstants.COLOR_INK_BLACK, true)
-	draw_rect(
-		Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT),
-		Color(GameConstants.COLOR_EARTH_DARK.r, GameConstants.COLOR_EARTH_DARK.g, GameConstants.COLOR_EARTH_DARK.b, 0.2),
-		true
-	)
+	_draw_background()
+	_draw_modal_backdrop()
 
 	var center_x: float = float(GameConstants.VIEW_WIDTH) * 0.5
 	var center_y: float = float(GameConstants.VIEW_HEIGHT) * 0.5
+	var panel: Rect2 = Rect2(center_x - 260.0, center_y - 150.0, 520.0, 260.0)
+	_draw_panel(panel)
 
-	_draw_text("敗", center_x - 30.0, center_y - 60.0, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.8), 60)
-	_draw_text("Defeated", center_x - 50.0, center_y + 10.0, Color(GameConstants.COLOR_MAROON.r, GameConstants.COLOR_MAROON.g, GameConstants.COLOR_MAROON.b, 0.7), 22)
+	_draw_centered_text("敗", center_x, center_y - 48.0, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.88), 78, true)
+	_draw_centered_text("Defeated", center_x, center_y + 20.0, Color(GameConstants.COLOR_TEXT_SUBHEADING.r, GameConstants.COLOR_TEXT_SUBHEADING.g, GameConstants.COLOR_TEXT_SUBHEADING.b, 0.92), 24)
 
 	var run_duration: float = _run_end_time - _run_start_time
 	var minutes: int = int(run_duration) / 60
 	var seconds: int = int(run_duration) % 60
-	_draw_text("Time: %d:%02d" % [minutes, seconds], center_x - 50.0, center_y + 60.0, GameConstants.COLOR_TEXT_CAPTION, 14)
+	_draw_centered_text("Time: %d:%02d" % [minutes, seconds], center_x, center_y + 64.0, GameConstants.COLOR_TEXT_BODY, 16)
 
-	var pulse: float = 0.5 + 0.5 * sin(_cursor_flash * 4.0)
-	_draw_text("Press Enter to return", center_x - 90.0, center_y + 120.0, Color(GameConstants.COLOR_TEXT_CAPTION.r, GameConstants.COLOR_TEXT_CAPTION.g, GameConstants.COLOR_TEXT_CAPTION.b, pulse), 16)
+	var pulse: float = 0.775 + 0.225 * sin(_cursor_flash * 4.0)
+	_draw_centered_text("Press Enter to return", center_x, center_y + 96.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, pulse), 18)
 
 func _draw_background() -> void:
 	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), GameConstants.COLOR_INK_BLACK, true)
+	draw_rect(
+		Rect2(0.0, float(GameConstants.VIEW_HEIGHT) * 0.58, GameConstants.VIEW_WIDTH, float(GameConstants.VIEW_HEIGHT) * 0.42),
+		Color(GameConstants.COLOR_EARTH_DARK.r, GameConstants.COLOR_EARTH_DARK.g, GameConstants.COLOR_EARTH_DARK.b, 0.32),
+		true
+	)
+	draw_rect(
+		Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT),
+		GameConstants.COLOR_SCREEN_VIGNETTE,
+		true
+	)
 
 func _draw_panel(rect: Rect2) -> void:
 	draw_rect(rect, Color(GameConstants.COLOR_PANEL_BG.r, GameConstants.COLOR_PANEL_BG.g, GameConstants.COLOR_PANEL_BG.b, 0.92), true)
@@ -836,14 +899,18 @@ func _draw_panel(rect: Rect2) -> void:
 	draw_rect(Rect2(rect.end.x, rect.end.y - cm + 1.0, 1.0, cm), cc)
 
 func _draw_reward_option_with_desc(rect: Rect2, label: String, description: String, selected: bool) -> void:
+	if selected:
+		rect.position.y -= 10.0
 	var border: Color = Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.3)
 	if selected:
 		border = GameConstants.COLOR_PANEL_ACCENT
-	draw_rect(rect, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.85), true)
+	if selected:
+		draw_rect(rect.grow(8.0), Color(GameConstants.COLOR_PANEL_ACCENT.r, GameConstants.COLOR_PANEL_ACCENT.g, GameConstants.COLOR_PANEL_ACCENT.b, 0.10), true)
+	draw_rect(rect, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.88), true)
 	draw_rect(rect, border, false, 2.0)
-	_draw_text(label, rect.position.x + 18.0, rect.position.y + 36.0, GameConstants.COLOR_TEXT_HEADING, 18)
+	_draw_text(label, rect.position.x + 18.0, rect.position.y + 36.0, GameConstants.COLOR_TEXT_HEADING, 20)
 	if description != "":
-		_draw_text(description, rect.position.x + 18.0, rect.position.y + 62.0, GameConstants.COLOR_TEXT_CAPTION, 13)
+		_draw_text_block(description, rect.position.x + 18.0, rect.position.y + 66.0, rect.size.x - 36.0, 18.0, GameConstants.COLOR_TEXT_BODY, 14)
 	if selected:
 		_draw_menu_cursor(Vector2(rect.position.x - 16.0, rect.position.y + 36.0))
 
@@ -854,11 +921,111 @@ func _draw_menu_cursor(position: Vector2) -> void:
 	draw_line(position + Vector2(-10.0, -4.0), position + Vector2(-2.0, 0.0), cursor_color, 2.0)
 	draw_line(position + Vector2(-10.0, 4.0), position + Vector2(-2.0, 0.0), cursor_color, 2.0)
 
-func _draw_text(text: String, x: float, y: float, color: Color, size: int = 16) -> void:
-	var font: Font = ThemeDB.fallback_font
+func _draw_text(text: String, x: float, y: float, color: Color, size: int = 16, display: bool = false) -> void:
+	var font: Font = _font_for_size(size, display)
 	if font == null:
 		return
 	draw_string(font, Vector2(x, y), text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, size, color)
+
+func _draw_centered_text(text: String, center_x: float, y: float, color: Color, size: int = 16, display: bool = false) -> void:
+	var width: float = _measure_text(text, size, display)
+	_draw_text(text, center_x - width * 0.5, y, color, size, display)
+
+func _draw_text_block(text: String, x: float, y: float, max_width: float, line_height: float, color: Color, size: int = 16, display: bool = false) -> float:
+	var lines: Array[String] = _wrap_text(text, max_width, size, display)
+	var cursor_y: float = y
+	for line in lines:
+		_draw_text(line, x, cursor_y, color, size, display)
+		cursor_y += line_height
+	return cursor_y
+
+func _font_for_size(size: int, display: bool = false) -> Font:
+	if display or size >= 32:
+		var display_font: Font = Fonts.display_font()
+		if display_font != null:
+			return display_font
+	var body_font: Font = Fonts.body_font()
+	if body_font != null:
+		return body_font
+	return ThemeDB.fallback_font
+
+func _measure_text(text: String, size: int = 16, display: bool = false) -> int:
+	var font: Font = _font_for_size(size, display)
+	if font == null:
+		return text.length() * size / 2
+	return int(round(font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, size).x))
+
+func _wrap_text(text: String, max_width: float, size: int = 16, display: bool = false) -> Array[String]:
+	if text.is_empty():
+		return [""]
+	var font: Font = _font_for_size(size, display)
+	if font == null:
+		return [text]
+	var lines: Array[String] = []
+	for paragraph in text.split("\n", false):
+		if paragraph.is_empty():
+			lines.append("")
+			continue
+		var words: Array[String] = paragraph.split(" ", false)
+		if words.is_empty():
+			lines.append(paragraph)
+			continue
+		var current: String = words[0]
+		for i in range(1, words.size()):
+			var candidate: String = "%s %s" % [current, words[i]]
+			if font.get_string_size(candidate, HORIZONTAL_ALIGNMENT_LEFT, -1.0, size).x <= max_width:
+				current = candidate
+			else:
+				lines.append(current)
+				current = words[i]
+		lines.append(current)
+	return lines
+
+func _draw_modal_backdrop() -> void:
+	draw_rect(
+		Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT),
+		Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.44),
+		true
+	)
+
+func _draw_scene_frame(margin: float) -> void:
+	var cm: float = 12.0
+	var cc: Color = Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.7)
+	var w: float = float(GameConstants.VIEW_WIDTH)
+	var h: float = float(GameConstants.VIEW_HEIGHT)
+	draw_rect(Rect2(margin, margin, cm, 1.0), cc)
+	draw_rect(Rect2(margin, margin, 1.0, cm), cc)
+	draw_rect(Rect2(w - margin - cm, margin, cm, 1.0), cc)
+	draw_rect(Rect2(w - margin - 1.0, margin, 1.0, cm), cc)
+	draw_rect(Rect2(margin, h - margin - 1.0, cm, 1.0), cc)
+	draw_rect(Rect2(margin, h - margin - cm, 1.0, cm), cc)
+	draw_rect(Rect2(w - margin - cm, h - margin - 1.0, cm, 1.0), cc)
+	draw_rect(Rect2(w - margin - 1.0, h - margin - cm, 1.0, cm), cc)
+
+func _draw_bamboo_silhouettes(base_y: float, opacity: float) -> void:
+	var pan_offset: float = fmod(_cursor_flash * 8.0, 82.0)
+	for i in range(26):
+		var x: float = -54.0 - pan_offset + float(i) * 82.0 + float((i * 37) % 19)
+		var height: float = 170.0 + float((i * 29) % 150)
+		var width: float = 8.0 + float(i % 3) * 2.0
+		var stalk_color: Color = Color(GameConstants.COLOR_MOUNTAIN_BLUE.r, GameConstants.COLOR_MOUNTAIN_BLUE.g, GameConstants.COLOR_MOUNTAIN_BLUE.b, opacity)
+		draw_rect(Rect2(x, base_y - height, width, height), stalk_color, true)
+		for node in range(1, 6):
+			var node_y: float = base_y - height + float(node) * (height / 6.0)
+			draw_rect(Rect2(x - 1.0, node_y, width + 2.0, 2.0), Color(GameConstants.COLOR_LIGHT_BLUE.r, GameConstants.COLOR_LIGHT_BLUE.g, GameConstants.COLOR_LIGHT_BLUE.b, opacity * 0.18), true)
+		for leaf in range(3):
+			var leaf_y: float = base_y - height * (0.34 + float(leaf) * 0.18)
+			var dir: float = -1.0 if ((i + leaf) % 2 == 0) else 1.0
+			var leaf_color: Color = Color(GameConstants.COLOR_JADE_DARK.r, GameConstants.COLOR_JADE_DARK.g, GameConstants.COLOR_JADE_DARK.b, opacity * 0.78)
+			draw_line(Vector2(x + width * 0.5, leaf_y), Vector2(x + width * 0.5 + dir * 34.0, leaf_y - 16.0), leaf_color, 2.0)
+			draw_line(Vector2(x + width * 0.5, leaf_y + 6.0), Vector2(x + width * 0.5 + dir * 24.0, leaf_y + 18.0), leaf_color, 2.0)
+
+func _draw_map_wash() -> void:
+	var wash_color: Color = Color(GameConstants.COLOR_MOUNTAIN_BLUE.r, GameConstants.COLOR_MOUNTAIN_BLUE.g, GameConstants.COLOR_MOUNTAIN_BLUE.b, 0.16)
+	draw_circle(Vector2(420.0, 360.0), 220.0, wash_color)
+	draw_circle(Vector2(960.0, 430.0), 300.0, Color(GameConstants.COLOR_EARTH_DARK.r, GameConstants.COLOR_EARTH_DARK.g, GameConstants.COLOR_EARTH_DARK.b, 0.18))
+	draw_circle(Vector2(1500.0, 320.0), 260.0, wash_color)
+	draw_rect(Rect2(0.0, float(GameConstants.VIEW_HEIGHT) - 240.0, GameConstants.VIEW_WIDTH, 240.0), Color(GameConstants.COLOR_EARTH_DARK.r, GameConstants.COLOR_EARTH_DARK.g, GameConstants.COLOR_EARTH_DARK.b, 0.28), true)
 
 func _get_map_node_position(node: MapNode, tiers: int, top: int, tier_height: int) -> Vector2:
 	var y: int = top + node.tier * tier_height
@@ -874,8 +1041,8 @@ func _get_map_node_position(node: MapNode, tiers: int, top: int, tier_height: in
 func _get_hovered_map_index(next_nodes: Array[MapNode]) -> int:
 	var mouse_pos: Vector2 = get_viewport().get_mouse_position()
 	var tiers: int = _run_state.max_tier + 1
-	var top: int = 160
-	var bottom: int = GameConstants.VIEW_HEIGHT - 170
+	var top: int = 180
+	var bottom: int = GameConstants.VIEW_HEIGHT - 200
 	var tier_height: int = int((bottom - top) / maxi(1, tiers - 1))
 
 	for i in range(next_nodes.size()):
@@ -887,7 +1054,7 @@ func _get_hovered_map_index(next_nodes: Array[MapNode]) -> int:
 
 func _get_reward_panel_rect() -> Rect2:
 	var width: float = minf(1200.0, float(GameConstants.VIEW_WIDTH) - 200.0)
-	var height: float = 260.0
+	var height: float = 300.0
 	return Rect2((float(GameConstants.VIEW_WIDTH) - width) * 0.5, (float(GameConstants.VIEW_HEIGHT) - height) * 0.5 - 20.0, width, height)
 
 func _get_reward_box_rect(index: int) -> Rect2:
@@ -895,9 +1062,9 @@ func _get_reward_box_rect(index: int) -> Rect2:
 	var count: int = maxi(_rewards.size(), 1)
 	var gap: float = 20.0
 	var box_width: float = (panel.size.x - gap * float(count + 1)) / float(count)
-	var box_height: float = 120.0
+	var box_height: float = 150.0
 	var x: float = panel.position.x + gap + float(index) * (box_width + gap)
-	var y: float = panel.position.y + 96.0
+	var y: float = panel.position.y + 118.0
 	return Rect2(x, y, box_width, box_height)
 
 func _get_hovered_reward_index() -> int:

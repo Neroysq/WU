@@ -34,6 +34,8 @@ var _debug_enabled: bool = false
 var _heavy_committed_attack: bool = false
 var _boss_death_timer: float = 0.0
 var _boss_death_triggered: bool = false
+var _boss_beat_message: String = ""
+var _boss_beat_timer: float = 0.0
 
 var _input_tracker: InputTracker = InputTracker.new()
 var _input_buffer: Variant = InputBufferScript.new()
@@ -89,6 +91,8 @@ func setup_combat(player: Fighter, node: MapNode) -> void:
 	_heavy_committed_attack = false
 	_boss_death_timer = 0.0
 	_boss_death_triggered = false
+	_boss_beat_message = ""
+	_boss_beat_timer = 0.0
 
 	_particle_system.clear()
 	_damage_number_system.clear()
@@ -128,6 +132,8 @@ func _process(delta: float) -> void:
 
 	if _feedback_timer > 0.0:
 		_feedback_timer -= delta
+	if _boss_beat_timer > 0.0:
+		_boss_beat_timer -= delta
 
 	if _is_paused and not _is_paused_on_end:
 		_sync_input_tracker()
@@ -202,7 +208,7 @@ func _process(delta: float) -> void:
 				_boss_death_timer = 1.0
 				_trigger_slow_mo(0.2, 1.0)
 				_on_camera_shake(20.0)
-				_show_feedback("破山!", 1.2)
+				_show_boss_beat("破山!", 1.1)
 				_particle_system.spawn_hit_sparks(_enemy.position + Vector2(0.0, -_enemy.height * 0.5), 40, GameConstants.COLOR_GOLD_BRIGHT)
 				_particle_system.spawn_hit_sparks(_enemy.position + Vector2(0.0, -_enemy.height * 0.3), 20, GameConstants.COLOR_CRIMSON)
 		else:
@@ -296,6 +302,7 @@ func _draw() -> void:
 
 	_draw_hud()
 	_draw_feedback()
+	_draw_boss_beat()
 	if _is_paused_on_end:
 		_draw_end_message()
 	_draw_effects()
@@ -334,27 +341,19 @@ func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 
 	if fighter.is_invulnerable:
 		var pulse: float = sin(fighter.animation_timer * 20.0) * 0.5 + 0.5
+		var center: Vector2 = body_rect.get_center()
+		var base_radius: float = maxf(body_rect.size.x, body_rect.size.y) * 0.45
 		for i in range(1, 4):
-			var glow: Rect2 = Rect2(
-				body_rect.position.x - i * 3.0,
-				body_rect.position.y - i * 3.0,
-				body_rect.size.x + i * 6.0,
-				body_rect.size.y + i * 6.0
-			)
-			var alpha: int = int(80.0 * pulse / float(i))
-			draw_rect(glow, Color(GameConstants.COLOR_LIGHT_BLUE.r, GameConstants.COLOR_LIGHT_BLUE.g, GameConstants.COLOR_LIGHT_BLUE.b, float(alpha) / 255.0), false)
+			var alpha: float = 0.22 * pulse / float(i)
+			draw_arc(center, base_radius + float(i) * 10.0 + pulse * 3.0, 0.0, TAU, 32, Color(GameConstants.COLOR_LIGHT_BLUE.r, GameConstants.COLOR_LIGHT_BLUE.g, GameConstants.COLOR_LIGHT_BLUE.b, alpha), 2.0, true)
 
 	if fighter.is_parrying():
 		var parry_intensity: float = sin(fighter.animation_timer * 25.0) * 0.3 + 0.7
+		var center: Vector2 = body_rect.get_center()
+		var parry_radius: float = maxf(body_rect.size.x, body_rect.size.y) * 0.42
 		for i in range(1, 5):
-			var parry_rect: Rect2 = Rect2(
-				body_rect.position.x - i * 2.0,
-				body_rect.position.y - i * 2.0,
-				body_rect.size.x + i * 4.0,
-				body_rect.size.y + i * 4.0
-			)
-			var alpha: int = int(120.0 * parry_intensity / float(i))
-			draw_rect(parry_rect, Color(GameConstants.COLOR_GOLD_BRIGHT.r, GameConstants.COLOR_GOLD_BRIGHT.g, GameConstants.COLOR_GOLD_BRIGHT.b, float(alpha) / 255.0), false)
+			var alpha: float = 0.34 * parry_intensity / float(i)
+			draw_arc(center, parry_radius + float(i) * 6.0, 0.0, TAU, 32, Color(GameConstants.COLOR_GOLD_BRIGHT.r, GameConstants.COLOR_GOLD_BRIGHT.g, GameConstants.COLOR_GOLD_BRIGHT.b, alpha), 2.0, true)
 
 	visual.draw(self, fighter, camera_offset)
 
@@ -415,23 +414,35 @@ func _draw_hud() -> void:
 		var phase_color: Color = GameConstants.COLOR_TEXT_ACCENT if _enemy.boss_controller.current_phase == 2 else GameConstants.COLOR_TEXT_SUBHEADING
 		_draw_text(phase_text, GameConstants.VIEW_WIDTH - 120, 30, phase_color, 14)
 
-	_draw_text("A/D move  W jump  J tap/hold  K block/parry  Space dash  L stance  P pause  R restart", 36, 128, GameConstants.COLOR_TEXT_CAPTION, 14)
+	var controls_panel: Rect2 = Rect2(520.0, float(GameConstants.VIEW_HEIGHT) - 70.0, 880.0, 44.0)
+	_draw_panel(controls_panel)
+	_draw_text("A/D move  W jump  J tap/hold  K block/parry  Space dash  L stance  P pause  R restart", controls_panel.position.x + 18.0, controls_panel.position.y + 28.0, GameConstants.COLOR_TEXT_BODY, 15)
 	if _player != null and _player.technique_engine != null:
 		var tech_ids: Array[String] = _player.technique_engine.technique_ids()
 		if not tech_ids.is_empty():
-			var tech_y: float = 148.0
-			_draw_text("技藝 Techniques:", 36.0, tech_y, GameConstants.COLOR_TEXT_SUBHEADING, 14)
-			tech_y += 18.0
-			for tech_id in tech_ids:
-				var tech_data: Dictionary = DataManager.get_technique(tech_id)
-				var display: String = "%s %s" % [str(tech_data.get("name_cn", tech_id)), str(tech_data.get("name_en", ""))]
-				var tech_color: Color = GameConstants.COLOR_LIGHT_BLUE
-				if tech_id.begins_with("D"):
-					tech_color = GameConstants.COLOR_GOLD_BRIGHT
-				elif tech_id.begins_with("B"):
-					tech_color = GameConstants.COLOR_SKY_BLUE
-				_draw_text(display, 36.0, tech_y, tech_color, 13)
-				tech_y += 16.0
+			var show_full_loadout: bool = _is_paused or _is_paused_on_end or _debug_enabled
+			if show_full_loadout:
+				var tech_panel_height: float = 56.0 + float(tech_ids.size()) * 18.0
+				var tech_panel: Rect2 = Rect2(24.0, float(GameConstants.VIEW_HEIGHT) - tech_panel_height - 28.0, 360.0, tech_panel_height)
+				_draw_panel(tech_panel)
+				var tech_y: float = tech_panel.position.y + 28.0
+				_draw_text("技藝 Techniques", tech_panel.position.x + 18.0, tech_y, GameConstants.COLOR_TEXT_SUBHEADING, 15, true)
+				tech_y += 18.0
+				for tech_id in tech_ids:
+					var tech_data: Dictionary = DataManager.get_technique(tech_id)
+					var display: String = "%s %s" % [str(tech_data.get("name_cn", tech_id)), str(tech_data.get("name_en", ""))]
+					var tech_color: Color = GameConstants.COLOR_LIGHT_BLUE
+					if tech_id.begins_with("D"):
+						tech_color = GameConstants.COLOR_GOLD_BRIGHT
+					elif tech_id.begins_with("B"):
+						tech_color = GameConstants.COLOR_SKY_BLUE
+					_draw_text(display, tech_panel.position.x + 18.0, tech_y, tech_color, 13)
+					tech_y += 16.0
+			else:
+				var compact_panel: Rect2 = Rect2(24.0, float(GameConstants.VIEW_HEIGHT) - 84.0, 280.0, 56.0)
+				_draw_panel(compact_panel)
+				_draw_text("技藝 %d" % tech_ids.size(), compact_panel.position.x + 16.0, compact_panel.position.y + 24.0, GameConstants.COLOR_TEXT_SUBHEADING, 15, true)
+				_draw_text("Pause to inspect full loadout", compact_panel.position.x + 16.0, compact_panel.position.y + 44.0, GameConstants.COLOR_TEXT_HINT, 13)
 
 		if _player.technique_engine.is_stance_active():
 			var stance_id: String = _player.technique_engine.active_stance()
@@ -467,7 +478,19 @@ func _draw_feedback() -> void:
 	if _feedback_timer <= 0.0:
 		return
 	var alpha: float = clampf(_feedback_timer, 0.0, 1.0)
-	_draw_text(_feedback_message, GameConstants.VIEW_WIDTH * 0.5 - 50.0, 200.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, alpha), 20)
+	var text_width: float = _measure_text(_feedback_message, 22)
+	_draw_text(_feedback_message, GameConstants.VIEW_WIDTH * 0.5 - text_width * 0.5, 200.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, alpha), 22)
+
+func _draw_boss_beat() -> void:
+	if _boss_beat_timer <= 0.0 or _boss_beat_message.is_empty():
+		return
+	var alpha: float = clampf(_boss_beat_timer / 1.1, 0.0, 1.0)
+	var pulse: float = 0.7 + 0.3 * sin((1.1 - _boss_beat_timer) * 12.0)
+	var rect: Rect2 = Rect2(GameConstants.VIEW_WIDTH * 0.5 - 250.0, 118.0, 500.0, 120.0)
+	draw_rect(rect, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.58 * alpha), true)
+	draw_rect(rect, Color(GameConstants.COLOR_PANEL_ACCENT.r, GameConstants.COLOR_PANEL_ACCENT.g, GameConstants.COLOR_PANEL_ACCENT.b, 0.75 * alpha), false, 2.0)
+	_draw_text(_boss_beat_message, rect.position.x + rect.size.x * 0.5 - _measure_text(_boss_beat_message, 52, true) * 0.5, rect.position.y + 60.0, Color(GameConstants.COLOR_TEXT_HEADING.r, GameConstants.COLOR_TEXT_HEADING.g, GameConstants.COLOR_TEXT_HEADING.b, alpha), 52, true)
+	_draw_text("Iron Bear falls", rect.position.x + rect.size.x * 0.5 - _measure_text("Iron Bear falls", 18) * 0.5, rect.position.y + 92.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, alpha * pulse), 18)
 
 func _draw_end_message() -> void:
 	var rect: Rect2 = Rect2((GameConstants.VIEW_WIDTH - 420) / 2, (GameConstants.VIEW_HEIGHT - 120) / 2 - 24, 420, 120)
@@ -520,17 +543,27 @@ func _draw_pause_indicator() -> void:
 func _draw_debug_overlay() -> void:
 	_debug_overlay.draw(self, _player, _enemy, _input_buffer)
 
-func _draw_text(text: String, x: float, y: float, color: Color, size: int = 16) -> void:
-	var font: Font = ThemeDB.fallback_font
+func _draw_text(text: String, x: float, y: float, color: Color, size: int = 16, display: bool = false) -> void:
+	var font: Font = _font_for_size(size, display)
 	if font == null:
 		return
 	draw_string(font, Vector2(x, y), text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, size, color)
 
-func _measure_text(text: String, size: int = 16) -> int:
-	var font: Font = ThemeDB.fallback_font
+func _measure_text(text: String, size: int = 16, display: bool = false) -> int:
+	var font: Font = _font_for_size(size, display)
 	if font == null:
 		return text.length() * size / 2
 	return int(round(font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, size).x))
+
+func _font_for_size(size: int, display: bool = false) -> Font:
+	if display or size >= 32:
+		var display_font: Font = Fonts.display_font()
+		if display_font != null:
+			return display_font
+	var body_font: Font = Fonts.body_font()
+	if body_font != null:
+		return body_font
+	return ThemeDB.fallback_font
 
 func _sync_input_tracker() -> void:
 	var keys: Array[int] = [KEY_QUOTELEFT, KEY_P, KEY_ENTER, KEY_J]
@@ -567,6 +600,10 @@ func _show_feedback(message: String, duration: float) -> void:
 	_feedback_frame = frame
 	_feedback_message = message
 	_feedback_timer = duration
+
+func _show_boss_beat(message: String, duration: float) -> void:
+	_boss_beat_message = message
+	_boss_beat_timer = duration
 
 func _get_visual_for(fighter: Fighter) -> FighterVisual:
 	if fighter.is_ai:
