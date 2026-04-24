@@ -2,6 +2,7 @@ extends Node2D
 
 const EventRunnerScript = preload("res://scripts/event_runner.gd")
 const ShopGeneratorScript = preload("res://scripts/shop_generator.gd")
+const TextWrappingScript = preload("res://scripts/util/text_wrapping.gd")
 
 enum SceneType {
 	MAIN_MENU,
@@ -538,14 +539,14 @@ func _draw_main_menu() -> void:
 	_draw_scene_frame(48.0)
 
 	var center_x: float = float(GameConstants.VIEW_WIDTH) * 0.5
-	var title_y: float = float(GameConstants.VIEW_HEIGHT) * 0.28
-	var title_panel: Rect2 = Rect2(center_x - 260.0, title_y - 92.0, 520.0, 248.0)
+	var title_y: float = float(GameConstants.VIEW_HEIGHT) * 0.36
+	var title_panel: Rect2 = Rect2(center_x - 360.0, title_y - 150.0, 720.0, 340.0)
 	_draw_panel(title_panel)
 
-	_draw_centered_text("武", center_x, title_y, GameConstants.COLOR_TEXT_HEADING, 132, true)
-	_draw_centered_text("WU", center_x, title_y + 72.0, GameConstants.COLOR_TEXT_SUBHEADING, 36, true)
-	_draw_centered_text("The Wanderer Emerges", center_x, title_y + 122.0, GameConstants.COLOR_TEXT_BODY, 20)
-	_draw_centered_text("A Sekiro-paced wuxia duel roguelike", center_x, title_y + 152.0, GameConstants.COLOR_TEXT_HINT, 16)
+	_draw_centered_text("武", center_x, title_y, GameConstants.COLOR_TEXT_HEADING, 200, true)
+	_draw_centered_text("WU", center_x, title_y + 94.0, GameConstants.COLOR_TEXT_SUBHEADING, 42, true)
+	_draw_centered_text("The Wanderer Emerges", center_x, title_y + 150.0, GameConstants.COLOR_TEXT_BODY, 22)
+	_draw_centered_text("A Sekiro-paced wuxia duel roguelike", center_x, title_y + 184.0, GameConstants.COLOR_TEXT_HINT, 17)
 
 	var prompt_pulse: float = 0.55 + 0.45 * sin(_cursor_flash * 4.0)
 	_draw_centered_text(
@@ -681,7 +682,7 @@ func _draw_event() -> void:
 func _draw_shop() -> void:
 	_draw_background()
 	_draw_modal_backdrop()
-	var panel: Rect2 = Rect2(300.0, 122.0, float(GameConstants.VIEW_WIDTH) - 600.0, 580.0)
+	var panel: Rect2 = Rect2(300.0, 110.0, float(GameConstants.VIEW_WIDTH) - 600.0, 740.0)
 	_draw_panel(panel)
 	_draw_text("商鋪 Shop", panel.position.x + 32.0, panel.position.y + 48.0, GameConstants.COLOR_TEXT_HEADING, 28, true)
 	_draw_text("Gold: %d" % _player.gold, panel.end.x - 180.0, panel.position.y + 48.0, GameConstants.COLOR_TEXT_ACCENT, 24)
@@ -847,8 +848,8 @@ func _draw_victory() -> void:
 	y += 20.0
 	_draw_text("The road beyond the bamboo leads deeper into the jianghu...", left, y, GameConstants.COLOR_TEXT_BODY, 15, true)
 
-	var pulse: float = 0.5 + 0.5 * sin(_cursor_flash * 4.0)
-	_draw_centered_text("Press Enter to return", center_x, scroll.end.y + 30.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, pulse), 18)
+	var pulse: float = 0.775 + 0.225 * sin(_cursor_flash * 4.0)
+	_draw_centered_text("Press Enter to return", center_x, scroll.end.y - 28.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, pulse), 18)
 
 func _draw_game_over() -> void:
 	_draw_background()
@@ -956,30 +957,8 @@ func _measure_text(text: String, size: int = 16, display: bool = false) -> int:
 	return int(round(font.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1.0, size).x))
 
 func _wrap_text(text: String, max_width: float, size: int = 16, display: bool = false) -> Array[String]:
-	if text.is_empty():
-		return [""]
 	var font: Font = _font_for_size(size, display)
-	if font == null:
-		return [text]
-	var lines: Array[String] = []
-	for paragraph in text.split("\n", false):
-		if paragraph.is_empty():
-			lines.append("")
-			continue
-		var words: Array[String] = paragraph.split(" ", false)
-		if words.is_empty():
-			lines.append(paragraph)
-			continue
-		var current: String = words[0]
-		for i in range(1, words.size()):
-			var candidate: String = "%s %s" % [current, words[i]]
-			if font.get_string_size(candidate, HORIZONTAL_ALIGNMENT_LEFT, -1.0, size).x <= max_width:
-				current = candidate
-			else:
-				lines.append(current)
-				current = words[i]
-		lines.append(current)
-	return lines
+	return TextWrappingScript.wrap_lines(font, text, max_width, size)
 
 func _draw_modal_backdrop() -> void:
 	draw_rect(
