@@ -538,7 +538,7 @@ func _draw_main_menu() -> void:
 	_draw_scene_frame(48.0)
 
 	var center_x: float = float(GameConstants.VIEW_WIDTH) * 0.5
-	var title_y: float = float(GameConstants.VIEW_HEIGHT) * 0.36
+	var title_y: float = float(GameConstants.VIEW_HEIGHT) * 0.42
 	var title_panel: Rect2 = Rect2(center_x - 360.0, title_y - 150.0, 720.0, 340.0)
 	_draw_panel(title_panel)
 
@@ -547,11 +547,11 @@ func _draw_main_menu() -> void:
 	_draw_centered_text("The Wanderer Emerges", center_x, title_y + 150.0, GameConstants.COLOR_TEXT_BODY, 22)
 	_draw_centered_text("A Sekiro-paced wuxia duel roguelike", center_x, title_y + 184.0, GameConstants.COLOR_TEXT_HINT, 17)
 
-	var prompt_pulse: float = 0.55 + 0.45 * sin(_cursor_flash * 4.0)
+	var prompt_pulse: float = 0.775 + 0.225 * sin(_cursor_flash * 4.0)
 	_draw_centered_text(
 		"Press Enter to begin",
 		center_x,
-		float(GameConstants.VIEW_HEIGHT) * 0.89,
+		float(GameConstants.VIEW_HEIGHT) * 0.82,
 		Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, prompt_pulse),
 		24
 	)
@@ -620,13 +620,19 @@ func _draw_reward() -> void:
 	_draw_background()
 	_draw_modal_backdrop()
 
+	var current_node: MapNode = _run_state.get_current_node() if _run_state != null else null
+	var is_master_reward: bool = current_node != null and current_node.node_type == MapNode.NodeType.MASTER
+	var reward_accent: Color = GameConstants.COLOR_PURPLE_MID if is_master_reward else GameConstants.COLOR_PANEL_ACCENT
+	var header_wash: Color = Color(reward_accent.r, reward_accent.g, reward_accent.b, 0.18 if is_master_reward else 0.28)
+	var header_cn: String = "拜師" if is_master_reward else "得技"
+	var header_en: String = "Master's Teaching" if is_master_reward else "Technique Acquired"
 	var panel: Rect2 = _get_reward_panel_rect()
 	_draw_panel(panel)
 	var header_bar: Rect2 = Rect2(panel.position.x + 18.0, panel.position.y + 18.0, panel.size.x - 36.0, 54.0)
-	draw_rect(header_bar, Color(GameConstants.COLOR_GOLD_DARK.r, GameConstants.COLOR_GOLD_DARK.g, GameConstants.COLOR_GOLD_DARK.b, 0.28), true)
-	draw_rect(header_bar, Color(GameConstants.COLOR_PANEL_ACCENT.r, GameConstants.COLOR_PANEL_ACCENT.g, GameConstants.COLOR_PANEL_ACCENT.b, 0.8), false, 1.0)
-	_draw_text("得技", header_bar.position.x + 18.0, header_bar.position.y + 28.0, GameConstants.COLOR_TEXT_HEADING, 24, true)
-	_draw_text("Technique Acquired", header_bar.position.x + 18.0, header_bar.position.y + 48.0, GameConstants.COLOR_TEXT_BODY, 17)
+	draw_rect(header_bar, header_wash, true)
+	draw_rect(header_bar, Color(reward_accent.r, reward_accent.g, reward_accent.b, 0.8), false, 1.0)
+	_draw_text(header_cn, header_bar.position.x + 18.0, header_bar.position.y + 28.0, GameConstants.COLOR_TEXT_HEADING, 24, true)
+	_draw_text(header_en, header_bar.position.x + 18.0, header_bar.position.y + 48.0, GameConstants.COLOR_TEXT_BODY, 17)
 	_draw_text("Arrows, 1/2/3, Enter or click", panel.position.x + 26.0, panel.position.y + 92.0, GameConstants.COLOR_TEXT_HINT, 15)
 
 	for i in range(_rewards.size()):
@@ -638,16 +644,19 @@ func _draw_reward() -> void:
 			if _rewards[i].technique_id != "":
 				var tech_data: Dictionary = DataManager.get_technique(_rewards[i].technique_id)
 				reward_desc = str(tech_data.get("description", ""))
-		_draw_reward_option_with_desc(box, reward_label, reward_desc, _reward_selection_idx == i)
+		_draw_reward_option_with_desc(box, reward_label, reward_desc, _reward_selection_idx == i, reward_accent)
 
 func _draw_event() -> void:
 	_draw_background()
 	_draw_modal_backdrop()
-	var panel: Rect2 = Rect2(360.0, 186.0, float(GameConstants.VIEW_WIDTH) - 720.0, 420.0 if _event_showing_result else 500.0)
-	_draw_panel(panel)
-
 	if _event_runner == null:
 		return
+
+	var panel_width: float = float(GameConstants.VIEW_WIDTH) - 720.0
+	var layout: Dictionary = _compute_event_panel_layout(panel_width - 64.0)
+	var panel_height: float = clampf(float(layout.get("height", 360.0)), 240.0, float(GameConstants.VIEW_HEIGHT) - 160.0)
+	var panel: Rect2 = Rect2(360.0, (float(GameConstants.VIEW_HEIGHT) - panel_height) * 0.5, panel_width, panel_height)
+	_draw_panel(panel)
 
 	var title: String = _event_runner.get_title()
 	var title_cn: String = _event_runner.get_title_cn()
@@ -655,10 +664,12 @@ func _draw_event() -> void:
 		title = "%s %s" % [title_cn, title]
 	_draw_text(title, panel.position.x + 32.0, panel.position.y + 48.0, GameConstants.COLOR_TEXT_HEADING, 28, true)
 	draw_rect(Rect2(panel.position.x + 32.0, panel.position.y + 64.0, panel.size.x - 64.0, 1.0), Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.55))
-	var body_bottom: float = _draw_text_block(_event_runner.get_text(), panel.position.x + 32.0, panel.position.y + 106.0, panel.size.x - 64.0, 28.0, GameConstants.COLOR_TEXT_BODY, 18)
+	var body_lines: Array = layout.get("body_lines", [])
+	var result_lines: Array = layout.get("result_lines", [])
+	var body_bottom: float = _draw_text_lines(body_lines, panel.position.x + 32.0, panel.position.y + 106.0, 28.0, GameConstants.COLOR_TEXT_BODY, 18)
 
 	if _event_showing_result:
-		_draw_text_block(str(_event_result.get("message", "")), panel.position.x + 32.0, body_bottom + 34.0, panel.size.x - 64.0, 30.0, GameConstants.COLOR_TEXT_ACCENT, 19)
+		_draw_text_lines(result_lines, panel.position.x + 32.0, body_bottom + 34.0, 30.0, GameConstants.COLOR_TEXT_ACCENT, 19)
 		_draw_text("Press Enter to continue", panel.position.x + 32.0, panel.end.y - 34.0, GameConstants.COLOR_TEXT_HINT, 15)
 	else:
 		var y: float = body_bottom + 36.0
@@ -677,6 +688,23 @@ func _draw_event() -> void:
 		if _shop_message_timer > 0.0:
 			_draw_text(_shop_message, panel.position.x + 32.0, panel.end.y - 62.0, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.95), 16)
 		_draw_text("W/S or 1-3 to choose, Enter to confirm", panel.position.x + 32.0, panel.end.y - 34.0, GameConstants.COLOR_TEXT_HINT, 15)
+
+func _compute_event_panel_layout(max_width: float) -> Dictionary:
+	var body_lines: Array[String] = _wrap_text(_event_runner.get_text(), max_width, 18)
+	var result_lines: Array[String] = []
+	if _event_showing_result:
+		result_lines = _wrap_text(str(_event_result.get("message", "")), max_width, 19)
+
+	var height: float = 96.0 + float(body_lines.size()) * 28.0
+	if _event_showing_result:
+		height += 34.0 + float(result_lines.size()) * 30.0 + 16.0 + 28.0
+	else:
+		height += 24.0 + float(_event_choices.size()) * 56.0 + 16.0 + 48.0
+	return {
+		"height": height,
+		"body_lines": body_lines,
+		"result_lines": result_lines,
+	}
 
 func _draw_shop() -> void:
 	_draw_background()
@@ -721,7 +749,7 @@ func _draw_shop() -> void:
 func _draw_rest() -> void:
 	_draw_background()
 	_draw_modal_backdrop()
-	var panel: Rect2 = Rect2(520.0, 260.0, float(GameConstants.VIEW_WIDTH) - 1040.0, 280.0)
+	var panel: Rect2 = Rect2(520.0, (float(GameConstants.VIEW_HEIGHT) - 280.0) * 0.5, float(GameConstants.VIEW_WIDTH) - 1040.0, 280.0)
 	_draw_panel(panel)
 	_draw_text("歇息 Rest Site", panel.position.x + 32.0, panel.position.y + 48.0, GameConstants.COLOR_TEXT_HEADING, 28, true)
 	_draw_text("HP: %d/%d" % [int(round(_player.health_current)), int(round(_player.health_max))], panel.position.x + 32.0, panel.position.y + 78.0, GameConstants.COLOR_TEXT_BODY, 18)
@@ -791,7 +819,9 @@ func _draw_victory() -> void:
 	_draw_modal_backdrop()
 
 	var center_x: float = float(GameConstants.VIEW_WIDTH) * 0.5
-	var scroll: Rect2 = Rect2(center_x - 340.0, 80.0, 680.0, float(GameConstants.VIEW_HEIGHT) - 160.0)
+	var technique_count: int = maxi(_run_techniques_acquired.size(), 1)
+	var scroll_height: float = clampf(476.0 + float(technique_count) * 22.0, 500.0, 760.0)
+	var scroll: Rect2 = Rect2(center_x - 340.0, (float(GameConstants.VIEW_HEIGHT) - scroll_height) * 0.5, 680.0, scroll_height)
 	draw_rect(scroll, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 240.0 / 255.0), true)
 	var gold: Color = GameConstants.COLOR_IMPERIAL_GOLD
 	draw_rect(Rect2(scroll.position.x, scroll.position.y, scroll.size.x, 3.0), gold)
@@ -842,7 +872,7 @@ func _draw_victory() -> void:
 			_draw_text("%s %s" % [cn, en], left + 20.0, y, GameConstants.COLOR_TEXT_BODY, 15)
 			y += 22.0
 
-	y = scroll.end.y - 80.0
+	y += 24.0
 	draw_rect(Rect2(left, y, scroll.size.x - 80.0, 1.0), Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.4))
 	y += 20.0
 	_draw_text("The road beyond the bamboo leads deeper into the jianghu...", left, y, GameConstants.COLOR_TEXT_BODY, 15, true)
@@ -856,19 +886,22 @@ func _draw_game_over() -> void:
 
 	var center_x: float = float(GameConstants.VIEW_WIDTH) * 0.5
 	var center_y: float = float(GameConstants.VIEW_HEIGHT) * 0.5
-	var panel: Rect2 = Rect2(center_x - 260.0, center_y - 150.0, 520.0, 260.0)
-	_draw_panel(panel)
+	var glyph_center: Vector2 = Vector2(center_x, center_y - 90.0)
+	for ring in range(8, 0, -1):
+		var radius: float = 58.0 + float(ring) * 34.0
+		var alpha: float = 0.015 + float(9 - ring) * 0.009
+		draw_circle(glyph_center, radius, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, alpha))
 
-	_draw_centered_text("敗", center_x, center_y - 48.0, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.88), 78, true)
-	_draw_centered_text("Defeated", center_x, center_y + 20.0, Color(GameConstants.COLOR_TEXT_SUBHEADING.r, GameConstants.COLOR_TEXT_SUBHEADING.g, GameConstants.COLOR_TEXT_SUBHEADING.b, 0.92), 24)
+	_draw_centered_text("敗", center_x, center_y - 18.0, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.88), 300, true)
+	_draw_centered_text("Defeated", center_x, center_y + 132.0, Color(GameConstants.COLOR_TEXT_SUBHEADING.r, GameConstants.COLOR_TEXT_SUBHEADING.g, GameConstants.COLOR_TEXT_SUBHEADING.b, 0.92), 30)
 
 	var run_duration: float = _run_end_time - _run_start_time
 	var minutes: int = int(run_duration) / 60
 	var seconds: int = int(run_duration) % 60
-	_draw_centered_text("Time: %d:%02d" % [minutes, seconds], center_x, center_y + 64.0, GameConstants.COLOR_TEXT_BODY, 16)
+	_draw_centered_text("Time: %d:%02d" % [minutes, seconds], center_x, center_y + 176.0, GameConstants.COLOR_TEXT_BODY, 18)
 
 	var pulse: float = 0.775 + 0.225 * sin(_cursor_flash * 4.0)
-	_draw_centered_text("Press Enter to return", center_x, center_y + 96.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, pulse), 18)
+	_draw_centered_text("Press Enter to return", center_x, center_y + 216.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, pulse), 20)
 
 func _draw_background() -> void:
 	draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), GameConstants.COLOR_INK_BLACK, true)
@@ -898,14 +931,14 @@ func _draw_panel(rect: Rect2) -> void:
 	draw_rect(Rect2(rect.end.x - cm + 1.0, rect.end.y, cm, 1.0), cc)
 	draw_rect(Rect2(rect.end.x, rect.end.y - cm + 1.0, 1.0, cm), cc)
 
-func _draw_reward_option_with_desc(rect: Rect2, label: String, description: String, selected: bool) -> void:
+func _draw_reward_option_with_desc(rect: Rect2, label: String, description: String, selected: bool, accent: Color = GameConstants.COLOR_PANEL_ACCENT) -> void:
 	if selected:
 		rect.position.y -= 10.0
 	var border: Color = Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.3)
 	if selected:
-		border = GameConstants.COLOR_PANEL_ACCENT
+		border = accent
 	if selected:
-		draw_rect(rect.grow(8.0), Color(GameConstants.COLOR_PANEL_ACCENT.r, GameConstants.COLOR_PANEL_ACCENT.g, GameConstants.COLOR_PANEL_ACCENT.b, 0.10), true)
+		draw_rect(rect.grow(8.0), Color(accent.r, accent.g, accent.b, 0.10), true)
 	draw_rect(rect, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.88), true)
 	draw_rect(rect, border, false, 2.0)
 	_draw_text(label, rect.position.x + 18.0, rect.position.y + 36.0, GameConstants.COLOR_TEXT_HEADING, 20)
@@ -931,13 +964,16 @@ func _draw_centered_text(text: String, center_x: float, y: float, color: Color, 
 	var width: float = _measure_text(text, size, display)
 	_draw_text(text, center_x - width * 0.5, y, color, size, display)
 
-func _draw_text_block(text: String, x: float, y: float, max_width: float, line_height: float, color: Color, size: int = 16, display: bool = false) -> float:
-	var lines: Array[String] = _wrap_text(text, max_width, size, display)
+func _draw_text_lines(lines: Array, x: float, y: float, line_height: float, color: Color, size: int = 16, display: bool = false) -> float:
 	var cursor_y: float = y
 	for line in lines:
-		_draw_text(line, x, cursor_y, color, size, display)
+		_draw_text(str(line), x, cursor_y, color, size, display)
 		cursor_y += line_height
 	return cursor_y
+
+func _draw_text_block(text: String, x: float, y: float, max_width: float, line_height: float, color: Color, size: int = 16, display: bool = false) -> float:
+	var lines: Array[String] = _wrap_text(text, max_width, size, display)
+	return _draw_text_lines(lines, x, y, line_height, color, size, display)
 
 func _font_for_size(size: int, display: bool = false) -> Font:
 	if display or size >= 32:
