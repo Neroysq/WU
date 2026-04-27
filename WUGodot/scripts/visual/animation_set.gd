@@ -1,6 +1,8 @@
 class_name AnimationSet
 extends RefCounted
 
+const AttackDefinitionScript = preload("res://scripts/attack_definition.gd")
+
 var set_id: String = "unknown"
 var default_scale: float = 2.0
 var clips: Dictionary = {}
@@ -54,10 +56,12 @@ static func load_from_file(path: String, catalog: AssetCatalog) -> AnimationSet:
 				"offset": Vector2.ZERO,
 			})
 
+		var built_phases: Array[Dictionary] = _parse_phases(clip_data.get("phases", []), built_frames.size())
 		set.clips[str(state_name).to_upper()] = {
 			"fps": fps,
 			"loop": looped,
 			"frames": built_frames,
+			"phases": built_phases,
 		}
 
 	if set.clips.is_empty():
@@ -92,6 +96,48 @@ static func _parse_offset(raw: Variant) -> Vector2:
 		return Vector2(float(map.get("x", 0.0)), float(map.get("y", 0.0)))
 	return Vector2.ZERO
 
+static func _parse_phases(raw: Variant, frame_count: int) -> Array[Dictionary]:
+	var phases: Array[Dictionary] = []
+	if typeof(raw) != TYPE_ARRAY:
+		return phases
+
+	for phase_variant in raw as Array:
+		if typeof(phase_variant) != TYPE_DICTIONARY:
+			continue
+		var phase_data: Dictionary = phase_variant as Dictionary
+		var phase_id: int = _parse_phase_id(phase_data.get("phase", ""))
+		if phase_id == -1:
+			continue
+
+		var frame_indices: Array[int] = []
+		var raw_frames: Variant = phase_data.get("frames", [])
+		if typeof(raw_frames) == TYPE_ARRAY:
+			for frame_variant in raw_frames as Array:
+				var idx: int = int(frame_variant)
+				if idx >= 0 and idx < frame_count:
+					frame_indices.append(idx)
+
+		if not frame_indices.is_empty():
+			phases.append({
+				"phase": phase_id,
+				"frames": frame_indices,
+			})
+
+	return phases
+
+static func _parse_phase_id(raw: Variant) -> int:
+	match str(raw).to_lower():
+		"windup":
+			return AttackDefinitionScript.Phase.WINDUP
+		"active":
+			return AttackDefinitionScript.Phase.ACTIVE
+		"recovery":
+			return AttackDefinitionScript.Phase.RECOVERY
+		"finished":
+			return AttackDefinitionScript.Phase.FINISHED
+		_:
+			return -1
+
 func _build_fallback(catalog: AssetCatalog) -> void:
 	set_id = "fallback"
 	default_scale = 2.0
@@ -104,4 +150,5 @@ func _build_fallback(catalog: AssetCatalog) -> void:
 		"fps": 1.0,
 		"loop": true,
 		"frames": [fallback_frame],
+		"phases": [],
 	}

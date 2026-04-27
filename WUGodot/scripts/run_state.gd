@@ -4,6 +4,7 @@ extends RefCounted
 var nodes: Array[MapNode] = []
 var current_node_id: int = 0
 var max_tier: int = 0
+var legend_seen_this_run: bool = false
 
 static func create_simple_three_tier() -> RunState:
 	return create_procedural_run()

@@ -218,9 +218,7 @@ func _update_event(delta: float) -> void:
 				_combat_gold_multiplier = int(result.get("combat_gold_multiplier", 1))
 				var node: MapNode = _run_state.get_current_node()
 				if node != null:
-					_combat_scene.setup_combat(_player, node)
-					_combat_scene.on_enter()
-					_current_scene = SceneType.COMBAT
+					_setup_combat_for_node(node)
 				else:
 					_run_state.mark_current_node_cleared()
 					_current_scene = SceneType.MAP
@@ -339,21 +337,15 @@ func _travel_to_node(chosen: MapNode) -> void:
 	match chosen.node_type:
 		MapNode.NodeType.BATTLE, MapNode.NodeType.ELITE:
 			_combat_gold_multiplier = 1
-			_combat_scene.setup_combat(_player, chosen)
-			_combat_scene.on_enter()
-			_current_scene = SceneType.COMBAT
+			_setup_combat_for_node(chosen)
 		MapNode.NodeType.AMBUSH:
 			if chosen.ambush_remaining <= 0:
 				chosen.ambush_remaining = 3
 			_combat_gold_multiplier = 1
-			_combat_scene.setup_combat(_player, chosen)
-			_combat_scene.on_enter()
-			_current_scene = SceneType.COMBAT
+			_setup_combat_for_node(chosen)
 		MapNode.NodeType.BOSS:
 			_combat_gold_multiplier = 1
-			_combat_scene.setup_combat(_player, chosen)
-			_combat_scene.on_enter()
-			_current_scene = SceneType.COMBAT
+			_setup_combat_for_node(chosen)
 		MapNode.NodeType.EVENT:
 			var event_data: Dictionary = {}
 			if not chosen.event_id.is_empty():
@@ -494,9 +486,7 @@ func _on_combat_end(victory: bool) -> void:
 		if node != null and node.node_type == MapNode.NodeType.AMBUSH:
 			node.ambush_remaining -= 1
 			if node.ambush_remaining > 0:
-				_combat_scene.setup_combat(_player, node)
-				_combat_scene.on_enter()
-				_current_scene = SceneType.COMBAT
+				_setup_combat_for_node(node)
 				return
 
 		_run_state.mark_current_node_cleared()
@@ -509,6 +499,15 @@ func _on_combat_end(victory: bool) -> void:
 		_run_end_time = Time.get_ticks_msec() / 1000.0
 		_current_scene = SceneType.GAME_OVER
 		_end_message = "Defeated"
+
+func _setup_combat_for_node(node: MapNode) -> void:
+	var show_controls_legend: bool = false
+	if _run_state != null and not _run_state.legend_seen_this_run:
+		show_controls_legend = true
+		_run_state.legend_seen_this_run = true
+	_combat_scene.setup_combat(_player, node, show_controls_legend)
+	_combat_scene.on_enter()
+	_current_scene = SceneType.COMBAT
 
 func _draw() -> void:
 	match _current_scene:

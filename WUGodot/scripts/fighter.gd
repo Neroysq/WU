@@ -5,6 +5,8 @@ const AttackCatalogScript = preload("res://scripts/attack_catalog.gd")
 const AttackDefinitionScript = preload("res://scripts/attack_definition.gd")
 const AttackStateScript = preload("res://scripts/attack_state.gd")
 
+signal attack_active_started
+
 enum AnimationState {
 	IDLE,
 	WALKING,
@@ -211,6 +213,8 @@ func update_timers(dt: float) -> void:
 
 	if _attack_state.is_active():
 		var events: Dictionary = _attack_state.advance(dt)
+		if bool(events.get("hit_started", false)):
+			emit_signal("attack_active_started")
 		if bool(events.get("finished", false)):
 			was_hit_this_swing = false
 			# D2 Tiger Stance: auto-chain light attacks into a 3-hit combo.

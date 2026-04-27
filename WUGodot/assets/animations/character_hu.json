@@ -83,6 +83,34 @@
             0,
             0
           ]
+        },
+        {
+          "path": "res://assets/sprites/characters/hu/attack_3.png",
+          "offset": [
+            0,
+            0
+          ]
+        }
+      ],
+      "phases": [
+        {
+          "frames": [
+            0,
+            1
+          ],
+          "phase": "windup"
+        },
+        {
+          "frames": [
+            2
+          ],
+          "phase": "active"
+        },
+        {
+          "frames": [
+            3
+          ],
+          "phase": "recovery"
         }
       ]
     },
@@ -92,6 +120,13 @@
       "frames": [
         {
           "path": "res://assets/sprites/characters/hu/attack_0.png",
+          "offset": [
+            0,
+            0
+          ]
+        },
+        {
+          "path": "res://assets/sprites/characters/hu/attack_1.png",
           "offset": [
             0,
             0
@@ -110,6 +145,27 @@
             0,
             0
           ]
+        }
+      ],
+      "phases": [
+        {
+          "frames": [
+            0,
+            1
+          ],
+          "phase": "windup"
+        },
+        {
+          "frames": [
+            2
+          ],
+          "phase": "active"
+        },
+        {
+          "frames": [
+            3
+          ],
+          "phase": "recovery"
         }
       ]
     },

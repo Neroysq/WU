@@ -36,6 +36,7 @@ var _boss_death_timer: float = 0.0
 var _boss_death_triggered: bool = false
 var _boss_beat_message: String = ""
 var _boss_beat_timer: float = 0.0
+var _controls_legend_timer: float = 0.0
 
 var _input_tracker: InputTracker = InputTracker.new()
 var _input_buffer: Variant = InputBufferScript.new()
@@ -61,7 +62,7 @@ func _ready() -> void:
 	set_process(false)
 	visible = false
 
-func setup_combat(player: Fighter, node: MapNode) -> void:
+func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = false) -> void:
 	_player = player
 	_current_node = node
 	_enemy = EnemyFactory.create_enemy_for_node(node)
@@ -70,6 +71,8 @@ func setup_combat(player: Fighter, node: MapNode) -> void:
 		_background.set_arena(arena_id)
 	_player_visual.configure(DataManager.get_visual_profile(_player.visual_profile_id), _player)
 	_enemy_visual.configure(DataManager.get_visual_profile(_enemy.visual_profile_id), _enemy)
+	_connect_attack_visual(_player, _player_visual)
+	_connect_attack_visual(_enemy, _enemy_visual)
 
 	_player.reset_for_combat()
 	_enemy.reset_for_combat()
@@ -93,6 +96,7 @@ func setup_combat(player: Fighter, node: MapNode) -> void:
 	_boss_death_triggered = false
 	_boss_beat_message = ""
 	_boss_beat_timer = 0.0
+	_controls_legend_timer = 6.0 if show_controls_legend else 0.0
 
 	_particle_system.clear()
 	_damage_number_system.clear()
@@ -134,6 +138,8 @@ func _process(delta: float) -> void:
 		_feedback_timer -= delta
 	if _boss_beat_timer > 0.0:
 		_boss_beat_timer -= delta
+	if _controls_legend_timer > 0.0:
+		_controls_legend_timer = maxf(0.0, _controls_legend_timer - delta)
 
 	if _is_paused and not _is_paused_on_end:
 		_sync_input_tracker()
@@ -309,6 +315,7 @@ func _draw() -> void:
 
 	if _is_paused:
 		_draw_pause_indicator()
+		_draw_controls_legend(1.0)
 
 	if _debug_enabled:
 		_draw_debug_overlay()
@@ -357,23 +364,10 @@ func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 
 	visual.draw(self, fighter, camera_offset)
 
-	if fighter.is_hit_active():
-		var weapon_start: Vector2 = Vector2(fighter.position.x + float(fighter.facing) * fighter.half_width, fighter.position.y - fighter.height * 0.4) + camera_offset
-		var weapon_end: Vector2 = weapon_start + Vector2(float(fighter.facing) * fighter.current_attack_range(), 0.0)
-		var attack_def: Variant = fighter._attack_state.def
-		var slash_color: Color = Color(GameConstants.COLOR_SKIN_WARM.r, GameConstants.COLOR_SKIN_WARM.g, GameConstants.COLOR_SKIN_WARM.b, 180.0 / 255.0) if attack_def != null and attack_def.is_heavy else Color(GameConstants.COLOR_LIGHT_BLUE.r, GameConstants.COLOR_LIGHT_BLUE.g, GameConstants.COLOR_LIGHT_BLUE.b, 140.0 / 255.0)
-		draw_line(weapon_start, weapon_end, slash_color, 3.0)
-		if fighter.combo_count > 1:
-			for trail in range(1, fighter.combo_count + 1):
-				var trail_start: Vector2 = weapon_start - Vector2(float(fighter.facing) * trail * 15.0, float(trail) * 3.0)
-				var trail_end: Vector2 = weapon_end - Vector2(float(fighter.facing) * trail * 20.0, float(trail) * 3.0)
-				var trail_alpha: float = clampf(40.0 / float(trail) / 255.0, 0.0, 1.0)
-				draw_line(trail_start, trail_end, Color(GameConstants.COLOR_IMPERIAL_GOLD.r, GameConstants.COLOR_IMPERIAL_GOLD.g, GameConstants.COLOR_IMPERIAL_GOLD.b, trail_alpha), 1.0)
-
-		if fighter.is_stunned:
-			var stun_pulse: float = sin(fighter.animation_timer * 12.0) * 0.5 + 0.5
-			var stun_rect: Rect2 = Rect2(body_rect.position.x, body_rect.position.y - 18.0, body_rect.size.x, 12.0)
-			draw_rect(stun_rect, Color(GameConstants.COLOR_IMPERIAL_GOLD.r, GameConstants.COLOR_IMPERIAL_GOLD.g, GameConstants.COLOR_IMPERIAL_GOLD.b, 120.0 * stun_pulse / 255.0), true)
+	if fighter.is_stunned:
+		var stun_pulse: float = sin(fighter.animation_timer * 12.0) * 0.5 + 0.5
+		var stun_rect: Rect2 = Rect2(body_rect.position.x, body_rect.position.y - 18.0, body_rect.size.x, 12.0)
+		draw_rect(stun_rect, Color(GameConstants.COLOR_IMPERIAL_GOLD.r, GameConstants.COLOR_IMPERIAL_GOLD.g, GameConstants.COLOR_IMPERIAL_GOLD.b, 120.0 * stun_pulse / 255.0), true)
 
 	if fighter.combo_count > 1 and fighter.combo_window > 0.0:
 		_draw_text("x%d" % fighter.combo_count, body_rect.position.x + body_rect.size.x * 0.5 - 12.0, body_rect.position.y - 40.0, GameConstants.COLOR_IMPERIAL_GOLD, 16)
@@ -414,9 +408,10 @@ func _draw_hud() -> void:
 		var phase_color: Color = GameConstants.COLOR_TEXT_ACCENT if _enemy.boss_controller.current_phase == 2 else GameConstants.COLOR_TEXT_SUBHEADING
 		_draw_text(phase_text, GameConstants.VIEW_WIDTH - 120, 30, phase_color, 14)
 
-	var controls_panel: Rect2 = Rect2(520.0, float(GameConstants.VIEW_HEIGHT) - 70.0, 880.0, 44.0)
-	_draw_panel(controls_panel)
-	_draw_text("A/D move  W jump  J tap/hold  K block/parry  Space dash  L stance  P pause  R restart", controls_panel.position.x + 18.0, controls_panel.position.y + 28.0, GameConstants.COLOR_TEXT_BODY, 15)
+	var show_controls_legend: bool = _controls_legend_timer > 0.0 or _is_paused or _is_paused_on_end
+	if show_controls_legend:
+		var legend_alpha: float = 1.0 if _is_paused or _is_paused_on_end else clampf(_controls_legend_timer, 0.0, 1.0)
+		_draw_controls_legend(legend_alpha)
 	if _player != null and _player.technique_engine != null:
 		var tech_ids: Array[String] = _player.technique_engine.technique_ids()
 		if not tech_ids.is_empty():
@@ -449,6 +444,17 @@ func _draw_hud() -> void:
 			var stance_label: String = "醉拳" if stance_id == "D1" else "虎形"
 			var pulse: float = sin(_player.animation_timer * 6.0) * 0.3 + 0.7
 			_draw_text("STANCE: %s" % stance_label, 36.0, 104.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, pulse), 16)
+
+func _draw_controls_legend(alpha: float) -> void:
+	var controls_panel: Rect2 = Rect2(520.0, float(GameConstants.VIEW_HEIGHT) - 70.0, 880.0, 44.0)
+	var panel_bg: Color = Color(GameConstants.COLOR_PANEL_BG.r, GameConstants.COLOR_PANEL_BG.g, GameConstants.COLOR_PANEL_BG.b, 0.88 * alpha)
+	var panel_border: Color = Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, alpha)
+	var accent: Color = Color(GameConstants.COLOR_PANEL_ACCENT.r, GameConstants.COLOR_PANEL_ACCENT.g, GameConstants.COLOR_PANEL_ACCENT.b, 0.75 * alpha)
+	var text_color: Color = Color(GameConstants.COLOR_TEXT_BODY.r, GameConstants.COLOR_TEXT_BODY.g, GameConstants.COLOR_TEXT_BODY.b, alpha)
+	draw_rect(controls_panel, panel_bg, true)
+	draw_rect(controls_panel, panel_border, false, 2.0)
+	draw_rect(Rect2(controls_panel.position.x + 2.0, controls_panel.position.y, controls_panel.size.x - 4.0, 1.0), accent, true)
+	_draw_text("A/D move  W jump  J tap/hold  K block/parry  Space dash  L stance  P pause  R restart", controls_panel.position.x + 18.0, controls_panel.position.y + 28.0, text_color, 15)
 
 func _draw_bars(fighter: Fighter, x: int, y: int, mirror: bool) -> void:
 	var width: int = GameConstants.VIEW_WIDTH / 2 - 76
@@ -604,6 +610,11 @@ func _show_feedback(message: String, duration: float) -> void:
 func _show_boss_beat(message: String, duration: float) -> void:
 	_boss_beat_message = message
 	_boss_beat_timer = duration
+
+func _connect_attack_visual(fighter: Fighter, visual: FighterVisual) -> void:
+	var callback: Callable = Callable(visual, "_on_attack_active_started")
+	if not fighter.is_connected("attack_active_started", callback):
+		fighter.connect("attack_active_started", callback)
 
 func _get_visual_for(fighter: Fighter) -> FighterVisual:
 	if fighter.is_ai:

@@ -12,6 +12,7 @@ const _TEST_MODULES: Array[String] = [
 	"res://tests/test_map_generator.gd",
 	"res://tests/test_background_renderer.gd",
 	"res://tests/test_text_wrapping.gd",
+	"res://tests/test_animation_set.gd",
 ]
 
 var _passed: int = 0
