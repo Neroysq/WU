@@ -22,21 +22,24 @@ from pathlib import Path
 from typing import Iterable
 
 
+ActionSlots = dict[str, list[str]]
+
+
 CHARACTERS = {
     "hu": {
         "profile": "player_humanoid",
         "scale": 1.625,
         "actions": {
-            "walk-cycle": [("walk_0.png", 1), ("walk_1.png", 2), ("walk_2.png", 3), ("walk_3.png", 4)],
-            "idle": [("idle_0.png", 1), ("idle_1.png", 2)],
-            "attack-windup": [("attack_0.png", 1), ("attack_1.png", 2)],
-            "attack-strike": [("attack_2.png", 1)],
-            "attack-recovery": [("attack_3.png", 1)],
-            "block": [("block_0.png", 1), ("block_1.png", 3)],
-            "hit-react": [("hit_0.png", 1), ("hit_1.png", 3)],
-            "stunned": [("stunned_0.png", 1), ("stunned_1.png", 2)],
-            "dash": [("dash_0.png", 1), ("dash_1.png", 4)],
-            "jump": [("jump_0.png", 1), ("jump_1.png", 2), ("jump_2.png", 3)],
+            "walk-cycle": ["walk_0.png", "walk_1.png", "walk_2.png", "walk_3.png"],
+            "idle": ["idle_0.png", "idle_1.png"],
+            "attack-windup": ["attack_0.png", "attack_1.png"],
+            "attack-strike": ["attack_2.png"],
+            "attack-recovery": ["attack_3.png"],
+            "block": ["block_0.png", "block_1.png"],
+            "hit-react": ["hit_0.png", "hit_1.png"],
+            "stunned": ["stunned_0.png", "stunned_1.png"],
+            "dash": ["dash_0.png", "dash_1.png"],
+            "jump": ["jump_0.png", "jump_1.png", "jump_2.png"],
         },
     },
     "bandit_sword": {
@@ -72,14 +75,14 @@ CHARACTERS = {
 }
 
 ENEMY_ACTIONS = {
-    "walk-cycle": [("walk_0.png", 1), ("walk_1.png", 2), ("walk_2.png", 3), ("walk_3.png", 4)],
-    "idle": [("idle_0.png", 1), ("idle_1.png", 2)],
-    "attack-windup": [("attack_0.png", 1), ("attack_1.png", 2)],
-    "attack-strike": [("attack_2.png", 1)],
-    "attack-recovery": [("attack_3.png", 1)],
-    "block": [("block_0.png", 1), ("block_1.png", 3)],
-    "hit-react": [("hit_0.png", 1), ("hit_1.png", 3)],
-    "stunned": [("stunned_0.png", 1), ("stunned_1.png", 2)],
+    "walk-cycle": ["walk_0.png", "walk_1.png", "walk_2.png", "walk_3.png"],
+    "idle": ["idle_0.png", "idle_1.png"],
+    "attack-windup": ["attack_0.png", "attack_1.png"],
+    "attack-strike": ["attack_2.png"],
+    "attack-recovery": ["attack_3.png"],
+    "block": ["block_0.png", "block_1.png"],
+    "hit-react": ["hit_0.png", "hit_1.png"],
+    "stunned": ["stunned_0.png", "stunned_1.png"],
 }
 
 for config in CHARACTERS.values():
@@ -204,9 +207,20 @@ def bottom_padding(path: Path) -> int:
 
 
 def source_dirs(stage: Path) -> list[Path]:
-    candidates = [stage]
-    candidates.extend(sorted(path for path in stage.iterdir() if path.is_dir() and path.name.startswith("run")))
-    return [path for path in candidates if path.exists()]
+    run_dirs = [path for path in stage.iterdir() if path.is_dir() and path.name.startswith("run")]
+    run_dirs.sort(key=lambda path: (path.stat().st_mtime_ns, path.name), reverse=True)
+    return run_dirs + [stage]
+
+
+def sample_indices(src_n: int, wu_n: int) -> list[int]:
+    """Pick wu_n evenly spaced 0-based indices from src_n source frames."""
+    if src_n < wu_n:
+        raise InstallError(f"cannot fill {wu_n} WU slots from {src_n} source frame(s)")
+    if wu_n == 1:
+        return [0]
+    if src_n == wu_n:
+        return list(range(src_n))
+    return [round(i * (src_n - 1) / (wu_n - 1)) for i in range(wu_n)]
 
 
 def find_static(stage: Path) -> Path:
@@ -222,17 +236,21 @@ def find_static(stage: Path) -> Path:
     raise InstallError(f"missing static PNG under {stage}")
 
 
-def find_action_frame(stage: Path, action: str, index: int) -> Path:
-    names = [
-        Path(action) / "frames" / f"frame_{index:03d}.png",
-        Path(action) / "convert" / f"pixel_{index:03d}.png",
-    ]
+def find_action_frames(stage: Path, action: str) -> list[Path]:
     for base in source_dirs(stage):
-        for name in names:
-            path = base / name
-            if path.exists():
-                return path
-    raise InstallError(f"missing {action} frame {index:03d} under {stage}")
+        frames = sorted((base / action / "frames").glob("frame_*.png"))
+        if frames:
+            return frames
+        converted = sorted((base / action / "convert").glob("pixel_*.png"))
+        if converted:
+            return converted
+    raise InstallError(f"missing {action} frames under {stage}")
+
+
+def selected_action_frames(stage: Path, action: str, dest_names: list[str]) -> list[tuple[str, Path]]:
+    source_frames = find_action_frames(stage, action)
+    indices = sample_indices(len(source_frames), len(dest_names))
+    return [(dest_name, source_frames[index]) for dest_name, index in zip(dest_names, indices)]
 
 
 def copy_png(src: Path, dest: Path, dry_run: bool) -> None:
@@ -257,9 +275,9 @@ def install_character(project: Path, source_root: Path, character: str, dry_run:
 
     static_src = find_static(stage)
     copy_png(static_src, dest_dir / "static.png", dry_run)
-    for action, mappings in config["actions"].items():
-        for dest_name, frame_index in mappings:
-            src = find_action_frame(stage, action, frame_index)
+    actions: ActionSlots = config["actions"]
+    for action, dest_names in actions.items():
+        for dest_name, src in selected_action_frames(stage, action, dest_names):
             copy_png(src, dest_dir / dest_name, dry_run)
 
     scale = float(config["scale"])
