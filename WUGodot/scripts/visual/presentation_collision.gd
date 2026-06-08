@@ -61,6 +61,16 @@ func attack_capsule_world(fighter: Variant) -> Dictionary:
 		"r": float(cap["radius"]) * manifest.render_scale,
 	}
 
+func derived_reach(fighter: Variant) -> float:
+	var cap: Dictionary = attack_capsule_world(fighter)
+	if cap.is_empty():
+		return 0.0
+	var a: Vector2 = cap["a"] as Vector2
+	var b: Vector2 = cap["b"] as Vector2
+	var forward: float = maxf(a.x, b.x) - fighter.position.x
+	var back: float = fighter.position.x - minf(a.x, b.x)
+	return maxf(forward, back) + float(cap["r"])
+
 func debug_capsule_world(fighter: Variant) -> Dictionary:
 	if not has_authored_hitbox(fighter):
 		return {}

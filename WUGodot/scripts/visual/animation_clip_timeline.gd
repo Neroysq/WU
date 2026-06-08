@@ -27,8 +27,8 @@ static func load_from_file(path: String) -> Variant:
 
 	for kp_variant in root.get("keyposes", []) as Array:
 		var kp: Dictionary = kp_variant as Dictionary
-		clip.keyposes.append({"t": float(kp.get("t", 0.0)), "pose": str(kp.get("pose", ""))})
-	clip.keyposes.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return float(a["t"]) < float(b["t"]))
+		clip.keyposes.append({"t": kp.get("t", 0.0), "pose": str(kp.get("pose", ""))})
+	clip.keyposes.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return clip._resolve_t(a["t"], null) < clip._resolve_t(b["t"], null))
 
 	var raw_tracks: Dictionary = root.get("tracks", {}) as Dictionary
 	for track_name in raw_tracks.keys():
@@ -63,10 +63,10 @@ func sample_track(track_name: String, t: float, default_value: float = 0.0) -> f
 			return lerpf(float(a["v"]), float(b["v"]), _ease(local, str(b["ease"])))
 	return float((keys[keys.size() - 1] as Dictionary)["v"])
 
-func pose_at(t: float) -> String:
+func pose_at(t: float, attack_def: Variant = null) -> String:
 	var current: String = ""
 	for kp in keyposes:
-		if t >= float(kp["t"]):
+		if t >= _resolve_t(kp["t"], attack_def):
 			current = str(kp["pose"])
 		else:
 			break
@@ -91,13 +91,15 @@ func events_in_window(prev_t: float, cur_t: float, attack_def: Variant) -> Array
 func _resolve_t(raw: Variant, attack_def: Variant) -> float:
 	if typeof(raw) == TYPE_STRING:
 		var dur: float = _duration(attack_def)
-		if dur <= 0.0 or attack_def == null:
-			return 0.0
 		match str(raw):
 			"windup_end":
-				return clampf(float(attack_def.windup_end) / dur, 0.0, 1.0)
+				if dur > 0.0 and attack_def != null:
+					return clampf(float(attack_def.windup_end) / dur, 0.0, 1.0)
+				return 0.4
 			"active_end":
-				return clampf(float(attack_def.active_end) / dur, 0.0, 1.0)
+				if dur > 0.0 and attack_def != null:
+					return clampf(float(attack_def.active_end) / dur, 0.0, 1.0)
+				return 0.6
 			_:
 				return 0.0
 	return float(raw)

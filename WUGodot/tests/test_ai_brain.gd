@@ -2,6 +2,7 @@ extends RefCounted
 
 const AiBrainScript = preload("res://scripts/ai_brain.gd")
 const FighterScript = preload("res://scripts/fighter.gd")
+const AttackCatalogScript = preload("res://scripts/attack_catalog.gd")
 
 func _make_fighter() -> Variant:
 	var fighter: Variant = FighterScript.new()
@@ -104,6 +105,23 @@ func run_all() -> Dictionary:
 	else:
 		failed += 1
 		failures.append("should block when target attacking and block_chance=1.0 (got %s)" % str(action.get("type", "")))
+	brain.block_chance = 0.0
+	target._attack_state.clear()
+	brain._decision_cooldown = 0.0
+
+	# Test 6b: block reaction scales with the attacker's current reach, not only the
+	# defender's old preferred_range. Hu's match-the-blade reach is much longer now.
+	ai.position = Vector2(665.0, 940.0)
+	target.position = Vector2(400.0, 940.0)
+	brain.preferred_range = 70.0
+	brain.block_chance = 1.0
+	target._attack_state.start(AttackCatalogScript.hu_light())
+	action = brain.decide(ai, target)
+	if str(action.get("type", "")) == "block":
+		passed += 1
+	else:
+		failed += 1
+		failures.append("should block long-reach player windup inside target attack range (got %s)" % str(action.get("type", "")))
 	brain.block_chance = 0.0
 	target._attack_state.clear()
 	brain._decision_cooldown = 0.0

@@ -85,7 +85,7 @@ func update(fighter: Fighter, state_name: String, combat_dt: float, presentation
 
 	position = fighter.position + camera_offset
 
-	var pose: Dictionary = _manifest.get_pose(_clip.pose_at(_norm_t))
+	var pose: Dictionary = _manifest.get_pose(_clip.pose_at(_norm_t, attack_def))
 	_sprite_current.texture = _catalog.get_texture(str(pose.get("path", "")))
 	var foot: Vector2 = pose.get("footAnchor", Vector2.ZERO) as Vector2
 	var facing: int = fighter.facing

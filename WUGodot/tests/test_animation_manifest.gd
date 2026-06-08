@@ -15,11 +15,13 @@ func run_all() -> Dictionary:
 		failures.append("hu manifest should load id and renderScale")
 
 	var pose: Dictionary = manifest.get_pose("strike_extended")
-	if (pose.get("footAnchor", Vector2.ZERO) as Vector2) == Vector2(128, 238) and (pose.get("weaponTip", Vector2.ZERO) as Vector2) == Vector2(218, 134):
+	var foot: Vector2 = pose.get("footAnchor", Vector2.ZERO) as Vector2
+	var tip: Vector2 = pose.get("weaponTip", Vector2.ZERO) as Vector2
+	if foot.x > 0 and foot.x < 256 and foot.y > 100 and foot.y < 256 and tip.x > foot.x and not (foot == Vector2(128, 238)):
 		passed += 1
 	else:
 		failed += 1
-		failures.append("strike_extended should expose footAnchor and weaponTip as Vector2")
+		failures.append("strike_extended anchors should be measured, not placeholder (got foot %s tip %s)" % [str(foot), str(tip)])
 
 	var errors: Array[String] = manifest.validation_errors(["guard", "windup", "strike_extended", "recover"])
 	if errors.is_empty():
@@ -42,11 +44,11 @@ func run_all() -> Dictionary:
 		failures.append("manifest should expose weaponClass")
 
 	var hb: Variant = manifest.get_hurtbox("guard")
-	if hb != null and (hb as Rect2) == Rect2(92, 60, 72, 178):
+	if hb != null and (hb as Rect2).size.x >= 8.0 and (hb as Rect2).size.y >= 30.0:
 		passed += 1
 	else:
 		failed += 1
-		failures.append("guard should expose its hurtbox rect")
+		failures.append("guard hurtbox should be a sane body rect")
 
 	if manifest.get_hurtbox("nonexistent_pose") == null:
 		passed += 1

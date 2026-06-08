@@ -2,6 +2,7 @@ extends RefCounted
 
 const TimelineScript = preload("res://scripts/visual/animation_clip_timeline.gd")
 const AttackDefinitionScript = preload("res://scripts/attack_definition.gd")
+const AttackCatalogScript = preload("res://scripts/attack_catalog.gd")
 
 func _light_def() -> Variant:
 	var def: Variant = AttackDefinitionScript.new()
@@ -28,11 +29,13 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("missing track should return default")
 
-	if clip.pose_at(0.0) == "guard" and clip.pose_at(0.40) == "windup" and clip.pose_at(0.99) == "strike_extended" and clip.pose_at(1.0) == "recover":
+	var hu_light: Variant = AttackCatalogScript.hu_light()
+	var hu_active_start_t: float = clip.event_time("attack_active_start", hu_light)
+	if clip.pose_at(0.0, hu_light) == "guard" and clip.pose_at(0.35, hu_light) == "windup" and clip.pose_at(hu_active_start_t, hu_light) == "strike_extended" and clip.pose_at(1.0, hu_light) == "recover":
 		passed += 1
 	else:
 		failed += 1
-		failures.append("pose_at should hold the most recent keypose")
+		failures.append("pose_at should show strike_extended at active start, got %s at %.2f" % [clip.pose_at(hu_active_start_t, hu_light), hu_active_start_t])
 
 	var def: Variant = _light_def()
 	var active_start_t: float = clip.event_time("attack_active_start", def)

@@ -1,71 +1,200 @@
 {
   "id": "hu",
-  "sourceCanvas": [256, 256],
-  "renderScale": 1.625,
-  "weaponClass": "sword",
   "poses": {
-    "guard": {
-      "path": "res://assets/sprites/characters/hu/idle_0.png",
-      "footAnchor": [128, 238],
-      "chestAnchor": [128, 150],
-      "weaponTip": [150, 150],
-      "hurtbox": [92, 60, 72, 178]
-    },
     "breath": {
+      "chestAnchor": [
+        122,
+        111
+      ],
+      "footAnchor": [
+        122,
+        209
+      ],
+      "hurtbox": [
+        92,
+        30,
+        59,
+        177
+      ],
       "path": "res://assets/sprites/characters/hu/idle_1.png",
-      "footAnchor": [128, 238],
-      "chestAnchor": [128, 150],
-      "weaponTip": [150, 150],
-      "hurtbox": [92, 60, 72, 178]
+      "weaponTip": [
+        175,
+        116
+      ]
     },
-    "walk_0": {
-      "path": "res://assets/sprites/characters/hu/walk_0.png",
-      "footAnchor": [128, 238],
-      "chestAnchor": [128, 150],
-      "weaponTip": [150, 150],
-      "hurtbox": [92, 60, 72, 178]
-    },
-    "walk_1": {
-      "path": "res://assets/sprites/characters/hu/walk_1.png",
-      "footAnchor": [128, 238],
-      "chestAnchor": [128, 150],
-      "weaponTip": [150, 150],
-      "hurtbox": [92, 60, 72, 178]
-    },
-    "walk_2": {
-      "path": "res://assets/sprites/characters/hu/walk_2.png",
-      "footAnchor": [128, 238],
-      "chestAnchor": [128, 150],
-      "weaponTip": [150, 150],
-      "hurtbox": [92, 60, 72, 178]
-    },
-    "walk_3": {
-      "path": "res://assets/sprites/characters/hu/walk_3.png",
-      "footAnchor": [128, 238],
-      "chestAnchor": [128, 150],
-      "weaponTip": [150, 150],
-      "hurtbox": [92, 60, 72, 178]
-    },
-    "windup": {
-      "path": "res://assets/sprites/characters/hu/attack_1.png",
-      "footAnchor": [128, 238],
-      "chestAnchor": [128, 150],
-      "weaponTip": [120, 120],
-      "hurtbox": [92, 60, 72, 178]
-    },
-    "strike_extended": {
-      "path": "res://assets/sprites/characters/hu/attack_2.png",
-      "footAnchor": [128, 238],
-      "chestAnchor": [128, 150],
-      "weaponTip": [218, 134],
-      "hurtbox": [92, 60, 72, 178]
+    "guard": {
+      "chestAnchor": [
+        125,
+        111
+      ],
+      "footAnchor": [
+        125,
+        209
+      ],
+      "hurtbox": [
+        96,
+        30,
+        58,
+        179
+      ],
+      "path": "res://assets/sprites/characters/hu/idle_0.png",
+      "weaponTip": [
+        177,
+        116
+      ]
     },
     "recover": {
+      "chestAnchor": [
+        123,
+        105
+      ],
+      "footAnchor": [
+        123,
+        193
+      ],
+      "hurtbox": [
+        95,
+        33,
+        55,
+        157
+      ],
       "path": "res://assets/sprites/characters/hu/attack_3.png",
-      "footAnchor": [128, 238],
-      "chestAnchor": [128, 150],
-      "weaponTip": [170, 150],
-      "hurtbox": [92, 60, 72, 178]
+      "weaponTip": [
+        175,
+        107
+      ]
+    },
+    "strike_extended": {
+      "chestAnchor": [
+        114,
+        110
+      ],
+      "footAnchor": [
+        114,
+        174
+      ],
+      "hurtbox": [
+        76,
+        57,
+        76,
+        104
+      ],
+      "path": "res://assets/sprites/characters/hu/attack_2.png",
+      "weaponTip": [
+        247,
+        103
+      ]
+    },
+    "walk_0": {
+      "chestAnchor": [
+        120,
+        107
+      ],
+      "footAnchor": [
+        120,
+        205
+      ],
+      "hurtbox": [
+        88,
+        27,
+        64,
+        178
+      ],
+      "path": "res://assets/sprites/characters/hu/walk_0.png",
+      "weaponTip": [
+        174,
+        108
+      ]
+    },
+    "walk_1": {
+      "chestAnchor": [
+        112,
+        108
+      ],
+      "footAnchor": [
+        112,
+        206
+      ],
+      "hurtbox": [
+        78,
+        28,
+        67,
+        177
+      ],
+      "path": "res://assets/sprites/characters/hu/walk_1.png",
+      "weaponTip": [
+        167,
+        109
+      ]
+    },
+    "walk_2": {
+      "chestAnchor": [
+        119,
+        106
+      ],
+      "footAnchor": [
+        119,
+        203
+      ],
+      "hurtbox": [
+        90,
+        27,
+        57,
+        176
+      ],
+      "path": "res://assets/sprites/characters/hu/walk_2.png",
+      "weaponTip": [
+        175,
+        107
+      ]
+    },
+    "walk_3": {
+      "chestAnchor": [
+        114,
+        106
+      ],
+      "footAnchor": [
+        114,
+        203
+      ],
+      "hurtbox": [
+        80,
+        26,
+        67,
+        176
+      ],
+      "path": "res://assets/sprites/characters/hu/walk_3.png",
+      "weaponTip": [
+        167,
+        107
+      ]
+    },
+    "windup": {
+      "chestAnchor": [
+        117,
+        115
+      ],
+      "footAnchor": [
+        117,
+        211
+      ],
+      "hurtbox": [
+        79,
+        36,
+        75,
+        146
+      ],
+      "path": "res://assets/sprites/characters/hu/attack_1.png",
+      "weaponTip": [
+        165,
+        208
+      ]
     }
-  }
+  },
+  "renderScale": 1.625,
+  "sourceCanvas": [
+    256.0,
+    256.0
+  ],
+  "weaponClass": "sword"
 }

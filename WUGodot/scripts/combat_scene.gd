@@ -9,7 +9,7 @@ const AnimationDebugOverlayScript = preload("res://scripts/visual/animation_debu
 const FighterPresenterScript = preload("res://scripts/visual/fighter_presenter.gd")
 const PresentationCollisionScript = preload("res://scripts/visual/presentation_collision.gd")
 
-const ENABLE_AUTHORED_PLAYER_HITBOXES: bool = false
+const ENABLE_AUTHORED_PLAYER_HITBOXES: bool = true
 
 signal combat_end(victory: bool)
 
@@ -45,6 +45,7 @@ var _boss_death_triggered: bool = false
 var _boss_beat_message: String = ""
 var _boss_beat_timer: float = 0.0
 var _controls_legend_timer: float = 0.0
+var _dev_capture_mode: bool = false
 
 var _input_tracker: InputTracker = InputTracker.new()
 var _input_buffer: Variant = InputBufferScript.new()
@@ -103,8 +104,7 @@ func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = f
 
 	_player.reset_for_combat()
 	_enemy.reset_for_combat()
-	# Placeholder anchors currently extend Hu's live reach roughly 2x. Keep the
-	# tested geometry path dormant until measured per-pose anchors replace them.
+	# Hu's authored hitboxes are measured from the committed per-pose manifest.
 	if _hit_geometry != null and ENABLE_AUTHORED_PLAYER_HITBOXES:
 		_hit_geometry.register_fighter(_player, "hu")
 	_player.position = Vector2(360.0, GameConstants.GROUND_Y)
@@ -155,8 +155,72 @@ func deactivate() -> void:
 	set_process(false)
 	visible = false
 
+func dev_set_capture_mode(enabled: bool) -> void:
+	_dev_capture_mode = enabled
+	_debug_enabled = enabled
+	_controls_legend_timer = 0.0
+
+func dev_prepare_capture_state(state_name: String) -> void:
+	if _player == null or _enemy == null:
+		return
+
+	_player.reset_for_combat()
+	_enemy.reset_for_combat()
+	_player.position = Vector2(520.0, GameConstants.GROUND_Y)
+	_enemy.position = Vector2(805.0, GameConstants.GROUND_Y)
+	_player.facing = 1
+	_enemy.facing = -1
+	_player.velocity = Vector2.ZERO
+	_enemy.velocity = Vector2.ZERO
+	_player.animation_offset = Vector2.ZERO
+	_enemy.animation_offset = Vector2.ZERO
+	_player.current_animation = Fighter.AnimationState.IDLE
+	_enemy.current_animation = Fighter.AnimationState.IDLE
+	_player._attack_state.clear()
+	_enemy._attack_state.clear()
+	_camera.reset()
+	_particle_system.clear()
+	_damage_number_system.clear()
+	_feedback_message = ""
+	_feedback_timer = 0.0
+	_is_paused = false
+	_is_paused_on_end = false
+	_boss_death_triggered = false
+	_time_scale = 1.0
+	_hitstop_timer = 0.0
+	_slow_mo_timer = 0.0
+	_slow_mo_factor = 1.0
+	_controls_legend_timer = 0.0
+
+	match state_name:
+		"02_walk":
+			_player.current_animation = Fighter.AnimationState.WALKING
+			_player.velocity.x = _player.move_speed * float(_player.facing)
+			_player.animation_timer = 0.2
+		"03_light_windup":
+			_player.start_light_attack()
+			if _player._attack_state.def != null:
+				_player._attack_state.elapsed = maxf(0.01, _player._attack_state.def.windup_end * 0.55)
+		"04_light_active":
+			_player.start_light_attack()
+			if _player._attack_state.def != null:
+				_player._attack_state.elapsed = _player._attack_state.def.windup_end + 0.04
+		_:
+			_player.current_animation = Fighter.AnimationState.IDLE
+
+	_update_player_presenter(0.0, 0.0)
+	queue_redraw()
+
 func _process(delta: float) -> void:
 	if _player == null or _enemy == null:
+		return
+
+	if _dev_capture_mode:
+		_player_visual.update(_player, 0.0)
+		_enemy_visual.update(_enemy, 0.0)
+		_update_player_presenter(delta, delta)
+		_sync_input_tracker()
+		queue_redraw()
 		return
 
 	if _input_tracker.pressed_key(KEY_QUOTELEFT):

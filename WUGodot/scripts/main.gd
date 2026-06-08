@@ -4,6 +4,10 @@ const EventRunnerScript = preload("res://scripts/event_runner.gd")
 const ShopGeneratorScript = preload("res://scripts/shop_generator.gd")
 const TextWrappingScript = preload("res://scripts/util/text_wrapping.gd")
 
+const DEV_SHOT_COMBAT_FLAG: String = "--shot-combat"
+const DEV_SHOT_DIR_PREFIX: String = "--shot-dir="
+const DEV_SHOT_DEFAULT_DIR: String = "user://shot-combat"
+
 enum SceneType {
 	MAIN_MENU,
 	MAP,
@@ -47,6 +51,7 @@ var _run_techniques_acquired: Array[String] = []
 
 var _input_tracker: InputTracker = InputTracker.new()
 var _cursor_flash: float = 0.0
+var _dev_shot_combat_dir: String = ""
 
 func _ready() -> void:
 	Engine.max_fps = GameConstants.TARGET_FPS
@@ -57,6 +62,9 @@ func _ready() -> void:
 	_combat_scene.deactivate()
 	queue_redraw()
 	_sync_input_tracker()
+	if _has_user_arg(DEV_SHOT_COMBAT_FLAG):
+		_dev_shot_combat_dir = _user_arg_value(DEV_SHOT_DIR_PREFIX, DEV_SHOT_DEFAULT_DIR)
+		call_deferred("_run_dev_combat_shots")
 
 func start_new_run() -> void:
 	_player = EnemyFactory.create_player()
@@ -508,6 +516,45 @@ func _setup_combat_for_node(node: MapNode) -> void:
 	_combat_scene.setup_combat(_player, node, show_controls_legend)
 	_combat_scene.on_enter()
 	_current_scene = SceneType.COMBAT
+
+func _run_dev_combat_shots() -> void:
+	var dir_path: String = _dev_shot_combat_dir if not _dev_shot_combat_dir.is_empty() else DEV_SHOT_DEFAULT_DIR
+	var abs_dir: String = ProjectSettings.globalize_path(dir_path) if dir_path.begins_with("user://") or dir_path.begins_with("res://") else dir_path
+	var err: int = DirAccess.make_dir_recursive_absolute(abs_dir)
+	if err != OK:
+		push_error("shot-combat: failed to create %s (err %d)" % [abs_dir, err])
+		get_tree().quit(1)
+		return
+
+	_player = EnemyFactory.create_player()
+	_run_state = RunState.create_procedural_run()
+	_run_state.legend_seen_this_run = true
+	var node: MapNode = MapNode.new(9001, 1, MapNode.NodeType.BATTLE, [])
+	_combat_scene.setup_combat(_player, node, false)
+	_combat_scene.on_enter()
+	_combat_scene.dev_set_capture_mode(true)
+	_current_scene = SceneType.COMBAT
+	queue_redraw()
+
+	await _capture_dev_combat_state("01_idle", abs_dir)
+	await _capture_dev_combat_state("02_walk", abs_dir)
+	await _capture_dev_combat_state("03_light_windup", abs_dir)
+	await _capture_dev_combat_state("04_light_active", abs_dir)
+	print("SHOT COMBAT: wrote %s" % abs_dir)
+	get_tree().quit(0)
+
+func _capture_dev_combat_state(state_name: String, abs_dir: String) -> void:
+	_combat_scene.dev_prepare_capture_state(state_name)
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	var image: Image = get_viewport().get_texture().get_image()
+	var path: String = "%s/%s.png" % [abs_dir.trim_suffix("/"), state_name]
+	var err: int = image.save_png(path)
+	if err != OK:
+		push_error("shot-combat: failed to save %s (err %d)" % [path, err])
+	else:
+		print("SHOT COMBAT: %s" % path)
 
 func _draw() -> void:
 	match _current_scene:
@@ -1170,3 +1217,16 @@ func _sync_input_tracker() -> void:
 	]
 	_input_tracker.sync_keys(keys)
 	_input_tracker.sync_mouse_buttons([MOUSE_BUTTON_LEFT])
+
+func _has_user_arg(flag: String) -> bool:
+	for arg in OS.get_cmdline_user_args():
+		if str(arg) == flag:
+			return true
+	return false
+
+func _user_arg_value(prefix: String, default_value: String) -> String:
+	for arg in OS.get_cmdline_user_args():
+		var text: String = str(arg)
+		if text.begins_with(prefix):
+			return text.substr(prefix.length())
+	return default_value

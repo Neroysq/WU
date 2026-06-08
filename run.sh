@@ -5,6 +5,9 @@
 #   ./run.sh --test       # run headless tests
 #   ./run.sh --import     # headless incremental import
 #   ./run.sh --reimport   # wipe .godot/imported cache + full headless reimport
+#   ./run.sh --measure-anchors  # regenerate Hu anchors from sprite pixels
+#   ./run.sh --anchor-sanity    # validate stored Hu anchors against sprite pixels
+#   ./run.sh --shot-combat [dir] # save deterministic combat screenshots, then quit
 #   ./run.sh --editor     # open the Godot editor
 
 set -euo pipefail
@@ -53,12 +56,25 @@ case "${1:-}" in
         echo "Reimport pass 2/2 (verifying clean load)..."
         exec "$GODOT" --path "$PROJECT_DIR" --headless --import
         ;;
+    --measure-anchors)
+        echo "Measuring sprite anchors -> hu.manifest.json..."
+        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/measure_anchors.gd
+        ;;
+    --anchor-sanity)
+        echo "Validating stored sprite anchors..."
+        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/anchor_sanity.gd
+        ;;
+    --shot-combat)
+        SHOT_DIR="${2:-/tmp/wu-shot-combat}"
+        echo "Capturing combat screenshots -> $SHOT_DIR"
+        exec "$GODOT" --path "$PROJECT_DIR" -- --shot-combat "--shot-dir=$SHOT_DIR"
+        ;;
     --editor|-e)
         echo "Opening Godot editor..."
         exec "$GODOT" --path "$PROJECT_DIR" --editor
         ;;
     --help|-h)
-        sed -n '2,8p' "$0"
+        sed -n '2,10p' "$0"
         ;;
     "")
         echo "Launching WU..."

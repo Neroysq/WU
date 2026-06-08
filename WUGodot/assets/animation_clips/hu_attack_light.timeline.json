@@ -4,7 +4,7 @@
   "keyposes": [
     { "t": 0.00, "pose": "guard" },
     { "t": 0.30, "pose": "windup" },
-    { "t": 0.55, "pose": "strike_extended" },
+    { "t": "windup_end", "pose": "strike_extended" },
     { "t": 1.00, "pose": "recover" }
   ],
   "tracks": {

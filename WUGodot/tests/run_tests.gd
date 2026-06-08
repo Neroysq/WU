@@ -16,6 +16,7 @@ const _TEST_MODULES: Array[String] = [
 	"res://tests/test_animation_clock.gd",
 	"res://tests/test_animation_manifest.gd",
 	"res://tests/test_anchor_math.gd",
+	"res://tests/test_anchor_measure.gd",
 	"res://tests/test_animation_clip_timeline.gd",
 	"res://tests/test_animation_graph.gd",
 	"res://tests/test_collision_shape_math.gd",

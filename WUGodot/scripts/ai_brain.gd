@@ -34,7 +34,9 @@ func decide(ai: Fighter, target: Fighter) -> Dictionary:
 	var direction: float = signf(distance)
 
 	# React to the start of an attack during windup, not just active hit frames.
-	if target._attack_state.is_active() and abs_distance < preferred_range * 1.5:
+	var target_attack_reaction_range: float = target.current_attack_range() + ai.half_width + target.half_width
+	var block_reaction_range: float = maxf(preferred_range * 1.5, target_attack_reaction_range)
+	if target._attack_state.is_active() and abs_distance < block_reaction_range:
 		if _rng.randf() < block_chance:
 			_decision_cooldown = 0.15
 			return {"type": "block"}
