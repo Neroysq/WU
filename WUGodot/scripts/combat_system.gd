@@ -12,6 +12,7 @@ signal damage_dealt(position: Vector2, damage: float, is_critical: bool)
 signal hitstop(duration: float)
 
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var hit_geometry: Variant = null
 
 func _init() -> void:
 	_rng.randomize()
@@ -269,7 +270,13 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 	var vertical_range: bool = absf(defender.position.y - attacker.position.y) <= defender.height + 20.0
 	var facing_correct: bool = (-1 if defender.position.x - attacker.position.x < 0.0 else 1) == attacker.facing
 
-	if in_range and vertical_range and facing_correct and not attacker.was_hit_this_swing:
+	var connects: bool = false
+	if hit_geometry != null and hit_geometry.has_authored_hitbox(attacker):
+		connects = hit_geometry.query_hit(attacker, defender)
+	else:
+		connects = in_range and vertical_range and facing_correct
+
+	if connects and not attacker.was_hit_this_swing:
 		attacker.was_hit_this_swing = true
 
 		var attack_is_grab: bool = attack_def != null and attack_def.is_grab

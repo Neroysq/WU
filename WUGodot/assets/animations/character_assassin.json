@@ -20,7 +20,7 @@
           "path": "res://assets/sprites/characters/assassin/idle_1.png",
           "offset": [
             0,
-            0
+            8
           ]
         }
       ]
@@ -33,28 +33,28 @@
           "path": "res://assets/sprites/characters/assassin/walk_0.png",
           "offset": [
             0,
-            0
+            10
           ]
         },
         {
           "path": "res://assets/sprites/characters/assassin/walk_1.png",
           "offset": [
             0,
-            0
+            11
           ]
         },
         {
           "path": "res://assets/sprites/characters/assassin/walk_2.png",
           "offset": [
             0,
-            0
+            30
           ]
         },
         {
           "path": "res://assets/sprites/characters/assassin/walk_3.png",
           "offset": [
             0,
-            0
+            33
           ]
         }
       ]
@@ -67,28 +67,28 @@
           "path": "res://assets/sprites/characters/assassin/attack_0.png",
           "offset": [
             0,
-            0
+            3
           ]
         },
         {
           "path": "res://assets/sprites/characters/assassin/attack_1.png",
           "offset": [
             0,
-            0
+            3
           ]
         },
         {
           "path": "res://assets/sprites/characters/assassin/attack_2.png",
           "offset": [
             0,
-            0
+            50
           ]
         },
         {
           "path": "res://assets/sprites/characters/assassin/attack_3.png",
           "offset": [
             0,
-            0
+            7
           ]
         }
       ],
@@ -122,28 +122,28 @@
           "path": "res://assets/sprites/characters/assassin/attack_0.png",
           "offset": [
             0,
-            0
+            3
           ]
         },
         {
           "path": "res://assets/sprites/characters/assassin/attack_1.png",
           "offset": [
             0,
-            0
+            3
           ]
         },
         {
           "path": "res://assets/sprites/characters/assassin/attack_2.png",
           "offset": [
             0,
-            0
+            50
           ]
         },
         {
           "path": "res://assets/sprites/characters/assassin/attack_3.png",
           "offset": [
             0,
-            0
+            7
           ]
         }
       ],
@@ -177,14 +177,14 @@
           "path": "res://assets/sprites/characters/assassin/hit_0.png",
           "offset": [
             0,
-            0
+            28
           ]
         },
         {
           "path": "res://assets/sprites/characters/assassin/hit_1.png",
           "offset": [
             0,
-            0
+            33
           ]
         }
       ]
@@ -197,14 +197,14 @@
           "path": "res://assets/sprites/characters/assassin/block_0.png",
           "offset": [
             0,
-            0
+            24
           ]
         },
         {
           "path": "res://assets/sprites/characters/assassin/block_1.png",
           "offset": [
             0,
-            0
+            33
           ]
         }
       ]
@@ -217,14 +217,14 @@
           "path": "res://assets/sprites/characters/assassin/stunned_0.png",
           "offset": [
             0,
-            0
+            21
           ]
         },
         {
           "path": "res://assets/sprites/characters/assassin/stunned_1.png",
           "offset": [
             0,
-            0
+            21
           ]
         }
       ]

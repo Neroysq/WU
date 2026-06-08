@@ -4,6 +4,12 @@ extends Node2D
 const CombatDebugOverlayScript = preload("res://scripts/combat_debug_overlay.gd")
 const InputBufferScript = preload("res://scripts/input_buffer.gd")
 const BackgroundRendererScript = preload("res://scripts/visual/background_renderer.gd")
+const AnimationClockScript = preload("res://scripts/visual/animation_clock.gd")
+const AnimationDebugOverlayScript = preload("res://scripts/visual/animation_debug_overlay.gd")
+const FighterPresenterScript = preload("res://scripts/visual/fighter_presenter.gd")
+const PresentationCollisionScript = preload("res://scripts/visual/presentation_collision.gd")
+
+const ENABLE_AUTHORED_PLAYER_HITBOXES: bool = false
 
 signal combat_end(victory: bool)
 
@@ -18,7 +24,9 @@ var _camera: Camera2DHelper
 var _asset_catalog: AssetCatalog
 var _player_visual: FighterVisual
 var _enemy_visual: FighterVisual
+var _player_presenter: Variant = null
 var _background: Variant = null
+var _hit_geometry: Variant = null
 
 var _is_paused_on_end: bool = false
 var _end_message: String = ""
@@ -44,11 +52,17 @@ var _debug_overlay: Variant = CombatDebugOverlayScript.new()
 
 func _ready() -> void:
 	_combat_system = CombatSystem.new()
+	_hit_geometry = PresentationCollisionScript.new()
+	_hit_geometry.register_from_manifest_file("hu", "res://assets/animation_manifests/hu.manifest.json")
+	_combat_system.hit_geometry = _hit_geometry
 	_particle_system = ParticleSystem.new(GameConstants.MAX_PARTICLES)
 	_damage_number_system = DamageNumberSystem.new()
 	_camera = Camera2DHelper.new()
 	_asset_catalog = AssetCatalog.new()
 	_player_visual = FighterVisual.new(_asset_catalog)
+	_player_presenter = FighterPresenterScript.new(_asset_catalog)
+	add_child(_player_presenter)
+	_player_presenter.visible = false
 	_enemy_visual = FighterVisual.new(_asset_catalog)
 	_background = BackgroundRendererScript.new()
 
@@ -70,12 +84,29 @@ func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = f
 	if _background != null:
 		_background.set_arena(arena_id)
 	_player_visual.configure(DataManager.get_visual_profile(_player.visual_profile_id), _player)
+	_player_presenter.configure(
+		"res://assets/animation_manifests/hu.manifest.json",
+		"res://assets/animation_graphs/humanoid.graph.json",
+		[
+			"res://assets/animation_clips/hu_attack_light.timeline.json",
+			"res://assets/animation_clips/idle.timeline.json",
+			"res://assets/animation_clips/walk.timeline.json",
+		],
+		float(DataManager.get_visual_profile(_player.visual_profile_id).get("scale", 1.625))
+	)
+	var presenter_callback: Callable = Callable(self, "_on_player_timeline_event")
+	if not _player_presenter.is_connected("timeline_event", presenter_callback):
+		_player_presenter.connect("timeline_event", presenter_callback)
 	_enemy_visual.configure(DataManager.get_visual_profile(_enemy.visual_profile_id), _enemy)
 	_connect_attack_visual(_player, _player_visual)
 	_connect_attack_visual(_enemy, _enemy_visual)
 
 	_player.reset_for_combat()
 	_enemy.reset_for_combat()
+	# Placeholder anchors currently extend Hu's live reach roughly 2x. Keep the
+	# tested geometry path dormant until measured per-pose anchors replace them.
+	if _hit_geometry != null and ENABLE_AUTHORED_PLAYER_HITBOXES:
+		_hit_geometry.register_fighter(_player, "hu")
 	_player.position = Vector2(360.0, GameConstants.GROUND_Y)
 	_enemy.position = Vector2(1560.0, GameConstants.GROUND_Y)
 	_player.facing = 1
@@ -160,6 +191,8 @@ func _process(delta: float) -> void:
 		_slow_mo_factor = 1.0
 
 	var dt: float = delta * _time_scale
+	var clocks: Dictionary = AnimationClockScript.resolve(delta, _time_scale)
+	var input_active: bool = bool(clocks["input_active"])
 
 	if _is_paused_on_end:
 		if _input_tracker.pressed_key(KEY_ENTER) or _input_tracker.pressed_key(KEY_J):
@@ -188,10 +221,23 @@ func _process(delta: float) -> void:
 	_combat_system.update_facing(_player, _enemy)
 
 	var attack_key: int = int(_player.controls.get("attack", KEY_J))
-	_input_tracker.update_hold_timers([attack_key], delta)
-	_input_buffer.advance(delta)
+	if input_active:
+		_input_tracker.update_hold_timers([attack_key], delta)
+		_input_buffer.advance(delta)
 
-	var input_state: Dictionary = _build_player_input()
+	if not input_active:
+		if not _is_paused:
+			_camera.update(delta)
+			_particle_system.update(dt)
+			_damage_number_system.update(dt)
+			_player_visual.update(_player, dt)
+			_enemy_visual.update(_enemy, dt)
+			_update_player_presenter(float(clocks["combat"]), float(clocks["presentation"]))
+		_sync_input_tracker()
+		queue_redraw()
+		return
+
+	var input_state: Dictionary = _build_player_input(input_active)
 	_combat_system.update_player(_player, input_state, dt, _enemy)
 	_combat_system.update_ai(_enemy, _player, dt)
 
@@ -227,11 +273,15 @@ func _process(delta: float) -> void:
 		_damage_number_system.update(dt)
 		_player_visual.update(_player, dt)
 		_enemy_visual.update(_enemy, dt)
+		_update_player_presenter(float(clocks["combat"]), float(clocks["presentation"]))
 
 	_sync_input_tracker()
 	queue_redraw()
 
-func _build_player_input() -> Dictionary:
+func _build_player_input(input_active: bool = true) -> Dictionary:
+	if not input_active:
+		return _neutral_input()
+
 	var left_key: int = int(_player.controls.get("left", KEY_A))
 	var right_key: int = int(_player.controls.get("right", KEY_D))
 	var jump_key: int = int(_player.controls.get("jump", KEY_W))
@@ -294,6 +344,42 @@ func _build_player_input() -> Dictionary:
 		"attack_holding": attack_held,
 		"attack_hold_duration": attack_hold,
 	}
+
+func _neutral_input() -> Dictionary:
+	return {
+		"move": 0.0,
+		"jump_pressed": false,
+		"dash_pressed": false,
+		"light_pressed": false,
+		"heavy_pressed": false,
+		"block_pressed": false,
+		"block_down": false,
+		"stance_pressed": false,
+		"attack_holding": false,
+		"attack_hold_duration": 0.0,
+	}
+
+func _update_player_presenter(combat_dt: float, presentation_dt: float) -> void:
+	if _player_presenter == null or _player == null:
+		return
+
+	var state_name: String = _resolve_player_state_name()
+	if _player_presenter.handles_state(state_name):
+		_player_presenter.visible = true
+		_player_presenter.update(_player, state_name, combat_dt, presentation_dt, _camera.offset)
+	else:
+		_player_presenter.visible = false
+
+func _resolve_player_state_name() -> String:
+	match _player.current_animation:
+		Fighter.AnimationState.ATTACKING_LIGHT:
+			return "ATTACKING_LIGHT"
+		Fighter.AnimationState.WALKING:
+			return "WALKING"
+		Fighter.AnimationState.IDLE:
+			return "IDLE"
+		_:
+			return "FALLBACK"
 
 func _draw() -> void:
 	if _player == null or _enemy == null or not visible:
@@ -362,7 +448,24 @@ func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 			var alpha: float = 0.34 * parry_intensity / float(i)
 			draw_arc(center, parry_radius + float(i) * 6.0, 0.0, TAU, 32, Color(GameConstants.COLOR_GOLD_BRIGHT.r, GameConstants.COLOR_GOLD_BRIGHT.g, GameConstants.COLOR_GOLD_BRIGHT.b, alpha), 2.0, true)
 
-	visual.draw(self, fighter, camera_offset)
+	if fighter == _player and _player_presenter != null and _player_presenter.visible:
+		if _debug_enabled:
+			AnimationDebugOverlayScript.draw(self, fighter, camera_offset, _resolve_player_state_name(), _player_presenter.current_norm_t())
+	else:
+		visual.draw(self, fighter, camera_offset)
+
+	if fighter == _player and _debug_enabled and _hit_geometry != null:
+		var cap: Dictionary = _hit_geometry.debug_capsule_world(_player)
+		if not cap.is_empty():
+			AnimationDebugOverlayScript.draw_shapes(
+				self,
+				_hit_geometry.debug_hurtbox_world(_enemy),
+				cap["a"] as Vector2,
+				cap["b"] as Vector2,
+				float(cap["r"]),
+				camera_offset,
+				_player.is_hit_active()
+			)
 
 	if fighter.is_stunned:
 		var stun_pulse: float = sin(fighter.animation_timer * 12.0) * 0.5 + 0.5
@@ -588,6 +691,12 @@ func _on_camera_shake(amount: float) -> void:
 
 func _on_damage_dealt(position: Vector2, damage: float, is_critical: bool) -> void:
 	_damage_number_system.spawn_damage_number(position, damage, false, is_critical)
+
+func _on_player_timeline_event(event_name: String) -> void:
+	match event_name:
+		"attack_active_start":
+			if _player_presenter != null:
+				_player_presenter.set_flash(1.0)
 
 func _trigger_slow_mo(factor: float, duration: float) -> void:
 	_slow_mo_factor = clampf(factor, 0.0, 1.0)

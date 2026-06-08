@@ -33,28 +33,28 @@
           "path": "res://assets/sprites/characters/bandit_sword/walk_0.png",
           "offset": [
             0,
-            0
+            -3
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_sword/walk_1.png",
           "offset": [
             0,
-            0
+            4
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_sword/walk_2.png",
           "offset": [
             0,
-            0
+            12
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_sword/walk_3.png",
           "offset": [
             0,
-            0
+            16
           ]
         }
       ]
@@ -67,28 +67,28 @@
           "path": "res://assets/sprites/characters/bandit_sword/attack_0.png",
           "offset": [
             0,
-            0
+            20
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_sword/attack_1.png",
           "offset": [
             0,
-            0
+            20
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_sword/attack_2.png",
           "offset": [
             0,
-            0
+            54
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_sword/attack_3.png",
           "offset": [
             0,
-            0
+            13
           ]
         }
       ],
@@ -122,28 +122,28 @@
           "path": "res://assets/sprites/characters/bandit_sword/attack_0.png",
           "offset": [
             0,
-            0
+            20
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_sword/attack_1.png",
           "offset": [
             0,
-            0
+            20
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_sword/attack_2.png",
           "offset": [
             0,
-            0
+            54
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_sword/attack_3.png",
           "offset": [
             0,
-            0
+            13
           ]
         }
       ],
@@ -177,14 +177,14 @@
           "path": "res://assets/sprites/characters/bandit_sword/hit_0.png",
           "offset": [
             0,
-            0
+            20
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_sword/hit_1.png",
           "offset": [
             0,
-            0
+            19
           ]
         }
       ]
@@ -197,14 +197,14 @@
           "path": "res://assets/sprites/characters/bandit_sword/block_0.png",
           "offset": [
             0,
-            0
+            8
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_sword/block_1.png",
           "offset": [
             0,
-            0
+            16
           ]
         }
       ]
@@ -217,14 +217,14 @@
           "path": "res://assets/sprites/characters/bandit_sword/stunned_0.png",
           "offset": [
             0,
-            0
+            11
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_sword/stunned_1.png",
           "offset": [
             0,
-            0
+            11
           ]
         }
       ]

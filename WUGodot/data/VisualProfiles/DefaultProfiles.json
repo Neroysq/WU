@@ -4,49 +4,49 @@
       "id": "player_humanoid",
       "animationSet": "res://assets/animations/character_hu.json",
       "scale": 1.625,
-      "yOffset": 30.875,
+      "yOffset": 78.0,
       "weaponTipOffset": [76.0, -34.0]
     },
     {
       "id": "enemy_humanoid_basic",
       "animationSet": "res://assets/animations/character_bandit_sword.json",
       "scale": 1.575,
-      "yOffset": 1.575,
+      "yOffset": 12.6,
       "weaponTipOffset": [74.0, -34.0]
     },
     {
       "id": "enemy_humanoid_basic_spear",
       "animationSet": "res://assets/animations/character_bandit_spear.json",
       "scale": 1.575,
-      "yOffset": 9.45,
+      "yOffset": 67.725,
       "weaponTipOffset": [126.0, -42.0]
     },
     {
       "id": "enemy_humanoid_ronin",
       "animationSet": "res://assets/animations/character_ronin.json",
       "scale": 1.625,
-      "yOffset": 6.5,
+      "yOffset": 37.375,
       "weaponTipOffset": [84.0, -34.0]
     },
     {
       "id": "enemy_humanoid_elite",
       "animationSet": "res://assets/animations/character_disciple.json",
       "scale": 1.675,
-      "yOffset": 10.05,
+      "yOffset": 35.175,
       "weaponTipOffset": [88.0, -38.0]
     },
     {
       "id": "enemy_humanoid_assassin",
       "animationSet": "res://assets/animations/character_assassin.json",
       "scale": 1.675,
-      "yOffset": 10.05,
+      "yOffset": 21.775,
       "weaponTipOffset": [92.0, -34.0]
     },
     {
       "id": "enemy_humanoid_boss",
       "animationSet": "res://assets/animations/character_iron_bear.json",
       "scale": 1.775,
-      "yOffset": 15.975,
+      "yOffset": 71.0,
       "weaponTipOffset": [132.0, -58.0]
     }
   ]

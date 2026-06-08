@@ -13,6 +13,14 @@ const _TEST_MODULES: Array[String] = [
 	"res://tests/test_background_renderer.gd",
 	"res://tests/test_text_wrapping.gd",
 	"res://tests/test_animation_set.gd",
+	"res://tests/test_animation_clock.gd",
+	"res://tests/test_animation_manifest.gd",
+	"res://tests/test_anchor_math.gd",
+	"res://tests/test_animation_clip_timeline.gd",
+	"res://tests/test_animation_graph.gd",
+	"res://tests/test_collision_shape_math.gd",
+	"res://tests/test_hitbox_template.gd",
+	"res://tests/test_presentation_collision.gd",
 ]
 
 var _passed: int = 0

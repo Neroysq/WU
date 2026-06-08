@@ -1,0 +1,10 @@
+{
+  "id": "walk",
+  "duration": 0.6,
+  "keyposes": [
+    { "t": 0.00, "pose": "walk_0" },
+    { "t": 0.25, "pose": "walk_1" },
+    { "t": 0.50, "pose": "walk_2" },
+    { "t": 0.75, "pose": "walk_3" }
+  ]
+}

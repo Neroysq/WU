@@ -1,0 +1,71 @@
+{
+  "id": "hu",
+  "sourceCanvas": [256, 256],
+  "renderScale": 1.625,
+  "weaponClass": "sword",
+  "poses": {
+    "guard": {
+      "path": "res://assets/sprites/characters/hu/idle_0.png",
+      "footAnchor": [128, 238],
+      "chestAnchor": [128, 150],
+      "weaponTip": [150, 150],
+      "hurtbox": [92, 60, 72, 178]
+    },
+    "breath": {
+      "path": "res://assets/sprites/characters/hu/idle_1.png",
+      "footAnchor": [128, 238],
+      "chestAnchor": [128, 150],
+      "weaponTip": [150, 150],
+      "hurtbox": [92, 60, 72, 178]
+    },
+    "walk_0": {
+      "path": "res://assets/sprites/characters/hu/walk_0.png",
+      "footAnchor": [128, 238],
+      "chestAnchor": [128, 150],
+      "weaponTip": [150, 150],
+      "hurtbox": [92, 60, 72, 178]
+    },
+    "walk_1": {
+      "path": "res://assets/sprites/characters/hu/walk_1.png",
+      "footAnchor": [128, 238],
+      "chestAnchor": [128, 150],
+      "weaponTip": [150, 150],
+      "hurtbox": [92, 60, 72, 178]
+    },
+    "walk_2": {
+      "path": "res://assets/sprites/characters/hu/walk_2.png",
+      "footAnchor": [128, 238],
+      "chestAnchor": [128, 150],
+      "weaponTip": [150, 150],
+      "hurtbox": [92, 60, 72, 178]
+    },
+    "walk_3": {
+      "path": "res://assets/sprites/characters/hu/walk_3.png",
+      "footAnchor": [128, 238],
+      "chestAnchor": [128, 150],
+      "weaponTip": [150, 150],
+      "hurtbox": [92, 60, 72, 178]
+    },
+    "windup": {
+      "path": "res://assets/sprites/characters/hu/attack_1.png",
+      "footAnchor": [128, 238],
+      "chestAnchor": [128, 150],
+      "weaponTip": [120, 120],
+      "hurtbox": [92, 60, 72, 178]
+    },
+    "strike_extended": {
+      "path": "res://assets/sprites/characters/hu/attack_2.png",
+      "footAnchor": [128, 238],
+      "chestAnchor": [128, 150],
+      "weaponTip": [218, 134],
+      "hurtbox": [92, 60, 72, 178]
+    },
+    "recover": {
+      "path": "res://assets/sprites/characters/hu/attack_3.png",
+      "footAnchor": [128, 238],
+      "chestAnchor": [128, 150],
+      "weaponTip": [170, 150],
+      "hurtbox": [92, 60, 72, 178]
+    }
+  }
+}

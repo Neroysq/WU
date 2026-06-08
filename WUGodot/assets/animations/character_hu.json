@@ -11,17 +11,11 @@
       "frames": [
         {
           "path": "res://assets/sprites/characters/hu/idle_0.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 0]
         },
         {
           "path": "res://assets/sprites/characters/hu/idle_1.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 0]
         }
       ]
     },
@@ -31,31 +25,19 @@
       "frames": [
         {
           "path": "res://assets/sprites/characters/hu/walk_0.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 4]
         },
         {
           "path": "res://assets/sprites/characters/hu/walk_1.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 4]
         },
         {
           "path": "res://assets/sprites/characters/hu/walk_2.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 6]
         },
         {
           "path": "res://assets/sprites/characters/hu/walk_3.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 6]
         }
       ]
     },
@@ -65,39 +47,24 @@
       "frames": [
         {
           "path": "res://assets/sprites/characters/hu/attack_0.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, -2]
         },
         {
           "path": "res://assets/sprites/characters/hu/attack_1.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, -1]
         },
         {
           "path": "res://assets/sprites/characters/hu/attack_2.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 35]
         },
         {
           "path": "res://assets/sprites/characters/hu/attack_3.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 16]
         }
       ],
       "phases": [
         {
-          "frames": [
-            0,
-            1
-          ],
+          "frames": [0, 1],
           "phase": "windup"
         },
         {
@@ -120,39 +87,24 @@
       "frames": [
         {
           "path": "res://assets/sprites/characters/hu/attack_0.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, -2]
         },
         {
           "path": "res://assets/sprites/characters/hu/attack_1.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, -1]
         },
         {
           "path": "res://assets/sprites/characters/hu/attack_2.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 35]
         },
         {
           "path": "res://assets/sprites/characters/hu/attack_3.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 16]
         }
       ],
       "phases": [
         {
-          "frames": [
-            0,
-            1
-          ],
+          "frames": [0, 1],
           "phase": "windup"
         },
         {
@@ -175,17 +127,11 @@
       "frames": [
         {
           "path": "res://assets/sprites/characters/hu/hit_0.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 17]
         },
         {
           "path": "res://assets/sprites/characters/hu/hit_1.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 17]
         }
       ]
     },
@@ -195,17 +141,11 @@
       "frames": [
         {
           "path": "res://assets/sprites/characters/hu/block_0.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 6]
         },
         {
           "path": "res://assets/sprites/characters/hu/block_1.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 13]
         }
       ]
     },
@@ -215,17 +155,11 @@
       "frames": [
         {
           "path": "res://assets/sprites/characters/hu/stunned_0.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, -13]
         },
         {
           "path": "res://assets/sprites/characters/hu/stunned_1.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, -13]
         }
       ]
     },
@@ -235,17 +169,11 @@
       "frames": [
         {
           "path": "res://assets/sprites/characters/hu/dash_0.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 0]
         },
         {
           "path": "res://assets/sprites/characters/hu/dash_1.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 0]
         }
       ]
     },
@@ -255,17 +183,11 @@
       "frames": [
         {
           "path": "res://assets/sprites/characters/hu/jump_0.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 0]
         },
         {
           "path": "res://assets/sprites/characters/hu/jump_1.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 0]
         }
       ]
     },
@@ -275,10 +197,7 @@
       "frames": [
         {
           "path": "res://assets/sprites/characters/hu/jump_2.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 0]
         }
       ]
     },
@@ -288,17 +207,11 @@
       "frames": [
         {
           "path": "res://assets/sprites/characters/hu/jump_2.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 0]
         },
         {
           "path": "res://assets/sprites/characters/hu/idle_0.png",
-          "offset": [
-            0,
-            0
-          ]
+          "offset": [0, 0]
         }
       ]
     }

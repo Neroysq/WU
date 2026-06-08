@@ -1,0 +1,31 @@
+{
+  "id": "hu_attack_light",
+  "duration": "fromAttackDef",
+  "keyposes": [
+    { "t": 0.00, "pose": "guard" },
+    { "t": 0.30, "pose": "windup" },
+    { "t": 0.55, "pose": "strike_extended" },
+    { "t": 1.00, "pose": "recover" }
+  ],
+  "tracks": {
+    "offsetX": [
+      { "t": 0.00, "v": 0.0, "ease": "out" },
+      { "t": 0.55, "v": 18.0, "ease": "inOut" },
+      { "t": 1.00, "v": 0.0, "ease": "out" }
+    ],
+    "scaleY": [
+      { "t": 0.00, "v": 1.0 },
+      { "t": 0.52, "v": 0.92, "ease": "in" },
+      { "t": 0.62, "v": 1.0, "ease": "out" }
+    ],
+    "smear": [
+      { "t": 0.48, "v": 0.0 },
+      { "t": 0.55, "v": 1.0 },
+      { "t": 0.70, "v": 0.0 }
+    ]
+  },
+  "events": [
+    { "t": "windup_end", "event": "attack_active_start" },
+    { "t": "active_end", "event": "attack_active_end" }
+  ]
+}

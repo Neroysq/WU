@@ -1,0 +1,24 @@
+{
+  "states": {
+    "IDLE": {
+      "clip": "idle",
+      "enter": { "mode": "dither", "time": 0.08 },
+      "priority": 0
+    },
+    "WALKING": {
+      "clip": "walk",
+      "enter": { "mode": "dither", "time": 0.08 },
+      "priority": 1
+    },
+    "ATTACKING_LIGHT": {
+      "clip": "hu_attack_light",
+      "duration": "fromAttackDef",
+      "enter": { "mode": "snap", "time": 0.0 },
+      "priority": 5,
+      "cancelInto": {
+        "DASH": "recovery",
+        "ATTACKING_LIGHT": "recovery"
+      }
+    }
+  }
+}

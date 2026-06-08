@@ -33,28 +33,28 @@
           "path": "res://assets/sprites/characters/bandit_spear/walk_0.png",
           "offset": [
             0,
-            0
+            -18
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_spear/walk_1.png",
           "offset": [
             0,
-            0
+            -16
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_spear/walk_2.png",
           "offset": [
             0,
-            0
+            -17
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_spear/walk_3.png",
           "offset": [
             0,
-            0
+            -13
           ]
         }
       ]
@@ -67,28 +67,28 @@
           "path": "res://assets/sprites/characters/bandit_spear/attack_0.png",
           "offset": [
             0,
-            0
+            -6
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_spear/attack_1.png",
           "offset": [
             0,
-            0
+            -5
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_spear/attack_2.png",
           "offset": [
             0,
-            0
+            23
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_spear/attack_3.png",
           "offset": [
             0,
-            0
+            -10
           ]
         }
       ],
@@ -122,28 +122,28 @@
           "path": "res://assets/sprites/characters/bandit_spear/attack_0.png",
           "offset": [
             0,
-            0
+            -6
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_spear/attack_1.png",
           "offset": [
             0,
-            0
+            -5
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_spear/attack_2.png",
           "offset": [
             0,
-            0
+            23
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_spear/attack_3.png",
           "offset": [
             0,
-            0
+            -10
           ]
         }
       ],
@@ -177,14 +177,14 @@
           "path": "res://assets/sprites/characters/bandit_spear/hit_0.png",
           "offset": [
             0,
-            0
+            -31
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_spear/hit_1.png",
           "offset": [
             0,
-            0
+            -29
           ]
         }
       ]
@@ -197,14 +197,14 @@
           "path": "res://assets/sprites/characters/bandit_spear/block_0.png",
           "offset": [
             0,
-            0
+            -24
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_spear/block_1.png",
           "offset": [
             0,
-            0
+            -27
           ]
         }
       ]
@@ -217,14 +217,14 @@
           "path": "res://assets/sprites/characters/bandit_spear/stunned_0.png",
           "offset": [
             0,
-            0
+            -18
           ]
         },
         {
           "path": "res://assets/sprites/characters/bandit_spear/stunned_1.png",
           "offset": [
             0,
-            0
+            -17
           ]
         }
       ]

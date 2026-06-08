@@ -1,0 +1,8 @@
+{
+  "id": "idle",
+  "duration": 1.6,
+  "keyposes": [
+    { "t": 0.00, "pose": "guard" },
+    { "t": 0.50, "pose": "breath" }
+  ]
+}

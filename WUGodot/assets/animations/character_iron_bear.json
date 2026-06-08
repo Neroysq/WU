@@ -33,28 +33,28 @@
           "path": "res://assets/sprites/characters/iron_bear/walk_0.png",
           "offset": [
             0,
-            0
+            -16
           ]
         },
         {
           "path": "res://assets/sprites/characters/iron_bear/walk_1.png",
           "offset": [
             0,
-            0
+            -11
           ]
         },
         {
           "path": "res://assets/sprites/characters/iron_bear/walk_2.png",
           "offset": [
             0,
-            0
+            -4
           ]
         },
         {
           "path": "res://assets/sprites/characters/iron_bear/walk_3.png",
           "offset": [
             0,
-            0
+            -2
           ]
         }
       ]
@@ -67,28 +67,28 @@
           "path": "res://assets/sprites/characters/iron_bear/attack_0.png",
           "offset": [
             0,
-            0
+            -18
           ]
         },
         {
           "path": "res://assets/sprites/characters/iron_bear/attack_1.png",
           "offset": [
             0,
-            0
+            -19
           ]
         },
         {
           "path": "res://assets/sprites/characters/iron_bear/attack_2.png",
           "offset": [
             0,
-            0
+            -1
           ]
         },
         {
           "path": "res://assets/sprites/characters/iron_bear/attack_3.png",
           "offset": [
             0,
-            0
+            -18
           ]
         }
       ],
@@ -122,28 +122,28 @@
           "path": "res://assets/sprites/characters/iron_bear/attack_0.png",
           "offset": [
             0,
-            0
+            -18
           ]
         },
         {
           "path": "res://assets/sprites/characters/iron_bear/attack_1.png",
           "offset": [
             0,
-            0
+            -19
           ]
         },
         {
           "path": "res://assets/sprites/characters/iron_bear/attack_2.png",
           "offset": [
             0,
-            0
+            -1
           ]
         },
         {
           "path": "res://assets/sprites/characters/iron_bear/attack_3.png",
           "offset": [
             0,
-            0
+            -18
           ]
         }
       ],
@@ -177,14 +177,14 @@
           "path": "res://assets/sprites/characters/iron_bear/hit_0.png",
           "offset": [
             0,
-            0
+            -13
           ]
         },
         {
           "path": "res://assets/sprites/characters/iron_bear/hit_1.png",
           "offset": [
             0,
-            0
+            -10
           ]
         }
       ]
@@ -197,14 +197,14 @@
           "path": "res://assets/sprites/characters/iron_bear/block_0.png",
           "offset": [
             0,
-            0
+            -19
           ]
         },
         {
           "path": "res://assets/sprites/characters/iron_bear/block_1.png",
           "offset": [
             0,
-            0
+            -15
           ]
         }
       ]
@@ -217,14 +217,14 @@
           "path": "res://assets/sprites/characters/iron_bear/stunned_0.png",
           "offset": [
             0,
-            0
+            -14
           ]
         },
         {
           "path": "res://assets/sprites/characters/iron_bear/stunned_1.png",
           "offset": [
             0,
-            0
+            -15
           ]
         }
       ]
