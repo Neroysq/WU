@@ -8,6 +8,7 @@
 #   ./run.sh --measure-anchors  # regenerate Hu anchors from sprite pixels
 #   ./run.sh --anchor-sanity    # validate stored Hu anchors against sprite pixels
 #   ./run.sh --shot-combat [dir] # save deterministic combat screenshots, then quit
+#   ./run.sh --shot-archetype=<id> [dir] # save deterministic combat + enemy archetype screenshots
 #   ./run.sh --editor     # open the Godot editor
 
 set -euo pipefail
@@ -69,12 +70,18 @@ case "${1:-}" in
         echo "Capturing combat screenshots -> $SHOT_DIR"
         exec "$GODOT" --path "$PROJECT_DIR" -- --shot-combat "--shot-dir=$SHOT_DIR"
         ;;
+    --shot-archetype=*)
+        ARCHETYPE="${1#--shot-archetype=}"
+        SHOT_DIR="${2:-/tmp/wu-balance-$ARCHETYPE}"
+        echo "Capturing combat screenshots for $ARCHETYPE -> $SHOT_DIR"
+        exec "$GODOT" --path "$PROJECT_DIR" -- --shot-combat "--shot-archetype=$ARCHETYPE" "--shot-dir=$SHOT_DIR"
+        ;;
     --editor|-e)
         echo "Opening Godot editor..."
         exec "$GODOT" --path "$PROJECT_DIR" --editor
         ;;
     --help|-h)
-        sed -n '2,10p' "$0"
+        sed -n '2,11p' "$0"
         ;;
     "")
         echo "Launching WU..."
@@ -82,7 +89,7 @@ case "${1:-}" in
         ;;
     *)
         echo "Unknown option: $1" >&2
-        echo "Usage: $0 [--test|--import|--reimport|--editor|--help]" >&2
+        echo "Usage: $0 [--test|--import|--reimport|--shot-combat|--shot-archetype=<id>|--editor|--help]" >&2
         exit 1
         ;;
 esac

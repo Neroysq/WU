@@ -77,10 +77,10 @@ func _ready() -> void:
 	set_process(false)
 	visible = false
 
-func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = false) -> void:
+func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = false, forced_archetype: String = "") -> void:
 	_player = player
 	_current_node = node
-	_enemy = EnemyFactory.create_enemy_for_node(node)
+	_enemy = EnemyFactory.create_enemy_by_archetype(forced_archetype) if not forced_archetype.is_empty() else EnemyFactory.create_enemy_for_node(node)
 	var arena_id: String = "chapter1_boss_clearing" if node.node_type == MapNode.NodeType.BOSS else "chapter1_bamboo_dusk"
 	if _background != null:
 		_background.set_arena(arena_id)
@@ -205,11 +205,54 @@ func dev_prepare_capture_state(state_name: String) -> void:
 			_player.start_light_attack()
 			if _player._attack_state.def != null:
 				_player._attack_state.elapsed = _player._attack_state.def.windup_end + 0.04
+		"05_enemy_windup":
+			_dev_place_at_enemy_preferred_range()
+			_dev_start_enemy_capture_attack(false)
+		"06_enemy_active":
+			_dev_place_at_enemy_preferred_range()
+			_dev_start_enemy_capture_attack(true)
+		"07_neutral_spacing":
+			_dev_place_at_enemy_preferred_range()
 		_:
 			_player.current_animation = Fighter.AnimationState.IDLE
 
 	_update_player_presenter(0.0, 0.0)
 	queue_redraw()
+
+func _dev_place_at_enemy_preferred_range() -> void:
+	var preferred: float = _enemy.attack_range
+	if _enemy.ai_brain != null:
+		preferred = _enemy.ai_brain.preferred_range
+	var gap: float = preferred + _enemy.half_width + _player.half_width
+	_player.position = Vector2(520.0, GameConstants.GROUND_Y)
+	_enemy.position = Vector2(_player.position.x + gap, GameConstants.GROUND_Y)
+	_player.facing = 1
+	_enemy.facing = -1
+	_player.velocity = Vector2.ZERO
+	_enemy.velocity = Vector2.ZERO
+
+func _dev_start_enemy_capture_attack(active: bool) -> void:
+	var attack_def: Variant = _dev_pick_enemy_capture_attack()
+	if attack_def == null:
+		return
+	_enemy._start_attack_with(attack_def)
+	if active:
+		var active_span: float = maxf(attack_def.active_end - attack_def.windup_end, 0.001)
+		_enemy._attack_state.elapsed = attack_def.windup_end + active_span * 0.4
+	else:
+		_enemy._attack_state.elapsed = maxf(0.01, attack_def.windup_end * 0.55)
+
+func _dev_pick_enemy_capture_attack() -> Variant:
+	if _enemy == null or _enemy.ai_brain == null:
+		return null
+	var best_def: Variant = null
+	for attack_id in _enemy.ai_brain.pattern_table:
+		var attack_def: Variant = _enemy.ai_brain.get_attack_def(str(attack_id))
+		if attack_def == null:
+			continue
+		if best_def == null or float(attack_def.range_units) < float(best_def.range_units):
+			best_def = attack_def
+	return best_def
 
 func _process(delta: float) -> void:
 	if _player == null or _enemy == null:
@@ -531,6 +574,9 @@ func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 				_player.is_hit_active()
 			)
 
+	if fighter == _enemy and _debug_enabled and fighter._attack_state.is_active():
+		_draw_enemy_scalar_reach_debug(fighter, camera_offset)
+
 	if fighter.is_stunned:
 		var stun_pulse: float = sin(fighter.animation_timer * 12.0) * 0.5 + 0.5
 		var stun_rect: Rect2 = Rect2(body_rect.position.x, body_rect.position.y - 18.0, body_rect.size.x, 12.0)
@@ -553,6 +599,20 @@ func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 			body_rect.size.y + 8.0
 		)
 		draw_rect(grab_rect, Color(GameConstants.COLOR_CRIMSON.r, GameConstants.COLOR_CRIMSON.g, GameConstants.COLOR_CRIMSON.b, 120.0 * grab_pulse / 255.0), false, 3.0)
+
+func _draw_enemy_scalar_reach_debug(attacker: Fighter, camera_offset: Vector2) -> void:
+	var attack_def: Variant = attacker._attack_state.def
+	if attack_def == null or _player == null:
+		return
+
+	var y_offset: float = -attacker.height * 0.72
+	var facing: float = float(attacker.facing)
+	var start: Vector2 = attacker.position + camera_offset + Vector2(facing * attacker.half_width, y_offset)
+	var end: Vector2 = attacker.position + camera_offset + Vector2(facing * (float(attack_def.range_units) + _player.half_width), y_offset)
+	var active: bool = attacker.is_hit_active()
+	var line_color: Color = Color(1.0, 0.18, 0.12, 0.92) if active else Color(1.0, 0.78, 0.15, 0.55)
+	draw_line(start, end, line_color, 4.0, true)
+	draw_circle(end, 8.0, line_color)
 
 func _draw_hud() -> void:
 	var left_panel: Rect2 = Rect2(20, 18, GameConstants.VIEW_WIDTH / 2 - 40, 98)

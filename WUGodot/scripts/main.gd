@@ -6,6 +6,7 @@ const TextWrappingScript = preload("res://scripts/util/text_wrapping.gd")
 
 const DEV_SHOT_COMBAT_FLAG: String = "--shot-combat"
 const DEV_SHOT_DIR_PREFIX: String = "--shot-dir="
+const DEV_SHOT_ARCHETYPE_PREFIX: String = "--shot-archetype="
 const DEV_SHOT_DEFAULT_DIR: String = "user://shot-combat"
 
 enum SceneType {
@@ -52,6 +53,7 @@ var _run_techniques_acquired: Array[String] = []
 var _input_tracker: InputTracker = InputTracker.new()
 var _cursor_flash: float = 0.0
 var _dev_shot_combat_dir: String = ""
+var _dev_shot_archetype: String = ""
 
 func _ready() -> void:
 	Engine.max_fps = GameConstants.TARGET_FPS
@@ -64,6 +66,7 @@ func _ready() -> void:
 	_sync_input_tracker()
 	if _has_user_arg(DEV_SHOT_COMBAT_FLAG):
 		_dev_shot_combat_dir = _user_arg_value(DEV_SHOT_DIR_PREFIX, DEV_SHOT_DEFAULT_DIR)
+		_dev_shot_archetype = _user_arg_value(DEV_SHOT_ARCHETYPE_PREFIX, "")
 		call_deferred("_run_dev_combat_shots")
 
 func start_new_run() -> void:
@@ -529,8 +532,9 @@ func _run_dev_combat_shots() -> void:
 	_player = EnemyFactory.create_player()
 	_run_state = RunState.create_procedural_run()
 	_run_state.legend_seen_this_run = true
-	var node: MapNode = MapNode.new(9001, 1, MapNode.NodeType.BATTLE, [])
-	_combat_scene.setup_combat(_player, node, false)
+	var node_type: int = MapNode.NodeType.BOSS if _dev_shot_archetype == "iron_bear" else MapNode.NodeType.BATTLE
+	var node: MapNode = MapNode.new(9001, 1, node_type, [])
+	_combat_scene.setup_combat(_player, node, false, _dev_shot_archetype)
 	_combat_scene.on_enter()
 	_combat_scene.dev_set_capture_mode(true)
 	_current_scene = SceneType.COMBAT
@@ -540,6 +544,10 @@ func _run_dev_combat_shots() -> void:
 	await _capture_dev_combat_state("02_walk", abs_dir)
 	await _capture_dev_combat_state("03_light_windup", abs_dir)
 	await _capture_dev_combat_state("04_light_active", abs_dir)
+	if not _dev_shot_archetype.is_empty():
+		await _capture_dev_combat_state("05_enemy_windup", abs_dir)
+		await _capture_dev_combat_state("06_enemy_active", abs_dir)
+		await _capture_dev_combat_state("07_neutral_spacing", abs_dir)
 	print("SHOT COMBAT: wrote %s" % abs_dir)
 	get_tree().quit(0)
 

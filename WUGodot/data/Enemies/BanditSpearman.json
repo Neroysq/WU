@@ -18,7 +18,7 @@
   "pattern_table": ["spear_long_thrust", "spear_wide_swing"],
   "aggression": 0.4,
   "blockChance": 0.15,
-  "preferredRange": 110.0,
+  "preferredRange": 153.0,
   "retreatChance": 0.04,
   "dashChance": 0.02
 }

@@ -44,7 +44,7 @@ static func bandit_slash():
 	def.is_heavy = false
 	def.is_perilous = false
 	def.is_parryable = true
-	def.range_units = 68.0
+	def.range_units = 140.0
 	def.knockback_units = 260.0
 	return def
 
@@ -59,7 +59,7 @@ static func bandit_thrust_perilous():
 	def.is_heavy = false
 	def.is_perilous = true
 	def.is_parryable = false
-	def.range_units = 88.0
+	def.range_units = 150.0
 	def.knockback_units = 320.0
 	return def
 
@@ -137,7 +137,7 @@ static func bandit_overhead():
 	def.is_heavy = true
 	def.is_perilous = false
 	def.is_parryable = true
-	def.range_units = 72.0
+	def.range_units = 145.0
 	def.knockback_units = 380.0
 	return def
 
@@ -154,7 +154,7 @@ static func spear_long_thrust():
 	def.is_heavy = false
 	def.is_perilous = false
 	def.is_parryable = true
-	def.range_units = 110.0
+	def.range_units = 180.0
 	def.knockback_units = 280.0
 	return def
 
@@ -169,7 +169,7 @@ static func spear_wide_swing():
 	def.is_heavy = true
 	def.is_perilous = false
 	def.is_parryable = true
-	def.range_units = 120.0
+	def.range_units = 175.0
 	def.knockback_units = 400.0
 	return def
 
@@ -186,7 +186,7 @@ static func ronin_slash():
 	def.is_heavy = false
 	def.is_perilous = false
 	def.is_parryable = true
-	def.range_units = 76.0
+	def.range_units = 150.0
 	def.knockback_units = 300.0
 	return def
 
@@ -201,7 +201,7 @@ static func ronin_thrust():
 	def.is_heavy = false
 	def.is_perilous = false
 	def.is_parryable = true
-	def.range_units = 88.0
+	def.range_units = 160.0
 	def.knockback_units = 320.0
 	return def
 
@@ -216,7 +216,7 @@ static func ronin_sweep():
 	def.is_heavy = true
 	def.is_perilous = false
 	def.is_parryable = true
-	def.range_units = 80.0
+	def.range_units = 150.0
 	def.knockback_units = 420.0
 	return def
 
@@ -231,7 +231,7 @@ static func ronin_perilous_thrust():
 	def.is_heavy = false
 	def.is_perilous = true
 	def.is_parryable = false
-	def.range_units = 92.0
+	def.range_units = 165.0
 	def.knockback_units = 360.0
 	return def
 
@@ -248,7 +248,7 @@ static func disciple_slash():
 	def.is_heavy = false
 	def.is_perilous = false
 	def.is_parryable = true
-	def.range_units = 74.0
+	def.range_units = 150.0
 	def.knockback_units = 300.0
 	return def
 
@@ -263,7 +263,7 @@ static func disciple_thrust():
 	def.is_heavy = false
 	def.is_perilous = false
 	def.is_parryable = true
-	def.range_units = 82.0
+	def.range_units = 155.0
 	def.knockback_units = 320.0
 	return def
 
@@ -278,7 +278,7 @@ static func disciple_sweep():
 	def.is_heavy = true
 	def.is_perilous = false
 	def.is_parryable = true
-	def.range_units = 78.0
+	def.range_units = 150.0
 	def.knockback_units = 400.0
 	return def
 
@@ -293,7 +293,7 @@ static func disciple_counter():
 	def.is_heavy = false
 	def.is_perilous = false
 	def.is_parryable = true
-	def.range_units = 70.0
+	def.range_units = 150.0
 	def.knockback_units = 360.0
 	return def
 
@@ -308,7 +308,7 @@ static func disciple_jump_attack():
 	def.is_heavy = true
 	def.is_perilous = false
 	def.is_parryable = true
-	def.range_units = 90.0
+	def.range_units = 160.0
 	def.knockback_units = 440.0
 	def.forward_lunge = 200.0
 	return def
@@ -389,7 +389,7 @@ static func bear_swipe():
 	def.is_heavy = false
 	def.is_perilous = false
 	def.is_parryable = true
-	def.range_units = 90.0
+	def.range_units = 165.0
 	def.knockback_units = 380.0
 	return def
 
@@ -404,7 +404,7 @@ static func bear_overhead():
 	def.is_heavy = true
 	def.is_perilous = false
 	def.is_parryable = true
-	def.range_units = 85.0
+	def.range_units = 160.0
 	def.knockback_units = 500.0
 	return def
 
@@ -419,7 +419,7 @@ static func bear_stomp():
 	def.is_heavy = true
 	def.is_perilous = false
 	def.is_parryable = true
-	def.range_units = 70.0
+	def.range_units = 150.0
 	def.knockback_units = 350.0
 	return def
 
@@ -435,7 +435,7 @@ static func bear_crush_grab():
 	def.is_perilous = true
 	def.is_parryable = false
 	def.is_grab = true
-	def.range_units = 95.0
+	def.range_units = 170.0
 	def.knockback_units = 0.0
 	def.forward_lunge = 150.0
 	return def
@@ -451,7 +451,7 @@ static func mountain_breaker():
 	def.is_heavy = true
 	def.is_perilous = true
 	def.is_parryable = false
-	def.range_units = 100.0
+	def.range_units = 175.0
 	def.knockback_units = 600.0
 	def.forward_lunge = 600.0
 	return def

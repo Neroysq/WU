@@ -16,9 +16,9 @@
   "colorBody": "#FF7878",
   "colorAccent": "#D23C3C",
   "pattern_table": ["bandit_slash", "bandit_thrust_perilous", "bandit_overhead"],
-  "aggression": 0.45,
+  "aggression": 0.5,
   "blockChance": 0.2,
-  "preferredRange": 72.0,
+  "preferredRange": 118.0,
   "retreatChance": 0.02,
   "dashChance": 0.03
 }

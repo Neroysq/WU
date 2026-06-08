@@ -84,6 +84,8 @@ func run_all() -> Dictionary:
 	brain._decision_cooldown = 0.0
 
 	# Test 5: out of range -> move toward target
+	brain.dash_chance = 0.0
+	brain._decision_cooldown = 0.0
 	ai.position = Vector2(900.0, 940.0)
 	target.position = Vector2(400.0, 940.0)
 	action = brain.decide(ai, target)
@@ -98,6 +100,7 @@ func run_all() -> Dictionary:
 	ai.position = Vector2(470.0, 940.0)
 	target.position = Vector2(400.0, 940.0)
 	brain.block_chance = 1.0
+	brain._decision_cooldown = 0.0
 	target.start_light_attack()
 	action = brain.decide(ai, target)
 	if str(action.get("type", "")) == "block":
@@ -150,7 +153,7 @@ func run_all() -> Dictionary:
 	brain._decision_cooldown = 0.0
 	var ranged_only: bool = true
 	for i in range(20):
-		var picked: String = brain.pick_attack_from_table(brain.pattern_table, 120.0)
+		var picked: String = brain.pick_attack_from_table(brain.pattern_table, 180.0)
 		if picked != "spear_wide_swing":
 			ranged_only = false
 			break
