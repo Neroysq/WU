@@ -4,6 +4,7 @@ const SLOTS: Dictionary = {
 	"idle": ["idle_0", "idle_1"],
 	"walk-cycle": ["walk_0", "walk_1", "walk_2", "walk_3"],
 	"attack": ["attack_0", "attack_1", "attack_2", "attack_3"],
+	"attack-heavy": ["heavy_0", "heavy_1", "heavy_2", "heavy_3"],
 	"block": ["block_0", "block_1"],
 	"hit-react": ["hit_0", "hit_1"],
 	"stunned": ["stunned_0", "stunned_1"],
@@ -21,6 +22,9 @@ const POSE_SLOT: Dictionary = {
 	"windup": "attack_1",
 	"strike_extended": "attack_2",
 	"recover": "attack_3",
+	"heavy_windup": "heavy_0",
+	"heavy_strike": "heavy_1",
+	"heavy_recover": "heavy_2",
 }
 
 const DEST: String = "res://assets/sprites/characters/hu/"

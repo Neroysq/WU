@@ -23,7 +23,7 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("strike_extended anchors should be measured, not placeholder (got foot %s tip %s)" % [str(foot), str(tip)])
 
-	var errors: Array[String] = manifest.validation_errors(["guard", "windup", "strike_extended", "recover"])
+	var errors: Array[String] = manifest.validation_errors(["guard", "windup", "strike_extended", "recover", "heavy_windup", "heavy_strike", "heavy_recover"])
 	if errors.is_empty():
 		passed += 1
 	else:

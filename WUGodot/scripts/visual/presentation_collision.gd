@@ -7,6 +7,10 @@ const ShapeMathScript = preload("res://scripts/visual/collision_shape_math.gd")
 
 const STRIKE_POSE: String = "strike_extended"
 const VISUAL_BODY_HEIGHT: float = 260.0
+const STRIKE_POSE_BY_ID: Dictionary = {
+	"hu_light": "strike_extended",
+	"hu_heavy": "heavy_strike",
+}
 
 const _AUTHORED_IDS: Dictionary = {
 	"hu_light": true,
@@ -46,7 +50,7 @@ func attack_capsule_world(fighter: Variant) -> Dictionary:
 	if manifest == null or fighter._attack_state.def == null:
 		return {}
 
-	var pose: Dictionary = manifest.get_pose(STRIKE_POSE)
+	var pose: Dictionary = manifest.get_pose(_strike_pose_for(fighter))
 	if pose.is_empty():
 		return {}
 
@@ -75,6 +79,12 @@ func debug_capsule_world(fighter: Variant) -> Dictionary:
 	if not has_authored_hitbox(fighter):
 		return {}
 	return attack_capsule_world(fighter)
+
+func _strike_pose_for(fighter: Variant) -> String:
+	var def: Variant = fighter._attack_state.def
+	if def != null and STRIKE_POSE_BY_ID.has(str(def.id)):
+		return str(STRIKE_POSE_BY_ID[str(def.id)])
+	return STRIKE_POSE
 
 func debug_hurtbox_world(fighter: Variant) -> Rect2:
 	return _defender_hurtbox(fighter)

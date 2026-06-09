@@ -90,6 +90,7 @@ func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = f
 		"res://assets/animation_graphs/humanoid.graph.json",
 		[
 			"res://assets/animation_clips/hu_attack_light.timeline.json",
+			"res://assets/animation_clips/hu_attack_heavy.timeline.json",
 			"res://assets/animation_clips/idle.timeline.json",
 			"res://assets/animation_clips/walk.timeline.json",
 		],
@@ -217,6 +218,10 @@ func dev_prepare_capture_state(state_name: String) -> void:
 			_player.start_heavy_attack()
 			if _player._attack_state.def != null:
 				_player._attack_state.elapsed = _player._attack_state.def.windup_end + 0.04
+		"15_heavy_recover":
+			_player.start_heavy_attack()
+			if _player._attack_state.def != null:
+				_player._attack_state.elapsed = _player._attack_state.def.active_end + 0.04
 		"08_block":
 			_player.current_animation = Fighter.AnimationState.BLOCKING
 			_player.is_blocking = true
@@ -242,13 +247,13 @@ func dev_prepare_capture_state(state_name: String) -> void:
 		"14_land":
 			_player.current_animation = Fighter.AnimationState.LANDING
 			_player.animation_timer = 0.08
-		"05_enemy_windup", "15_enemy_windup":
+		"05_enemy_windup", "15_enemy_windup", "16_enemy_windup":
 			_dev_place_at_enemy_preferred_range()
 			_dev_start_enemy_capture_attack(false)
-		"06_enemy_active", "16_enemy_active":
+		"06_enemy_active", "16_enemy_active", "17_enemy_active":
 			_dev_place_at_enemy_preferred_range()
 			_dev_start_enemy_capture_attack(true)
-		"07_neutral_spacing", "17_neutral_spacing":
+		"07_neutral_spacing", "17_neutral_spacing", "18_neutral_spacing":
 			_dev_place_at_enemy_preferred_range()
 		_:
 			_player.current_animation = Fighter.AnimationState.IDLE
@@ -518,6 +523,8 @@ func _resolve_player_state_name() -> String:
 	match _player.current_animation:
 		Fighter.AnimationState.ATTACKING_LIGHT:
 			return "ATTACKING_LIGHT"
+		Fighter.AnimationState.ATTACKING_HEAVY:
+			return "ATTACKING_HEAVY"
 		Fighter.AnimationState.WALKING:
 			return "WALKING"
 		Fighter.AnimationState.IDLE:

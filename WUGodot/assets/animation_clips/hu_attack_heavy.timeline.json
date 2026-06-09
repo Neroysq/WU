@@ -1,0 +1,31 @@
+{
+  "id": "hu_attack_heavy",
+  "duration": "fromAttackDef",
+  "keyposes": [
+    { "t": 0.00, "pose": "guard" },
+    { "t": 0.15, "pose": "heavy_windup" },
+    { "t": "windup_end", "pose": "heavy_strike" },
+    { "t": "active_end", "pose": "heavy_recover" },
+    { "t": 1.00, "pose": "heavy_recover" }
+  ],
+  "tracks": {
+    "offsetX": [
+      { "t": 0.00, "v": 0.0, "ease": "out" },
+      { "t": 0.47, "v": 26.0, "ease": "inOut" },
+      { "t": 1.00, "v": 0.0, "ease": "out" }
+    ],
+    "scaleY": [
+      { "t": 0.00, "v": 1.0 },
+      { "t": 0.47, "v": 0.88, "ease": "in" },
+      { "t": 0.65, "v": 1.0, "ease": "out" }
+    ],
+    "smear": [
+      { "t": 0.47, "v": 1.0 },
+      { "t": 0.65, "v": 0.0 }
+    ]
+  },
+  "events": [
+    { "t": "windup_end", "event": "attack_active_start" },
+    { "t": "active_end", "event": "attack_active_end" }
+  ]
+}

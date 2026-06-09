@@ -8,47 +8,47 @@
             0,
             0
           ],
-          "path": "res://assets/sprites/characters/hu/attack_0.png"
+          "path": "res://assets/sprites/characters/hu/heavy_0.png"
         },
         {
           "offset": [
             0,
             0
           ],
-          "path": "res://assets/sprites/characters/hu/attack_1.png"
+          "path": "res://assets/sprites/characters/hu/heavy_1.png"
         },
         {
           "offset": [
             0,
             0
           ],
-          "path": "res://assets/sprites/characters/hu/attack_2.png"
+          "path": "res://assets/sprites/characters/hu/heavy_2.png"
         },
         {
           "offset": [
             0,
             0
           ],
-          "path": "res://assets/sprites/characters/hu/attack_3.png"
+          "path": "res://assets/sprites/characters/hu/heavy_3.png"
         }
       ],
       "loop": false,
       "phases": [
         {
           "frames": [
-            0.0,
-            1.0
+            0.0
           ],
           "phase": "windup"
         },
         {
           "frames": [
-            2.0
+            1.0
           ],
           "phase": "active"
         },
         {
           "frames": [
+            2.0,
             3.0
           ],
           "phase": "recovery"

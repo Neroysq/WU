@@ -29,7 +29,7 @@ static func hu_heavy():
 	def.is_heavy = true
 	def.is_perilous = false
 	def.is_parryable = true
-	def.range_units = 222.0
+	def.range_units = 234.0
 	def.knockback_units = 420.0
 	return def
 

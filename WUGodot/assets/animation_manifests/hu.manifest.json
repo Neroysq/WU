@@ -43,6 +43,69 @@
         99
       ]
     },
+    "heavy_recover": {
+      "chestAnchor": [
+        104,
+        84
+      ],
+      "footAnchor": [
+        104,
+        179
+      ],
+      "hurtbox": [
+        31,
+        2,
+        146,
+        177
+      ],
+      "path": "res://assets/sprites/characters/hu/heavy_2.png",
+      "weaponTip": [
+        177,
+        99
+      ]
+    },
+    "heavy_strike": {
+      "chestAnchor": [
+        103,
+        84
+      ],
+      "footAnchor": [
+        103,
+        179
+      ],
+      "hurtbox": [
+        1,
+        2,
+        204,
+        177
+      ],
+      "path": "res://assets/sprites/characters/hu/heavy_1.png",
+      "weaponTip": [
+        205,
+        99
+      ]
+    },
+    "heavy_windup": {
+      "chestAnchor": [
+        102,
+        84
+      ],
+      "footAnchor": [
+        102,
+        179
+      ],
+      "hurtbox": [
+        16,
+        2,
+        173,
+        177
+      ],
+      "path": "res://assets/sprites/characters/hu/heavy_0.png",
+      "weaponTip": [
+        189,
+        99
+      ]
+    },
     "recover": {
       "chestAnchor": [
         103,

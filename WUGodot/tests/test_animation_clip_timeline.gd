@@ -66,4 +66,14 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("idle ambient clip should expose fixed duration and cycle poses")
 
+	var heavy_clip: Variant = TimelineScript.load_from_file("res://assets/animation_clips/hu_attack_heavy.timeline.json")
+	var hu_heavy: Variant = AttackCatalogScript.hu_heavy()
+	var heavy_active_start_t: float = heavy_clip.event_time("attack_active_start", hu_heavy)
+	var heavy_active_end_t: float = heavy_clip.event_time("attack_active_end", hu_heavy)
+	if heavy_clip.pose_at(heavy_active_start_t, hu_heavy) == "heavy_strike" and heavy_clip.pose_at(heavy_active_end_t, hu_heavy) == "heavy_recover" and heavy_clip.sample_track("offsetX", 0.47) > 25.0:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("heavy clip should show heavy_strike at active start, heavy_recover at recovery start, and use numeric track timing")
+
 	return {"passed": passed, "failed": failed, "failures": failures}

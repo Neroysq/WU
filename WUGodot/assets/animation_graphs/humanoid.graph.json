@@ -19,6 +19,15 @@
         "DASH": "recovery",
         "ATTACKING_LIGHT": "recovery"
       }
+    },
+    "ATTACKING_HEAVY": {
+      "clip": "hu_attack_heavy",
+      "duration": "fromAttackDef",
+      "enter": { "mode": "snap", "time": 0.0 },
+      "priority": 6,
+      "cancelInto": {
+        "DASH": "recovery"
+      }
     }
   }
 }

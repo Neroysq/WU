@@ -14,6 +14,12 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("graph should map ATTACKING_LIGHT to its clip")
 
+	if graph.has_state("ATTACKING_HEAVY") and graph.clip_for("ATTACKING_HEAVY") == "hu_attack_heavy":
+		passed += 1
+	else:
+		failed += 1
+		failures.append("graph should map ATTACKING_HEAVY to its clip")
+
 	var atk_enter: Dictionary = graph.enter_for("ATTACKING_LIGHT")
 	var idle_enter: Dictionary = graph.enter_for("IDLE")
 	if str(atk_enter.get("mode", "")) == "snap" and str(idle_enter.get("mode", "")) == "dither":
@@ -22,7 +28,7 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("committed states snap, ambient states dither")
 
-	if graph.can_cancel_into("ATTACKING_LIGHT", "DASH") and not graph.can_cancel_into("ATTACKING_LIGHT", "WALKING"):
+	if graph.can_cancel_into("ATTACKING_LIGHT", "DASH") and graph.can_cancel_into("ATTACKING_HEAVY", "DASH") and not graph.can_cancel_into("ATTACKING_LIGHT", "WALKING"):
 		passed += 1
 	else:
 		failed += 1

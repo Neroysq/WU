@@ -104,10 +104,11 @@ func run_all() -> Dictionary:
 			var clip: Dictionary = clips.get(clip_name, {}) as Dictionary
 			var raw_frames: Array = clip.get("frames", []) as Array
 			var raw_phases: Array = clip.get("phases", []) as Array
-			if raw_frames.size() == 4 and str((raw_frames[3] as Dictionary).get("path", "")).ends_with("attack_3.png") and raw_phases.size() == 3:
+			var expected_prefix: String = "heavy" if char_id == "hu" and clip_name == "ATTACKING_HEAVY" else "attack"
+			if raw_frames.size() == 4 and str((raw_frames[3] as Dictionary).get("path", "")).ends_with("%s_3.png" % expected_prefix) and raw_phases.size() == 3:
 				passed += 1
 			else:
 				failed += 1
-				failures.append("%s %s should reference attack_0..attack_3 and three phase blocks" % [char_id, clip_name])
+				failures.append("%s %s should reference %s_0..%s_3 and three phase blocks" % [char_id, clip_name, expected_prefix, expected_prefix])
 
 	return {"passed": passed, "failed": failed, "failures": failures}

@@ -554,10 +554,11 @@ func _run_dev_combat_shots() -> void:
 	await _capture_dev_combat_state("12_jump", abs_dir)
 	await _capture_dev_combat_state("13_fall", abs_dir)
 	await _capture_dev_combat_state("14_land", abs_dir)
+	await _capture_dev_combat_state("15_heavy_recover", abs_dir)
 	if not _dev_shot_archetype.is_empty():
-		await _capture_dev_combat_state("15_enemy_windup", abs_dir)
-		await _capture_dev_combat_state("16_enemy_active", abs_dir)
-		await _capture_dev_combat_state("17_neutral_spacing", abs_dir)
+		await _capture_dev_combat_state("16_enemy_windup", abs_dir)
+		await _capture_dev_combat_state("17_enemy_active", abs_dir)
+		await _capture_dev_combat_state("18_neutral_spacing", abs_dir)
 	print("SHOT COMBAT: wrote %s" % abs_dir)
 	get_tree().quit(0)
 
