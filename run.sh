@@ -7,6 +7,8 @@
 #   ./run.sh --reimport   # wipe .godot/imported cache + full headless reimport
 #   ./run.sh --measure-anchors  # regenerate Hu anchors from sprite pixels
 #   ./run.sh --anchor-sanity    # validate stored Hu anchors against sprite pixels
+#   ./run.sh --scale-masters <dir>     # normalize smooth masters to a common canvas
+#   ./run.sh --install-pixelized <dir> # install pixelized Hu frames into canonical slots
 #   ./run.sh --shot-combat [dir] # save deterministic combat screenshots, then quit
 #   ./run.sh --shot-archetype=<id> [dir] # save deterministic combat + enemy archetype screenshots
 #   ./run.sh --editor     # open the Godot editor
@@ -65,6 +67,16 @@ case "${1:-}" in
         echo "Validating stored sprite anchors..."
         exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/anchor_sanity.gd
         ;;
+    --scale-masters)
+        shift
+        echo "Scaling smooth masters..."
+        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/scale_masters.gd -- "$@"
+        ;;
+    --install-pixelized)
+        shift
+        echo "Installing pixelized Hu frames..."
+        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/install_pixelized.gd -- "$@"
+        ;;
     --shot-combat)
         SHOT_DIR="${2:-/tmp/wu-shot-combat}"
         echo "Capturing combat screenshots -> $SHOT_DIR"
@@ -89,7 +101,7 @@ case "${1:-}" in
         ;;
     *)
         echo "Unknown option: $1" >&2
-        echo "Usage: $0 [--test|--import|--reimport|--shot-combat|--shot-archetype=<id>|--editor|--help]" >&2
+        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-pixelized <dir>|--shot-combat|--shot-archetype=<id>|--editor|--help]" >&2
         exit 1
         ;;
 esac

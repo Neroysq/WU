@@ -8,7 +8,7 @@ func run_all() -> Dictionary:
 	var failures: Array[String] = []
 
 	var manifest: Variant = AnimationManifestScript.load_from_file("res://assets/animation_manifests/hu.manifest.json")
-	if manifest != null and manifest.id == "hu" and is_equal_approx(manifest.render_scale, 1.625):
+	if manifest != null and manifest.id == "hu" and is_equal_approx(manifest.render_scale, 2.0):
 		passed += 1
 	else:
 		failed += 1

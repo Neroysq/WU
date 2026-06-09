@@ -22,6 +22,7 @@ const _TEST_MODULES: Array[String] = [
 	"res://tests/test_collision_shape_math.gd",
 	"res://tests/test_hitbox_template.gd",
 	"res://tests/test_presentation_collision.gd",
+	"res://tests/test_master_normalizer.gd",
 ]
 
 var _passed: int = 0

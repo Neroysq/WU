@@ -205,13 +205,50 @@ func dev_prepare_capture_state(state_name: String) -> void:
 			_player.start_light_attack()
 			if _player._attack_state.def != null:
 				_player._attack_state.elapsed = _player._attack_state.def.windup_end + 0.04
-		"05_enemy_windup":
+		"05_light_recover":
+			_player.start_light_attack()
+			if _player._attack_state.def != null:
+				_player._attack_state.elapsed = _player._attack_state.def.active_end + 0.04
+		"06_heavy_windup":
+			_player.start_heavy_attack()
+			if _player._attack_state.def != null:
+				_player._attack_state.elapsed = maxf(0.01, _player._attack_state.def.windup_end * 0.55)
+		"07_heavy_active":
+			_player.start_heavy_attack()
+			if _player._attack_state.def != null:
+				_player._attack_state.elapsed = _player._attack_state.def.windup_end + 0.04
+		"08_block":
+			_player.current_animation = Fighter.AnimationState.BLOCKING
+			_player.is_blocking = true
+			_player.animation_timer = 0.1
+		"09_hit_react":
+			_player.current_animation = Fighter.AnimationState.HIT_REACTION
+			_player.animation_timer = 0.1
+		"10_stunned":
+			_player.current_animation = Fighter.AnimationState.STUNNED
+			_player.is_stunned = true
+			_player.animation_timer = 0.15
+		"11_dash":
+			_player.start_dash(_player.facing)
+			_player.animation_timer = 0.08
+		"12_jump":
+			_player.start_jump()
+			_player.animation_timer = 0.12
+		"13_fall":
+			_player.current_animation = Fighter.AnimationState.FALLING
+			_player.is_grounded = false
+			_player.velocity.y = 450.0
+			_player.animation_timer = 0.1
+		"14_land":
+			_player.current_animation = Fighter.AnimationState.LANDING
+			_player.animation_timer = 0.08
+		"05_enemy_windup", "15_enemy_windup":
 			_dev_place_at_enemy_preferred_range()
 			_dev_start_enemy_capture_attack(false)
-		"06_enemy_active":
+		"06_enemy_active", "16_enemy_active":
 			_dev_place_at_enemy_preferred_range()
 			_dev_start_enemy_capture_attack(true)
-		"07_neutral_spacing":
+		"07_neutral_spacing", "17_neutral_spacing":
 			_dev_place_at_enemy_preferred_range()
 		_:
 			_player.current_animation = Fighter.AnimationState.IDLE

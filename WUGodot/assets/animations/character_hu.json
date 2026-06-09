@@ -1,219 +1,306 @@
 {
-  "setId": "character_hu",
-  "meta": {
-    "defaultScale": 1.0,
-    "pivot": "bottom_center"
-  },
   "clips": {
-    "IDLE": {
-      "fps": 6.0,
-      "loop": true,
-      "frames": [
-        {
-          "path": "res://assets/sprites/characters/hu/idle_0.png",
-          "offset": [0, 0]
-        },
-        {
-          "path": "res://assets/sprites/characters/hu/idle_1.png",
-          "offset": [0, 0]
-        }
-      ]
-    },
-    "WALKING": {
+    "ATTACKING_HEAVY": {
       "fps": 10.0,
-      "loop": true,
       "frames": [
         {
-          "path": "res://assets/sprites/characters/hu/walk_0.png",
-          "offset": [0, 4]
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/attack_0.png"
         },
         {
-          "path": "res://assets/sprites/characters/hu/walk_1.png",
-          "offset": [0, 4]
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/attack_1.png"
         },
         {
-          "path": "res://assets/sprites/characters/hu/walk_2.png",
-          "offset": [0, 6]
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/attack_2.png"
         },
         {
-          "path": "res://assets/sprites/characters/hu/walk_3.png",
-          "offset": [0, 6]
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/attack_3.png"
+        }
+      ],
+      "loop": false,
+      "phases": [
+        {
+          "frames": [
+            0.0,
+            1.0
+          ],
+          "phase": "windup"
+        },
+        {
+          "frames": [
+            2.0
+          ],
+          "phase": "active"
+        },
+        {
+          "frames": [
+            3.0
+          ],
+          "phase": "recovery"
         }
       ]
     },
     "ATTACKING_LIGHT": {
       "fps": 12.0,
-      "loop": false,
       "frames": [
         {
-          "path": "res://assets/sprites/characters/hu/attack_0.png",
-          "offset": [0, -2]
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/attack_0.png"
         },
         {
-          "path": "res://assets/sprites/characters/hu/attack_1.png",
-          "offset": [0, -1]
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/attack_1.png"
         },
         {
-          "path": "res://assets/sprites/characters/hu/attack_2.png",
-          "offset": [0, 35]
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/attack_2.png"
         },
         {
-          "path": "res://assets/sprites/characters/hu/attack_3.png",
-          "offset": [0, 16]
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/attack_3.png"
         }
       ],
+      "loop": false,
       "phases": [
         {
-          "frames": [0, 1],
+          "frames": [
+            0.0,
+            1.0
+          ],
           "phase": "windup"
         },
         {
           "frames": [
-            2
+            2.0
           ],
           "phase": "active"
         },
         {
           "frames": [
-            3
+            3.0
           ],
           "phase": "recovery"
-        }
-      ]
-    },
-    "ATTACKING_HEAVY": {
-      "fps": 10.0,
-      "loop": false,
-      "frames": [
-        {
-          "path": "res://assets/sprites/characters/hu/attack_0.png",
-          "offset": [0, -2]
-        },
-        {
-          "path": "res://assets/sprites/characters/hu/attack_1.png",
-          "offset": [0, -1]
-        },
-        {
-          "path": "res://assets/sprites/characters/hu/attack_2.png",
-          "offset": [0, 35]
-        },
-        {
-          "path": "res://assets/sprites/characters/hu/attack_3.png",
-          "offset": [0, 16]
-        }
-      ],
-      "phases": [
-        {
-          "frames": [0, 1],
-          "phase": "windup"
-        },
-        {
-          "frames": [
-            2
-          ],
-          "phase": "active"
-        },
-        {
-          "frames": [
-            3
-          ],
-          "phase": "recovery"
-        }
-      ]
-    },
-    "HIT_REACTION": {
-      "fps": 10.0,
-      "loop": false,
-      "frames": [
-        {
-          "path": "res://assets/sprites/characters/hu/hit_0.png",
-          "offset": [0, 17]
-        },
-        {
-          "path": "res://assets/sprites/characters/hu/hit_1.png",
-          "offset": [0, 17]
         }
       ]
     },
     "BLOCKING": {
       "fps": 8.0,
-      "loop": false,
       "frames": [
         {
-          "path": "res://assets/sprites/characters/hu/block_0.png",
-          "offset": [0, 6]
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/block_0.png"
         },
         {
-          "path": "res://assets/sprites/characters/hu/block_1.png",
-          "offset": [0, 13]
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/block_1.png"
         }
-      ]
-    },
-    "STUNNED": {
-      "fps": 8.0,
-      "loop": true,
-      "frames": [
-        {
-          "path": "res://assets/sprites/characters/hu/stunned_0.png",
-          "offset": [0, -13]
-        },
-        {
-          "path": "res://assets/sprites/characters/hu/stunned_1.png",
-          "offset": [0, -13]
-        }
-      ]
+      ],
+      "loop": false
     },
     "DASHING": {
       "fps": 16.0,
-      "loop": false,
       "frames": [
         {
-          "path": "res://assets/sprites/characters/hu/dash_0.png",
-          "offset": [0, 0]
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/dash_0.png"
         },
         {
-          "path": "res://assets/sprites/characters/hu/dash_1.png",
-          "offset": [0, 0]
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/dash_1.png"
         }
-      ]
-    },
-    "JUMPING": {
-      "fps": 10.0,
-      "loop": false,
-      "frames": [
-        {
-          "path": "res://assets/sprites/characters/hu/jump_0.png",
-          "offset": [0, 0]
-        },
-        {
-          "path": "res://assets/sprites/characters/hu/jump_1.png",
-          "offset": [0, 0]
-        }
-      ]
+      ],
+      "loop": false
     },
     "FALLING": {
       "fps": 8.0,
-      "loop": false,
       "frames": [
         {
-          "path": "res://assets/sprites/characters/hu/jump_2.png",
-          "offset": [0, 0]
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/jump_2.png"
         }
-      ]
+      ],
+      "loop": false
+    },
+    "HIT_REACTION": {
+      "fps": 10.0,
+      "frames": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/hit_0.png"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/hit_1.png"
+        }
+      ],
+      "loop": false
+    },
+    "IDLE": {
+      "fps": 6.0,
+      "frames": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/idle_0.png"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/idle_1.png"
+        }
+      ],
+      "loop": true
+    },
+    "JUMPING": {
+      "fps": 10.0,
+      "frames": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/jump_0.png"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/jump_1.png"
+        }
+      ],
+      "loop": false
     },
     "LANDING": {
       "fps": 12.0,
-      "loop": false,
       "frames": [
         {
-          "path": "res://assets/sprites/characters/hu/jump_2.png",
-          "offset": [0, 0]
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/jump_2.png"
         },
         {
-          "path": "res://assets/sprites/characters/hu/idle_0.png",
-          "offset": [0, 0]
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/idle_0.png"
         }
-      ]
+      ],
+      "loop": false
+    },
+    "STUNNED": {
+      "fps": 8.0,
+      "frames": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/stunned_0.png"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/stunned_1.png"
+        }
+      ],
+      "loop": true
+    },
+    "WALKING": {
+      "fps": 10.0,
+      "frames": [
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/walk_0.png"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/walk_1.png"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/walk_2.png"
+        },
+        {
+          "offset": [
+            0,
+            0
+          ],
+          "path": "res://assets/sprites/characters/hu/walk_3.png"
+        }
+      ],
+      "loop": true
     }
-  }
+  },
+  "meta": {
+    "defaultScale": 1.0,
+    "pivot": "bottom_center"
+  },
+  "setId": "character_hu"
 }
