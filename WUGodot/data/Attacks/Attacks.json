@@ -42,7 +42,7 @@
       "is_perilous": false,
       "knockback_units": 380.0,
       "posture_damage": 30.0,
-      "range_units": 218.0,
+      "range_units": 242.0,
       "windup_end": 0.5
     },
     "bandit_slash": {
@@ -57,7 +57,7 @@
       "is_perilous": false,
       "knockback_units": 260.0,
       "posture_damage": 24.0,
-      "range_units": 210.0,
+      "range_units": 233.0,
       "windup_end": 0.45
     },
     "bandit_thrust_perilous": {
@@ -72,7 +72,7 @@
       "is_perilous": true,
       "knockback_units": 320.0,
       "posture_damage": 20.0,
-      "range_units": 225.0,
+      "range_units": 249.0,
       "windup_end": 0.55
     },
     "bear_crush_grab": {
@@ -87,7 +87,7 @@
       "is_perilous": true,
       "knockback_units": 0.0,
       "posture_damage": 0.0,
-      "range_units": 255.0,
+      "range_units": 273.0,
       "windup_end": 0.6
     },
     "bear_overhead": {
@@ -102,7 +102,7 @@
       "is_perilous": false,
       "knockback_units": 500.0,
       "posture_damage": 44.0,
-      "range_units": 240.0,
+      "range_units": 258.0,
       "windup_end": 0.55
     },
     "bear_roar_aoe": {
@@ -117,7 +117,7 @@
       "is_perilous": true,
       "knockback_units": 450.0,
       "posture_damage": 20.0,
-      "range_units": 210.0,
+      "range_units": 233.0,
       "windup_end": 0.45
     },
     "bear_stomp": {
@@ -132,7 +132,7 @@
       "is_perilous": false,
       "knockback_units": 350.0,
       "posture_damage": 38.0,
-      "range_units": 225.0,
+      "range_units": 245.0,
       "windup_end": 0.5
     },
     "bear_swipe": {
@@ -147,7 +147,7 @@
       "is_perilous": false,
       "knockback_units": 380.0,
       "posture_damage": 32.0,
-      "range_units": 248.0,
+      "range_units": 266.0,
       "windup_end": 0.4
     },
     "disciple_counter": {
@@ -162,7 +162,7 @@
       "is_perilous": false,
       "knockback_units": 360.0,
       "posture_damage": 36.0,
-      "range_units": 225.0,
+      "range_units": 245.0,
       "windup_end": 0.12
     },
     "disciple_jump_attack": {
@@ -177,7 +177,7 @@
       "is_perilous": false,
       "knockback_units": 440.0,
       "posture_damage": 30.0,
-      "range_units": 240.0,
+      "range_units": 260.0,
       "windup_end": 0.35
     },
     "disciple_slash": {
@@ -192,7 +192,7 @@
       "is_perilous": false,
       "knockback_units": 300.0,
       "posture_damage": 26.0,
-      "range_units": 225.0,
+      "range_units": 245.0,
       "windup_end": 0.22
     },
     "disciple_sweep": {
@@ -207,7 +207,7 @@
       "is_perilous": false,
       "knockback_units": 400.0,
       "posture_damage": 34.0,
-      "range_units": 225.0,
+      "range_units": 245.0,
       "windup_end": 0.35
     },
     "disciple_thrust": {
@@ -222,7 +222,7 @@
       "is_perilous": false,
       "knockback_units": 320.0,
       "posture_damage": 24.0,
-      "range_units": 233.0,
+      "range_units": 253.0,
       "windup_end": 0.28
     },
     "drunken_heavy": {
@@ -282,7 +282,7 @@
       "is_perilous": false,
       "knockback_units": 420.0,
       "posture_damage": 42.0,
-      "range_units": 394.0,
+      "range_units": 340.0,
       "windup_end": 0.4
     },
     "hu_light": {
@@ -297,7 +297,7 @@
       "is_perilous": false,
       "knockback_units": 300.0,
       "posture_damage": 22.0,
-      "range_units": 326.0,
+      "range_units": 342.0,
       "windup_end": 0.18
     },
     "mountain_breaker": {
@@ -327,7 +327,7 @@
       "is_perilous": true,
       "knockback_units": 360.0,
       "posture_damage": 24.0,
-      "range_units": 248.0,
+      "range_units": 266.0,
       "windup_end": 0.5
     },
     "ronin_slash": {
@@ -342,7 +342,7 @@
       "is_perilous": false,
       "knockback_units": 300.0,
       "posture_damage": 26.0,
-      "range_units": 225.0,
+      "range_units": 244.0,
       "windup_end": 0.3
     },
     "ronin_sweep": {
@@ -357,7 +357,7 @@
       "is_perilous": false,
       "knockback_units": 420.0,
       "posture_damage": 32.0,
-      "range_units": 225.0,
+      "range_units": 244.0,
       "windup_end": 0.4
     },
     "ronin_thrust": {
@@ -372,7 +372,7 @@
       "is_perilous": false,
       "knockback_units": 320.0,
       "posture_damage": 22.0,
-      "range_units": 240.0,
+      "range_units": 258.0,
       "windup_end": 0.35
     },
     "smoke_thrust": {
@@ -402,7 +402,7 @@
       "is_perilous": false,
       "knockback_units": 280.0,
       "posture_damage": 20.0,
-      "range_units": 270.0,
+      "range_units": 287.0,
       "windup_end": 0.5
     },
     "spear_wide_swing": {
@@ -417,7 +417,7 @@
       "is_perilous": false,
       "knockback_units": 400.0,
       "posture_damage": 28.0,
-      "range_units": 263.0,
+      "range_units": 280.0,
       "windup_end": 0.55
     },
     "tiger_heavy": {

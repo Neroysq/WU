@@ -3,254 +3,254 @@
   "poses": {
     "breath": {
       "chestAnchor": [
-        179,
-        81
+        241,
+        104
       ],
       "footAnchor": [
-        185,
-        179
+        224,
+        202
       ],
       "hurtbox": [
-        155,
-        2,
-        48,
-        174
+        216,
+        24,
+        50,
+        177
       ],
       "path": "res://assets/sprites/characters/hu/idle_1.png",
       "weaponTip": [
-        225,
-        74
+        290,
+        111
       ]
     },
     "guard": {
       "chestAnchor": [
-        178,
-        81
+        219,
+        104
       ],
       "footAnchor": [
-        185,
-        179
+        224,
+        202
       ],
       "hurtbox": [
-        154,
-        1,
-        48,
-        177
+        194,
+        25,
+        50,
+        176
       ],
       "path": "res://assets/sprites/characters/hu/idle_0.png",
       "weaponTip": [
-        226,
-        73
+        268,
+        109
       ]
     },
     "heavy_recover": {
       "chestAnchor": [
-        196,
-        81
+        283,
+        141
       ],
       "footAnchor": [
-        185,
-        179
+        224,
+        202
       ],
       "hurtbox": [
-        93,
-        2,
-        206,
-        150
+        211,
+        91,
+        143,
+        96
       ],
       "path": "res://assets/sprites/characters/hu/heavy_2.png",
       "weaponTip": [
-        361,
-        115
+        390,
+        162
       ]
     },
     "heavy_strike": {
       "chestAnchor": [
-        212,
-        81
+        287,
+        149
       ],
       "footAnchor": [
-        185,
-        172
+        224,
+        202
       ],
       "hurtbox": [
-        70,
-        7,
-        284,
-        149
+        201,
+        107,
+        171,
+        85
       ],
       "path": "res://assets/sprites/characters/hu/heavy_1.png",
       "weaponTip": [
-        367,
-        53
+        379,
+        134
       ]
     },
     "heavy_windup": {
       "chestAnchor": [
-        194,
-        81
+        333,
+        139
       ],
       "footAnchor": [
-        185,
-        179
+        224,
+        202
       ],
       "hurtbox": [
-        94,
-        2,
-        200,
-        154
+        268,
+        88,
+        129,
+        99
       ],
       "path": "res://assets/sprites/characters/hu/heavy_0.png",
       "weaponTip": [
-        354,
-        94
+        435,
+        147
       ]
     },
     "recover": {
       "chestAnchor": [
-        142,
-        81
+        291,
+        135
       ],
       "footAnchor": [
-        185,
-        179
+        224,
+        202
       ],
       "hurtbox": [
-        92,
-        2,
-        100,
-        169
+        255,
+        81,
+        72,
+        101
       ],
       "path": "res://assets/sprites/characters/hu/attack_3.png",
       "weaponTip": [
-        337,
-        56
+        424,
+        118
       ]
     },
     "strike_extended": {
       "chestAnchor": [
-        143,
-        81
+        247,
+        132
       ],
       "footAnchor": [
-        184,
-        179
+        224,
+        202
       ],
       "hurtbox": [
-        95,
-        2,
-        95,
-        176
+        213,
+        75,
+        68,
+        126
       ],
       "path": "res://assets/sprites/characters/hu/attack_2.png",
       "weaponTip": [
-        338,
-        64
+        386,
+        119
       ]
     },
     "walk_0": {
       "chestAnchor": [
-        183,
-        81
+        195,
+        104
       ],
       "footAnchor": [
-        185,
-        179
+        224,
+        202
       ],
       "hurtbox": [
-        155,
-        2,
-        56,
-        175
+        166,
+        24,
+        58,
+        167
       ],
       "path": "res://assets/sprites/characters/hu/walk_0.png",
       "weaponTip": [
-        230,
-        122
+        244,
+        109
       ]
     },
     "walk_1": {
       "chestAnchor": [
-        181,
-        81
+        252,
+        104
       ],
       "footAnchor": [
-        185,
-        179
+        224,
+        202
       ],
       "hurtbox": [
-        148,
-        2,
-        66,
-        174
+        218,
+        25,
+        68,
+        175
       ],
       "path": "res://assets/sprites/characters/hu/walk_1.png",
       "weaponTip": [
-        235,
-        169
+        307,
+        192
       ]
     },
     "walk_2": {
       "chestAnchor": [
-        181,
-        81
+        251,
+        104
       ],
       "footAnchor": [
-        186,
-        179
+        224,
+        202
       ],
       "hurtbox": [
-        148,
-        1,
-        66,
-        176
+        217,
+        25,
+        68,
+        168
       ],
       "path": "res://assets/sprites/characters/hu/walk_2.png",
       "weaponTip": [
-        236,
-        164
+        307,
+        186
       ]
     },
     "walk_3": {
       "chestAnchor": [
-        177,
-        81
+        195,
+        104
       ],
       "footAnchor": [
-        185,
-        179
+        224,
+        202
       ],
       "hurtbox": [
-        147,
-        2,
-        60,
-        157
+        164,
+        25,
+        62,
+        176
       ],
       "path": "res://assets/sprites/characters/hu/walk_3.png",
       "weaponTip": [
-        229,
-        80
+        249,
+        114
       ]
     },
     "windup": {
       "chestAnchor": [
-        142,
-        81
+        291,
+        135
       ],
       "footAnchor": [
-        185,
-        179
+        224,
+        202
       ],
       "hurtbox": [
-        92,
-        2,
-        100,
-        169
+        255,
+        81,
+        72,
+        101
       ],
       "path": "res://assets/sprites/characters/hu/attack_1.png",
       "weaponTip": [
-        337,
-        56
+        424,
+        118
       ]
     }
   },

@@ -18,7 +18,7 @@
   "pattern_table": ["disciple_slash", "disciple_thrust", "disciple_sweep", "disciple_counter", "disciple_jump_attack"],
   "aggression": 0.65,
   "blockChance": 0.4,
-  "preferredRange": 201.0,
+  "preferredRange": 221.0,
   "retreatChance": 0.03,
   "dashChance": 0.12
 }

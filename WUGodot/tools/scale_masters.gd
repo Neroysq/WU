@@ -3,7 +3,9 @@ extends SceneTree
 const MasterNormalizerScript = preload("res://scripts/visual/master_normalizer.gd")
 const MasterGeometryScript = preload("res://scripts/visual/master_geometry.gd")
 
-const TARGET_TEXELS: int = 145
+# 177 texels x R=2 = 354 px on-screen: height parity with the
+# enemy roster after fit-mode exact made T literal.
+const TARGET_TEXELS: int = 177
 const DENSITY: int = 4
 const PAD: int = 48
 

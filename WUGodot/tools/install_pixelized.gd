@@ -42,7 +42,7 @@ func _init() -> void:
 		quit(1)
 		return
 
-	var side_by_slot: Dictionary = {}
+	var selected_entries: Array = []
 	for action in SLOTS.keys():
 		var pdir: String = run_dir.path_join(str(action)).path_join("pixelize")
 		var dir: DirAccess = DirAccess.open(pdir)
@@ -64,30 +64,51 @@ func _init() -> void:
 		for i in range(names.size()):
 			var src: String = pdir.path_join(pngs[int(idxs[i])])
 			var dest_name: String = str(names[i])
-			var copy_err: Error = DirAccess.copy_absolute(src, ProjectSettings.globalize_path(DEST + dest_name + ".png"))
-			if copy_err != OK:
-				printerr("failed to copy %s -> %s (%s)" % [src, DEST + dest_name + ".png", error_string(copy_err)])
-				quit(1)
-				return
-			var installed_img: Image = Image.new()
-			var load_err: Error = installed_img.load(ProjectSettings.globalize_path(DEST + dest_name + ".png"))
+			var pixel_sidecar: Dictionary = _read_dict(src.get_basename() + ".json")
+			var scale_applied: float = _exact_scale(pixel_sidecar, src)
+			var master_sidecar_path: String = _master_sidecar_for(run_dir, str(action), src)
+			var master_sidecar: Dictionary = _read_dict(master_sidecar_path)
+			var master_foot: Vector2 = _vector(master_sidecar.get("foot_anchor"))
+			var foot_px: Vector2 = master_foot * scale_applied
+
+			var source_img: Image = Image.new()
+			var load_err: Error = source_img.load(src)
 			if load_err != OK:
-				printerr("failed to load installed %s (%s)" % [DEST + dest_name + ".png", error_string(load_err)])
+				printerr("failed to load %s (%s)" % [src, error_string(load_err)])
 				quit(1)
 				return
-			if installed_img.is_compressed():
-				installed_img.decompress()
-			var measured: Dictionary = AnchorMeasureScript.measure(installed_img)
-			var sidecar: Dictionary = _read_dict(src.get_basename() + ".json")
-			measured["pixelFootAnchor"] = _vector(sidecar.get("foot_anchor"))
-			side_by_slot[dest_name] = measured
-			print("slot %s <- %s/%s" % [dest_name, str(action), pngs[int(idxs[i])].get_basename().replace("pixel", "master")])
+			if source_img.is_compressed():
+				source_img.decompress()
+			var measured: Dictionary = AnchorMeasureScript.measure(source_img)
+			measured["footAnchor"] = foot_px
+			selected_entries.append({
+				"src": src,
+				"dest_name": dest_name,
+				"action": str(action),
+				"master_name": src.get_file().get_basename().replace("pixel", "master"),
+				"measured": measured,
+			})
+
+	_assert_constant_foot(selected_entries)
+
+	var side_by_slot: Dictionary = {}
+	for entry_value in selected_entries:
+		var entry: Dictionary = entry_value as Dictionary
+		var src: String = str(entry["src"])
+		var dest_name: String = str(entry["dest_name"])
+		var copy_err: Error = DirAccess.copy_absolute(src, ProjectSettings.globalize_path(DEST + dest_name + ".png"))
+		if copy_err != OK:
+			printerr("failed to copy %s -> %s (%s)" % [src, DEST + dest_name + ".png", error_string(copy_err)])
+			quit(1)
+			return
+		side_by_slot[dest_name] = entry["measured"] as Dictionary
+		print("slot %s <- %s/%s" % [dest_name, str(entry["action"]), str(entry["master_name"])])
 
 	var poses: Dictionary = {}
 	for pose_name in POSE_SLOT.keys():
 		var slot: String = str(POSE_SLOT[pose_name])
 		var meta: Dictionary = side_by_slot.get(slot, {}) as Dictionary
-		var foot: Vector2 = meta.get("pixelFootAnchor", meta.get("footAnchor", Vector2.ZERO)) as Vector2
+		var foot: Vector2 = meta.get("footAnchor", Vector2.ZERO) as Vector2
 		var chest: Vector2 = meta.get("chestAnchor", foot) as Vector2
 		var tip: Vector2 = meta.get("weaponTip", foot) as Vector2
 		var hurtbox: Rect2 = meta.get("hurtbox", Rect2()) as Rect2
@@ -104,7 +125,7 @@ func _init() -> void:
 	_zero_animset_offsets()
 
 	var idle_meta: Dictionary = side_by_slot.get("idle_0", {}) as Dictionary
-	var foot: Vector2 = idle_meta.get("pixelFootAnchor", idle_meta.get("footAnchor", Vector2.ZERO)) as Vector2
+	var foot: Vector2 = idle_meta.get("footAnchor", Vector2.ZERO) as Vector2
 	var idle_img: Image = Image.new()
 	var load_err: Error = idle_img.load(ProjectSettings.globalize_path(DEST + "idle_0.png"))
 	if load_err != OK:
@@ -151,6 +172,43 @@ func _sample_indices(src_n: int, want_n: int) -> Array:
 	for i in range(want_n):
 		out.append(int(round(float(i) * float(src_n - 1) / float(want_n - 1))))
 	return out
+
+func _assert_constant_foot(entries: Array) -> void:
+	var min_x: float = INF
+	var max_x: float = -INF
+	for entry_value in entries:
+		var entry: Dictionary = entry_value as Dictionary
+		var measured: Dictionary = entry["measured"] as Dictionary
+		var foot: Vector2 = measured.get("footAnchor", Vector2.ZERO) as Vector2
+		min_x = minf(min_x, foot.x)
+		max_x = maxf(max_x, foot.x)
+	var spread: float = max_x - min_x
+	if spread > 1.0:
+		printerr("exact-mode root footAnchor.x spread %.3f texels; expected <= 1.0 from scaled-master transform" % spread)
+		quit(1)
+
+func _master_sidecar_for(run_dir: String, action: String, pixel_path: String) -> String:
+	var master_name: String = pixel_path.get_file().get_basename().replace("pixel", "master") + ".json"
+	var path: String = run_dir.path_join(action).path_join("masters").path_join(master_name)
+	if not FileAccess.file_exists(path):
+		printerr("missing scaled-master sidecar for %s: %s" % [pixel_path, path])
+		quit(1)
+	return path
+
+func _exact_scale(sidecar: Dictionary, source_path: String) -> float:
+	var raw: Variant = sidecar.get("scale_applied")
+	if typeof(raw) != TYPE_ARRAY or (raw as Array).size() < 2:
+		printerr("missing exact-mode scale_applied in %s.json" % source_path.get_basename())
+		quit(1)
+		return 0.0
+	var arr: Array = raw as Array
+	var sx: float = float(arr[0])
+	var sy: float = float(arr[1])
+	if sx <= 0.0 or absf(sx - sy) > 0.0001:
+		printerr("invalid exact-mode scale_applied in %s.json: %s" % [source_path.get_basename(), str(arr)])
+		quit(1)
+		return 0.0
+	return sx
 
 func _arg() -> String:
 	var args: PackedStringArray = OS.get_cmdline_user_args()

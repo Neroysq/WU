@@ -18,7 +18,7 @@
   "pattern_table": ["bear_swipe", "bear_overhead", "bear_stomp", "bear_crush_grab"],
   "aggression": 0.5,
   "blockChance": 0.15,
-  "preferredRange": 195.0,
+  "preferredRange": 215.0,
   "retreatChance": 0.01,
   "dashChance": 0.03
 }

@@ -9,6 +9,7 @@
 #   ./run.sh --anchor-sanity    # validate stored Hu anchors against sprite pixels
 #   ./run.sh --scale-masters <dir>     # normalize smooth masters to a common canvas
 #   ./run.sh --install-pixelized <dir> # install pixelized Hu frames into canonical slots
+#   ./run.sh --probe-reach             # derive Hu authored reach and enemy range targets
 #   ./run.sh --shot-combat [dir] # save deterministic combat screenshots, then quit
 #   ./run.sh --shot-archetype=<id> [dir] # save deterministic combat + enemy archetype screenshots
 #   ./run.sh --editor     # open the Godot editor
@@ -77,6 +78,10 @@ case "${1:-}" in
         echo "Installing pixelized Hu frames..."
         exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/install_pixelized.gd -- "$@"
         ;;
+    --probe-reach)
+        echo "Probing Hu authored reach..."
+        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/probe_hu_reach.gd
+        ;;
     --shot-combat)
         SHOT_DIR="${2:-/tmp/wu-shot-combat}"
         echo "Capturing combat screenshots -> $SHOT_DIR"
@@ -93,7 +98,7 @@ case "${1:-}" in
         exec "$GODOT" --path "$PROJECT_DIR" --editor
         ;;
     --help|-h)
-        sed -n '2,11p' "$0"
+        sed -n '2,15p' "$0"
         ;;
     "")
         echo "Launching WU..."
@@ -101,7 +106,7 @@ case "${1:-}" in
         ;;
     *)
         echo "Unknown option: $1" >&2
-        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-pixelized <dir>|--shot-combat|--shot-archetype=<id>|--editor|--help]" >&2
+        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-pixelized <dir>|--probe-reach|--shot-combat|--shot-archetype=<id>|--editor|--help]" >&2
         exit 1
         ;;
 esac
