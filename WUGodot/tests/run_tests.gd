@@ -15,6 +15,9 @@ const _TEST_MODULES: Array[String] = [
 	"res://tests/test_map_generator.gd",
 	"res://tests/test_background_renderer.gd",
 	"res://tests/test_text_wrapping.gd",
+	"res://tests/test_menu_input.gd",
+	"res://tests/test_run_flow.gd",
+	"res://tests/test_scene_controllers.gd",
 	"res://tests/test_animation_set.gd",
 	"res://tests/test_animation_clock.gd",
 	"res://tests/test_animation_manifest.gd",
@@ -26,6 +29,7 @@ const _TEST_MODULES: Array[String] = [
 	"res://tests/test_hitbox_template.gd",
 	"res://tests/test_presentation_collision.gd",
 	"res://tests/test_master_normalizer.gd",
+	"res://tests/test_master_geometry.gd",
 	"res://tests/test_heavy_capsule_pose.gd",
 ]
 
