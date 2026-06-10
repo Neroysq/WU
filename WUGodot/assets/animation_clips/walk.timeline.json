@@ -1,10 +1,27 @@
 {
   "id": "walk",
   "duration": 0.6,
+  "rate": "velocity",
   "keyposes": [
     { "t": 0.00, "pose": "walk_0" },
     { "t": 0.25, "pose": "walk_1" },
     { "t": 0.50, "pose": "walk_2" },
     { "t": 0.75, "pose": "walk_3" }
-  ]
+  ],
+  "tracks": {
+    "offsetY": [
+      { "t": 0.00, "v": 0.0, "ease": "inOut" },
+      { "t": 0.25, "v": -3.0, "ease": "inOut" },
+      { "t": 0.50, "v": 0.0, "ease": "inOut" },
+      { "t": 0.75, "v": -3.0, "ease": "inOut" },
+      { "t": 1.00, "v": 0.0, "ease": "inOut" }
+    ],
+    "rotation": [
+      { "t": 0.00, "v": 1.5, "ease": "inOut" },
+      { "t": 0.25, "v": 2.5, "ease": "inOut" },
+      { "t": 0.50, "v": -1.5, "ease": "inOut" },
+      { "t": 0.75, "v": -2.5, "ease": "inOut" },
+      { "t": 1.00, "v": 1.5, "ease": "inOut" }
+    ]
+  }
 }

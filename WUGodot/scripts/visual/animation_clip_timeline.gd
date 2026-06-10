@@ -4,6 +4,7 @@ extends RefCounted
 var id: String = "unknown"
 var duration_from_attack_def: bool = false
 var fixed_duration: float = 0.5
+var rate_mode: String = "fixed"
 var keyposes: Array[Dictionary] = []
 var tracks: Dictionary = {}
 var events: Array[Dictionary] = []
@@ -24,6 +25,7 @@ static func load_from_file(path: String) -> Variant:
 		clip.duration_from_attack_def = true
 	else:
 		clip.fixed_duration = float(dur)
+	clip.rate_mode = str(root.get("rate", "fixed"))
 
 	for kp_variant in root.get("keyposes", []) as Array:
 		var kp: Dictionary = kp_variant as Dictionary
@@ -63,13 +65,17 @@ func sample_track(track_name: String, t: float, default_value: float = 0.0) -> f
 			return lerpf(float(a["v"]), float(b["v"]), _ease(local, str(b["ease"])))
 	return float((keys[keys.size() - 1] as Dictionary)["v"])
 
+func has_track(track_name: String) -> bool:
+	return tracks.has(track_name)
+
 func pose_at(t: float, attack_def: Variant = null) -> String:
 	var current: String = ""
+	var current_t: float = -1.0
 	for kp in keyposes:
-		if t >= _resolve_t(kp["t"], attack_def):
+		var resolved_t: float = _resolve_t(kp["t"], attack_def)
+		if t >= resolved_t and resolved_t >= current_t:
+			current_t = resolved_t
 			current = str(kp["pose"])
-		else:
-			break
 	if current.is_empty() and not keyposes.is_empty():
 		current = str((keyposes[0] as Dictionary)["pose"])
 	return current

@@ -3,7 +3,8 @@
   "duration": "fromAttackDef",
   "keyposes": [
     { "t": 0.00, "pose": "guard" },
-    { "t": 0.15, "pose": "heavy_windup" },
+    { "t": 0.15, "pose": "guard" },
+    { "t": 0.42, "pose": "heavy_windup" },
     { "t": "windup_end", "pose": "heavy_strike" },
     { "t": "active_end", "pose": "heavy_recover" },
     { "t": 1.00, "pose": "heavy_recover" }
@@ -11,16 +12,41 @@
   "tracks": {
     "offsetX": [
       { "t": 0.00, "v": 0.0, "ease": "out" },
-      { "t": 0.47, "v": 26.0, "ease": "inOut" },
+      { "t": 0.15, "v": -14.0, "ease": "out" },
+      { "t": 0.42, "v": -6.0, "ease": "inOut" },
+      { "t": 0.50, "v": 34.0, "ease": "inOut" },
+      { "t": 0.65, "v": 12.0, "ease": "out" },
+      { "t": 0.82, "v": -8.0, "ease": "out" },
       { "t": 1.00, "v": 0.0, "ease": "out" }
+    ],
+    "scaleX": [
+      { "t": 0.00, "v": 1.0 },
+      { "t": 0.15, "v": 1.14, "ease": "out" },
+      { "t": 0.42, "v": 1.08, "ease": "inOut" },
+      { "t": 0.50, "v": 1.16, "ease": "in" },
+      { "t": 0.65, "v": 1.0, "ease": "out" },
+      { "t": 1.00, "v": 1.0 }
     ],
     "scaleY": [
       { "t": 0.00, "v": 1.0 },
-      { "t": 0.47, "v": 0.88, "ease": "in" },
-      { "t": 0.65, "v": 1.0, "ease": "out" }
+      { "t": 0.15, "v": 0.88, "ease": "out" },
+      { "t": 0.42, "v": 0.92, "ease": "inOut" },
+      { "t": 0.50, "v": 0.86, "ease": "in" },
+      { "t": 0.65, "v": 1.04, "ease": "out" },
+      { "t": 0.82, "v": 0.97, "ease": "out" },
+      { "t": 1.00, "v": 1.0 }
+    ],
+    "rotation": [
+      { "t": 0.00, "v": 0.0 },
+      { "t": 0.15, "v": -5.0, "ease": "out" },
+      { "t": 0.42, "v": -2.0, "ease": "inOut" },
+      { "t": 0.50, "v": 6.0, "ease": "inOut" },
+      { "t": 0.82, "v": -2.0, "ease": "out" },
+      { "t": 1.00, "v": 0.0, "ease": "out" }
     ],
     "smear": [
-      { "t": 0.47, "v": 1.0 },
+      { "t": 0.47, "v": 0.25 },
+      { "t": 0.50, "v": 1.0 },
       { "t": 0.65, "v": 0.0 }
     ]
   },

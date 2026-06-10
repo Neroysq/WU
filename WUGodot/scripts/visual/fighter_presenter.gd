@@ -76,7 +76,7 @@ func update(fighter: Fighter, state_name: String, combat_dt: float, presentation
 		_norm_t = clampf(fighter._attack_state.elapsed / attack_def.duration, 0.0, 1.0)
 	else:
 		var dur: float = maxf(_clip.fixed_duration, 0.0001)
-		_clip_time += combat_dt
+		_clip_time += combat_dt * _clip_rate_multiplier(fighter)
 		_norm_t = fposmod(_clip_time, dur) / dur
 
 	if _norm_t >= _prev_norm_t:
@@ -90,13 +90,19 @@ func update(fighter: Fighter, state_name: String, combat_dt: float, presentation
 	var foot: Vector2 = pose.get("footAnchor", Vector2.ZERO) as Vector2
 	var facing: int = fighter.facing
 	var off_x: float = _clip.sample_track("offsetX", _norm_t, 0.0)
+	var off_y: float = _clip.sample_track("offsetY", _norm_t, 0.0)
 	var scale_y: float = _clip.sample_track("scaleY", _norm_t, 1.0)
+	var scale_x: float = _clip.sample_track("scaleX", _norm_t, 1.0)
+	if not _clip.has_track("scaleX") and _clip.has_track("scaleY"):
+		scale_x = clampf(1.0 / maxf(scale_y, 0.001), 0.75, 1.25)
+	var rotation_rad: float = deg_to_rad(_clip.sample_track("rotation", _norm_t, 0.0) * float(facing))
 	var smear_v: float = _clip.sample_track("smear", _norm_t, 0.0)
 
-	var sx: float = _render_scale * float(facing)
+	var sx: float = _render_scale * float(facing) * scale_x
 	var sy: float = _render_scale * scale_y
 	_sprite_current.scale = Vector2(sx, sy)
-	_sprite_current.position = Vector2(-foot.x * sx, -foot.y * sy) + Vector2(off_x * float(facing), 0.0)
+	_sprite_current.rotation = rotation_rad
+	_sprite_current.position = Vector2(off_x * float(facing), off_y) - Vector2(foot.x * sx, foot.y * sy).rotated(rotation_rad)
 
 	if _dissolve_t < 1.0:
 		_dissolve_t = minf(1.0, _dissolve_t + presentation_dt / _dissolve_time)
@@ -145,6 +151,7 @@ func _maybe_change_state(state_name: String) -> void:
 		_sprite_previous.texture = _sprite_current.texture
 		_sprite_previous.position = _sprite_current.position
 		_sprite_previous.scale = _sprite_current.scale
+		_sprite_previous.rotation = _sprite_current.rotation
 		_sprite_previous.visible = true
 		_dissolve_t = 0.0
 		_dissolve_time = maxf(float(enter.get("time", 0.08)), 0.001)
@@ -157,3 +164,9 @@ func _maybe_change_state(state_name: String) -> void:
 	_clip_time = 0.0
 	_norm_t = 0.0
 	_prev_norm_t = 0.0
+
+func _clip_rate_multiplier(fighter: Fighter) -> float:
+	if _clip == null or str(_clip.rate_mode) != "velocity":
+		return 1.0
+	var denom: float = maxf(absf(fighter.move_speed), 1.0)
+	return clampf(absf(fighter.velocity.x) / denom, 0.3, 1.6)

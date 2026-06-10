@@ -4,5 +4,22 @@
   "keyposes": [
     { "t": 0.00, "pose": "guard" },
     { "t": 0.50, "pose": "breath" }
-  ]
+  ],
+  "tracks": {
+    "offsetX": [
+      { "t": 0.00, "v": -1.0, "ease": "inOut" },
+      { "t": 0.50, "v": 1.0, "ease": "inOut" },
+      { "t": 1.00, "v": -1.0, "ease": "inOut" }
+    ],
+    "scaleY": [
+      { "t": 0.00, "v": 1.0, "ease": "inOut" },
+      { "t": 0.50, "v": 1.015, "ease": "inOut" },
+      { "t": 1.00, "v": 1.0, "ease": "inOut" }
+    ],
+    "rotation": [
+      { "t": 0.00, "v": -0.4, "ease": "inOut" },
+      { "t": 0.50, "v": 0.4, "ease": "inOut" },
+      { "t": 1.00, "v": -0.4, "ease": "inOut" }
+    ]
+  }
 }

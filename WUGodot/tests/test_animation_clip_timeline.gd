@@ -17,11 +17,11 @@ func run_all() -> Dictionary:
 	var failures: Array[String] = []
 
 	var clip: Variant = TimelineScript.load_from_file("res://assets/animation_clips/hu_attack_light.timeline.json")
-	if is_equal_approx(clip.sample_track("offsetX", 0.0), 0.0) and clip.sample_track("offsetX", 0.55) > 17.0:
+	if is_equal_approx(clip.sample_track("offsetX", 0.0), 0.0) and clip.sample_track("offsetX", 0.20) < 0.0 and clip.sample_track("offsetX", 0.42) > 23.0 and clip.sample_track("offsetX", 0.78) < 0.0:
 		passed += 1
 	else:
 		failed += 1
-		failures.append("offsetX should ramp from 0 to ~18")
+		failures.append("offsetX should hold anticipation during windup, lunge at impact, then overshoot recovery")
 
 	if is_equal_approx(clip.sample_track("nonexistent", 0.5, 3.0), 3.0):
 		passed += 1
@@ -31,11 +31,12 @@ func run_all() -> Dictionary:
 
 	var hu_light: Variant = AttackCatalogScript.hu_light()
 	var hu_active_start_t: float = clip.event_time("attack_active_start", hu_light)
-	if clip.pose_at(0.0, hu_light) == "guard" and clip.pose_at(0.35, hu_light) == "windup" and clip.pose_at(hu_active_start_t, hu_light) == "strike_extended" and clip.pose_at(1.0, hu_light) == "recover":
+	var hu_active_end_t: float = clip.event_time("attack_active_end", hu_light)
+	if clip.pose_at(0.0, hu_light) == "guard" and clip.pose_at(0.07, hu_light) == "guard" and clip.pose_at(hu_active_start_t - 0.01, hu_light) == "windup" and clip.pose_at(hu_active_start_t, hu_light) == "strike_extended" and clip.pose_at(hu_active_end_t + 0.01, hu_light) == "recover" and clip.pose_at(1.0, hu_light) == "recover":
 		passed += 1
 	else:
 		failed += 1
-		failures.append("pose_at should show strike_extended at active start, got %s at %.2f" % [clip.pose_at(hu_active_start_t, hu_light), hu_active_start_t])
+		failures.append("pose_at should avoid strike art in early windup, snap to strike at active start, and recover after active end")
 
 	var def: Variant = _light_def()
 	var active_start_t: float = clip.event_time("attack_active_start", def)
@@ -60,20 +61,27 @@ func run_all() -> Dictionary:
 		failures.append("active_start should not refire after its window passed")
 
 	var idle: Variant = TimelineScript.load_from_file("res://assets/animation_clips/idle.timeline.json")
-	if idle.pose_at(0.0) == "guard" and idle.pose_at(0.6) == "breath" and not idle.duration_from_attack_def and is_equal_approx(idle.fixed_duration, 1.6):
+	if idle.pose_at(0.0) == "guard" and idle.pose_at(0.6) == "breath" and not idle.duration_from_attack_def and is_equal_approx(idle.fixed_duration, 1.6) and idle.has_track("scaleY"):
 		passed += 1
 	else:
 		failed += 1
-		failures.append("idle ambient clip should expose fixed duration and cycle poses")
+		failures.append("idle ambient clip should expose fixed duration, cycle poses, and breathing track")
 
 	var heavy_clip: Variant = TimelineScript.load_from_file("res://assets/animation_clips/hu_attack_heavy.timeline.json")
 	var hu_heavy: Variant = AttackCatalogScript.hu_heavy()
 	var heavy_active_start_t: float = heavy_clip.event_time("attack_active_start", hu_heavy)
 	var heavy_active_end_t: float = heavy_clip.event_time("attack_active_end", hu_heavy)
-	if heavy_clip.pose_at(heavy_active_start_t, hu_heavy) == "heavy_strike" and heavy_clip.pose_at(heavy_active_end_t, hu_heavy) == "heavy_recover" and heavy_clip.sample_track("offsetX", 0.47) > 25.0:
+	if heavy_clip.pose_at(0.26, hu_heavy) == "guard" and heavy_clip.pose_at(heavy_active_start_t - 0.01, hu_heavy) == "heavy_windup" and heavy_clip.pose_at(heavy_active_start_t, hu_heavy) == "heavy_strike" and heavy_clip.pose_at(heavy_active_end_t, hu_heavy) == "heavy_recover" and heavy_clip.sample_track("offsetX", 0.50) > 33.0 and heavy_clip.has_track("scaleX"):
 		passed += 1
 	else:
 		failed += 1
-		failures.append("heavy clip should show heavy_strike at active start, heavy_recover at recovery start, and use numeric track timing")
+		failures.append("heavy clip should hold readable anticipation, strike at active start, recover at recovery start, and use numeric track timing")
+
+	var walk: Variant = TimelineScript.load_from_file("res://assets/animation_clips/walk.timeline.json")
+	if walk.rate_mode == "velocity" and walk.has_track("offsetY") and walk.has_track("rotation"):
+		passed += 1
+	else:
+		failed += 1
+		failures.append("walk should opt into velocity rate matching and expose bob/lean tracks")
 
 	return {"passed": passed, "failed": failed, "failures": failures}
