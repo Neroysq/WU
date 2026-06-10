@@ -8,9 +8,23 @@ static var _game_settings: Dictionary = {}
 static var _rewards: Array[Dictionary] = []
 static var _techniques: Dictionary = {}
 static var _events: Array[Dictionary] = []
+static var _attacks: Dictionary = {}
+
+# Required numeric fields: a typo (for example "range_unit") must fail loudly,
+# not silently fall back to an AttackDefinition default. Flags stay optional.
+const _REQUIRED_ATTACK_FIELDS: Array[String] = [
+	"duration",
+	"windup_end",
+	"active_end",
+	"damage",
+	"posture_damage",
+	"range_units",
+	"knockback_units",
+]
 
 static func initialize() -> void:
 	_load_game_settings()
+	_load_attacks()
 	_load_techniques()
 	_load_events()
 	_load_rewards()
@@ -26,6 +40,7 @@ static func reload_data() -> void:
 	_rewards.clear()
 	_techniques.clear()
 	_events.clear()
+	_attacks.clear()
 	initialize()
 
 static func get_character(name: String) -> Dictionary:
@@ -92,6 +107,61 @@ static func get_random_event(rng: RandomNumberGenerator = null) -> Dictionary:
 	if rng == null:
 		roll_rng.randomize()
 	return (_events[roll_rng.randi_range(0, _events.size() - 1)] as Dictionary).duplicate(true)
+
+static func validate_attacks() -> Array[String]:
+	var errors: Array[String] = []
+	for attack_id in _attacks.keys():
+		var raw: Dictionary = _attacks[attack_id] as Dictionary
+		for field in _REQUIRED_ATTACK_FIELDS:
+			if not raw.has(field):
+				errors.append("%s: missing required field '%s'" % [attack_id, field])
+		var windup_end: float = float(raw.get("windup_end", 0.0))
+		var active_end: float = float(raw.get("active_end", 0.0))
+		var duration: float = float(raw.get("duration", 0.0))
+		if not (windup_end >= 0.0 and active_end >= windup_end and duration >= active_end):
+			errors.append("%s: timing must satisfy 0 <= windup_end <= active_end <= duration (got %s/%s/%s)" % [attack_id, windup_end, active_end, duration])
+	return errors
+
+# Fresh AttackDefinition per call: callers (boss phase 2) mutate fetched defs.
+# Lazy-loads when the store is cold: in headless tests, several modules call
+# AttackCatalog wrappers BEFORE anything runs DataManager.initialize(), and module
+# registration order must not decide whether the suite passes. (REQUIRED.)
+static func get_attack_def(attack_id: String) -> Variant:
+	if _attacks.is_empty():
+		_load_attacks()
+	if not _attacks.has(attack_id):
+		return null
+	var raw: Dictionary = _attacks[attack_id] as Dictionary
+	var def: Variant = load("res://scripts/attack_definition.gd").new()
+	def.id = attack_id
+	def.duration = float(raw.get("duration", def.duration))
+	def.windup_end = float(raw.get("windup_end", def.windup_end))
+	def.active_end = float(raw.get("active_end", def.active_end))
+	def.damage = float(raw.get("damage", def.damage))
+	def.posture_damage = float(raw.get("posture_damage", def.posture_damage))
+	def.is_heavy = bool(raw.get("is_heavy", def.is_heavy))
+	def.is_perilous = bool(raw.get("is_perilous", def.is_perilous))
+	def.is_parryable = bool(raw.get("is_parryable", def.is_parryable))
+	def.range_units = float(raw.get("range_units", def.range_units))
+	def.knockback_units = float(raw.get("knockback_units", def.knockback_units))
+	def.ignores_block = bool(raw.get("ignores_block", def.ignores_block))
+	def.is_grab = bool(raw.get("is_grab", def.is_grab))
+	def.forward_lunge = float(raw.get("forward_lunge", def.forward_lunge))
+	return def
+
+static func _load_attacks() -> void:
+	_attacks.clear()
+	var path := "res://data/Attacks/Attacks.json"
+	if not FileAccess.file_exists(path):
+		push_error("DataManager: missing %s" % path)
+		return
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if typeof(parsed) != TYPE_DICTIONARY:
+		push_error("DataManager: %s did not parse" % path)
+		return
+	_attacks = (parsed as Dictionary).get("attacks", {}) as Dictionary
+	for err in validate_attacks():
+		push_error("DataManager: %s" % err)
 
 static func _load_techniques() -> void:
 	var dir: DirAccess = DirAccess.open("res://data/Techniques")

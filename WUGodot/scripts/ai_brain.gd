@@ -1,10 +1,6 @@
 class_name AiBrain
 extends RefCounted
 
-const AttackCatalogScript = preload("res://scripts/attack_catalog.gd")
-
-static var _attack_catalog: Variant = null
-
 var pattern_table: Array[String] = []
 var aggression: float = 0.5
 var block_chance: float = 0.25
@@ -78,11 +74,7 @@ func _pick_attack(distance: float) -> String:
 	return pick_attack_from_table(pattern_table, distance)
 
 func get_attack_def(attack_id: String) -> Variant:
-	if _attack_catalog == null:
-		_attack_catalog = AttackCatalogScript.new()
-	if not _attack_catalog.has_method(attack_id):
-		return null
-	return _attack_catalog.call(attack_id)
+	return DataManager.get_attack_def(attack_id)
 
 static func from_enemy_data(data: Dictionary) -> Variant:
 	var brain: Variant = load("res://scripts/ai_brain.gd").new()
