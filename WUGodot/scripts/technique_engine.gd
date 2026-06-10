@@ -1,22 +1,13 @@
 class_name TechniqueEngine
 extends RefCounted
 
-const AttackCatalogScript = preload("res://scripts/attack_catalog.gd")
+const TechniqueRegistryScript = preload("res://scripts/techniques/technique_registry.gd")
+const TechniqueEffectScript = preload("res://scripts/techniques/technique_effect.gd")
 
 var _technique_ids: Array[String] = []
+var _effects: Array = []
 var _active_stance_id: String = ""
-var _stance_timer: float = 0.0
-var _stance_damage_taken: float = 0.0
-var _pre_stance_dash_duration: float = 0.0
-var _pre_stance_dash_iframe_end: float = 0.0
-var _phoenix_used: bool = false
-var _echo_active: bool = false
-var _flowing_water_heal: bool = false
-var _sparrow_timer: float = 0.0
-var _gaze_timer: float = 0.0
-var _gaze_speed_bonus: float = 0.0
-var _gaze_earned: bool = false
-var _stat_deltas: Dictionary = {}
+var _effect_state_archive: Dictionary = {}
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 func _init() -> void:
@@ -25,151 +16,160 @@ func _init() -> void:
 func has(id: String) -> bool:
 	return _technique_ids.has(id)
 
+func has_effect(id: String) -> bool:
+	return _effect_by_id(id) != null
+
 func technique_ids() -> Array[String]:
 	return _technique_ids.duplicate()
 
 func add(id: String, fighter: Fighter) -> void:
 	if has(id):
 		return
-	if id.begins_with("D"):
-		for existing_id in _technique_ids.duplicate():
-			if existing_id.begins_with("D"):
-				remove(existing_id, fighter)
+	var effect: Variant = TechniqueRegistryScript.create_effect(id)
+	if effect != null:
+		_install_effect(effect, fighter)
+		return
 	_technique_ids.append(id)
-	_apply_on_add(id, fighter)
 
 func remove(id: String, fighter: Fighter) -> void:
 	if not has(id):
 		return
 	if _active_stance_id == id:
 		deactivate_stance(fighter)
-	if id == "B4":
-		if _gaze_speed_bonus > 0.0:
-			fighter.move_speed -= _gaze_speed_bonus
-		_gaze_timer = 0.0
-		_gaze_speed_bonus = 0.0
-		_gaze_earned = false
+	var effect: Variant = _effect_by_id(id)
+	if effect != null:
+		if effect.once_per_run:
+			_effect_state_archive[id] = effect.state()
+		effect.on_remove(fighter)
+		_effects.erase(effect)
 	_technique_ids.erase(id)
-	_unapply(id, fighter)
 
-func _apply_on_add(id: String, fighter: Fighter) -> void:
-	var delta: Variant = null
-	match id:
-		"A6":
-			delta = {"posture_max": 15.0, "posture_current": 15.0}
-			fighter.posture_max += 15.0
-			fighter.posture_current += 15.0
-		"A7":
-			var move_bonus: float = fighter.move_speed * 0.15
-			delta = {"move_speed": move_bonus}
-			fighter.move_speed += move_bonus
-		"A8":
-			var recovery_bonus: float = fighter.posture_recovery_rate * 0.25
-			delta = {"posture_recovery_rate": recovery_bonus}
-			fighter.posture_recovery_rate += recovery_bonus
-		"A9":
-			delta = {"parry_window": 0.03}
-			fighter.parry_window += 0.03
-		"A11":
-			var dash_bonus: float = fighter.dash_speed * 0.25
-			var air_dash_bonus: float = fighter.air_dash_speed * 0.25
-			var cooldown_delta: float = -minf(0.15, fighter.dash_cooldown - 0.1)
-			delta = {
-				"dash_speed": dash_bonus,
-				"air_dash_speed": air_dash_bonus,
-				"dash_cooldown": cooldown_delta,
-			}
-			fighter.dash_speed += dash_bonus
-			fighter.air_dash_speed += air_dash_bonus
-			fighter.dash_cooldown += cooldown_delta
-		"A12":
-			delta = {"health_max": 20.0, "health_current": 20.0}
-			fighter.health_max += 20.0
-			fighter.health_current += 20.0
-	if delta != null:
-		_stat_deltas[id] = delta
-
-func _unapply(id: String, fighter: Fighter) -> void:
-	var delta: Variant = _stat_deltas.get(id)
-	if delta == null:
+func _install_effect(effect: Variant, fighter: Variant) -> void:
+	if effect.exclusive_group != "":
+		for existing in _effects.duplicate():
+			if existing.exclusive_group == effect.exclusive_group:
+				remove(existing.id, fighter)
+	if has(effect.id):
 		return
-	match id:
-		"A6":
-			fighter.posture_max -= float(delta["posture_max"])
-			fighter.posture_current = minf(fighter.posture_current, fighter.posture_max)
-		"A7":
-			fighter.move_speed -= float(delta["move_speed"])
-		"A8":
-			fighter.posture_recovery_rate -= float(delta["posture_recovery_rate"])
-		"A9":
-			fighter.parry_window -= float(delta["parry_window"])
-		"A11":
-			fighter.dash_speed -= float(delta["dash_speed"])
-			fighter.air_dash_speed -= float(delta["air_dash_speed"])
-			fighter.dash_cooldown -= float(delta["dash_cooldown"])
-		"A12":
-			fighter.health_max -= float(delta["health_max"])
-			fighter.health_current = minf(fighter.health_current, fighter.health_max)
-	_stat_deltas.erase(id)
+	_technique_ids.append(effect.id)
+	if _effect_state_archive.has(effect.id):
+		effect.restore(_effect_state_archive[effect.id] as Dictionary)
+	_effects.append(effect)
+	_sort_effects()
+	effect.on_add(fighter)
+
+func _sort_effects() -> void:
+	_effects.sort_custom(func(a: Variant, b: Variant) -> bool:
+		if a.priority == b.priority:
+			return a.id < b.id
+		return a.priority < b.priority
+	)
+
+func _effect_by_id(id: String) -> Variant:
+	for effect in _effects:
+		if effect.id == id:
+			return effect
+	return null
+
+func _active_stance_effect() -> Variant:
+	if _active_stance_id.is_empty():
+		return null
+	return _effect_by_id(_active_stance_id)
 
 func update(dt: float, fighter: Fighter) -> void:
-	# B4 deferred gaze: apply the buff at the start of the next fight.
-	if _gaze_earned and _gaze_timer <= 0.0:
-		_gaze_speed_bonus = fighter.move_speed * 0.5
-		fighter.move_speed += _gaze_speed_bonus
-		_gaze_timer = 3.0
-		_gaze_earned = false
+	for effect in _effects:
+		effect.update(dt, fighter)
+	var stance_effect: Variant = _active_stance_effect()
+	if stance_effect != null and stance_effect.has_method("is_expired") and stance_effect.is_expired():
+		deactivate_stance(fighter)
 
-	if _sparrow_timer > 0.0:
-		_sparrow_timer -= dt
-	if _gaze_timer > 0.0:
-		_gaze_timer -= dt
-		if _gaze_timer <= 0.0:
-			fighter.move_speed -= _gaze_speed_bonus
-			_gaze_speed_bonus = 0.0
-	if _active_stance_id == "D2" and _stance_timer > 0.0:
-		_stance_timer -= dt
-		if _stance_timer <= 0.0:
-			deactivate_stance(fighter)
+func on_combat_start(fighter: Fighter) -> void:
+	for effect in _effects:
+		effect.on_combat_start(fighter)
+
+func on_combat_end(fighter: Fighter) -> void:
+	for effect in _effects:
+		effect.on_combat_end(fighter)
+
+func reset_combat_state(fighter: Fighter) -> void:
+	on_combat_start(fighter)
+
+func dispatch_outgoing_hit(ctx: Variant) -> void:
+	for effect in _effects:
+		effect.modify_outgoing_hit(ctx)
+
+func dispatch_block(ctx: Variant) -> void:
+	for effect in _effects:
+		effect.modify_block(ctx)
+
+func dispatch_post_hit(ctx: Variant) -> void:
+	for effect in _effects:
+		effect.post_hit(ctx)
+
+func dispatch_parry_success(fighter: Fighter) -> bool:
+	var handled := false
+	for effect in _effects:
+		if effect.has_method("handles_parry_success") and effect.handles_parry_success():
+			handled = true
+		effect.on_parry_success(fighter)
+	return handled
+
+func on_dash_end(fighter: Fighter = null, enemy: Fighter = null) -> Dictionary:
+	var merged: Dictionary = {}
+	for effect in _effects:
+		var result: Dictionary = effect.on_dash_end(fighter, enemy)
+		for key in result.keys():
+			merged[key] = result[key]
+	return merged
+
+func on_dash_through(fighter: Fighter = null) -> void:
+	for effect in _effects:
+		effect.on_dash_through(fighter)
+
+func on_kill(fighter: Fighter) -> void:
+	for effect in _effects:
+		effect.on_kill(fighter)
+
+func on_posture_break(fighter: Fighter) -> bool:
+	var before: float = fighter.health_current
+	for effect in _effects:
+		effect.on_posture_break_dealt(fighter)
+	return fighter.health_current > before
+
+func check_lethal_save(fighter: Fighter) -> bool:
+	for effect in _effects:
+		if effect.try_lethal_save(fighter):
+			return true
+	return false
+
+func roll_stagger() -> bool:
+	for effect in _effects:
+		if effect.roll_stagger(_rng):
+			return true
+	return false
 
 func activate_stance(fighter: Fighter) -> bool:
-	if _active_stance_id != "":
+	if not _active_stance_id.is_empty():
 		return false
-
-	var d_id: String = ""
-	for technique_id in _technique_ids:
-		if technique_id.begins_with("D"):
-			d_id = technique_id
+	var stance_effect: Variant = null
+	for effect in _effects:
+		if effect.exclusive_group == "stance":
+			stance_effect = effect
 			break
-	if d_id.is_empty():
+	if stance_effect == null:
 		return false
 	if fighter.rage_current < fighter.rage_max:
 		return false
-
 	fighter.rage_current = 0.0
-	_active_stance_id = d_id
-	_stance_damage_taken = 0.0
-	match d_id:
-		"D1":
-			_pre_stance_dash_duration = fighter.dash_duration
-			_pre_stance_dash_iframe_end = fighter.dash_iframe_end
-			fighter.dash_duration = 0.30
-			# i-frame phase = 0.22s; absolute end = DASH_STARTUP_END(0.04) + 0.22 = 0.26
-			fighter.dash_iframe_end = 0.26
-		"D2":
-			_stance_timer = 15.0
+	_active_stance_id = stance_effect.id
+	stance_effect.on_stance_activate(fighter)
 	return true
 
 func deactivate_stance(fighter: Fighter) -> void:
-	if _active_stance_id.is_empty():
-		return
-	match _active_stance_id:
-		"D1":
-			fighter.dash_duration = _pre_stance_dash_duration
-			fighter.dash_iframe_end = _pre_stance_dash_iframe_end
+	var effect: Variant = _active_stance_effect()
+	if effect != null:
+		effect.on_stance_deactivate(fighter)
 	_active_stance_id = ""
-	_stance_timer = 0.0
-	_stance_damage_taken = 0.0
 
 func is_stance_active() -> bool:
 	return not _active_stance_id.is_empty()
@@ -177,92 +177,87 @@ func is_stance_active() -> bool:
 func active_stance() -> String:
 	return _active_stance_id
 
+func active_stance_display_name() -> String:
+	var effect: Variant = _active_stance_effect()
+	return effect.display_name if effect != null else ""
+
 func get_light_override() -> Variant:
-	match _active_stance_id:
-		"D1":
-			return AttackCatalogScript.drunken_light()
-		"D2":
-			return AttackCatalogScript.tiger_light()
-	return null
+	var effect: Variant = _active_stance_effect()
+	return effect.attack_override(false) if effect != null else null
 
 func get_heavy_override() -> Variant:
-	match _active_stance_id:
-		"D1":
-			return AttackCatalogScript.drunken_heavy()
-		"D2":
-			return AttackCatalogScript.tiger_heavy()
-	return null
+	var effect: Variant = _active_stance_effect()
+	return effect.attack_override(true) if effect != null else null
 
-func set_echo() -> void:
-	_echo_active = true
-
-func consume_echo() -> bool:
-	if _echo_active:
-		_echo_active = false
-		return true
-	return false
-
-func consume_flowing_water() -> bool:
-	if _flowing_water_heal:
-		_flowing_water_heal = false
-		return true
-	return false
-
-func on_dash_through() -> void:
-	if has("B3"):
-		_flowing_water_heal = true
-
-func on_dash_end() -> void:
-	if has("A4"):
-		_sparrow_timer = 0.6
-
-func has_sparrow_bonus() -> bool:
-	return _sparrow_timer > 0.0
-
-func consume_sparrow() -> void:
-	_sparrow_timer = 0.0
-
-func on_kill(_fighter: Fighter) -> void:
-	if not has("B4"):
-		return
-	if _gaze_timer > 0.0:
-		# Already active in a multi-enemy fight; refresh timer.
-		_gaze_timer = 3.0
-		return
-	# Deferred: buff applies at the start of the next fight's first update tick.
-	_gaze_earned = true
-
-func on_posture_break(fighter: Fighter) -> void:
-	if has("B2"):
-		fighter.health_current = minf(fighter.health_current + 15.0, fighter.health_max)
-
-func check_lethal_save(fighter: Fighter) -> bool:
-	if not has("B6") or _phoenix_used:
-		return false
-	_phoenix_used = true
-	fighter.health_current = fighter.health_max * 0.2
-	fighter._phoenix_invuln_timer = 2.0
-	return true
+func should_auto_chain_light(def: Variant) -> bool:
+	var effect: Variant = _active_stance_effect()
+	return effect != null and effect.should_auto_chain_light(def)
 
 func on_stance_damage(amount: float, fighter: Fighter) -> bool:
-	if _active_stance_id != "D1":
+	var effect: Variant = _active_stance_effect()
+	if effect == null:
 		return false
-	_stance_damage_taken += amount
-	if _stance_damage_taken >= 20.0:
+	if effect.on_stance_damage(amount, fighter):
 		deactivate_stance(fighter)
 		return true
 	return false
 
-func roll_stagger() -> bool:
-	return has("A2") and _rng.randf() < 0.2
+func set_echo() -> void:
+	for effect in _effects:
+		if effect.has_method("set_armed"):
+			effect.set_armed()
 
-func reset_combat_state(fighter: Fighter) -> void:
-	_echo_active = false
-	_flowing_water_heal = false
-	_sparrow_timer = 0.0
-	if _gaze_speed_bonus > 0.0:
-		fighter.move_speed -= _gaze_speed_bonus
-	_gaze_timer = 0.0
-	_gaze_speed_bonus = 0.0
-	# _gaze_earned intentionally persists; it carries the buff into the next fight.
-	_stance_damage_taken = 0.0
+func consume_echo() -> bool:
+	for effect in _effects:
+		if effect.has_method("consume_echo") and effect.consume_echo():
+			return true
+	return false
+
+func consume_flowing_water() -> bool:
+	for effect in _effects:
+		if effect.has_method("consume_flowing_water") and effect.consume_flowing_water():
+			return true
+	return false
+
+func has_sparrow_bonus() -> bool:
+	for effect in _effects:
+		if effect.has_method("has_bonus") and effect.has_bonus():
+			return true
+	return false
+
+func consume_sparrow() -> void:
+	for effect in _effects:
+		if effect.has_method("consume_bonus"):
+			effect.consume_bonus()
+
+func save_state() -> Dictionary:
+	var effect_state: Dictionary = {}
+	for effect in _effects:
+		effect_state[effect.id] = effect.state()
+	return {
+		"technique_ids": _technique_ids.duplicate(),
+		"active_stance_id": _active_stance_id,
+		"effects": effect_state,
+		"effect_state_archive": _effect_state_archive.duplicate(true),
+	}
+
+func load_state(data: Dictionary, fighter: Fighter) -> void:
+	var ids: Array = data.get("technique_ids", []) as Array
+	for raw_id in ids:
+		var id: String = str(raw_id)
+		if not has(id):
+			add(id, fighter)
+	var effect_state: Dictionary = data.get("effects", {}) as Dictionary
+	for id in effect_state.keys():
+		var effect: Variant = _effect_by_id(str(id))
+		if effect != null:
+			effect.restore(effect_state[id] as Dictionary)
+	_effect_state_archive = (data.get("effect_state_archive", {}) as Dictionary).duplicate(true)
+	for effect in _effects:
+		effect.after_restore(fighter)
+	var saved_stance: String = str(data.get("active_stance_id", ""))
+	if not saved_stance.is_empty():
+		_active_stance_id = saved_stance
+		var stance_effect: Variant = _active_stance_effect()
+		if stance_effect != null:
+			stance_effect.on_stance_activate(fighter)

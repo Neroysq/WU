@@ -710,11 +710,10 @@ func _draw_hud() -> void:
 				_draw_text("技藝 %d" % tech_ids.size(), compact_panel.position.x + 16.0, compact_panel.position.y + 24.0, GameConstants.COLOR_TEXT_SUBHEADING, 15, true)
 				_draw_text("Pause to inspect full loadout", compact_panel.position.x + 16.0, compact_panel.position.y + 44.0, GameConstants.COLOR_TEXT_HINT, 13)
 
-		if _player.technique_engine.is_stance_active():
-			var stance_id: String = _player.technique_engine.active_stance()
-			var stance_label: String = "醉拳" if stance_id == "D1" else "虎形"
-			var pulse: float = sin(_player.animation_timer * 6.0) * 0.3 + 0.7
-			_draw_text("STANCE: %s" % stance_label, 36.0, 104.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, pulse), 16)
+			if _player.technique_engine.is_stance_active():
+				var stance_label: String = _player.technique_engine.active_stance_display_name()
+				var pulse: float = sin(_player.animation_timer * 6.0) * 0.3 + 0.7
+				_draw_text("STANCE: %s" % stance_label, 36.0, 104.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, pulse), 16)
 
 func _draw_controls_legend(alpha: float) -> void:
 	var controls_panel: Rect2 = Rect2(520.0, float(GameConstants.VIEW_HEIGHT) - 70.0, 880.0, 44.0)

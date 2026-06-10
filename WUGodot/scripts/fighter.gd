@@ -218,8 +218,7 @@ func update_timers(dt: float) -> void:
 		if bool(events.get("finished", false)):
 			was_hit_this_swing = false
 			# D2 Tiger Stance: auto-chain light attacks into a 3-hit combo.
-			if technique_engine != null and technique_engine.active_stance() == "D2" \
-					and _attack_state.def != null and _attack_state.def.id == "tiger_light" \
+			if technique_engine != null and technique_engine.should_auto_chain_light(_attack_state.def) \
 					and combo_count < 3:
 				combo_window = combo_window_duration
 				start_light_attack()
