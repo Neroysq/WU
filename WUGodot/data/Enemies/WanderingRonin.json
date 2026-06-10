@@ -18,7 +18,7 @@
   "pattern_table": ["ronin_slash", "ronin_thrust", "ronin_sweep", "ronin_perilous_thrust"],
   "aggression": 0.55,
   "blockChance": 0.3,
-  "preferredRange": 128.0,
+  "preferredRange": 203.0,
   "retreatChance": 0.03,
   "dashChance": 0.06
 }

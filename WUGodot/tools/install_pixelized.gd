@@ -1,5 +1,7 @@
 extends SceneTree
 
+const AnchorMeasureScript = preload("res://scripts/visual/anchor_measure.gd")
+
 const SLOTS: Dictionary = {
 	"idle": ["idle_0", "idle_1"],
 	"walk-cycle": ["walk_0", "walk_1", "walk_2", "walk_3"],
@@ -67,22 +69,34 @@ func _init() -> void:
 				printerr("failed to copy %s -> %s (%s)" % [src, DEST + dest_name + ".png", error_string(copy_err)])
 				quit(1)
 				return
-			var sidecar: String = src.get_basename() + ".json"
-			side_by_slot[dest_name] = _read_dict(sidecar)
+			var installed_img: Image = Image.new()
+			var load_err: Error = installed_img.load(ProjectSettings.globalize_path(DEST + dest_name + ".png"))
+			if load_err != OK:
+				printerr("failed to load installed %s (%s)" % [DEST + dest_name + ".png", error_string(load_err)])
+				quit(1)
+				return
+			if installed_img.is_compressed():
+				installed_img.decompress()
+			var measured: Dictionary = AnchorMeasureScript.measure(installed_img)
+			var sidecar: Dictionary = _read_dict(src.get_basename() + ".json")
+			measured["pixelFootAnchor"] = _vector(sidecar.get("foot_anchor"))
+			side_by_slot[dest_name] = measured
 			print("slot %s <- %s/%s" % [dest_name, str(action), pngs[int(idxs[i])].get_basename().replace("pixel", "master")])
 
 	var poses: Dictionary = {}
 	for pose_name in POSE_SLOT.keys():
 		var slot: String = str(POSE_SLOT[pose_name])
 		var meta: Dictionary = side_by_slot.get(slot, {}) as Dictionary
-		var foot: Array = meta.get("foot_anchor", [0, 0]) as Array
-		var bbox: Array = meta.get("bbox", [0, 0, 0, 0]) as Array
+		var foot: Vector2 = meta.get("pixelFootAnchor", meta.get("footAnchor", Vector2.ZERO)) as Vector2
+		var chest: Vector2 = meta.get("chestAnchor", foot) as Vector2
+		var tip: Vector2 = meta.get("weaponTip", foot) as Vector2
+		var hurtbox: Rect2 = meta.get("hurtbox", Rect2()) as Rect2
 		poses[pose_name] = {
 			"path": DEST + slot + ".png",
-			"footAnchor": [int(round(float(foot[0]))), int(round(float(foot[1])))],
-			"chestAnchor": [int(round(float(foot[0]))), int(round(float(foot[1])) - 95)],
-			"weaponTip": [int(round(float(bbox[0]) + float(bbox[2]))), int(round(float(foot[1])) - 80)],
-			"hurtbox": [int(round(float(bbox[0]))), int(round(float(bbox[1]))), int(round(float(bbox[2]))), int(round(float(bbox[3])))],
+			"footAnchor": [int(round(foot.x)), int(round(foot.y))],
+			"chestAnchor": [int(round(chest.x)), int(round(chest.y))],
+			"weaponTip": [int(round(tip.x)), int(round(tip.y))],
+			"hurtbox": [int(round(hurtbox.position.x)), int(round(hurtbox.position.y)), int(round(hurtbox.size.x)), int(round(hurtbox.size.y))],
 		}
 
 	_apply_capsule_overrides(poses)
@@ -90,14 +104,14 @@ func _init() -> void:
 	_zero_animset_offsets()
 
 	var idle_meta: Dictionary = side_by_slot.get("idle_0", {}) as Dictionary
-	var foot_arr: Array = idle_meta.get("foot_anchor", [0, 0]) as Array
+	var foot: Vector2 = idle_meta.get("pixelFootAnchor", idle_meta.get("footAnchor", Vector2.ZERO)) as Vector2
 	var idle_img: Image = Image.new()
 	var load_err: Error = idle_img.load(ProjectSettings.globalize_path(DEST + "idle_0.png"))
 	if load_err != OK:
 		printerr("failed to load installed idle_0.png (%s)" % error_string(load_err))
 		quit(1)
 		return
-	var y_offset: float = (float(idle_img.get_height()) - float(foot_arr[1])) * RENDER_SCALE
+	var y_offset: float = (float(idle_img.get_height()) - foot.y) * RENDER_SCALE
 	print("installed; profile yOffset = %.3f  renderScale = %.1f" % [y_offset, RENDER_SCALE])
 	quit()
 
@@ -154,3 +168,10 @@ func _write_dict(path: String, value: Dictionary) -> void:
 	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
 	file.store_string(JSON.stringify(value, "  "))
 	file.close()
+
+func _vector(raw: Variant) -> Vector2:
+	if typeof(raw) == TYPE_ARRAY:
+		var arr: Array = raw as Array
+		if arr.size() >= 2:
+			return Vector2(float(arr[0]), float(arr[1]))
+	return Vector2.ZERO

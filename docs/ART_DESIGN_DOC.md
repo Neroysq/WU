@@ -245,6 +245,10 @@ Before finalizing any art asset, verify:
 - **Blasphemous**: Environmental atmosphere
 - **Traditional Chinese Architecture**: Structural details
 
+## Art Source Archives
+
+- Hu smooth-master archive: `/Users/animula/WU-art-masters/wu-smooth-hu-run2`. This is the source for the corrected master-scale pipeline; do not rely on `/tmp/wu-smooth-hu-run2` surviving a reboot.
+
 ## Updates and Revisions
 
 | Version | Date | Changes |

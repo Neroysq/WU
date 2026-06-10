@@ -1,6 +1,7 @@
 extends SceneTree
 
 const MasterNormalizerScript = preload("res://scripts/visual/master_normalizer.gd")
+const MasterGeometryScript = preload("res://scripts/visual/master_geometry.gd")
 
 const TARGET_TEXELS: int = 145
 const DENSITY: int = 4
@@ -19,18 +20,19 @@ func _init() -> void:
 
 	_ensure_fresh(run_dir)
 
-	var ref_px: float = _idle_reference(run_dir)
-	if ref_px <= 0.0:
-		printerr("no idle master sidecar with usable bbox in %s" % run_dir)
-		quit(1)
-		return
-
-	var base: float = MasterNormalizerScript.base_scale(ref_px, TARGET_TEXELS, DENSITY)
 	var frames: Array = _collect(run_dir)
 	if frames.is_empty():
 		printerr("no master frames found in %s" % run_dir)
 		quit(1)
 		return
+
+	var ref_px: float = _resolved_idle_reference(frames)
+	if ref_px <= 0.0:
+		printerr("no resolvable idle master in %s" % run_dir)
+		quit(1)
+		return
+
+	var base: float = MasterNormalizerScript.base_scale(ref_px, TARGET_TEXELS, DENSITY)
 
 	var max_left: float = 0.0
 	var max_right: float = 0.0
@@ -61,19 +63,22 @@ func _init() -> void:
 			frame_dict["foot"] as Vector2,
 			norm
 		)
-		var img: Image = Image.new()
-		var load_err: Error = img.load(str(frame_dict["png"]))
-		if load_err != OK:
-			printerr("failed to load %s (%s)" % [str(frame_dict["png"]), error_string(load_err)])
-			quit(1)
-			return
+		var img: Image = (frame_dict["img"] as Image).duplicate()
 		var scaled_size: Vector2 = p["scaled_size"] as Vector2
+		var source_bbox: Rect2 = frame_dict["bbox"] as Rect2
+		var source_aspect: float = source_bbox.size.x / maxf(source_bbox.size.y, 1.0)
 		img.resize(maxi(1, int(round(scaled_size.x))), maxi(1, int(round(scaled_size.y))), Image.INTERPOLATE_LANCZOS)
 		var canvas: Image = Image.create(canvas_w, canvas_h, false, Image.FORMAT_RGBA8)
 		canvas.fill(Color(0, 0, 0, 0))
 		var scaled_foot: Vector2 = p["scaled_foot"] as Vector2
 		var dst: Vector2i = Vector2i(int(round(foot_canvas.x - scaled_foot.x)), int(round(foot_canvas.y - scaled_foot.y)))
 		canvas.blit_rect(img, Rect2i(0, 0, img.get_width(), img.get_height()), dst)
+		var measured: Rect2 = _alpha_bbox(canvas)
+		var measured_aspect: float = measured.size.x / maxf(measured.size.y, 1.0)
+		if measured.size.x <= 0.0 or measured.size.y <= 0.0 or absf(measured_aspect / maxf(source_aspect, 0.0001) - 1.0) > 0.02:
+			printerr("UNIFORMITY VIOLATION %s: content aspect %.3f -> %.3f" % [str(frame_dict["png"]), source_aspect, measured_aspect])
+			quit(1)
+			return
 		var save_err: Error = canvas.save_png(str(frame_dict["png"]))
 		if save_err != OK:
 			printerr("failed to save %s (%s)" % [str(frame_dict["png"]), error_string(save_err)])
@@ -96,17 +101,12 @@ func _init() -> void:
 	print("common canvas %dx%d  out-size for pixelize: %d:%d" % [canvas_w, canvas_h, canvas_w / DENSITY, canvas_h / DENSITY])
 	quit()
 
-func _idle_reference(run_dir: String) -> float:
-	var masters: String = run_dir.path_join("idle").path_join("masters")
-	var dir: DirAccess = DirAccess.open(masters)
-	if dir == null:
-		return 0.0
-	var files: PackedStringArray = dir.get_files()
-	files.sort()
-	for file_name in files:
-		if file_name.ends_with(".json"):
-			var meta: Dictionary = _read_dict(masters.path_join(file_name))
-			return _rect(meta.get("bbox")).size.y
+func _resolved_idle_reference(frames: Array) -> float:
+	for frame in frames:
+		var frame_dict: Dictionary = frame as Dictionary
+		if str(frame_dict["action"]) == "idle":
+			var bbox: Rect2 = frame_dict["bbox"] as Rect2
+			return bbox.size.y
 	return 0.0
 
 func _collect(run_dir: String) -> Array:
@@ -133,15 +133,43 @@ func _collect(run_dir: String) -> Array:
 				quit(1)
 				return []
 			var meta: Dictionary = _read_dict(sidecar)
+			var img: Image = Image.new()
+			var load_err: Error = img.load(png)
+			if load_err != OK:
+				printerr("failed to load %s (%s)" % [png, error_string(load_err)])
+				quit(1)
+				return []
+			var geo: Dictionary = MasterGeometryScript.resolve(img, meta)
+			if bool(geo["remeasured"]):
+				print("NOTE %s/%s: sidecar geometry untrusted (native/bbox/foot mismatch) -> pixel-remeasured" % [action, file_name])
 			out.append({
 				"png": png,
 				"side": sidecar,
 				"action": action,
-				"native": _vector(meta.get("native_size")),
-				"bbox": _rect(meta.get("bbox")),
-				"foot": _vector(meta.get("foot_anchor")),
+				"img": img,
+				"native": geo["native"] as Vector2,
+				"bbox": geo["bbox"] as Rect2,
+				"foot": geo["foot"] as Vector2,
 			})
 	return out
+
+func _alpha_bbox(img: Image) -> Rect2:
+	var w: int = img.get_width()
+	var h: int = img.get_height()
+	var left: int = w
+	var right: int = -1
+	var top: int = h
+	var bottom: int = -1
+	for y in range(0, h, 2):
+		for x in range(0, w, 2):
+			if img.get_pixel(x, y).a > 0.1:
+				left = mini(left, x)
+				right = maxi(right, x)
+				top = mini(top, y)
+				bottom = maxi(bottom, y)
+	if right < 0:
+		return Rect2()
+	return Rect2(float(left), float(top), float(right - left + 1), float(bottom - top + 1))
 
 func _ensure_fresh(run_dir: String) -> void:
 	var root: DirAccess = DirAccess.open(run_dir)

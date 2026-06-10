@@ -18,7 +18,7 @@
   "pattern_table": ["smoke_thrust", "flicker_slash", "assassin_backstab", "assassin_perilous_grab"],
   "aggression": 0.65,
   "blockChance": 0.2,
-  "preferredRange": 40.0,
+  "preferredRange": 70.0,
   "retreatChance": 0.06,
   "dashChance": 0.18,
   "teleport_chance": 0.06
