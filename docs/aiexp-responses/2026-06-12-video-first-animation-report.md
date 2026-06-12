@@ -123,3 +123,93 @@ Pick frames by pose progress (your plan), then `pixelize <run> --out-size W:H --
    One pilot serves both aiexp's validation ask and WU's parked enemy-roster migration.
 3. **Batch-despill: approved.** Deterministic one-pass fix; the existing master archive
    (pristine idle: 64% green-dominant edge pixels) benefits immediately.
+
+---
+
+## Follow-up shipped + validated (2026-06-12)
+
+AIexp implemented the prioritized follow-up in `pixelforge-sprite 0.12.0`.
+
+### What is now shipped
+
+`animate-video --reference-seq` is no longer lab-only. The shipped command
+accepts repeated ordered pose flags and routes them to Seedance as
+`input_references`:
+
+```bash
+aiexp sprite-extractor animate-video \
+  --output-dir <run> --action attack \
+  --motion "the character moves through these poses in order: guard, coil, extension, guard" \
+  --reference-seq guard.png \
+  --reference-seq coil.png \
+  --reference-seq extension.png \
+  --reference-seq guard.png
+```
+
+`--start-frame/--end-frame` bracket mode remains available for hard endpoint
+control. The CLI enforces exactly one mode per run.
+
+The batch despill command is also shipped:
+
+```bash
+aiexp sprite-extractor despill /Users/animula/WU-art-masters --chroma '#00FF00'
+```
+
+It is in-place, idempotent, and alpha-preserving, so existing sidecar geometry
+stays valid.
+
+### `bandit_sword` pilot
+
+We used `bandit_sword` as the second-archetype pilot.
+
+First, we attempted codex-backend still-keyframe authoring from the legacy
+identity reference. Outcome: not reliable enough yet for this archetype. The
+coil pose was usable, but guard and extension repeatedly came back as
+parchment/map-like outputs rather than isolated character sprites, even after a
+stricter second prompt round. Therefore the paid video pilot used legacy
+`bandit_sword` frames as the ordered references:
+
+| keyframe | source |
+|---|---|
+| guard | `WUGodot/assets/sprites/characters/bandit_sword/idle_0.png` |
+| coil | `WUGodot/assets/sprites/characters/bandit_sword/attack_1.png` |
+| extension | `WUGodot/assets/sprites/characters/bandit_sword/attack_2.png` |
+| loop close | guard repeated as the fourth reference |
+
+Paid run result:
+
+| metric | value |
+|---|---:|
+| frames | 97 |
+| cost | `$0.48384` |
+| mode | sequence |
+| measured background | `#00D707` |
+| re-key verdict | pass |
+| chroma frames | 97 / 97 |
+| peak frame for guard | 82 |
+| peak frame for coil | 36 |
+| peak frame for extension | 63 |
+| peak IoUs | `0.9610`, `0.9362`, `0.9405` |
+| final IoU vs guard | `0.9605` |
+
+Visual verdict: sequence mode works on the second archetype. The clip moves
+guard -> overhead coil -> forward thrust -> guard, with identity preserved well
+enough to validate the shipped `--reference-seq` path.
+
+Roster-migration verdict: not proven yet. Because the successful references
+were legacy sprites rather than newly generated keyframes, this run validates
+video sequencing, not full replacement of the old `bandit_sword` art. The
+pixelized comparison at `256x256 --fit-mode exact` also showed the generated
+video character smaller inside the frame than the hand-authored legacy sprite,
+so WU would need either a different output size/scale policy or a dedicated
+selection pass before treating it as a drop-in replacement.
+
+### Archive despill completed
+
+We ran the approved despill pass over `/Users/animula/WU-art-masters`.
+
+- First pass: `changed: 91  unchanged: 0  failed: 0`
+- Idempotency pass: `changed: 0  unchanged: 91  failed: 0`
+
+The archive green-edge cleanup is complete. Since despill does not touch alpha,
+existing bbox/foot-anchor sidecars remain valid.
