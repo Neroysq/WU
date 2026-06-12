@@ -17,11 +17,13 @@ func run_all() -> Dictionary:
 	var failures: Array[String] = []
 
 	var clip: Variant = TimelineScript.load_from_file("res://assets/animation_clips/hu_attack_light.timeline.json")
-	if is_equal_approx(clip.sample_track("offsetX", 0.0), 0.0) and clip.sample_track("offsetX", 0.20) < 0.0 and clip.sample_track("offsetX", 0.42) > 23.0 and clip.sample_track("offsetX", 0.78) < 0.0:
+	# Video frames carry ALL body motion (including real lunge travel in-frame);
+	# the only remaining track is the active-window smear.
+	if is_equal_approx(clip.sample_track("offsetX", 0.42, 0.0), 0.0) and clip.sample_track("smear", 0.45) > 0.5 and is_equal_approx(clip.sample_track("smear", 0.30), 0.0):
 		passed += 1
 	else:
 		failed += 1
-		failures.append("offsetX should hold anticipation during windup, lunge at impact, then overshoot recovery")
+		failures.append("video-frame clip should have no offsetX track and smear covering the active window")
 
 	if is_equal_approx(clip.sample_track("nonexistent", 0.5, 3.0), 3.0):
 		passed += 1
@@ -32,11 +34,11 @@ func run_all() -> Dictionary:
 	var hu_light: Variant = AttackCatalogScript.hu_light()
 	var hu_active_start_t: float = clip.event_time("attack_active_start", hu_light)
 	var hu_active_end_t: float = clip.event_time("attack_active_end", hu_light)
-	if clip.pose_at(0.0, hu_light) == "guard" and clip.pose_at(0.07, hu_light) == "guard" and clip.pose_at(hu_active_start_t - 0.01, hu_light) == "windup" and clip.pose_at(hu_active_start_t, hu_light) == "strike_extended" and clip.pose_at(hu_active_end_t + 0.01, hu_light) == "recover" and clip.pose_at(1.0, hu_light) == "recover":
+	if clip.pose_at(0.0, hu_light) == "guard" and clip.pose_at(0.07, hu_light) == "va_020" and clip.pose_at(hu_active_start_t - 0.01, hu_light) == "va_050" and clip.pose_at(hu_active_start_t, hu_light) == "va_053" and clip.pose_at(hu_active_end_t + 0.01, hu_light) == "va_068" and clip.pose_at(1.0, hu_light) == "va_091":
 		passed += 1
 	else:
 		failed += 1
-		failures.append("pose_at should avoid strike art in early windup, snap to strike at active start, and recover after active end")
+		failures.append("pose_at should show the draw within 2 frames, no strike art before active, strike at active start, retract after active end")
 
 	var def: Variant = _light_def()
 	var active_start_t: float = clip.event_time("attack_active_start", def)

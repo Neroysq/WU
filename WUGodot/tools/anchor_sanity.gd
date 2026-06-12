@@ -2,7 +2,10 @@ extends SceneTree
 
 const AnchorMeasureScript = preload("res://scripts/visual/anchor_measure.gd")
 const MANIFEST_PATH: String = "res://assets/animation_manifests/hu.manifest.json"
-const TIP_DISTANCE_CEILING_WORLD: float = 430.0
+# Coarse absurdity guard only — gameplay reach is gated by the reach-consistency tests.
+# 560 accommodates the video-generated thrust frames (va_strike tip-foot 265 src x2),
+# which legitimately extend further than the still-art family.
+const TIP_DISTANCE_CEILING_WORLD: float = 560.0
 const ANCHOR_TOLERANCE: float = 12.0
 const FOOT_X_SPREAD_CEILING: float = 24.0
 # Keep empty by default so corrected PixelForge sidecars are checked against
