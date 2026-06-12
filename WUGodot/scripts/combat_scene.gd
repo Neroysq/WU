@@ -404,14 +404,14 @@ func _process(delta: float) -> void:
 	elif _enemy.health_current <= 0.0:
 		if _player.technique_engine != null:
 			_player.technique_engine.on_kill(_player)
-			if _current_node.node_type == MapNode.NodeType.BOSS:
-				_boss_death_triggered = true
-				_boss_death_timer = 1.0
-				_trigger_slow_mo(0.2, 1.0)
-				_on_camera_shake(20.0)
-				_show_boss_beat("破山!", 1.1)
-				_particle_system.spawn_hit_sparks(_enemy.position + Vector2(0.0, -_enemy.height * 0.5), 40, GameConstants.COLOR_GOLD_BRIGHT)
-				_particle_system.spawn_hit_sparks(_enemy.position + Vector2(0.0, -_enemy.height * 0.3), 20, GameConstants.COLOR_CRIMSON)
+		if _current_node.node_type == MapNode.NodeType.BOSS:
+			_boss_death_triggered = true
+			_boss_death_timer = 1.0
+			_trigger_slow_mo(0.2, 1.0)
+			_on_camera_shake(20.0)
+			_show_boss_beat("破山!", 1.1)
+			_particle_system.spawn_hit_sparks(_enemy.position + Vector2(0.0, -_enemy.height * 0.5), 40, GameConstants.COLOR_GOLD_BRIGHT)
+			_particle_system.spawn_hit_sparks(_enemy.position + Vector2(0.0, -_enemy.height * 0.3), 20, GameConstants.COLOR_CRIMSON)
 		else:
 			_is_paused_on_end = true
 			_end_message = "Victory (Enter)"
