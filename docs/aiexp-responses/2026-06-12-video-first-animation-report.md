@@ -162,6 +162,8 @@ stays valid.
 
 We used `bandit_sword` as the second-archetype pilot.
 
+> **[SUPERSEDED 2026-06-12 — see Correction at the end; this was a misdiagnosis]**
+
 First, we attempted codex-backend still-keyframe authoring from the legacy
 identity reference. Outcome: not reliable enough yet for this archetype. The
 coil pose was usable, but guard and extension repeatedly came back as
@@ -196,6 +198,8 @@ Visual verdict: sequence mode works on the second archetype. The clip moves
 guard -> overhead coil -> forward thrust -> guard, with identity preserved well
 enough to validate the shipped `--reference-seq` path.
 
+> **[SUPERSEDED 2026-06-12 — see Correction at the end; this was a misdiagnosis]**
+
 Roster-migration verdict: not proven yet. Because the successful references
 were legacy sprites rather than newly generated keyframes, this run validates
 video sequencing, not full replacement of the old `bandit_sword` art. The
@@ -213,3 +217,13 @@ We ran the approved despill pass over `/Users/animula/WU-art-masters`.
 
 The archive green-edge cleanup is complete. Since despill does not touch alpha,
 existing bbox/foot-anchor sidecars remain valid.
+
+## Correction (2026-06-12)
+
+The pilot caveat ("codex still-keyframe authoring failed for 2/3 poses") was a
+misdiagnosis. The failures were a cross-session recovery race in AIexp's codex
+backend: a concurrent codex loop's image won the largest-blob race. That is
+fixed in `pixelforge-image-gen 0.10.2`, and the two "lost" bandit keyframes
+were recovered intact from the session logs.
+
+Codex keyframe authoring works; the $0 stills path stands for roster migration.
