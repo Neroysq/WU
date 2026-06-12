@@ -11,7 +11,9 @@ from __future__ import annotations
 
 import argparse
 import html
+import os
 import pathlib
+import shutil
 
 
 CURRENT_ART = {
@@ -28,8 +30,21 @@ CURRENT_ART = {
 }
 
 
-def figure(src: pathlib.Path, caption: str) -> str:
-    return f'<figure><img src="{src.as_uri()}"><figcaption>{html.escape(caption)}</figcaption></figure>'
+def figure(src: str, caption: str) -> str:
+    safe_src = html.escape(src, quote=True)
+    return f'<figure><img src="{safe_src}"><figcaption>{html.escape(caption)}</figcaption></figure>'
+
+
+def rel_url(path: pathlib.Path, base: pathlib.Path) -> str:
+    return pathlib.Path(os.path.relpath(path, base)).as_posix()
+
+
+def copy_current_art(source: pathlib.Path, action: str, base: pathlib.Path) -> pathlib.Path:
+    asset_dir = base / "_current"
+    asset_dir.mkdir(parents=True, exist_ok=True)
+    dest = asset_dir / f"{action}_{source.name}"
+    shutil.copy2(source, dest)
+    return dest
 
 
 def main() -> int:
@@ -48,9 +63,10 @@ def main() -> int:
             cards: list[str] = []
             current = CURRENT_ART.get(action_dir.name)
             if current and (repo / current).exists():
-                cards.append(figure((repo / current).resolve(), "CURRENT in-game"))
+                current_copy = copy_current_art((repo / current).resolve(), action_dir.name, out.parent)
+                cards.append(figure(rel_url(current_copy, out.parent), "CURRENT in-game"))
             for candidate in sorted(slot_dir.glob("cand_*.png")):
-                cards.append(figure(candidate.resolve(), candidate.name))
+                cards.append(figure(rel_url(candidate.resolve(), out.parent), candidate.name))
             rows.append(f"<h2>{html.escape(action_dir.name)} / {html.escape(slot_dir.name)}</h2><div class=row>{''.join(cards)}</div>")
 
     out.parent.mkdir(parents=True, exist_ok=True)
