@@ -1033,7 +1033,7 @@ Each action phase executes these steps with its own parameter block. Commands ar
 1. **Keyframe authoring.** First run `aiexp sprite-extractor rawgen --help` (flag names may differ from this plan's sketch — adapt; the report guarantees codex backend + image-to-image editing exist). Generate 3–4 candidates per slot. Iteration uses plain edit framing: *"Edit the image: <minimal change>. Everything else stays unchanged."* Object-state consistency across ALL slots of ALL actions: blade drawn, scabbard visible at hip, same grip hand as the approved guard.
 
    **Codex recovery check (aiexp 2026-06-12 fix):** codex generation now prints `recovery: session-id (…)` on stderr — the safe, session-targeted path (pixelforge-image-gen ≥0.10.2). If a run ever reports `recovery: sessions-diff-fallback`, the image may belong to ANOTHER codex session on this machine (the cross-session leak that once returned a MadCards map as a sprite) — discard and regenerate. Record the reported `session_id`/`recovery` in `keyframes.manifest.json` provenance for each approved keyframe.
-2. **✋ Gate 1.** Build + serve the review page; the user verdicts per slot. Before serving, kill the old review/static server or use a fresh port — stale `python3 -m http.server` processes on `8765` have already caused the browser to show old evidence pages instead of the current keyframe page. Copy each approved file to `art/keyframes/hu/<action>/<slot>.png`, record `prompt/backend/seed/approved` in `keyframes.manifest.json`, commit (`art:` prefix). Budget ~5 rounds per action family; if a slot resists after that, fall back to image-to-image edits from the nearest approved still.
+2. **✋ Gate 1.** Build + serve the review page; the user verdicts per slot. **Scope (amended 2026-06-12): Gate 1 covers genuinely NEW poses only** — the ones that define Hu's look (coil, thrust, heavy windup, recoil, dizzy, brace, lunge, jump set, sheathed/draw). Derived micro-variants of an approved pose (breath-tier deltas) are not authored as keyframes at all where a begin=end video prompt carries the motion; their quality is judged in motion at Gate 2. Before serving, kill the old review/static server or use a fresh port — stale `python3 -m http.server` processes on `8765` have already caused the browser to show old evidence pages instead of the current keyframe page. Copy each approved file to `art/keyframes/hu/<action>/<slot>.png`, record `prompt/backend/seed/approved` in `keyframes.manifest.json`, commit (`art:` prefix). Budget ~5 rounds per action family; if a slot resists after that, fall back to image-to-image edits from the nearest approved still.
 3. **Video.** `animate-video --reference-seq` with approved keyframes in order (loops repeat the first as last). Check `contact_sheet.png` + `preview.gif` in the run dir: static camera, no identity drift. Reject and re-run (new seed) on camera drift — do not hand-fix frames.
 4. **Selection.** List candidate frames by measuring tips/feet (AnchorMeasure probe or visual scan of masters). Select by pose progress, dense where motion supports it (light-attack precedent: ~30 frames). Skip glitch frames (object flicker). For loops, verify first≈last selected frame.
 5. **Stage the SELECTED frames — order is the naming contract.** The installer reads sources *sequentially* (`pixel_001..N`, `master_001..N`) and uses `--frames` labels *only for destination pose names*: `pixel_001` becomes `<prefix>_<first label>`, and so on. Staging the full video output while passing selected labels would silently install wrong frames under right names. So: copy ONLY the selected masters **and their sidecars**, renumbered `master_001..N` in exactly the same order as the `<pose-labels>` list you will pass to `--frames`:
@@ -1114,19 +1114,20 @@ This preserves the Gate 1 review flow, but the outputs are pixel-styled stills r
 
 - [ ] **Step 2: ✋ Gate 1 (guard)** — `python3 tools/build_keyframe_review.py /tmp/wu-reanim/keyframes && python3 -m http.server -d /tmp/wu-reanim/keyframes 8765`. STOP for user verdict. On approval: copy to `art/keyframes/hu/guard/stance.png`, update `keyframes.manifest.json`, commit.
 
-- [ ] **Step 3: Generate the breath keyframe** — image-to-image from the approved guard: *"Edit the image: the swordsman inhales deeply, chest expands, shoulders rise slightly. Everything else stays unchanged."* 3 candidates → ✋ Gate 1 → `art/keyframes/hu/idle/breath.png`.
+- [ ] ~~Step 3: Generate the breath keyframe~~ **DROPPED (user decision, 2026-06-12):** no breath keyframe. The breathing in-between is the video model's job — the guard pose is both begin and end, and the inhale amplitude is controlled by the motion prompt, judged in motion at Gate 2 (a still can't be judged for breathing anyway). This also narrows Gate 1 generally: **Gate 1 covers genuinely new poses only**; derived micro-variants of an approved pose are never authored as keyframes when a begin=end video prompt can carry them.
 
-- [ ] **Step 4: Idle video**
+- [ ] **Step 4: Idle video** — guard as BOTH endpoints. Bracket mode pins the literal first/last frames (loop closure exact by construction):
 
 ```bash
 aiexp sprite-extractor animate-video --output-dir /tmp/wu-reanim/idle-run --action idle \
-  --motion "the swordsman stands in his guard stance breathing calmly, weight shifting subtly, sword held steady, then returns exactly to the starting pose" \
-  --reference-seq art/keyframes/hu/guard/stance.png \
-  --reference-seq art/keyframes/hu/idle/breath.png \
-  --reference-seq art/keyframes/hu/guard/stance.png
+  --motion "the swordsman stands in his guard stance breathing calmly, chest rising and falling, weight shifting subtly, sword held steady, then returns exactly to the starting pose" \
+  --start-frame art/keyframes/hu/guard/stance.png \
+  --end-frame art/keyframes/hu/guard/stance.png
 ```
 
-Verify `contact_sheet.png`: static camera, loop closure visible.
+(Sequence mode `--reference-seq guard guard` is the fallback if bracketed output breathes too little/too stiffly. If the amplitude is wrong in either mode, iterate the PROMPT — e.g. "breathes deeply" / "barely moves" — not keyframes.) Verify `contact_sheet.png`: static camera, visible breathing, loop closure. Remember the bracketed-clip rule: select from frame 2 onward (frame 1 is the composite verbatim).
+
+**User note from the v1 Gate 2 approval (2026-06-12), apply on any idle regen:** breathing must read CALM — no mouth opening. Add "mouth closed, calm steady breathing through the nose" to the motion prompt; reject frames where the mouth visibly opens.
 
 - [ ] **Step 5: Select ~16 frames across one breath cycle** (loops need fewer than attacks; selection by pose progress, first≈last). Stage + scale + pixelize per Runbook 5–6 (staged selected frames + sidecars in label order; use the printed out-size).
 

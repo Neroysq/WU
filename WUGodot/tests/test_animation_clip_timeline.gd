@@ -63,11 +63,11 @@ func run_all() -> Dictionary:
 		failures.append("active_start should not refire after its window passed")
 
 	var idle: Variant = TimelineScript.load_from_file("res://assets/animation_clips/idle.timeline.json")
-	if idle.pose_at(0.0) == "guard" and idle.pose_at(0.6) == "breath" and not idle.duration_from_attack_def and is_equal_approx(idle.fixed_duration, 1.6) and idle.has_track("scaleY"):
+	if idle.pose_at(0.0) == "vi_002" and idle.pose_at(0.5) == "vi_050" and idle.pose_at(0.94) == "vi_097" and not idle.duration_from_attack_def and is_equal_approx(idle.fixed_duration, 2.0) and not idle.has_track("offsetX") and not idle.has_track("scaleY") and not idle.has_track("rotation"):
 		passed += 1
 	else:
 		failed += 1
-		failures.append("idle ambient clip should expose fixed duration, cycle poses, and breathing track")
+		failures.append("idle video clip should expose a 2s vi_* pose cycle without synthetic breathing tracks")
 
 	var heavy_clip: Variant = TimelineScript.load_from_file("res://assets/animation_clips/hu_attack_heavy.timeline.json")
 	var hu_heavy: Variant = AttackCatalogScript.hu_heavy()

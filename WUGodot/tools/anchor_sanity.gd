@@ -7,7 +7,7 @@ const MANIFEST_PATH: String = "res://assets/animation_manifests/hu.manifest.json
 # which legitimately extend further than the still-art family.
 const TIP_DISTANCE_CEILING_WORLD: float = 560.0
 const ANCHOR_TOLERANCE: float = 12.0
-const FOOT_X_SPREAD_CEILING: float = 24.0
+const FOOT_X_GROUP_SPREAD_CEILING: float = 2.0
 # Keep empty by default so corrected PixelForge sidecars are checked against
 # the installed pixels. Add only documented, pose-specific exceptions here.
 const OVERRIDE_ALLOWLIST: Dictionary = {}
@@ -17,8 +17,7 @@ func _init() -> void:
 	var scale: float = float(root.get("renderScale", 1.0))
 	var poses: Dictionary = root.get("poses", {}) as Dictionary
 	var fails: Array[String] = []
-	var min_foot_x: float = INF
-	var max_foot_x: float = -INF
+	var foot_groups: Dictionary = {}
 	for pose_name in poses.keys():
 		var pose: Dictionary = poses[pose_name] as Dictionary
 		var foot: Vector2 = _v(pose.get("footAnchor"))
@@ -30,6 +29,13 @@ func _init() -> void:
 			continue
 		var canvas_w: float = float(img.get_width())
 		var canvas_h: float = float(img.get_height())
+		var group_key: String = "%.0f" % canvas_w
+		if not foot_groups.has(group_key):
+			foot_groups[group_key] = {"min": foot.x, "max": foot.x}
+		else:
+			var group: Dictionary = foot_groups[group_key] as Dictionary
+			group["min"] = minf(float(group["min"]), foot.x)
+			group["max"] = maxf(float(group["max"]), foot.x)
 
 		if foot.y < canvas_h * 0.4:
 			fails.append("%s: stored foot too high (y=%.0f)" % [pose_name, foot.y])
@@ -40,8 +46,6 @@ func _init() -> void:
 		var tip_dist_world: float = absf(tip.x - foot.x) * scale
 		if tip_dist_world > TIP_DISTANCE_CEILING_WORLD:
 			fails.append("%s: tip-distance %.0f world-px beyond coarse ceiling %.0f" % [pose_name, tip_dist_world, TIP_DISTANCE_CEILING_WORLD])
-		min_foot_x = minf(min_foot_x, foot.x)
-		max_foot_x = maxf(max_foot_x, foot.x)
 
 		if not OVERRIDE_ALLOWLIST.has(pose_name):
 			var m: Dictionary = AnchorMeasureScript.measure(img)
@@ -49,9 +53,11 @@ func _init() -> void:
 			if tip.distance_to(measured_tip) > ANCHOR_TOLERANCE:
 				fails.append("%s: stored weaponTip drifts from measured (%s vs %s) - regenerate or allowlist" % [pose_name, str(tip), str(measured_tip)])
 
-	var foot_x_spread: float = max_foot_x - min_foot_x
-	if foot_x_spread > FOOT_X_SPREAD_CEILING:
-		fails.append("stored footAnchor.x spread %.0f exceeds ceiling %.0f; use body-center foot X to avoid presenter lurch" % [foot_x_spread, FOOT_X_SPREAD_CEILING])
+	for group_key in foot_groups.keys():
+		var group: Dictionary = foot_groups[group_key] as Dictionary
+		var spread: float = float(group["max"]) - float(group["min"])
+		if spread > FOOT_X_GROUP_SPREAD_CEILING:
+			fails.append("stored footAnchor.x spread %.0f in %spx-wide sprites exceeds ceiling %.0f; root must be stable within each canvas family" % [spread, group_key, FOOT_X_GROUP_SPREAD_CEILING])
 
 	if fails.is_empty():
 		print("ANCHOR SANITY: OK")
