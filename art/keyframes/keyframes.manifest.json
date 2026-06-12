@@ -1,5 +1,28 @@
 {
   "character": "hu",
   "reference": "art/keyframes/hu/guard/stance.png",
-  "actions": {}
+  "actions": {
+    "guard": {
+      "slots": {
+        "stance": {
+          "file": "art/keyframes/hu/guard/stance.png",
+          "prompt": "side view, full body, young wuxia swordsman in deep blue robes, combat guard stance, sword DRAWN and held ready in front, empty scabbard visible at his hip, exaggerated confident wide stance, comical wild energy, clean white background",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-12",
+          "notes": "user pick over wider-stance candidates; generated via sprite-extractor extract --backend codex because rawgen is not exposed in current aiexp CLI",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes/guard/stance/cand_1.png",
+            "run_dir": "/tmp/wu-reanim/keyframes-raw/guard-1",
+            "recovery": "session-id",
+            "session_id": "019ebb1d-227a-7e43-a631-998efc4ff3ed",
+            "request_id": "rollout-2026-06-12T17-15-09-019ebb1d-227a-7e43-a631-998efc4ff3ed",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        }
+      }
+    }
+  }
 }
