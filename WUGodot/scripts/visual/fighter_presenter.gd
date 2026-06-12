@@ -61,6 +61,41 @@ func handles_state(state_name: String) -> bool:
 func current_norm_t() -> float:
 	return _norm_t
 
+func get_body_rect(fighter: Fighter, camera_offset: Vector2) -> Rect2:
+	# Bounds reflect the most recent update(); combat_scene updates the
+	# presenter before _draw, so callers see same-frame state.
+	var fallback := Rect2(
+		fighter.position.x - fighter.half_width + camera_offset.x,
+		fighter.position.y - fighter.height + camera_offset.y,
+		fighter.half_width * 2.0,
+		fighter.height
+	)
+	if _clip == null or _manifest == null or _sprite_current == null or _sprite_current.texture == null:
+		return fallback
+
+	var attack_def: Variant = fighter._attack_state.def if fighter._attack_state != null else null
+	var pose: Dictionary = _manifest.get_pose(_clip.pose_at(_norm_t, attack_def))
+	if pose.is_empty():
+		return fallback
+	var hb: Rect2 = pose.get("hurtbox", Rect2()) as Rect2
+	if hb.size.x <= 0.0 or hb.size.y <= 0.0:
+		return fallback
+
+	var corners: Array[Vector2] = [
+		hb.position,
+		hb.position + Vector2(hb.size.x, 0.0),
+		hb.position + Vector2(0.0, hb.size.y),
+		hb.end,
+	]
+	var rect := Rect2()
+	for i in range(corners.size()):
+		var p: Vector2 = position + _sprite_current.position + (corners[i] * _sprite_current.scale).rotated(_sprite_current.rotation)
+		if i == 0:
+			rect = Rect2(p, Vector2.ZERO)
+		else:
+			rect = rect.expand(p)
+	return rect
+
 func set_flash(amount: float) -> void:
 	_flash = clampf(amount, 0.0, 1.0)
 
@@ -84,6 +119,8 @@ func update(fighter: Fighter, state_name: String, combat_dt: float, presentation
 			emit_signal("timeline_event", e)
 
 	position = fighter.position + camera_offset
+	if _clip.use_fighter_offset:
+		position += fighter.animation_offset
 
 	var pose: Dictionary = _manifest.get_pose(_clip.pose_at(_norm_t, attack_def))
 	_sprite_current.texture = _catalog.get_texture(str(pose.get("path", "")))

@@ -10,6 +10,7 @@ const FighterPresenterScript = preload("res://scripts/visual/fighter_presenter.g
 const PresentationCollisionScript = preload("res://scripts/visual/presentation_collision.gd")
 
 const ENABLE_AUTHORED_PLAYER_HITBOXES: bool = true
+const DEV_CAPTURE_STEP: float = 1.0 / 60.0
 
 signal combat_end(victory: bool)
 
@@ -46,6 +47,8 @@ var _boss_beat_message: String = ""
 var _boss_beat_timer: float = 0.0
 var _controls_legend_timer: float = 0.0
 var _dev_capture_mode: bool = false
+var _dev_capture_playback: bool = false
+var _dev_capture_physics: bool = false
 
 var _input_tracker: InputTracker = InputTracker.new()
 var _input_buffer: Variant = InputBufferScript.new()
@@ -161,6 +164,10 @@ func dev_set_capture_mode(enabled: bool) -> void:
 	_debug_enabled = enabled
 	_controls_legend_timer = 0.0
 
+func dev_set_capture_playback(enabled: bool, physics: bool = false) -> void:
+	_dev_capture_playback = enabled
+	_dev_capture_physics = physics
+
 func dev_prepare_capture_state(state_name: String) -> void:
 	if _player == null or _enemy == null:
 		return
@@ -198,6 +205,8 @@ func dev_prepare_capture_state(state_name: String) -> void:
 			_player.current_animation = Fighter.AnimationState.WALKING
 			_player.velocity.x = _player.move_speed * float(_player.facing)
 			_player.animation_timer = 0.2
+		"attack_light_full":
+			_player.start_light_attack()
 		"03_light_windup":
 			_player.start_light_attack()
 			if _player._attack_state.def != null:
@@ -210,6 +219,8 @@ func dev_prepare_capture_state(state_name: String) -> void:
 			_player.start_light_attack()
 			if _player._attack_state.def != null:
 				_player._attack_state.elapsed = _player._attack_state.def.active_end + 0.04
+		"attack_heavy_full":
+			_player.start_heavy_attack()
 		"06_heavy_windup":
 			_player.start_heavy_attack()
 			if _player._attack_state.def != null:
@@ -301,9 +312,18 @@ func _process(delta: float) -> void:
 		return
 
 	if _dev_capture_mode:
+		var presenter_dt: float = 0.0
+		if _dev_capture_playback:
+			var capture_dt: float = DEV_CAPTURE_STEP
+			presenter_dt = capture_dt
+			if _dev_capture_physics:
+				_combat_system.update_player(_player, _build_player_input(false), capture_dt, _enemy)
+			else:
+				_player.update_timers(capture_dt)
+			_particle_system.update(capture_dt)
 		_player_visual.update(_player, 0.0)
 		_enemy_visual.update(_enemy, 0.0)
-		_update_player_presenter(delta, delta)
+		_update_player_presenter(presenter_dt, presenter_dt)
 		_sync_input_tracker()
 		queue_redraw()
 		return
@@ -532,6 +552,11 @@ func _resolve_player_state_name() -> String:
 		_:
 			return "FALLBACK"
 
+func _body_rect_for(fighter: Fighter, visual: FighterVisual, camera_offset: Vector2) -> Rect2:
+	if fighter == _player and _player_presenter != null and _player_presenter.visible and _player_presenter.handles_state(_resolve_player_state_name()):
+		return _player_presenter.get_body_rect(fighter, camera_offset)
+	return visual.get_body_rect(fighter, camera_offset)
+
 func _draw() -> void:
 	if _player == null or _enemy == null or not visible:
 		return
@@ -566,7 +591,7 @@ func _draw_arena(offset: Vector2) -> void:
 
 func _draw_fighter(fighter: Fighter, camera_offset: Vector2) -> void:
 	var visual: FighterVisual = _get_visual_for(fighter)
-	var body_rect: Rect2 = visual.get_body_rect(fighter, camera_offset)
+	var body_rect: Rect2 = _body_rect_for(fighter, visual, camera_offset)
 
 	var telegraph_color: Color = fighter.current_telegraph_color()
 	if telegraph_color.a > 0.0:

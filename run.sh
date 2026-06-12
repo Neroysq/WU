@@ -12,6 +12,8 @@
 #   ./run.sh --probe-reach             # derive Hu authored reach and enemy range targets
 #   ./run.sh --shot-combat [dir] # save deterministic combat screenshots, then quit
 #   ./run.sh --shot-archetype=<id> [dir] # save deterministic combat + enemy archetype screenshots
+#   ./run.sh --shot-action STATE [dir] # save every rendered frame for one combat state
+#   ./run.sh --install-video <run-dir> --action=<name> --frames=... [--prefix=va] # install staged video frames
 #   ./run.sh --editor     # open the Godot editor
 
 set -euo pipefail
@@ -82,10 +84,21 @@ case "${1:-}" in
         echo "Probing Hu authored reach..."
         exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/probe_hu_reach.gd
         ;;
+    --install-video)
+        shift
+        echo "Installing video frames..."
+        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/install_video_frames.gd -- "$@"
+        ;;
     --shot-combat)
         SHOT_DIR="${2:-/tmp/wu-shot-combat}"
         echo "Capturing combat screenshots -> $SHOT_DIR"
         exec "$GODOT" --path "$PROJECT_DIR" -- --shot-combat "--shot-dir=$SHOT_DIR"
+        ;;
+    --shot-action)
+        STATE="${2:?usage: ./run.sh --shot-action STATE [dir]}"
+        SHOT_DIR="${3:-/tmp/wu-shot-action}"
+        echo "Capturing action frames for $STATE -> $SHOT_DIR"
+        exec "$GODOT" --path "$PROJECT_DIR" -- --shot-action "--shot-state=$STATE" "--shot-dir=$SHOT_DIR"
         ;;
     --shot-archetype=*)
         ARCHETYPE="${1#--shot-archetype=}"
@@ -98,7 +111,7 @@ case "${1:-}" in
         exec "$GODOT" --path "$PROJECT_DIR" --editor
         ;;
     --help|-h)
-        sed -n '2,15p' "$0"
+        sed -n '2,17p' "$0"
         ;;
     "")
         echo "Launching WU..."
@@ -106,7 +119,7 @@ case "${1:-}" in
         ;;
     *)
         echo "Unknown option: $1" >&2
-        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-pixelized <dir>|--probe-reach|--shot-combat|--shot-archetype=<id>|--editor|--help]" >&2
+        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-pixelized <dir>|--install-video <args>|--probe-reach|--shot-combat|--shot-action STATE|--shot-archetype=<id>|--editor|--help]" >&2
         exit 1
         ;;
 esac

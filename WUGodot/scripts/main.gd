@@ -1,9 +1,23 @@
 extends Node2D
 
 const DEV_SHOT_COMBAT_FLAG: String = "--shot-combat"
+const DEV_SHOT_ACTION_FLAG: String = "--shot-action"
 const DEV_SHOT_DIR_PREFIX: String = "--shot-dir="
 const DEV_SHOT_ARCHETYPE_PREFIX: String = "--shot-archetype="
+const DEV_SHOT_STATE_PREFIX: String = "--shot-state="
 const DEV_SHOT_DEFAULT_DIR: String = "user://shot-combat"
+
+const _ACTION_CAPTURE := {
+	"ATTACKING_LIGHT": {"prep": "attack_light_full", "frames": 32, "loop": false},
+	"ATTACKING_HEAVY": {"prep": "attack_heavy_full", "frames": 50, "loop": false},
+	"IDLE": {"prep": "01_idle", "frames": 192, "loop": true},
+	"WALKING": {"prep": "02_walk", "frames": 120, "loop": true},
+	"BLOCKING": {"prep": "08_block", "frames": 36, "loop": false},
+	"HIT_REACTION": {"prep": "09_hit_react", "frames": 24, "loop": false},
+	"STUNNED": {"prep": "10_stunned", "frames": 90, "loop": true},
+	"DASHING": {"prep": "11_dash", "frames": 20, "loop": false, "physics": true},
+	"JUMPING": {"prep": "12_jump", "frames": 40, "loop": false, "physics": true},
+}
 
 @onready var _combat_scene: CombatScene = $CombatScene
 
@@ -13,6 +27,7 @@ var _controllers: Dictionary = {}
 var _input_tracker: InputTracker = InputTracker.new()
 var _dev_shot_combat_dir: String = ""
 var _dev_shot_archetype: String = ""
+var _dev_shot_action_state: String = ""
 
 func _ready() -> void:
 	Engine.max_fps = GameConstants.TARGET_FPS
@@ -28,6 +43,10 @@ func _ready() -> void:
 		_dev_shot_combat_dir = _user_arg_value(DEV_SHOT_DIR_PREFIX, DEV_SHOT_DEFAULT_DIR)
 		_dev_shot_archetype = _user_arg_value(DEV_SHOT_ARCHETYPE_PREFIX, "")
 		call_deferred("_run_dev_combat_shots")
+	elif _has_user_arg(DEV_SHOT_ACTION_FLAG):
+		_dev_shot_combat_dir = _user_arg_value(DEV_SHOT_DIR_PREFIX, DEV_SHOT_DEFAULT_DIR)
+		_dev_shot_action_state = _user_arg_value(DEV_SHOT_STATE_PREFIX, "ATTACKING_LIGHT")
+		call_deferred("_run_dev_action_shots")
 
 func start_new_run() -> void:
 	_controllers = _build_controllers()
@@ -207,6 +226,66 @@ func _capture_dev_combat_state(state_name: String, abs_dir: String) -> void:
 		push_error("shot-combat: failed to save %s (err %d)" % [path, err])
 	else:
 		print("SHOT COMBAT: %s" % path)
+
+func _run_dev_action_shots() -> void:
+	var state: String = _dev_shot_action_state
+	if not _ACTION_CAPTURE.has(state):
+		push_error("shot-action: unknown state %s (known: %s)" % [state, str(_ACTION_CAPTURE.keys())])
+		get_tree().quit(1)
+		return
+
+	var cfg: Dictionary = _ACTION_CAPTURE[state] as Dictionary
+	var dir_path: String = _dev_shot_combat_dir if not _dev_shot_combat_dir.is_empty() else DEV_SHOT_DEFAULT_DIR
+	var abs_dir: String = ProjectSettings.globalize_path(dir_path) if dir_path.begins_with("user://") or dir_path.begins_with("res://") else dir_path
+	var err: int = DirAccess.make_dir_recursive_absolute(abs_dir)
+	if err != OK:
+		push_error("shot-action: failed to create %s (err %d)" % [abs_dir, err])
+		get_tree().quit(1)
+		return
+
+	_ctx = SceneContext.new()
+	_ctx.player = EnemyFactory.create_player()
+	_ctx.run_state = RunState.create_procedural_run()
+	_ctx.run_state.legend_seen_this_run = true
+	var node: MapNode = MapNode.new(9001, 1, MapNode.NodeType.BATTLE, [])
+	_combat_scene.setup_combat(_ctx.player, node, false, "")
+	_combat_scene.on_enter()
+	_combat_scene.dev_set_capture_mode(true)
+	_combat_scene.dev_set_capture_playback(true, bool(cfg.get("physics", false)))
+	_current_scene = SceneContext.SCENE_COMBAT
+	_ctx.current_scene = SceneContext.SCENE_COMBAT
+	queue_redraw()
+
+	_combat_scene.dev_prepare_capture_state(str(cfg["prep"]))
+	await get_tree().process_frame
+
+	var total: int = int(cfg["frames"]) * (2 if bool(cfg["loop"]) else 1)
+	for i in range(total):
+		await get_tree().process_frame
+		await RenderingServer.frame_post_draw
+		var image: Image = get_viewport().get_texture().get_image()
+		var path: String = "%s/frame_%03d.png" % [abs_dir.trim_suffix("/"), i]
+		var save_err: int = image.save_png(path)
+		if save_err != OK:
+			push_error("shot-action: failed to save %s (err %d)" % [path, save_err])
+			get_tree().quit(1)
+			return
+
+	var phases: Dictionary = {"state": state, "fps": 60, "loop": bool(cfg["loop"]), "frames": total}
+	var def: Variant = _ctx.player._attack_state.def if _ctx.player._attack_state != null else null
+	if def != null and (state == "ATTACKING_LIGHT" or state == "ATTACKING_HEAVY"):
+		phases["windup_end_frame"] = int(round(def.windup_end * 60.0))
+		phases["active_end_frame"] = int(round(def.active_end * 60.0))
+
+	var phase_file: FileAccess = FileAccess.open("%s/phases.json" % abs_dir.trim_suffix("/"), FileAccess.WRITE)
+	if phase_file == null:
+		push_error("shot-action: failed to write phases.json")
+		get_tree().quit(1)
+		return
+	phase_file.store_string(JSON.stringify(phases, "  "))
+	phase_file.close()
+	print("SHOT ACTION: wrote %d frames to %s" % [total, abs_dir])
+	get_tree().quit(0)
 
 func _sync_input_tracker() -> void:
 	var keys: Array[int] = [

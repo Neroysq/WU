@@ -650,8 +650,10 @@ func dev_set_capture_playback(enabled: bool, physics: bool = false) -> void:
 ```gdscript
 	if _dev_capture_playback:
 		# Advance presentation-relevant time only. No real input, no AI,
-		# no resolve_hits, no victory/defeat checks.
-		var capture_dt: float = delta
+		# no resolve_hits, no victory/defeat checks. Fixed step is required:
+		# viewport readback stalls can inflate wall-clock delta, while
+		# phases.json assumes one captured PNG = exactly 1/60 s.
+		var capture_dt: float = 1.0 / 60.0
 		if _dev_capture_physics:
 			# Ballistic/dash states: full player physics with neutral input
 			# (gravity, velocity integration, state transitions like
@@ -661,6 +663,8 @@ func dev_set_capture_playback(enabled: bool, physics: bool = false) -> void:
 			_player.update_timers(capture_dt)
 		_particle_system.update(capture_dt)
 ```
+
+Also feed the same fixed `capture_dt` into `_update_player_presenter(capture_dt, capture_dt)` in this branch. Do not pass wall-clock `delta` to the presenter during capture — otherwise timeline pose selection and dither playback drift away from the frame index while `phases.json` still reports 60 fps.
 
 (`fighter.update_timers` is at `fighter.gd:178` and **already calls `_update_animation()` internally** (`fighter.gd:236`) — do NOT call `_update_animation` separately or held-state shake/wobble/bob will advance at double speed in the review GIF. `update_player` drives timers itself — never combine the two branches. Verify `update_timers` advances the attack state via `AttackState.advance()`; if it does not, add `if _player._attack_state != null: _player._attack_state.advance(capture_dt)` — discarding the returned event dict is fine for capture — but never assign `elapsed` directly. Verify `_build_player_input(false)` returns the all-neutral dict (it is the existing inactive-input shape at `combat_scene.gd:505-510`); if its signature differs, add a tiny `_neutral_capture_input()` returning that literal. Keep the whole diff inside the dev-mode branch.)
 
