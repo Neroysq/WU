@@ -23,6 +23,46 @@
           }
         }
       }
+    },
+    "light": {
+      "slots": {
+        "coil": {
+          "file": "art/keyframes/hu/light/coil.png",
+          "prompt": "Edit the image: the sheath at his hip is an empty scabbard -- remove the sword handle and pommel sticking out of it so it is just an empty green sheath. He keeps facing the same direction; keep the same coiled windup pose, same face, hair, blue robes, white pants, black boots, drawn sword in hand, jade tassel, clean green background. Everything else stays unchanged.",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-15",
+          "notes": "user approved coil cand_2 after empty-scabbard correction; source pose from /tmp/wu-reanim/keyframes/light/coil/cand_2.png",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes/light/coil_fixed/cand_1.png",
+            "run_dir": "/tmp/wu-reanim/keyframes-raw/light-coil-2-empty-scabbard",
+            "recovery": "session-id",
+            "session_id": "019ecaa6-c79b-70f0-a54a-dfe5fa2f6667",
+            "request_id": "rollout-2026-06-15T17-39-48-019ecaa6-c79b-70f0-a54a-dfe5fa2f6667",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        },
+        "thrust": {
+          "file": "art/keyframes/hu/light/thrust.png",
+          "prompt": "Edit the image: the sheath at his hip is an empty scabbard -- remove the sword handle and pommel sticking out of it so it is just an empty green sheath. He keeps facing the same direction; keep the same forward thrust pose, same face, hair, blue robes, white pants, black boots, drawn sword fully extended in hand, jade tassel, clean green background. Everything else stays unchanged.",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-15",
+          "notes": "user approved thrust cand_2 after empty-scabbard correction; source pose from /tmp/wu-reanim/keyframes/light/thrust/cand_2.png",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes/light/thrust_fixed/cand_1.png",
+            "run_dir": "/tmp/wu-reanim/keyframes-raw/light-thrust-2-empty-scabbard",
+            "recovery": "session-id",
+            "session_id": "019ecaa8-97d4-7381-81bb-3b37e797940b",
+            "request_id": "rollout-2026-06-15T17-41-47-019ecaa8-97d4-7381-81bb-3b37e797940b",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        }
+      }
     }
   }
 }
