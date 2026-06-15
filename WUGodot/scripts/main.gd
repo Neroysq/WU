@@ -11,7 +11,7 @@ const _ACTION_CAPTURE := {
 	"ATTACKING_LIGHT": {"prep": "attack_light_full", "frames": 32, "loop": false},
 	"ATTACKING_HEAVY": {"prep": "attack_heavy_full", "frames": 50, "loop": false},
 	"IDLE": {"prep": "01_idle", "frames": 192, "loop": true},
-	"WALKING": {"prep": "02_walk", "frames": 120, "loop": true},
+	"WALKING": {"prep": "02_walk", "frames": 36, "loop": true, "physics": true},
 	"BLOCKING": {"prep": "08_block", "frames": 36, "loop": false},
 	"HIT_REACTION": {"prep": "09_hit_react", "frames": 24, "loop": false},
 	"STUNNED": {"prep": "10_stunned", "frames": 90, "loop": true},

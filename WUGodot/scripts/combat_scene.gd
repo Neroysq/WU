@@ -202,6 +202,7 @@ func dev_prepare_capture_state(state_name: String) -> void:
 
 	match state_name:
 		"02_walk":
+			_enemy.position = Vector2(1300.0, GameConstants.GROUND_Y)
 			_player.current_animation = Fighter.AnimationState.WALKING
 			_player.velocity.x = _player.move_speed * float(_player.facing)
 			_player.animation_timer = 0.2
@@ -317,7 +318,7 @@ func _process(delta: float) -> void:
 			var capture_dt: float = DEV_CAPTURE_STEP
 			presenter_dt = capture_dt
 			if _dev_capture_physics:
-				_combat_system.update_player(_player, _build_player_input(false), capture_dt, _enemy)
+				_combat_system.update_player(_player, _dev_capture_input(), capture_dt, _enemy)
 			else:
 				_player.update_timers(capture_dt)
 			_particle_system.update(capture_dt)
@@ -527,6 +528,12 @@ func _neutral_input() -> Dictionary:
 		"attack_holding": false,
 		"attack_hold_duration": 0.0,
 	}
+
+func _dev_capture_input() -> Dictionary:
+	var input: Dictionary = _neutral_input()
+	if _player != null and _player.current_animation == Fighter.AnimationState.WALKING:
+		input["move"] = float(_player.facing)
+	return input
 
 func _update_player_presenter(combat_dt: float, presentation_dt: float) -> void:
 	if _player_presenter == null or _player == null:

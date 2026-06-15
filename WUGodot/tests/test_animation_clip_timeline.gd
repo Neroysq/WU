@@ -80,10 +80,10 @@ func run_all() -> Dictionary:
 		failures.append("heavy clip should hold readable anticipation, strike at active start, recover at recovery start, and use numeric track timing")
 
 	var walk: Variant = TimelineScript.load_from_file("res://assets/animation_clips/walk.timeline.json")
-	if walk.rate_mode == "velocity" and walk.has_track("offsetY") and walk.has_track("rotation"):
+	if walk.rate_mode == "velocity" and walk.pose_at(0.0) == "vw_002" and walk.pose_at(0.5) == "vw_049" and walk.pose_at(0.99) == "vw_096" and not walk.has_track("offsetY") and not walk.has_track("rotation"):
 		passed += 1
 	else:
 		failed += 1
-		failures.append("walk should opt into velocity rate matching and expose bob/lean tracks")
+		failures.append("walk video clip should opt into velocity rate matching, use vw_* poses, and drop synthetic bob/lean tracks")
 
 	return {"passed": passed, "failed": failed, "failures": failures}
