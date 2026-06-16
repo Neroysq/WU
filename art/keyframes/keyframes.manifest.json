@@ -285,6 +285,43 @@
           }
         }
       }
+    },
+    "entry": {
+      "notes": "Phase 6 entry draw uses generated video frames installed with the vd_ prefix.",
+      "slots": {
+        "sheathed": {
+          "file": "art/keyframes/hu/entry/sheathed.png",
+          "prompt": "Edit the image: create Hu's one-time combat-entry starting pose. He stands relaxed but confident in side view with the sword fully SHEATHED in the green hip scabbard, one hand resting near the hilt and the other loose, before drawing. No drawn blade is visible yet. Keep the same young wuxia swordsman identity, face, hair bun, deep blue robe, white pants, black boots, brown belt, green scabbard, jade tassel near the hilt, full body, clean chroma green background, current pixel-art style. This pose may be calmer than combat guard but should have stylish iaido swagger. No duplicate sword.",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-17",
+          "notes": "Phase 6 Gate 1 approved sheathed cand_1 for the one-time combat-entry draw start.",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes-phase6/entry/sheathed/cand_1.png",
+            "run_dir": "/tmp/wu-phase6-raw/entry-sheathed-1",
+            "eval_run_id": "entry-sheathed-1__db00fc4d",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        },
+        "mid_draw": {
+          "file": "art/keyframes/hu/entry/mid_draw.png",
+          "prompt": "Edit the image: create the MID-DRAW pose of the same one-time iaido combat-entry flourish. Hu has just begun drawing the sword from the green hip scabbard: right hand pulls the hilt forward, left hand braces the scabbard, a short length of silver blade is visible halfway out, body twisting into motion, knees bent, stylish wuxia draw. The blade is NOT fully drawn yet and not in combat guard. Preserve the same Hu identity, face, hair bun, deep blue robe, white pants, black boots, belt, green scabbard, jade tassel, side-view full body, clean chroma green background, current pixel-art style. No duplicate sword, no second blade.",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-17",
+          "notes": "Phase 6 Gate 1 approved mid_draw cand_1 for the one-time combat-entry draw transition.",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes-phase6/entry/mid_draw/cand_1.png",
+            "run_dir": "/tmp/wu-phase6-raw/entry-mid-draw-1",
+            "eval_run_id": "entry-mid-draw-1__a9bd08c0",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        }
+      }
     }
   }
 }
