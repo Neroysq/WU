@@ -55,10 +55,15 @@ Status legend: ✅ shipped (committed) · ☑️ Gate 2 passed, pending cleanup/
 - **Known issue (deferred):** blade length varies slightly frame-to-frame (Seedance redraw, recurs from light). Gameplay-safe (hitbox uses the single max-extension pose `vh_064`); visual-polish deferral.
 - **Review rule (important, learned here):** windup and strike must form **one coherent swing**. Overhead windup → horizontal thrust is an unnatural path and produces a muddy video + grip mismatch in the recover (recover was generated for a different swing than the chosen strike). Pick a coherent pairing first (overhead→cleave OR coil→thrust), *then* generate recover from the final strike.
 
-## Held poses ⬜ (Phase 5)
+## Held poses ✅
+
+> **Repo state:** Phase 5 landed (commit `12c27e2`): 9 `vp_*` stills, `held_*` single-pose clips, graph states + routing, stunned carrier retune + capture-prep fix. Tests 308/0.
 
 - **Concept (SF6 economy):** hit / stunned / block / dash / jump are *held poses*, not animated clips — their durations are gameplay-variable and interrupt-any-frame. Single maximally-exaggerated stills (huge recoil, spiral-eye dizzy) carried by existing procedural motion (shake/wobble/bob/arc) + juice (hitstop, shake, sparks). No video.
-- **Gate:** stills via Gate 1; quality judged at Gate 2 with the procedural carriers live. Requires the §5a presenter parity (opt-in `animation_offset`) already built in Phase 0.
+- **Poses:** `vp_hit` (huge recoil — regenerated bigger after the first was too composed), `vp_stun_a`/`vp_stun_b` (dizzy ping-pong, stars), `vp_block` (cross-body horizontal brace — regenerated to differ from the guard), `vp_dash` (low horizontal lunge), `vp_rise`/`vp_peak`/`vp_fall`/`vp_land` (jump arc). Clips set `useFighterOffset: true`.
+- **Carriers (`fighter.gd` `animation_offset` per state):** each state writes its own sin/cos offset — hit shake, block bob, dash forward-arc, jump ballistic, stunned drunken-stagger. The still is static; *all* motion is the carrier. **Stunned lesson:** the first carrier (±5px clean sinusoid) read as breathing → retuned to a large slow off-balance sway + faster woozy tremor (`x = sin(t·6)·16 + sin(t·19)·4`).
+- **Capture-harness lesson:** `--shot-action STUNNED` initially showed idle because the prep set `is_stunned` without `_stun_timer` → the fighter reverted to IDLE on frame 1. Fixed with `apply_stun(9999.0)`. *Any* held-state capture prep must sustain its state's timer, or the review rig silently shows the wrong state.
+- **Gate:** stills via Gate 1 (hit + block regenerated once); quality judged at Gate 2 with the procedural carriers live. Required the presenter parity (opt-in `animation_offset` / `useFighterOffset`) built in Phase 0.
 
 ## Entry draw ⬜ (Phase 6)
 
