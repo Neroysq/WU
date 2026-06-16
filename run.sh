@@ -10,6 +10,7 @@
 #   ./run.sh --scale-masters <dir>     # normalize smooth masters to a common canvas
 #   ./run.sh --install-pixelized <dir> # install pixelized Hu frames into canonical slots
 #   ./run.sh --probe-reach             # derive Hu authored reach and enemy range targets
+#   ./run.sh --stage-held-keyframes <dir> # stage approved held keyframes as smooth masters
 #   ./run.sh --shot-combat [dir] # save deterministic combat screenshots, then quit
 #   ./run.sh --shot-archetype=<id> [dir] # save deterministic combat + enemy archetype screenshots
 #   ./run.sh --shot-action STATE [dir] # save every rendered frame for one combat state
@@ -84,6 +85,11 @@ case "${1:-}" in
         echo "Probing Hu authored reach..."
         exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/probe_hu_reach.gd
         ;;
+    --stage-held-keyframes)
+        shift
+        echo "Staging held keyframes..."
+        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/stage_held_keyframes.gd -- "$@"
+        ;;
     --install-video)
         shift
         echo "Installing video frames..."
@@ -119,7 +125,7 @@ case "${1:-}" in
         ;;
     *)
         echo "Unknown option: $1" >&2
-        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-pixelized <dir>|--install-video <args>|--probe-reach|--shot-combat|--shot-action STATE|--shot-archetype=<id>|--editor|--help]" >&2
+        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-pixelized <dir>|--install-video <args>|--probe-reach|--stage-held-keyframes <dir>|--shot-combat|--shot-action STATE|--shot-archetype=<id>|--editor|--help]" >&2
         exit 1
         ;;
 esac

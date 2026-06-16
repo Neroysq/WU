@@ -96,6 +96,13 @@ func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = f
 			"res://assets/animation_clips/hu_attack_heavy.timeline.json",
 			"res://assets/animation_clips/idle.timeline.json",
 			"res://assets/animation_clips/walk.timeline.json",
+			"res://assets/animation_clips/held_block.timeline.json",
+			"res://assets/animation_clips/held_hit.timeline.json",
+			"res://assets/animation_clips/held_stunned.timeline.json",
+			"res://assets/animation_clips/held_dash.timeline.json",
+			"res://assets/animation_clips/held_jump.timeline.json",
+			"res://assets/animation_clips/held_fall.timeline.json",
+			"res://assets/animation_clips/held_land.timeline.json",
 		],
 		float(DataManager.get_visual_profile(_player.visual_profile_id).get("scale", 1.625))
 	)
@@ -242,8 +249,7 @@ func dev_prepare_capture_state(state_name: String) -> void:
 			_player.current_animation = Fighter.AnimationState.HIT_REACTION
 			_player.animation_timer = 0.1
 		"10_stunned":
-			_player.current_animation = Fighter.AnimationState.STUNNED
-			_player.is_stunned = true
+			_player.apply_stun(9999.0)
 			_player.animation_timer = 0.15
 		"11_dash":
 			_player.start_dash(_player.facing)
@@ -556,6 +562,20 @@ func _resolve_player_state_name() -> String:
 			return "WALKING"
 		Fighter.AnimationState.IDLE:
 			return "IDLE"
+		Fighter.AnimationState.BLOCKING:
+			return "BLOCKING"
+		Fighter.AnimationState.HIT_REACTION:
+			return "HIT_REACTION"
+		Fighter.AnimationState.STUNNED:
+			return "STUNNED"
+		Fighter.AnimationState.DASHING:
+			return "DASHING"
+		Fighter.AnimationState.JUMPING:
+			return "JUMPING"
+		Fighter.AnimationState.FALLING:
+			return "FALLING"
+		Fighter.AnimationState.LANDING:
+			return "LANDING"
 		_:
 			return "FALLBACK"
 

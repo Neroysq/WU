@@ -1,0 +1,8 @@
+{
+  "id": "held_land",
+  "duration": 0.2,
+  "useFighterOffset": true,
+  "keyposes": [
+    { "t": 0.0, "pose": "vp_land" }
+  ]
+}

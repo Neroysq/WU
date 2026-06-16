@@ -1,0 +1,9 @@
+{
+  "id": "held_stunned",
+  "duration": 0.5,
+  "useFighterOffset": true,
+  "keyposes": [
+    { "t": 0.0, "pose": "vp_stun_a" },
+    { "t": 0.5, "pose": "vp_stun_b" }
+  ]
+}

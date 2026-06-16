@@ -1,0 +1,8 @@
+{
+  "id": "held_block",
+  "duration": 0.4,
+  "useFighterOffset": true,
+  "keyposes": [
+    { "t": 0.0, "pose": "vp_block" }
+  ]
+}

@@ -28,6 +28,41 @@
       "cancelInto": {
         "DASH": "recovery"
       }
+    },
+    "BLOCKING": {
+      "clip": "held_block",
+      "enter": { "mode": "snap", "time": 0.0 },
+      "priority": 3
+    },
+    "HIT_REACTION": {
+      "clip": "held_hit",
+      "enter": { "mode": "snap", "time": 0.0 },
+      "priority": 7
+    },
+    "STUNNED": {
+      "clip": "held_stunned",
+      "enter": { "mode": "dither", "time": 0.06 },
+      "priority": 7
+    },
+    "DASHING": {
+      "clip": "held_dash",
+      "enter": { "mode": "snap", "time": 0.0 },
+      "priority": 4
+    },
+    "JUMPING": {
+      "clip": "held_jump",
+      "enter": { "mode": "dither", "time": 0.06 },
+      "priority": 2
+    },
+    "FALLING": {
+      "clip": "held_fall",
+      "enter": { "mode": "dither", "time": 0.06 },
+      "priority": 2
+    },
+    "LANDING": {
+      "clip": "held_land",
+      "enter": { "mode": "snap", "time": 0.0 },
+      "priority": 2
     }
   }
 }

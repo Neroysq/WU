@@ -1,0 +1,9 @@
+{
+  "id": "held_jump",
+  "duration": 0.3,
+  "useFighterOffset": true,
+  "keyposes": [
+    { "t": 0.0, "pose": "vp_rise" },
+    { "t": 0.5, "pose": "vp_peak" }
+  ]
+}

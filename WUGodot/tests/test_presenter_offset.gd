@@ -50,6 +50,15 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("useFighterOffset should parse true and default false")
 
+	var real_held: Variant = TimelineScript.load_from_file("res://assets/animation_clips/held_hit.timeline.json")
+	var real_stunned: Variant = TimelineScript.load_from_file("res://assets/animation_clips/held_stunned.timeline.json")
+	var real_dash: Variant = TimelineScript.load_from_file("res://assets/animation_clips/held_dash.timeline.json")
+	if real_held.use_fighter_offset and real_stunned.use_fighter_offset and real_dash.use_fighter_offset:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("Phase 5 held clips should opt into fighter.animation_offset")
+
 	var catalog: AssetCatalog = AssetCatalog.new()
 	var presenter: Variant = PresenterScript.new(catalog)
 	presenter.configure(

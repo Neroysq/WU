@@ -20,6 +20,25 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("graph should map ATTACKING_HEAVY to its clip")
 
+	var held_expected: Dictionary = {
+		"BLOCKING": "held_block",
+		"HIT_REACTION": "held_hit",
+		"STUNNED": "held_stunned",
+		"DASHING": "held_dash",
+		"JUMPING": "held_jump",
+		"FALLING": "held_fall",
+		"LANDING": "held_land",
+	}
+	var held_ok: bool = true
+	for state_name in held_expected.keys():
+		if not graph.has_state(str(state_name)) or graph.clip_for(str(state_name)) != str(held_expected[state_name]):
+			held_ok = false
+	if held_ok:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("graph should map every Phase 5 held state to its held clip")
+
 	var atk_enter: Dictionary = graph.enter_for("ATTACKING_LIGHT")
 	var idle_enter: Dictionary = graph.enter_for("IDLE")
 	if str(atk_enter.get("mode", "")) == "snap" and str(idle_enter.get("mode", "")) == "dither":

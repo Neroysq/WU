@@ -255,8 +255,9 @@ func _update_animation(dt: float) -> void:
 				current_animation = AnimationState.IDLE
 				animation_timer = 0.0
 		AnimationState.STUNNED:
-			animation_offset.x = sin(animation_timer * 12.0) * 5.0
-			animation_offset.y = cos(animation_timer * 15.0) * 2.0
+			# Drunken stagger: large slow off-balance sway + faster woozy tremor.
+			animation_offset.x = sin(animation_timer * 6.0) * 16.0 + sin(animation_timer * 19.0) * 4.0
+			animation_offset.y = cos(animation_timer * 5.0) * 6.0 + cos(animation_timer * 23.0) * 2.0
 		AnimationState.DASHING:
 			var dash_progress: float = 1.0 - (_dash_timer / maxf(dash_duration, 0.001))
 			animation_offset.x = sin(dash_progress * PI) * 20.0 * float(facing)

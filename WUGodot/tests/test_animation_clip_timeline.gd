@@ -86,4 +86,12 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("walk video clip should opt into velocity rate matching, use vw_* poses, and drop synthetic bob/lean tracks")
 
+	var jump: Variant = TimelineScript.load_from_file("res://assets/animation_clips/held_jump.timeline.json")
+	var stunned: Variant = TimelineScript.load_from_file("res://assets/animation_clips/held_stunned.timeline.json")
+	if jump.use_fighter_offset and jump.pose_at(0.0) == "vp_rise" and jump.pose_at(0.5) == "vp_peak" and stunned.use_fighter_offset and stunned.pose_at(0.5) == "vp_stun_b":
+		passed += 1
+	else:
+		failed += 1
+		failures.append("held timelines should use approved vp poses, including jump peak and stunned pair")
+
 	return {"passed": passed, "failed": failed, "failures": failures}
