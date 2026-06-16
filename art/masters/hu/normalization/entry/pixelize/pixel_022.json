@@ -1,0 +1,28 @@
+{
+  "out_size": [
+    333,
+    236
+  ],
+  "palette": "vinik24",
+  "fit_mode": "exact",
+  "scale_applied": [
+    0.25,
+    0.25
+  ],
+  "content_bbox": [
+    0,
+    0,
+    1332,
+    944
+  ],
+  "bbox": [
+    100,
+    24,
+    133,
+    200
+  ],
+  "foot_anchor": [
+    166,
+    224
+  ]
+}

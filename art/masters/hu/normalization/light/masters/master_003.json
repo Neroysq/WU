@@ -1,0 +1,21 @@
+{
+  "action": "light",
+  "bbox": [
+    344.934020996094,
+    172.318664550781,
+    795.527465820312,
+    799.417541503906
+  ],
+  "foot_anchor": [
+    742.0,
+    971.901123046875
+  ],
+  "measured_bg": "#00DE04",
+  "native_size": [
+    1484,
+    1020
+  ],
+  "source": "animate-video",
+  "space": "image",
+  "strategy": "chroma-key"
+}

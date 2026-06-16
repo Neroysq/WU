@@ -1,0 +1,21 @@
+{
+  "action": "heavy",
+  "space": "image",
+  "native_size": [
+    1280,
+    720
+  ],
+  "measured_bg": "#02E808",
+  "strategy": "chroma-key",
+  "source": "animate-video",
+  "bbox": [
+    438,
+    299,
+    479,
+    361
+  ],
+  "foot_anchor": [
+    677,
+    660
+  ]
+}

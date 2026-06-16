@@ -1,0 +1,21 @@
+{
+  "action": "walk",
+  "space": "image",
+  "native_size": [
+    1280,
+    720
+  ],
+  "measured_bg": "#00FA03",
+  "strategy": "chroma-key",
+  "source": "animate-video",
+  "bbox": [
+    296,
+    202,
+    696,
+    518
+  ],
+  "foot_anchor": [
+    644,
+    720
+  ]
+}
