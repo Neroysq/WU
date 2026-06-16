@@ -122,6 +122,46 @@
         }
       }
     },
+    "hit": {
+      "slots": {
+        "hit": {
+          "file": "art/keyframes/hu/hit/hit.png",
+          "prompt": "Edit the image: Hu is hit by a huge impact and is violently knocked backward in a wild comical fighting-game recoil. Push the exaggeration hard: whole torso whipped backward, head snapped back, mouth grimacing, arms flailing open, sword still UNSHEATHED but thrown off-line in his hand, knees buckling, feet nearly leaving the ground, body off-balance and clearly losing control. Full body side view on clean chroma green. Same young wuxia swordsman, face, hair bun, blue robe, white pants, black boots, jade tassel. Green hip scabbard is empty with no handle or pommel sticking out. No duplicate sword, no composed guard stance.",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-16",
+          "notes": "Phase 5 Gate 1 approved hit cand_2; selected over cand_1 because the recoil is less composed, over cand_3 because the sword drops, and over cand_4 by user preference.",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes-phase5/hit/hit/cand_2.png",
+            "run_dir": "/tmp/wu-phase5-raw/hit-2",
+            "eval_run_id": "hit-2__17feee4c",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        }
+      }
+    },
+    "block": {
+      "slots": {
+        "block": {
+          "file": "art/keyframes/hu/block/block.png",
+          "prompt": "Edit the image: Hu is blocking a heavy blow with a low braced cross-body parry. Make the pose visually distinct from his guard: body compressed, weight back, front knee bent, sword laid almost flat across the body at rib height, blade spanning left-to-right as a barrier, shoulders behind the sword. Full body side view on clean chroma green. Same face, hair bun, deep blue robe, white pants, black boots, drawn sword with jade tassel, empty green hip scabbard with no handle or pommel. No forward attack pose, no duplicate sword.",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-16",
+          "notes": "Phase 5 Gate 1 approved block cand_3; selected because it is a distinct low braced cross-body parry. cand_1 was too guard-like and cand_4 regressed toward ready stance.",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes-phase5/block/block/cand_3.png",
+            "run_dir": "/tmp/wu-phase5-raw/block-3",
+            "eval_run_id": "block-3__4c091c26",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        }
+      }
+    },
     "stunned": {
       "slots": {
         "stun_a": {
