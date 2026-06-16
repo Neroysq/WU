@@ -46,9 +46,13 @@ This handoff is a snapshot/index; if it disagrees with the plan, the plan wins f
 | 3 | Light attack (`vl_`, guard-start thrust; reach re-synced 342→362; BanditSwordsman re-tuned) | ✅ landed (`6638373`) |
 | 4 | Heavy attack (`vh_`, overhead cleave; reach 340→258, close-range cleave, no lunge) | ✅ landed (`507300a`) |
 | 5 | Held poses (hit/stunned/block/dash/jump, `vp_`) | ✅ landed (`12c27e2`) |
-| **6** | **Entry draw (iaido flourish) + legacy `character_hu.json` retirement** | **⬜ NEXT — see §4** |
+| 6 | Entry draw (iaido flourish, `vd_`) + legacy `character_hu.json` retirement | ✅ landed (`2334463`, `07c30fb`) |
 
-Phase 5 keyframes: `aa48b3d`, `90259a8`. Phase 5 runtime: `12c27e2` (held poses + stunned carrier retune + capture-prep `apply_stun` fix). Only Phase 6 remains.
+> **✅ RE-ANIMATION COMPLETE (2026-06-17).** All phases landed. Hu renders entirely from the video-first `v*` pipeline; the legacy `character_hu.json` set, its 26 slot PNGs, and `install_pixelized.gd` are gone. Worktree clean, tests 308/0, all 15 states audited to `v*` assets. Deferred polish only (see below). New work on Hu's visuals starts from the canonical docs in §2, not this handoff.
+
+**Deferred polish (gameplay-safe, not blocking):**
+- Blade length varies frame-to-frame on attacks (Seedance redraw; hitbox uses one max-extension pose).
+- Entry-draw feet not on the same y-level in some frames (foot-grounding/anchor).
 
 ---
 

@@ -5,6 +5,8 @@
 
 Status legend: ✅ shipped (committed) · ☑️ Gate 2 passed, pending cleanup/commit · 🔄 in progress · ⬜ queued
 
+> **✅ Re-animation COMPLETE (2026-06-17).** All actions shipped (idle · walk · light · heavy · held poses · entry draw) and the legacy `character_hu.json` set is retired (`07c30fb`). Hu renders entirely from the video-first `v*` pipeline. Remaining items are the deferred polish notes below (blade-length variance; entry foot y-level).
+
 ---
 
 ## Character constants (apply to every action)
@@ -65,9 +67,15 @@ Status legend: ✅ shipped (committed) · ☑️ Gate 2 passed, pending cleanup/
 - **Capture-harness lesson:** `--shot-action STUNNED` initially showed idle because the prep set `is_stunned` without `_stun_timer` → the fighter reverted to IDLE on frame 1. Fixed with `apply_stun(9999.0)`. *Any* held-state capture prep must sustain its state's timer, or the review rig silently shows the wrong state.
 - **Gate:** stills via Gate 1 (hit + block regenerated once); quality judged at Gate 2 with the procedural carriers live. Required the presenter parity (opt-in `animation_offset` / `useFighterOffset`) built in Phase 0.
 
-## Entry draw ⬜ (Phase 6)
+## Entry draw ✅
 
-- **Concept:** one-time combat-entry flourish — sheathed idle → iaido draw → guard. The draw we removed from per-swing attacks returns here as entry swagger. Scene-local `COMBAT_ENTRY` presenter override, skippable on input.
+> **Repo state:** Phase 6 landed: entry draw (`2334463`), legacy set retired (`07c30fb`). All 15 states render from `v*` assets; `character_hu.json` + 26 legacy slot PNGs + `install_pixelized.gd` removed. Tests 308/0.
+
+- **Concept:** one-time combat-entry flourish — sheathed idle → iaido draw → guard. The draw we removed from per-swing attacks returns here as entry swagger.
+- **Anchors:** `sheathed` (cand_1, relaxed, scabbard *full* — the one place the sword sits in the sheath) → `mid_draw` (cand_1, horizontal nukitsuke) → guard. Scabbard goes full → empty as the blade clears.
+- **Recipe:** `--reference-seq sheathed mid-draw guard`. Installed as `vd_*` / `entry_draw.timeline.json` (non-loop — does not wrap back to sheathed).
+- **Wiring:** scene-local `COMBAT_ENTRY` presenter override — a graph state with an arbitrary name, NOT a `Fighter.AnimationState` (combat truth stays IDLE). `combat_scene._entry_timer` runs it on enter, suppresses input, and **any input cancels** into normal idle routing. `_resolve_player_state_name()` untouched. (This is also why it can't recreate the stunned capture bug — there's no fighter-state timer to forget.)
+- **Known issue (deferred):** the two feet aren't on the same y-level in some entry frames (foot-grounding/anchor polish). Cosmetic; the entry is input-cancellable. Parked.
 
 ---
 
