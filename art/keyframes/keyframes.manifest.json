@@ -121,6 +121,130 @@
           }
         }
       }
+    },
+    "stunned": {
+      "slots": {
+        "stun_a": {
+          "file": "art/keyframes/hu/stunned/stun_a.png",
+          "prompt": "Edit the image: the young wuxia swordsman is stunned and dazed in a comical wobbling pose. Eyes spiraling or unfocused, head tilted, shoulders loose, knees wobbly, sword drooping but still in hand, full body side view. Drawn sword with jade tassel, empty green scabbard at his hip with no handle or pommel sticking out. Same face, hair bun, blue robe, white pants, black boots. Clean chroma green background. Everything else stays consistent.",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-16",
+          "notes": "Phase 5 Gate 1 approved stun_a cand_1; baked dazed/stars read accepted for the held stunned ping-pong pair.",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes-phase5/stunned/stun_a/cand_1.png",
+            "run_dir": "/tmp/wu-phase5-raw/stun_a-1",
+            "eval_run_id": "stun_a-1__9ba67e7e",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        },
+        "stun_b": {
+          "file": "art/keyframes/hu/stunned/stun_b.png",
+          "prompt": "Edit the image: create a second slight variant of the stunned dazed pose. The young wuxia swordsman wobbles the opposite way, head tilted differently, eyes spiraling or unfocused, knees loose, sword drooping but still in hand, full body side view. Drawn sword with jade tassel, empty green scabbard at his hip with no handle or pommel sticking out. Same face, hair bun, blue robe, white pants, black boots. Clean chroma green background. Everything else stays consistent.",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-16",
+          "notes": "Phase 5 Gate 1 approved stun_b cand_1 as the second held stunned ping-pong pose.",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes-phase5/stunned/stun_b/cand_1.png",
+            "run_dir": "/tmp/wu-phase5-raw/stun_b-1",
+            "eval_run_id": "stun_b-1__92cc4a8c",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        }
+      }
+    },
+    "dash": {
+      "slots": {
+        "dash": {
+          "file": "art/keyframes/hu/dash/dash.png",
+          "prompt": "Edit the image: render Hu in a low fast dash pose on clean chroma green. Keep the forward-leaning running silhouette: body low and stretched forward, one knee lifted, trailing leg driving back. The sword is UNSHEATHED and clearly drawn in his rear hand, blade visible trailing behind him; the green hip scabbard is empty with no handle or pommel sticking out. Do not put the sword back in the scabbard. No duplicate sword. Full body side view, same face, hair bun, blue robe, white pants, black boots, jade tassel on the sword.",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-16",
+          "notes": "Phase 5 Gate 1 approved dash cand_3; cand_1 was a guard/block fallback and cand_2 sheathed the sword.",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes-phase5/dash/dash/cand_3.png",
+            "run_dir": "/tmp/wu-phase5-raw/dash-3",
+            "eval_run_id": "dash-3__78e40bda",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        }
+      }
+    },
+    "jump": {
+      "slots": {
+        "rise": {
+          "file": "art/keyframes/hu/jump/rise.png",
+          "prompt": "Edit the image: the young wuxia swordsman is launching upward into a jump. Knees lifting, body rising off the ground, sword held ready, robe and scabbard following upward motion, full body side view. Drawn sword with jade tassel, empty green scabbard at his hip with no handle or pommel sticking out. Same face, hair bun, blue robe, white pants, black boots. Clean chroma green background. Everything else stays consistent.",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-16",
+          "notes": "Phase 5 Gate 1 approved rise cand_1.",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes-phase5/jump/rise/cand_1.png",
+            "run_dir": "/tmp/wu-phase5-raw/rise-1",
+            "eval_run_id": "rise-1__404a8167",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        },
+        "peak": {
+          "file": "art/keyframes/hu/jump/peak.png",
+          "prompt": "Edit the image: the young wuxia swordsman is airborne at the peak of a jump. Body suspended, legs spread or tucked naturally for a fighting game jump, sword balanced and ready, robe floating, full body side view. Drawn sword with jade tassel, empty green scabbard at his hip with no handle or pommel sticking out. Same face, hair bun, blue robe, white pants, black boots. Clean chroma green background. Everything else stays consistent.",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-16",
+          "notes": "Phase 5 Gate 1 approved peak cand_1.",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes-phase5/jump/peak/cand_1.png",
+            "run_dir": "/tmp/wu-phase5-raw/peak-1",
+            "eval_run_id": "peak-1__39dedf34",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        },
+        "fall": {
+          "file": "art/keyframes/hu/jump/fall.png",
+          "prompt": "Edit the image: turn this airborne Hu pose into the falling-down phase after a jump. Keep him clearly in the air, body angled downward and forward, knees and boots preparing for landing, robe and empty scabbard pulled upward by descent. Sword remains UNSHEATHED and clearly visible in one hand with jade tassel; green hip scabbard is empty with no handle or pommel sticking out. Full body side view, same face, hair bun, blue robe, white pants, black boots. Clean chroma green background. No duplicate sword, no standing guard pose.",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-16",
+          "notes": "Phase 5 Gate 1 approved fall cand_2; cand_1 was a guard/block fallback.",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes-phase5/jump/fall/cand_2.png",
+            "run_dir": "/tmp/wu-phase5-raw/fall-2",
+            "eval_run_id": "fall-2__20e87a2b",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        },
+        "land": {
+          "file": "art/keyframes/hu/jump/land.png",
+          "prompt": "Edit the image: turn this into Hu landing from a jump in a deep compressed crouch. He has just hit the ground: knees bent much lower than the reference, weight sunk down, torso forward, sword still UNSHEATHED and ready near the front, face focused. Full body side view on clean chroma green. Green hip scabbard is empty with no handle or pommel sticking out. Same face, hair bun, blue robe, white pants, black boots, jade tassel. No duplicate sword, no standing guard pose.",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-16",
+          "notes": "Phase 5 Gate 1 approved land cand_2; cand_1 was a guard/block fallback.",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes-phase5/jump/land/cand_2.png",
+            "run_dir": "/tmp/wu-phase5-raw/land-2",
+            "eval_run_id": "land-2__597895ba",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        }
+      }
     }
   }
 }
