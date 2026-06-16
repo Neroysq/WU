@@ -18,6 +18,14 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("hu_light golden values should load from JSON")
 
+	var heavy: Variant = DataManager.get_attack_def("hu_heavy")
+	if heavy != null and heavy.id == "hu_heavy" and is_equal_approx(heavy.range_units, 258.0) \
+			and is_equal_approx(heavy.damage, 22.0) and heavy.is_heavy:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("hu_heavy golden values should load from JSON")
+
 	var grab: Variant = DataManager.get_attack_def("bear_crush_grab")
 	if grab != null and grab.is_grab and is_equal_approx(grab.range_units, 273.0):
 		passed += 1

@@ -7,6 +7,7 @@ const AttackCatalogScript = preload("res://scripts/attack_catalog.gd")
 
 const CASES := [
 	{"id": "hu_light", "clip": "res://assets/animation_clips/hu_attack_light.timeline.json"},
+	{"id": "hu_heavy", "clip": "res://assets/animation_clips/hu_attack_heavy.timeline.json"},
 ]
 
 func _max_extension_active_pose(clip: Variant, def: Variant, manifest: Variant) -> String:

@@ -12,12 +12,14 @@ func run_all() -> Dictionary:
 	var pc: Variant = PresentationCollisionScript.new()
 	pc.register_from_manifest_file("hu", "res://assets/animation_manifests/hu.manifest.json")
 	var manifest: Variant = pc._manifests["hu"]
-	var heavy_pose: Dictionary = manifest.get_pose("heavy_strike")
-	var light_pose: Dictionary = manifest.get_pose("strike_extended")
+	var heavy_pose_name: String = str(PresentationCollisionScript.STRIKE_POSE_BY_ID["hu_heavy"])
+	var light_pose_name: String = str(PresentationCollisionScript.STRIKE_POSE_BY_ID["hu_light"])
+	var heavy_pose: Dictionary = manifest.get_pose(heavy_pose_name)
+	var light_pose: Dictionary = manifest.get_pose(light_pose_name)
 
 	if heavy_pose.is_empty():
 		failed += 1
-		failures.append("manifest should include heavy_strike pose")
+		failures.append("manifest should include mapped heavy strike pose %s" % heavy_pose_name)
 		return {"passed": passed, "failed": failed, "failures": failures}
 
 	var heavy: Variant = _mid_active(AttackCatalogScript.hu_heavy())
@@ -30,7 +32,7 @@ func run_all() -> Dictionary:
 		passed += 1
 	else:
 		failed += 1
-		failures.append("heavy capsule endpoint should match heavy_strike tip (got %s expected %s)" % [str(endpoint), str(heavy_tip)])
+		failures.append("heavy capsule endpoint should match %s tip (got %s expected %s)" % [heavy_pose_name, str(endpoint), str(heavy_tip)])
 
 	var light_tip_source: Vector2 = light_pose.get("weaponTip", Vector2.ZERO) as Vector2
 	var heavy_tip_source: Vector2 = heavy_pose.get("weaponTip", Vector2.ZERO) as Vector2

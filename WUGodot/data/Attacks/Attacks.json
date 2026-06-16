@@ -282,7 +282,7 @@
       "is_perilous": false,
       "knockback_units": 420.0,
       "posture_damage": 42.0,
-      "range_units": 340.0,
+      "range_units": 258.0,
       "windup_end": 0.4
     },
     "hu_light": {

@@ -9,7 +9,7 @@ const STRIKE_POSE: String = "strike_extended"
 const VISUAL_BODY_HEIGHT: float = 260.0
 const STRIKE_POSE_BY_ID: Dictionary = {
 	"hu_light": "vl_051",
-	"hu_heavy": "heavy_strike",
+	"hu_heavy": "vh_064",
 }
 
 const _AUTHORED_IDS: Dictionary = {
