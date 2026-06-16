@@ -63,6 +63,64 @@
           }
         }
       }
+    },
+    "heavy": {
+      "slots": {
+        "windup": {
+          "file": "art/keyframes/hu/heavy/windup.png",
+          "prompt": "Edit the image: the young wuxia swordsman performs a massive heavy-attack windup, sword raised far overhead and behind him, torso twisted back, knees bent in a wide rooted stance, comically telegraphed power, face focused, sword DRAWN in both hands, empty green scabbard visible at his hip with no handle or pommel sticking out, same blue robes, white pants, black boots, jade tassel, side view, full body, clean green background. Everything else stays consistent.",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-16",
+          "notes": "user approved heavy windup cand_2; overhead cleave concept selected for Phase 4",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes/heavy/windup/cand_2.png",
+            "run_dir": "/tmp/wu-reanim/keyframes-raw/heavy-windup-2",
+            "recovery": "session-id",
+            "session_id": "019ecaf3-88f0-7640-aabe-8c7d6f201e4a",
+            "request_id": "rollout-2026-06-15T19-03-38-019ecaf3-88f0-7640-aabe-8c7d6f201e4a",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        },
+        "strike": {
+          "file": "art/keyframes/hu/heavy/strike.png",
+          "prompt": "Edit the image: continue this exact heavy windup into the impact frame of a huge diagonal sword cleave. The swordsman has just swung downward and forward from overhead; blade cuts across the front on a broad diagonal slash, not a straight thrust. Body weight dropped low, torso committed forward, stance grounded and powerful, sword DRAWN in both hands, empty green scabbard still visible at his hip with no handle or pommel sticking out, same face, hair, blue robes, white pants, black boots, jade tassel, side view, full body, clean green background. Everything else stays consistent.",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-16",
+          "notes": "user approved heavy strike cand_4; selected over thrust-like cand_2/cand_3 to keep heavy distinct from light",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes/heavy/strike/cand_4.png",
+            "run_dir": "/tmp/wu-reanim/keyframes-raw/heavy-strike-4-cleave",
+            "recovery": "session-id",
+            "session_id": "019ecb05-395c-7dc1-a409-de22af305053",
+            "request_id": "rollout-2026-06-15T19-22-57-019ecb05-395c-7dc1-a409-de22af305053",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        },
+        "recover": {
+          "file": "art/keyframes/hu/heavy/recover.png",
+          "prompt": "Edit the image: continue this exact heavy cleave into the recovery follow-through. The swordsman has just completed the downward diagonal slash and is settling low, blade lowered across the front, same two-hand grip orientation as this image, hands still on the sword in the same relationship, body weight grounded, shoulders dropping after impact, no second attack, empty green scabbard still visible at his hip with no handle or pommel sticking out, same face, hair, blue robes, white pants, black boots, jade tassel, side view, full body, clean green background. Everything else stays consistent.",
+          "backend": "codex",
+          "seed": null,
+          "approved": "2026-06-16",
+          "notes": "user approved recover cand_2; image-to-image from approved heavy strike cand_4 to preserve grip and swing path",
+          "provenance": {
+            "candidate": "/tmp/wu-reanim/keyframes/heavy/recover_from_strike/cand_2.png",
+            "run_dir": "/tmp/wu-reanim/keyframes-raw/heavy-recover-from-strike-2",
+            "recovery": "session-id",
+            "session_id": "019eceff-0609-71c2-9a72-e3d41a994a4f",
+            "request_id": "rollout-2026-06-16T13-54-40-019eceff-0609-71c2-9a72-e3d41a994a4f",
+            "model": "codex-cli/image_generation",
+            "requested_model": "openai/gpt-5.4-image-2",
+            "cost_usd": 0.0
+          }
+        }
+      }
     }
   }
 }
