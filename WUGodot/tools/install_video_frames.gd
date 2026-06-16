@@ -90,7 +90,9 @@ func _init() -> void:
 		cropped.blit_rect(img, Rect2i(crop, 0, img.get_width() - crop, img.get_height()), Vector2i.ZERO)
 
 		var pose_name: String = "%s_%s" % [prefix, str(entry["label"])]
-		cropped = _apply_pose_translation(cropped, _pose_transform(pose_name))
+		var transform: Dictionary = _pose_transform(pose_name)
+		var anchor_offset: Vector2 = _pose_anchor_offset(transform)
+		cropped = _apply_pose_translation(cropped, transform)
 		var dest: String = DEST_DIR + pose_name + ".png"
 		var save_err: Error = cropped.save_png(ProjectSettings.globalize_path(dest))
 		if save_err != OK:
@@ -104,7 +106,7 @@ func _init() -> void:
 		var hurtbox: Rect2 = measured.get("hurtbox", Rect2()) as Rect2
 		poses[pose_name] = {
 			"path": dest,
-			"footAnchor": [foot_x, int(round(foot.y))],
+			"footAnchor": [int(round(float(foot_x) + anchor_offset.x)), int(round(foot.y + anchor_offset.y))],
 			"chestAnchor": [int(round(chest.x)), int(round(chest.y))],
 			"weaponTip": [int(round(tip.x)), int(round(tip.y))],
 			"hurtbox": [int(round(hurtbox.position.x)), int(round(hurtbox.position.y)), int(round(hurtbox.size.x)), int(round(hurtbox.size.y))],
@@ -172,8 +174,9 @@ func _pose_transform(pose_name: String) -> Dictionary:
 	return {}
 
 func _apply_pose_translation(img: Image, transform: Dictionary) -> Image:
-	var offset_x: int = int(round(float(transform.get("offsetX", 0.0))))
-	var offset_y: int = int(round(float(transform.get("offsetY", 0.0))))
+	var anchor_offset: Vector2 = _pose_anchor_offset(transform)
+	var offset_x: int = int(anchor_offset.x)
+	var offset_y: int = int(anchor_offset.y)
 	if offset_x == 0 and offset_y == 0:
 		return img
 
@@ -194,6 +197,12 @@ func _apply_pose_translation(img: Image, transform: Dictionary) -> Image:
 	out.fill(Color(0, 0, 0, 0))
 	out.blit_rect(img, src_rect, Vector2i(maxi(0, offset_x), maxi(0, offset_y)))
 	return out
+
+func _pose_anchor_offset(transform: Dictionary) -> Vector2:
+	return Vector2(
+		float(int(round(float(transform.get("offsetX", 0.0))))),
+		float(int(round(float(transform.get("offsetY", 0.0)))))
+	)
 
 func _vector(raw: Variant, label: String) -> Vector2:
 	if typeof(raw) == TYPE_ARRAY:

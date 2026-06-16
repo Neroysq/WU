@@ -1,0 +1,49 @@
+{
+  "attacks": {
+    "hu_heavy": {
+      "derivedReach": 280.0,
+      "rangeUnits": 258.0,
+      "rangeUnitsFromReach": 258.0
+    },
+    "hu_light": {
+      "derivedReach": 384.0,
+      "rangeUnits": 362.0,
+      "rangeUnitsFromReach": 362.0
+    }
+  },
+  "enemies": {
+    "BanditSpearman": {
+      "halfWidth": 22.0,
+      "preferredRange": 258.0,
+      "shortestRangeUnits": 280.0
+    },
+    "BanditSwordsman": {
+      "halfWidth": 22.0,
+      "preferredRange": 228.0,
+      "shortestRangeUnits": 250.0
+    },
+    "IronBear": {
+      "halfWidth": 30.0,
+      "preferredRange": 215.0,
+      "shortestRangeUnits": 245.0
+    },
+    "SectDisciple": {
+      "halfWidth": 24.0,
+      "preferredRange": 221.0,
+      "shortestRangeUnits": 245.0
+    },
+    "WanderingRonin": {
+      "halfWidth": 22.0,
+      "preferredRange": 222.0,
+      "shortestRangeUnits": 244.0
+    }
+  },
+  "enemyBand": {
+    "c2cMax": 326.4,
+    "c2cMin": 268.8,
+    "rangeUnitsMax": 304.4,
+    "rangeUnitsMin": 246.8
+  },
+  "huHalfWidth": 22.0,
+  "id": "hu_reach_snapshot"
+}
