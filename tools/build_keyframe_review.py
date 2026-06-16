@@ -20,7 +20,7 @@ CURRENT_ART = {
     "guard": "WUGodot/assets/sprites/characters/hu/static.png",
     "idle": "WUGodot/assets/sprites/characters/hu/idle_0.png",
     "walk": "WUGodot/assets/sprites/characters/hu/walk_0.png",
-    "light": "WUGodot/assets/sprites/characters/hu/va_053.png",
+    "light": "WUGodot/assets/sprites/characters/hu/vl_051.png",
     "heavy": "WUGodot/assets/sprites/characters/hu/heavy_1.png",
     "hit": "WUGodot/assets/sprites/characters/hu/hit_0.png",
     "stunned": "WUGodot/assets/sprites/characters/hu/stunned_0.png",

@@ -33,9 +33,9 @@ Status legend: ✅ shipped (committed) · ☑️ Gate 2 passed, pending cleanup/
 - **Result:** `vw_` poses, `rate: velocity`, 0.6s, no bob/lean tracks.
 - **Review notes / lessons:** locomotion needs **no authored keyframes** — the prompt is decisive ("march" → stiff lunges; fighting-game framing → grounded steps). Free-end runs wander (no clean loop → trim a window); pinning the same pose both ends closes the loop but can suppress motion (fix: prompt "two full steps"). Legs are deliberately subtle → **foot-slide is the in-engine Gate-2 check** (tune `move_speed`/duration, never regenerate). Green "outlines" in GIF previews were a palette artifact, not spill — judge colour on PNGs/final pixels.
 
-## Light attack ☑️ (Gate 2 passed — pending cleanup + commit)
+## Light attack ✅
 
-> **Repo state:** `vl_*.png` still untracked, old `va_` rollback assets still present, Phase 3 changes (timeline/collision/reach/enemy tune) uncommitted. Ships once the implementer removes `va_` and commits per the Phase 3 protocol.
+> **Repo state:** Phase 3 landed: `vl_` poses installed, old `va_` rollback assets removed, timeline/collision/reach/enemy tune committed.
 
 - **Concept:** quick guard-start thrust. Coil back → explosive horizontal thrust → recover to guard. Replaces the old `va_` iaido (which drew + re-sheathed every swing); the new one chains from combat stance for combos.
 - **Anchors:** guard → **coil** (coil_fixed cand_1) → **thrust** (thrust_fixed cand_1) → guard. Both coil/thrust were re-edited to empty the hip scabbard (initial generations drew a handled sheath = duplicate-sword defect).

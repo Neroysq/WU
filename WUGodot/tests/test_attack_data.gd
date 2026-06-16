@@ -11,7 +11,7 @@ func run_all() -> Dictionary:
 
 	# Golden values (current live balance - change ONLY via deliberate balance edits).
 	var light: Variant = DataManager.get_attack_def("hu_light")
-	if light != null and light.id == "hu_light" and is_equal_approx(light.range_units, 342.0) \
+	if light != null and light.id == "hu_light" and is_equal_approx(light.range_units, 362.0) \
 			and is_equal_approx(light.duration, 0.5) and not light.is_heavy:
 		passed += 1
 	else:
@@ -62,7 +62,7 @@ func run_all() -> Dictionary:
 	# modules run in registration order and several call AttackCatalog before this one.
 	DataManager._attacks.clear()
 	var lazy: Variant = DataManager.get_attack_def("hu_light")
-	if lazy != null and is_equal_approx(lazy.range_units, 342.0):
+	if lazy != null and is_equal_approx(lazy.range_units, 362.0):
 		passed += 1
 	else:
 		failed += 1

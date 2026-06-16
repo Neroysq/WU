@@ -153,7 +153,7 @@ func run_all() -> Dictionary:
 	brain._decision_cooldown = 0.0
 	var ranged_only: bool = true
 	for i in range(20):
-		var picked: String = brain.pick_attack_from_table(brain.pattern_table, 280.0)
+		var picked: String = brain.pick_attack_from_table(brain.pattern_table, 300.0)
 		if picked != "spear_wide_swing":
 			ranged_only = false
 			break
@@ -161,7 +161,7 @@ func run_all() -> Dictionary:
 		passed += 1
 	else:
 		failed += 1
-		failures.append("range filter should pick only long-reach attacks at 280 units")
+		failures.append("range filter should pick only long-reach attacks at 300 units")
 
 	# Test 10: empty range-filter result falls back to the full table.
 	brain.pattern_table.clear()

@@ -5,10 +5,9 @@ const ManifestScript = preload("res://scripts/visual/animation_manifest.gd")
 const CollisionScript = preload("res://scripts/visual/presentation_collision.gd")
 const AttackCatalogScript = preload("res://scripts/attack_catalog.gd")
 
-# Populated per attack as regenerated clips pass the reach/balance STOP gate.
-# Enabling hu_light now would switch live reach from the legacy strike pose to
-# va_053 and requires the before/after table called out in the plan.
-const CASES := []
+const CASES := [
+	{"id": "hu_light", "clip": "res://assets/animation_clips/hu_attack_light.timeline.json"},
+]
 
 func _max_extension_active_pose(clip: Variant, def: Variant, manifest: Variant) -> String:
 	var t_start: float = clip.event_time("attack_active_start", def)

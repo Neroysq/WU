@@ -42,7 +42,7 @@
       "is_perilous": false,
       "knockback_units": 380.0,
       "posture_damage": 30.0,
-      "range_units": 242.0,
+      "range_units": 250.0,
       "windup_end": 0.5
     },
     "bandit_slash": {
@@ -57,7 +57,7 @@
       "is_perilous": false,
       "knockback_units": 260.0,
       "posture_damage": 24.0,
-      "range_units": 233.0,
+      "range_units": 250.0,
       "windup_end": 0.45
     },
     "bandit_thrust_perilous": {
@@ -72,7 +72,7 @@
       "is_perilous": true,
       "knockback_units": 320.0,
       "posture_damage": 20.0,
-      "range_units": 249.0,
+      "range_units": 250.0,
       "windup_end": 0.55
     },
     "bear_crush_grab": {
@@ -297,7 +297,7 @@
       "is_perilous": false,
       "knockback_units": 300.0,
       "posture_damage": 22.0,
-      "range_units": 342.0,
+      "range_units": 362.0,
       "windup_end": 0.18
     },
     "mountain_breaker": {

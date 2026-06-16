@@ -1,7 +1,7 @@
 {
   "archetype": "bandit_swordsman",
   "name": "Bandit Swordsman",
-  "name_cn": "匪劍",
+  "name_cn": "\u532a\u528d",
   "difficulty": "easy",
   "visualProfile": "enemy_humanoid_basic",
   "moveSpeed": 200.0,
@@ -15,10 +15,14 @@
   "height": 88.0,
   "colorBody": "#FF7878",
   "colorAccent": "#D23C3C",
-  "pattern_table": ["bandit_slash", "bandit_thrust_perilous", "bandit_overhead"],
+  "pattern_table": [
+    "bandit_slash",
+    "bandit_thrust_perilous",
+    "bandit_overhead"
+  ],
   "aggression": 0.5,
   "blockChance": 0.2,
-  "preferredRange": 211.0,
+  "preferredRange": 228.0,
   "retreatChance": 0.02,
   "dashChance": 0.03
 }

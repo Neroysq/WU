@@ -34,7 +34,7 @@ func run_all() -> Dictionary:
 	var hu_light: Variant = AttackCatalogScript.hu_light()
 	var hu_active_start_t: float = clip.event_time("attack_active_start", hu_light)
 	var hu_active_end_t: float = clip.event_time("attack_active_end", hu_light)
-	if clip.pose_at(0.0, hu_light) == "guard" and clip.pose_at(0.07, hu_light) == "va_020" and clip.pose_at(hu_active_start_t - 0.01, hu_light) == "va_050" and clip.pose_at(hu_active_start_t, hu_light) == "va_053" and clip.pose_at(hu_active_end_t + 0.01, hu_light) == "va_068" and clip.pose_at(1.0, hu_light) == "va_091":
+	if clip.pose_at(0.0, hu_light) == "vl_001" and clip.pose_at(0.07, hu_light) == "vl_013" and clip.pose_at(hu_active_start_t - 0.01, hu_light) == "vl_041" and clip.pose_at(hu_active_start_t, hu_light) == "vl_051" and clip.pose_at(hu_active_end_t + 0.01, hu_light) == "vl_081" and clip.pose_at(1.0, hu_light) == "vl_097":
 		passed += 1
 	else:
 		failed += 1
