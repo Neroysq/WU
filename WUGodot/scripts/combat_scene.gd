@@ -11,6 +11,8 @@ const PresentationCollisionScript = preload("res://scripts/visual/presentation_c
 
 const ENABLE_AUTHORED_PLAYER_HITBOXES: bool = true
 const DEV_CAPTURE_STEP: float = 1.0 / 60.0
+const ENTRY_DRAW_STATE: String = "COMBAT_ENTRY"
+const ENTRY_DRAW_DURATION: float = 1.6
 
 signal combat_end(victory: bool)
 
@@ -46,6 +48,8 @@ var _boss_death_triggered: bool = false
 var _boss_beat_message: String = ""
 var _boss_beat_timer: float = 0.0
 var _controls_legend_timer: float = 0.0
+var _entry_timer: float = 0.0
+var _entry_presenter_active: bool = false
 var _dev_capture_mode: bool = false
 var _dev_capture_playback: bool = false
 var _dev_capture_physics: bool = false
@@ -103,6 +107,7 @@ func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = f
 			"res://assets/animation_clips/held_jump.timeline.json",
 			"res://assets/animation_clips/held_fall.timeline.json",
 			"res://assets/animation_clips/held_land.timeline.json",
+			"res://assets/animation_clips/entry_draw.timeline.json",
 		],
 		float(DataManager.get_visual_profile(_player.visual_profile_id).get("scale", 1.625))
 	)
@@ -139,6 +144,8 @@ func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = f
 	_boss_beat_message = ""
 	_boss_beat_timer = 0.0
 	_controls_legend_timer = 6.0 if show_controls_legend else 0.0
+	_entry_timer = 0.0
+	_entry_presenter_active = false
 
 	_particle_system.clear()
 	_damage_number_system.clear()
@@ -157,10 +164,14 @@ func on_enter() -> void:
 	_hitstop_timer = 0.0
 	_slow_mo_timer = 0.0
 	_slow_mo_factor = 1.0
+	_entry_timer = ENTRY_DRAW_DURATION
+	_entry_presenter_active = true
 
 func on_exit() -> void:
 	_particle_system.clear()
 	_damage_number_system.clear()
+	_entry_timer = 0.0
+	_entry_presenter_active = false
 
 func deactivate() -> void:
 	set_process(false)
@@ -206,8 +217,13 @@ func dev_prepare_capture_state(state_name: String) -> void:
 	_slow_mo_timer = 0.0
 	_slow_mo_factor = 1.0
 	_controls_legend_timer = 0.0
+	_entry_timer = 0.0
+	_entry_presenter_active = false
 
 	match state_name:
+		"entry_draw":
+			_entry_timer = ENTRY_DRAW_DURATION
+			_entry_presenter_active = true
 		"02_walk":
 			_enemy.position = Vector2(1300.0, GameConstants.GROUND_Y)
 			_player.current_animation = Fighter.AnimationState.WALKING
@@ -323,6 +339,7 @@ func _process(delta: float) -> void:
 		if _dev_capture_playback:
 			var capture_dt: float = DEV_CAPTURE_STEP
 			presenter_dt = capture_dt
+			_advance_entry_timer(capture_dt, false)
 			if _dev_capture_physics:
 				_combat_system.update_player(_player, _dev_capture_input(), capture_dt, _enemy)
 			else:
@@ -369,6 +386,8 @@ func _process(delta: float) -> void:
 	var dt: float = delta * _time_scale
 	var clocks: Dictionary = AnimationClockScript.resolve(delta, _time_scale)
 	var input_active: bool = bool(clocks["input_active"])
+	if _advance_entry_timer(float(clocks["combat"]), true):
+		input_active = false
 
 	if _is_paused_on_end:
 		if _input_tracker.pressed_key(KEY_ENTER) or _input_tracker.pressed_key(KEY_J):
@@ -541,11 +560,34 @@ func _dev_capture_input() -> Dictionary:
 		input["move"] = float(_player.facing)
 	return input
 
+func _advance_entry_timer(dt: float, allow_cancel: bool) -> bool:
+	_entry_presenter_active = false
+	if _entry_timer <= 0.0:
+		return false
+	if allow_cancel and _entry_cancel_requested():
+		_entry_timer = 0.0
+		return false
+
+	_entry_presenter_active = true
+	_entry_timer = maxf(0.0, _entry_timer - dt)
+	return true
+
+func _entry_cancel_requested() -> bool:
+	if _player == null:
+		return false
+	for action_name in ["left", "right", "jump", "dash", "attack", "block", "stance"]:
+		var key: int = int(_player.controls.get(str(action_name), KEY_NONE))
+		if key != KEY_NONE and Input.is_key_pressed(key):
+			return true
+	return false
+
 func _update_player_presenter(combat_dt: float, presentation_dt: float) -> void:
 	if _player_presenter == null or _player == null:
 		return
 
 	var state_name: String = _resolve_player_state_name()
+	if _entry_presenter_active:
+		state_name = ENTRY_DRAW_STATE
 	if _player_presenter.handles_state(state_name):
 		_player_presenter.visible = true
 		_player_presenter.update(_player, state_name, combat_dt, presentation_dt, _camera.offset)

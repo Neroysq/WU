@@ -20,6 +20,12 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("graph should map ATTACKING_HEAVY to its clip")
 
+	if graph.has_state("COMBAT_ENTRY") and graph.clip_for("COMBAT_ENTRY") == "entry_draw":
+		passed += 1
+	else:
+		failed += 1
+		failures.append("graph should map scene-local COMBAT_ENTRY to entry_draw")
+
 	var held_expected: Dictionary = {
 		"BLOCKING": "held_block",
 		"HIT_REACTION": "held_hit",

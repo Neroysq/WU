@@ -5,6 +5,7 @@ var id: String = "unknown"
 var duration_from_attack_def: bool = false
 var fixed_duration: float = 0.5
 var rate_mode: String = "fixed"
+var loop: bool = true
 var use_fighter_offset: bool = false
 var keyposes: Array[Dictionary] = []
 var tracks: Dictionary = {}
@@ -27,6 +28,7 @@ static func load_from_file(path: String) -> Variant:
 	else:
 		clip.fixed_duration = float(dur)
 	clip.rate_mode = str(root.get("rate", "fixed"))
+	clip.loop = bool(root.get("loop", true))
 	clip.use_fighter_offset = bool(root.get("useFighterOffset", false))
 
 	for kp_variant in root.get("keyposes", []) as Array:

@@ -27,6 +27,7 @@ CURRENT_ART = {
     "block": "WUGodot/assets/sprites/characters/hu/block_0.png",
     "dash": "WUGodot/assets/sprites/characters/hu/dash_0.png",
     "jump": "WUGodot/assets/sprites/characters/hu/jump_0.png",
+    "entry": "art/keyframes/hu/guard/stance.png",
 }
 
 

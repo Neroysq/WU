@@ -63,6 +63,11 @@
       "clip": "held_land",
       "enter": { "mode": "snap", "time": 0.0 },
       "priority": 2
+    },
+    "COMBAT_ENTRY": {
+      "clip": "entry_draw",
+      "enter": { "mode": "snap", "time": 0.0 },
+      "priority": 8
     }
   }
 }

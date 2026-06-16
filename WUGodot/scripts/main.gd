@@ -10,6 +10,7 @@ const DEV_SHOT_DEFAULT_DIR: String = "user://shot-combat"
 const _ACTION_CAPTURE := {
 	"ATTACKING_LIGHT": {"prep": "attack_light_full", "frames": 32, "loop": false},
 	"ATTACKING_HEAVY": {"prep": "attack_heavy_full", "frames": 50, "loop": false},
+	"COMBAT_ENTRY": {"prep": "entry_draw", "frames": 112, "loop": false},
 	"IDLE": {"prep": "01_idle", "frames": 192, "loop": true},
 	"WALKING": {"prep": "02_walk", "frames": 36, "loop": true, "physics": true},
 	"BLOCKING": {"prep": "08_block", "frames": 36, "loop": false},

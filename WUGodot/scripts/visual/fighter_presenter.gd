@@ -112,7 +112,11 @@ func update(fighter: Fighter, state_name: String, combat_dt: float, presentation
 	else:
 		var dur: float = maxf(_clip.fixed_duration, 0.0001)
 		_clip_time += combat_dt * _clip_rate_multiplier(fighter)
-		_norm_t = fposmod(_clip_time, dur) / dur
+		if _clip.loop:
+			_norm_t = fposmod(_clip_time, dur) / dur
+		else:
+			_clip_time = minf(_clip_time, dur)
+			_norm_t = clampf(_clip_time / dur, 0.0, 1.0)
 
 	if _norm_t >= _prev_norm_t:
 		for e in _clip.events_in_window(_prev_norm_t, _norm_t, attack_def):

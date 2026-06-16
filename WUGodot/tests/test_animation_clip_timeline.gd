@@ -94,4 +94,11 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("held timelines should use approved vp poses, including jump peak and stunned pair")
 
+	var entry: Variant = TimelineScript.load_from_file("res://assets/animation_clips/entry_draw.timeline.json")
+	if not entry.duration_from_attack_def and not entry.loop and is_equal_approx(entry.fixed_duration, 1.6) and entry.pose_at(0.0) == "vd_001" and entry.pose_at(0.5) == "vd_049" and entry.pose_at(1.0) == "vd_097":
+		passed += 1
+	else:
+		failed += 1
+		failures.append("entry draw clip should use the installed non-looping vd_ sequence over a fixed 1.6s duration")
+
 	return {"passed": passed, "failed": failed, "failures": failures}
