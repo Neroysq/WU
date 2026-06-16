@@ -43,7 +43,9 @@ Status legend: ✅ shipped (committed) · ☑️ Gate 2 passed, pending cleanup/
 - **Result:** ~30 `vl_` poses. Collision → max-extension active pose `vl_051`. **Reach re-synced 342→362** ("match the visible blade" — the new thrust extends further); BanditSwordsman re-tuned (all attacks to 250) to stay in the 70–85% band.
 - **Known issue (deferred):** blade length varies slightly frame-to-frame (Seedance redraw). Gameplay-safe (hitbox uses one max-extension pose); visual-polish deferral, will recur in heavy.
 
-## Heavy attack ☑️ (Phase 4, Gate 2 passed — pending commit)
+## Heavy attack ✅
+
+> **Repo state:** Phase 4 landed (commit `507300a`): `vh_` poses installed, timeline/collision/reach committed, tests 305/0.
 
 - **Concept:** **Overhead Cleave** — big telegraphed overhead raise → downward diagonal cleave → low heavy settle. Deliberately distinct from light's horizontal thrust (a horizontal heavy strike reads as "just a slow light"). The vertical silhouette differentiates the two attacks at a glance.
 - **Anchors:** guard → **windup** (cand_2, overhead raise) → **strike** (cand_4, diagonal cleave down) → **recover** (cand_2, regenerated via image-to-image *from strike cand_4* to inherit the grip) → guard.
