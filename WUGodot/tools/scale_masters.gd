@@ -9,28 +9,36 @@ const TARGET_TEXELS: int = 177
 const DENSITY: int = 4
 const PAD: int = 48
 
-# Manual drift overrides, keyed per source frame: "<action>/<master_basename>".
-# Example: "attack/master_003": 1.12
+# Legacy manual drift overrides, keyed per source frame: "<action>/<master_basename>".
+# Prefer --transforms=<json> for new normalization passes.
 const SCALE_NORM: Dictionary = {}
 
+var _run_dir: String = ""
+var _transform_path: String = ""
+var _idle_ref_path: String = ""
+var _transforms: Dictionary = {}
+
 func _init() -> void:
-	var run_dir: String = _arg()
-	if run_dir.is_empty():
-		printerr("usage: --scale-masters <abs_run_dir>")
+	_parse_args()
+	if _run_dir.is_empty():
+		printerr("usage: --scale-masters <abs_run_dir> [--transforms=<json>] [--idle-ref=<path>]")
 		quit(1)
 		return
 
-	_ensure_fresh(run_dir)
+	if not _transform_path.is_empty():
+		_transforms = _read_transform_file(_transform_path)
 
-	var frames: Array = _collect(run_dir)
+	_ensure_fresh(_run_dir)
+
+	var frames: Array = _collect(_run_dir)
 	if frames.is_empty():
-		printerr("no master frames found in %s" % run_dir)
+		printerr("no master frames found in %s" % _run_dir)
 		quit(1)
 		return
 
 	var ref_px: float = _resolved_idle_reference(frames)
 	if ref_px <= 0.0:
-		printerr("no resolvable idle master in %s" % run_dir)
+		printerr("no resolvable idle master in %s (pass --idle-ref=<path> when the run has no idle action)" % _run_dir)
 		quit(1)
 		return
 
@@ -42,7 +50,7 @@ func _init() -> void:
 	var max_down: float = 0.0
 	for frame in frames:
 		var frame_dict: Dictionary = frame as Dictionary
-		var scale: float = base * float(SCALE_NORM.get(_norm_key(frame_dict), 1.0))
+		var scale: float = base * _scale_norm(frame_dict)
 		var bbox: Rect2 = frame_dict["bbox"] as Rect2
 		var foot: Vector2 = frame_dict["foot"] as Vector2
 		max_left = maxf(max_left, (foot.x - bbox.position.x) * scale)
@@ -57,7 +65,7 @@ func _init() -> void:
 
 	for frame in frames:
 		var frame_dict: Dictionary = frame as Dictionary
-		var norm: float = float(SCALE_NORM.get(_norm_key(frame_dict), 1.0))
+		var norm: float = _scale_norm(frame_dict)
 		var p: Dictionary = MasterNormalizerScript.plan(
 			base,
 			frame_dict["native"] as Vector2,
@@ -109,6 +117,10 @@ func _resolved_idle_reference(frames: Array) -> float:
 		if str(frame_dict["action"]) == "idle":
 			var bbox: Rect2 = frame_dict["bbox"] as Rect2
 			return bbox.size.y
+	if not _idle_ref_path.is_empty():
+		var ref: Dictionary = _load_reference_geometry(_idle_ref_path)
+		var bbox: Rect2 = ref.get("bbox", Rect2()) as Rect2
+		return bbox.size.y
 	return 0.0
 
 func _collect(run_dir: String) -> Array:
@@ -214,14 +226,55 @@ func _copy_dir(src: String, dst: String) -> void:
 func _norm_key(frame: Dictionary) -> String:
 	return "%s/%s" % [str(frame["action"]), String(str(frame["png"])).get_file().get_basename()]
 
+func _scale_norm(frame: Dictionary) -> float:
+	var key: String = _norm_key(frame)
+	var raw: Variant = _transforms.get(key, null)
+	if raw == null:
+		raw = SCALE_NORM.get(key, 1.0)
+	if typeof(raw) == TYPE_DICTIONARY:
+		var dict: Dictionary = raw as Dictionary
+		return float(dict.get("scale", 1.0))
+	return float(raw)
+
 func _round_up(value: int, multiple: int) -> int:
 	return int(ceil(float(value) / float(multiple))) * multiple
 
-func _arg() -> String:
+func _parse_args() -> void:
 	var args: PackedStringArray = OS.get_cmdline_user_args()
-	if args.is_empty():
-		return ""
-	return args[args.size() - 1]
+	for arg_value in args:
+		var arg: String = str(arg_value)
+		if arg.begins_with("--transforms="):
+			_transform_path = _global_path(arg.substr("--transforms=".length()))
+		elif arg.begins_with("--idle-ref="):
+			_idle_ref_path = _global_path(arg.substr("--idle-ref=".length()))
+		elif not arg.begins_with("--") and _run_dir.is_empty():
+			_run_dir = arg
+
+func _global_path(path: String) -> String:
+	if path.begins_with("res://") or path.begins_with("user://"):
+		return ProjectSettings.globalize_path(path)
+	return path
+
+func _load_reference_geometry(path: String) -> Dictionary:
+	var png_path: String = path
+	if DirAccess.open(path) != null:
+		var dir: DirAccess = DirAccess.open(path)
+		var files: PackedStringArray = dir.get_files()
+		files.sort()
+		for file_name in files:
+			if file_name.ends_with(".png"):
+				png_path = path.path_join(file_name)
+				break
+	if not png_path.ends_with(".png"):
+		return {}
+	var img: Image = Image.new()
+	var load_err: Error = img.load(png_path)
+	if load_err != OK:
+		printerr("failed to load idle reference %s (%s)" % [png_path, error_string(load_err)])
+		return {}
+	var sidecar_path: String = png_path.get_basename() + ".json"
+	var sidecar: Dictionary = _read_dict(sidecar_path) if FileAccess.file_exists(sidecar_path) else {}
+	return MasterGeometryScript.resolve(img, sidecar)
 
 func _vector(raw: Variant) -> Vector2:
 	if typeof(raw) == TYPE_ARRAY:
@@ -247,3 +300,9 @@ func _write_dict(path: String, value: Dictionary) -> void:
 	var file: FileAccess = FileAccess.open(path, FileAccess.WRITE)
 	file.store_string(JSON.stringify(value, "  "))
 	file.close()
+
+func _read_transform_file(path: String) -> Dictionary:
+	var root: Dictionary = _read_dict(path)
+	if root.has("transforms"):
+		return root.get("transforms", {}) as Dictionary
+	return root

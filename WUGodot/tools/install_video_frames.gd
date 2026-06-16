@@ -4,6 +4,7 @@ extends SceneTree
 # Usage (via run.sh):
 #   ./run.sh --install-video <run-dir> --action=<name> --frames=020,023,... \
 #            [--prefix=va] [--foot-x=224] [--manifest=res://assets/animation_manifests/hu.manifest.json]
+#            [--transforms=<json>]
 #
 # ORDER CONTRACT: pixel_001 installs as <prefix>_<first --frames label>,
 # pixel_002 as the second, and so on. --frames names destinations; it never
@@ -13,6 +14,8 @@ extends SceneTree
 const AnchorMeasureScript = preload("res://scripts/visual/anchor_measure.gd")
 
 const DEST_DIR: String = "res://assets/sprites/characters/hu/"
+
+var _transforms: Dictionary = {}
 
 func _init() -> void:
 	var args: PackedStringArray = OS.get_cmdline_user_args()
@@ -27,10 +30,13 @@ func _init() -> void:
 	var prefix: String = _arg("--prefix", action)
 	var foot_x: int = int(_arg("--foot-x", "224"))
 	var manifest_path: String = _arg("--manifest", "res://assets/animation_manifests/hu.manifest.json")
+	var transform_path: String = _arg("--transforms", "")
 	if action.is_empty() or frame_labels.is_empty():
 		printerr("--action and --frames are required")
 		quit(1)
 		return
+	if not transform_path.is_empty():
+		_transforms = _read_transform_file(_global_path(transform_path))
 
 	var staged: Array[Dictionary] = []
 	var min_x: float = INF
@@ -84,6 +90,7 @@ func _init() -> void:
 		cropped.blit_rect(img, Rect2i(crop, 0, img.get_width() - crop, img.get_height()), Vector2i.ZERO)
 
 		var pose_name: String = "%s_%s" % [prefix, str(entry["label"])]
+		cropped = _apply_pose_translation(cropped, _pose_transform(pose_name))
 		var dest: String = DEST_DIR + pose_name + ".png"
 		var save_err: Error = cropped.save_png(ProjectSettings.globalize_path(dest))
 		if save_err != OK:
@@ -122,6 +129,11 @@ func _arg(name: String, fallback: String) -> String:
 			return text.substr(name.length() + 1)
 	return fallback
 
+func _global_path(path: String) -> String:
+	if path.begins_with("res://") or path.begins_with("user://"):
+		return ProjectSettings.globalize_path(path)
+	return path
+
 func _read_dict(path: String) -> Dictionary:
 	if not FileAccess.file_exists(path):
 		printerr("missing file: %s" % path)
@@ -133,6 +145,12 @@ func _read_dict(path: String) -> Dictionary:
 		quit(1)
 		return {}
 	return parsed as Dictionary
+
+func _read_transform_file(path: String) -> Dictionary:
+	var root: Dictionary = _read_dict(path)
+	if root.has("transforms"):
+		return root.get("transforms", {}) as Dictionary
+	return root
 
 func _scale_applied(sidecar: Dictionary, source_path: String) -> Vector2:
 	var raw: Variant = sidecar.get("scale_applied", sidecar.get("scaleApplied", []))
@@ -146,6 +164,36 @@ func _scale_applied(sidecar: Dictionary, source_path: String) -> Vector2:
 	printerr("missing scale_applied in %s.json" % source_path.get_basename())
 	quit(1)
 	return Vector2.ZERO
+
+func _pose_transform(pose_name: String) -> Dictionary:
+	var raw: Variant = _transforms.get(pose_name, {})
+	if typeof(raw) == TYPE_DICTIONARY:
+		return raw as Dictionary
+	return {}
+
+func _apply_pose_translation(img: Image, transform: Dictionary) -> Image:
+	var offset_x: int = int(round(float(transform.get("offsetX", 0.0))))
+	var offset_y: int = int(round(float(transform.get("offsetY", 0.0))))
+	if offset_x == 0 and offset_y == 0:
+		return img
+
+	var src_rect := Rect2i(
+		maxi(0, -offset_x),
+		maxi(0, -offset_y),
+		img.get_width() - maxi(0, -offset_x),
+		img.get_height() - maxi(0, -offset_y)
+	)
+	if src_rect.size.x <= 0 or src_rect.size.y <= 0:
+		printerr("transform crops entire image: %s" % str(transform))
+		quit(1)
+		return img
+
+	var out_w: int = src_rect.size.x + maxi(0, offset_x)
+	var out_h: int = src_rect.size.y + maxi(0, offset_y)
+	var out: Image = Image.create(out_w, out_h, false, Image.FORMAT_RGBA8)
+	out.fill(Color(0, 0, 0, 0))
+	out.blit_rect(img, src_rect, Vector2i(maxi(0, offset_x), maxi(0, offset_y)))
+	return out
 
 func _vector(raw: Variant, label: String) -> Vector2:
 	if typeof(raw) == TYPE_ARRAY:
