@@ -8,7 +8,6 @@
 #   ./run.sh --measure-anchors  # regenerate Hu anchors from sprite pixels
 #   ./run.sh --anchor-sanity    # validate stored Hu anchors against sprite pixels
 #   ./run.sh --scale-masters <dir>     # normalize smooth masters to a common canvas
-#   ./run.sh --install-pixelized <dir> # install pixelized Hu frames into canonical slots
 #   ./run.sh --probe-reach             # derive Hu authored reach and enemy range targets
 #   ./run.sh --stage-held-keyframes <dir> # stage approved held keyframes as smooth masters
 #   ./run.sh --shot-combat [dir] # save deterministic combat screenshots, then quit
@@ -76,11 +75,6 @@ case "${1:-}" in
         echo "Scaling smooth masters..."
         exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/scale_masters.gd -- "$@"
         ;;
-    --install-pixelized)
-        shift
-        echo "Installing pixelized Hu frames..."
-        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/install_pixelized.gd -- "$@"
-        ;;
     --probe-reach)
         echo "Probing Hu authored reach..."
         exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/probe_hu_reach.gd
@@ -125,7 +119,7 @@ case "${1:-}" in
         ;;
     *)
         echo "Unknown option: $1" >&2
-        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-pixelized <dir>|--install-video <args>|--probe-reach|--stage-held-keyframes <dir>|--shot-combat|--shot-action STATE|--shot-archetype=<id>|--editor|--help]" >&2
+        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-video <args>|--probe-reach|--stage-held-keyframes <dir>|--shot-combat|--shot-action STATE|--shot-archetype=<id>|--editor|--help]" >&2
         exit 1
         ;;
 esac

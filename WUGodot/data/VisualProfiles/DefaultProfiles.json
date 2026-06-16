@@ -2,7 +2,7 @@
   "profiles": [
     {
       "id": "player_humanoid",
-      "animationSet": "res://assets/animations/character_hu.json",
+      "animationSet": "res://assets/animations/character_humanoid.json",
       "scale": 2.0,
       "yOffset": 26.109,
       "weaponTipOffset": [76.0, -34.0]

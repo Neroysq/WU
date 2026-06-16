@@ -3,149 +3,149 @@
   "poses": {
     "breath": {
       "chestAnchor": [
-        241.0,
-        104.0
+        90.0,
+        95.0
       ],
       "footAnchor": [
-        224.0,
-        202.0
+        132.0,
+        198.0
       ],
       "hurtbox": [
-        216.0,
-        24.0,
-        50.0,
-        177.0
+        33.0,
+        12.0,
+        113.0,
+        184.0
       ],
-      "path": "res://assets/sprites/characters/hu/idle_1.png",
+      "path": "res://assets/sprites/characters/hu/vi_050.png",
       "weaponTip": [
-        290.0,
-        111.0
+        248.0,
+        29.0
       ]
     },
     "guard": {
       "chestAnchor": [
-        219.0,
-        104.0
+        89.0,
+        100.0
       ],
       "footAnchor": [
-        224.0,
-        202.0
+        132.0,
+        198.0
       ],
       "hurtbox": [
-        194.0,
-        25.0,
-        50.0,
-        176.0
+        31.0,
+        21.0,
+        116.0,
+        150.0
       ],
-      "path": "res://assets/sprites/characters/hu/idle_0.png",
+      "path": "res://assets/sprites/characters/hu/vi_002.png",
       "weaponTip": [
-        268.0,
-        109.0
+        250.0,
+        32.0
       ]
     },
     "heavy_recover": {
       "chestAnchor": [
-        283.0,
-        141.0
+        130.0,
+        205.0
       ],
       "footAnchor": [
-        224.0,
-        202.0
+        155.0,
+        297.0
       ],
       "hurtbox": [
-        211.0,
-        91.0,
-        143.0,
-        96.0
+        72.0,
+        130.0,
+        115.0,
+        166.0
       ],
-      "path": "res://assets/sprites/characters/hu/heavy_2.png",
+      "path": "res://assets/sprites/characters/hu/vh_080.png",
       "weaponTip": [
-        390.0,
-        162.0
+        259.0,
+        294.0
       ]
     },
     "heavy_strike": {
       "chestAnchor": [
-        287.0,
-        149.0
+        124.0,
+        206.0
       ],
       "footAnchor": [
-        224.0,
-        202.0
+        155.0,
+        297.0
       ],
       "hurtbox": [
-        201.0,
-        107.0,
-        171.0,
-        85.0
+        58.0,
+        133.0,
+        132.0,
+        163.0
       ],
-      "path": "res://assets/sprites/characters/hu/heavy_1.png",
+      "path": "res://assets/sprites/characters/hu/vh_064.png",
       "weaponTip": [
-        379.0,
-        134.0
+        269.0,
+        280.0
       ]
     },
     "heavy_windup": {
       "chestAnchor": [
-        333.0,
-        139.0
+        113.0,
+        200.0
       ],
       "footAnchor": [
-        224.0,
-        202.0
+        155.0,
+        297.0
       ],
       "hurtbox": [
-        268.0,
-        88.0,
-        129.0,
-        99.0
+        56.0,
+        122.0,
+        114.0,
+        173.0
       ],
-      "path": "res://assets/sprites/characters/hu/heavy_0.png",
+      "path": "res://assets/sprites/characters/hu/vh_001.png",
       "weaponTip": [
-        435.0,
-        147.0
+        271.0,
+        133.0
       ]
     },
     "recover": {
       "chestAnchor": [
-        291.0,
-        135.0
+        123.0,
+        156.0
       ],
       "footAnchor": [
-        224.0,
-        202.0
+        186.0,
+        243.0
       ],
       "hurtbox": [
-        255.0,
-        81.0,
-        72.0,
-        101.0
+        74.0,
+        85.0,
+        97.0,
+        132.0
       ],
-      "path": "res://assets/sprites/characters/hu/attack_3.png",
+      "path": "res://assets/sprites/characters/hu/vl_081.png",
       "weaponTip": [
-        424.0,
-        118.0
+        341.0,
+        114.0
       ]
     },
     "strike_extended": {
       "chestAnchor": [
-        247.0,
-        132.0
+        123.0,
+        162.0
       ],
       "footAnchor": [
-        224.0,
-        202.0
+        186.0,
+        243.0
       ],
       "hurtbox": [
-        213.0,
-        75.0,
-        68.0,
-        126.0
+        55.0,
+        97.0,
+        135.0,
+        145.0
       ],
-      "path": "res://assets/sprites/characters/hu/attack_2.png",
+      "path": "res://assets/sprites/characters/hu/vl_051.png",
       "weaponTip": [
-        386.0,
-        119.0
+        358.0,
+        146.0
       ]
     },
     "vd_001": {
@@ -4957,109 +4957,25 @@
         36.0
       ]
     },
-    "walk_0": {
-      "chestAnchor": [
-        195.0,
-        104.0
-      ],
-      "footAnchor": [
-        224.0,
-        202.0
-      ],
-      "hurtbox": [
-        166.0,
-        24.0,
-        58.0,
-        167.0
-      ],
-      "path": "res://assets/sprites/characters/hu/walk_0.png",
-      "weaponTip": [
-        244.0,
-        109.0
-      ]
-    },
-    "walk_1": {
-      "chestAnchor": [
-        252.0,
-        104.0
-      ],
-      "footAnchor": [
-        224.0,
-        202.0
-      ],
-      "hurtbox": [
-        218.0,
-        25.0,
-        68.0,
-        175.0
-      ],
-      "path": "res://assets/sprites/characters/hu/walk_1.png",
-      "weaponTip": [
-        307.0,
-        192.0
-      ]
-    },
-    "walk_2": {
-      "chestAnchor": [
-        251.0,
-        104.0
-      ],
-      "footAnchor": [
-        224.0,
-        202.0
-      ],
-      "hurtbox": [
-        217.0,
-        25.0,
-        68.0,
-        168.0
-      ],
-      "path": "res://assets/sprites/characters/hu/walk_2.png",
-      "weaponTip": [
-        307.0,
-        186.0
-      ]
-    },
-    "walk_3": {
-      "chestAnchor": [
-        195.0,
-        104.0
-      ],
-      "footAnchor": [
-        224.0,
-        202.0
-      ],
-      "hurtbox": [
-        164.0,
-        25.0,
-        62.0,
-        176.0
-      ],
-      "path": "res://assets/sprites/characters/hu/walk_3.png",
-      "weaponTip": [
-        249.0,
-        114.0
-      ]
-    },
     "windup": {
       "chestAnchor": [
-        291.0,
-        135.0
+        153.0,
+        147.0
       ],
       "footAnchor": [
-        224.0,
-        202.0
+        186.0,
+        243.0
       ],
       "hurtbox": [
-        255.0,
-        81.0,
-        72.0,
-        101.0
+        104.0,
+        69.0,
+        97.0,
+        171.0
       ],
-      "path": "res://assets/sprites/characters/hu/attack_1.png",
+      "path": "res://assets/sprites/characters/hu/vl_001.png",
       "weaponTip": [
-        424.0,
-        118.0
+        301.0,
+        80.0
       ]
     }
   },

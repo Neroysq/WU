@@ -7,8 +7,7 @@ const AttackDefinitionScript = preload("res://scripts/attack_definition.gd")
 const FighterScript = preload("res://scripts/fighter.gd")
 const FighterVisualScript = preload("res://scripts/visual/fighter_visual.gd")
 
-const LIVE_CHARACTER_IDS: Array[String] = [
-	"hu",
+const LEGACY_CHARACTER_IDS: Array[String] = [
 	"bandit_sword",
 	"bandit_spear",
 	"ronin",
@@ -23,7 +22,7 @@ func run_all() -> Dictionary:
 	var failures: Array[String] = []
 
 	var catalog: Variant = AssetCatalogScript.new()
-	var set: Variant = AnimationSetScript.load_from_file("res://assets/animations/character_hu.json", catalog)
+	var set: Variant = AnimationSetScript.load_from_file("res://assets/animations/character_bandit_sword.json", catalog)
 	var light_clip: Dictionary = set.get_clip("ATTACKING_LIGHT")
 	var phases: Array = light_clip.get("phases", []) as Array
 	if phases.size() == 3:
@@ -47,7 +46,7 @@ func run_all() -> Dictionary:
 
 	var visual: Variant = FighterVisualScript.new(catalog)
 	var fighter: Variant = FighterScript.new()
-	visual.configure({"animationSet": "res://assets/animations/character_hu.json", "scale": 1.0, "yOffset": 0.0}, fighter)
+	visual.configure({"animationSet": "res://assets/animations/character_bandit_sword.json", "scale": 1.0, "yOffset": 0.0}, fighter)
 	var attack_def: Variant = AttackCatalogScript.hu_light()
 	fighter._attack_state.start(attack_def)
 	fighter.current_animation = FighterScript.AnimationState.ATTACKING_LIGHT
@@ -92,7 +91,7 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("fixed-FPS playback should still advance non-phased clips")
 
-	for char_id in LIVE_CHARACTER_IDS:
+	for char_id in LEGACY_CHARACTER_IDS:
 		var path: String = "res://assets/animations/character_%s.json" % char_id
 		var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
 		if typeof(parsed) != TYPE_DICTIONARY:
@@ -104,7 +103,7 @@ func run_all() -> Dictionary:
 			var clip: Dictionary = clips.get(clip_name, {}) as Dictionary
 			var raw_frames: Array = clip.get("frames", []) as Array
 			var raw_phases: Array = clip.get("phases", []) as Array
-			var expected_prefix: String = "heavy" if char_id == "hu" and clip_name == "ATTACKING_HEAVY" else "attack"
+			var expected_prefix: String = "attack"
 			if raw_frames.size() == 4 and str((raw_frames[3] as Dictionary).get("path", "")).ends_with("%s_3.png" % expected_prefix) and raw_phases.size() == 3:
 				passed += 1
 			else:
