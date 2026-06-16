@@ -141,6 +141,7 @@ Overall: all 11 states render from manifest poses; §5a parity holds (presenter 
 |---|---|
 | Redraw ceiling (~0.925 IoU vs authored keyframe) | Judge landings against adjacent clip boundaries, not the authored still; approval page shows the *video's* peak frames at Gate 2, not just authored stills |
 | Object permanence (scabbard flicker) | Keyframe object-state consistency; per-frame rejection at selection (97 frames leave plenty) |
+| **Blade-length inconsistency across frames** (observed Phase 3 light, 2026-06-15) | Seedance redraws the blade at slightly varying lengths frame-to-frame. Gameplay-safe (the hitbox uses one max-extension pose, not per-frame), so it's a **visual-polish deferral** — accepted for v1, will recur in Phase 4 heavy. Future fix options: tighter frame selection favoring consistent-length frames, or a post-pass that normalizes blade length. Revisit after the action set is complete. |
 | Model-shaped timing | Sequence mode paces naturally (measured); timeline markers re-map to combat timing regardless |
 | Source frame-doubling in slow segments (~12fps effective) | Accept for v1; fold "generate at 48/60fps or slow-motion" into the next aiexp ask |
 | No seed determinism | `keyframes.manifest.json` provenance makes *keyframes* reproducible; videos are select-from-output, never regenerate-to-match |
