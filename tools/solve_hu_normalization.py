@@ -10,6 +10,8 @@ from typing import Any
 
 from hu_normalization_lib import load_json, median, write_json
 
+MIN_CLEAN_HEAD_WIDTH: float = 34.0
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -35,9 +37,9 @@ def main() -> int:
     target = by_pose.get(args.target_pose)
     if target is None:
         raise ValueError(f"target pose not found: {args.target_pose}")
-    target_head = float(target["render"]["headHeight"])
-    if target_head <= 0.0:
-        raise ValueError(f"target pose has invalid render head height: {args.target_pose}")
+    target_head_width = float(target["render"]["headBBox"][2])
+    if target_head_width <= 0.0:
+        raise ValueError(f"target pose has invalid render head width: {args.target_pose}")
 
     overrides = load_json(args.manual_overrides) if args.manual_overrides else {}
     override_transforms = overrides.get("transforms", overrides)
@@ -45,6 +47,7 @@ def main() -> int:
         override_transforms = {}
 
     group_targets = solve_group_targets(poses)
+    scale_groups = solve_scale_groups(poses, target_head_width)
     transforms: dict[str, dict[str, Any]] = {}
     pose_summaries: list[dict[str, Any]] = []
     for pose in poses:
@@ -53,8 +56,9 @@ def main() -> int:
         pose_name = str(pose["pose"])
         render = pose["render"]
         source = pose["source"]
-        head = float(render.get("headHeight", 0.0))
-        scale = target_head / head if head > 0.0 else 1.0
+        scale_group = scale_group_for_pose(pose)
+        scale_info = scale_groups.get(scale_group, scale_groups.get("__all__", {"scale": 1.0}))
+        scale = float(scale_info["scale"])
         grounding = str(pose.get("grounding", "grounded"))
         group = str(pose.get("prefix", ""))
         target_xy = group_targets.get(group, {"x": 0.0, "y": 0.0})
@@ -68,9 +72,12 @@ def main() -> int:
             "offsetX": round(offset_x, 3),
             "offsetY": round(offset_y, 3),
             "grounding": grounding,
+            "scaleGroup": scale_group,
+            "scaleSource": str(scale_info.get("source", "fallback")),
             "sourceKey": str(pose.get("sourceKey", "")),
             "targetFoot": [round(float(target_xy["x"]), 3), round(float(target_xy["y"]), 3)],
             "flags": flags,
+            "spatialFlags": spatial_flags(offset_x, offset_y),
         }
         manual = override_transforms.get(pose_name, {})
         if isinstance(manual, dict):
@@ -83,6 +90,7 @@ def main() -> int:
             transforms[source_key] = {
                 "pose": pose_name,
                 "scale": transform["scale"],
+                "scaleGroup": scale_group,
                 "flags": flags,
             }
         pose_summaries.append(
@@ -93,6 +101,7 @@ def main() -> int:
                 "offsetX": transform["offsetX"],
                 "offsetY": transform["offsetY"],
                 "flags": flags,
+                "scaleGroup": scale_group,
             }
         )
 
@@ -101,8 +110,9 @@ def main() -> int:
         "generated": datetime.now(timezone.utc).isoformat(),
         "measurements": args.measurements.as_posix(),
         "targetPose": args.target_pose,
-        "targetRenderHeadHeight": target_head,
+        "targetRenderHeadWidth": target_head_width,
         "groupTargets": group_targets,
+        "scaleGroups": scale_groups,
         "transforms": transforms,
         "summary": {
             "poses": len([k for k in transforms if "_" in k and "/" not in k]),
@@ -110,6 +120,7 @@ def main() -> int:
             "flagged": sum(1 for row in pose_summaries if row["flags"]),
             "maxScale": max((float(row["scale"]) for row in pose_summaries), default=1.0),
             "minScale": min((float(row["scale"]) for row in pose_summaries), default=1.0),
+            "scaleGroupCount": len([key for key in scale_groups if key != "__all__"]),
         },
         "poses": pose_summaries,
     }
@@ -140,21 +151,96 @@ def solve_group_targets(poses: list[Any]) -> dict[str, dict[str, float]]:
     }
 
 
+def solve_scale_groups(poses: list[Any], target_head_width: float) -> dict[str, dict[str, Any]]:
+    groups: dict[str, list[tuple[str, float]]] = {}
+    all_clean: list[tuple[str, float]] = []
+    for pose in poses:
+        if not isinstance(pose, dict):
+            continue
+        render = pose.get("render", {})
+        if not isinstance(render, dict) or not is_clean_scale_sample(render):
+            continue
+        width = raw_head_width(render)
+        row = (str(pose.get("pose", "")), width)
+        group = scale_group_for_pose(pose)
+        groups.setdefault(group, []).append(row)
+        all_clean.append(row)
+
+    fallback_width = median([width for _pose, width in all_clean], target_head_width)
+    out: dict[str, dict[str, Any]] = {
+        "__all__": {
+            "medianHeadWidth": round(fallback_width, 3),
+            "scale": round(target_head_width / fallback_width if fallback_width > 0.0 else 1.0, 5),
+            "cleanCount": len(all_clean),
+            "source": "all-clean-render-head-width",
+        }
+    }
+    pose_groups = sorted({scale_group_for_pose(pose) for pose in poses if isinstance(pose, dict)})
+    for group in pose_groups:
+        samples = groups.get(group, [])
+        if samples:
+            width = median([sample_width for _pose, sample_width in samples], fallback_width)
+            source = "action-clean-render-head-width"
+            clean_poses = [pose_name for pose_name, _width in samples]
+        else:
+            width = fallback_width
+            source = "fallback-all-clean-render-head-width"
+            clean_poses = []
+        out[group] = {
+            "medianHeadWidth": round(width, 3),
+            "scale": round(target_head_width / width if width > 0.0 else 1.0, 5),
+            "cleanCount": len(samples),
+            "cleanPoses": clean_poses,
+            "source": source,
+        }
+    return out
+
+
+def scale_group_for_pose(pose: dict[str, Any]) -> str:
+    if str(pose.get("prefix", "")) == "vp":
+        return "held"
+    return str(pose.get("action", pose.get("prefix", "")))
+
+
+def is_clean_scale_sample(render: dict[str, Any]) -> bool:
+    width = raw_head_width(render)
+    if width < MIN_CLEAN_HEAD_WIDTH:
+        return False
+    if bool(render.get("rawHeadWidthContaminated", render.get("headWidthContaminated", False))):
+        return False
+    if float(render.get("rawConfidence", render.get("confidence", 0.0))) < 0.8:
+        return False
+    raw_flags = [str(flag) for flag in render.get("rawFlags", render.get("flags", []))]
+    return not any(flag.startswith("head-") for flag in raw_flags)
+
+
+def raw_head_width(render: dict[str, Any]) -> float:
+    raw_bbox = render.get("rawHeadBBox", render.get("headBBox", [0, 0, 0, 0]))
+    if isinstance(raw_bbox, list) and len(raw_bbox) >= 4:
+        return float(raw_bbox[2])
+    return 0.0
+
+
 def transform_flags(scale: float, offset_x: float, offset_y: float, source_flags: Any, render_flags: Any) -> list[str]:
     flags: list[str] = []
     if scale < 0.85 or scale > 1.18:
         flags.append("scale-review")
+    for flag in list(source_flags or []):
+        if str(flag).startswith("head-") and "effective" not in str(flag):
+            flags.append(f"source-{flag}")
+    for flag in list(render_flags or []):
+        if str(flag).startswith("head-") and "effective" not in str(flag):
+            flags.append(f"render-{flag}")
+    return sorted(set(flags))
+
+
+def spatial_flags(offset_x: float, offset_y: float) -> list[str]:
+    flags: list[str] = []
     if abs(offset_x) > 16.0:
         flags.append("offset-x-review")
     if abs(offset_y) > 12.0:
         flags.append("offset-y-review")
-    for flag in list(source_flags or []):
-        if str(flag).startswith("head-"):
-            flags.append(f"source-{flag}")
-    for flag in list(render_flags or []):
-        if str(flag).startswith("head-") or str(flag).startswith("foot-"):
-            flags.append(f"render-{flag}")
-    return sorted(set(flags))
+    return flags
 
 
 if __name__ == "__main__":

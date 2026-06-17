@@ -16,6 +16,12 @@ from typing import Any
 from hu_normalization_lib import load_json, measure_alpha, write_json
 
 
+HEAD_WIDTH_LIMITS = {
+    "source": 120.0,
+    "render": 60.0,
+}
+HEAD_WIDE_THIN_RATIO = 1.8
+
 HELD_SOURCES = {
     "vp_block": "art/keyframes/hu/block/block.png",
     "vp_dash": "art/keyframes/hu/dash/dash.png",
@@ -110,6 +116,8 @@ def main() -> int:
             }
         )
 
+    apply_effective_head_metrics(pose_rows)
+
     target_pose = next((p for p in pose_rows if p["pose"] == "vi_002"), None)
     target_head = float(target_pose["source"]["headHeight"]) if target_pose else 0.0
     target_render_head = float(target_pose["render"]["headHeight"]) if target_pose else 0.0
@@ -123,6 +131,7 @@ def main() -> int:
             "aliases": len(alias_rows),
             "sourceBacked": sum(1 for p in pose_rows if p["sourceKind"] != "installed_only"),
         },
+        "headContamination": head_contamination_summary(pose_rows),
         "target": {
             "pose": "vi_002",
             "sourceHeadHeight": target_head,
@@ -188,6 +197,142 @@ def build_source_map(repo: Path, source_root: Path, manifest: dict[str, Any]) ->
             "sourceKey": f"held/{pose}",
         }
     return out
+
+
+def apply_effective_head_metrics(poses: list[dict[str, Any]]) -> None:
+    for space in ("source", "render"):
+        limit = HEAD_WIDTH_LIMITS[space]
+        templates = build_head_templates(poses, space, limit)
+        for pose in poses:
+            measurement = pose[space]
+            raw_bbox = list(measurement.get("headBBox", [0, 0, 0, 0]))
+            raw_flags = list(measurement.get("flags", []))
+            raw_width = float(raw_bbox[2]) if len(raw_bbox) >= 4 else 0.0
+            raw_height = float(raw_bbox[3]) if len(raw_bbox) >= 4 else 0.0
+            raw_wide_thin = raw_height > 0.0 and raw_width / raw_height > HEAD_WIDE_THIN_RATIO
+            raw_head_flag = any(str(flag).startswith("head-") for flag in raw_flags)
+            raw_contaminated = raw_width > limit or raw_wide_thin or raw_head_flag
+            measurement["rawHeadBBox"] = raw_bbox
+            measurement["rawHeadHeight"] = measurement.get("headHeight", raw_height)
+            measurement["rawConfidence"] = measurement.get("confidence", 0.0)
+            measurement["rawFlags"] = raw_flags
+            measurement["rawHeadWidthContaminated"] = raw_contaminated
+            measurement["headWidthLimit"] = limit
+
+            if not raw_contaminated:
+                measurement["headWidth"] = raw_width
+                measurement["headWidthContaminated"] = False
+                continue
+
+            group = scale_group_for_pose(pose)
+            template = templates.get(group) or templates.get(str(pose.get("prefix", ""))) or templates.get("__all__")
+            if template is None:
+                effective_width = min(raw_width, limit)
+                effective_height = raw_height
+                flags = [flag for flag in raw_flags if not str(flag).startswith("head-")]
+                flags.append("head-effective-clamped")
+            else:
+                effective_width = template["width"]
+                effective_height = template["height"]
+                flags = [flag for flag in raw_flags if not str(flag).startswith("head-")]
+                flags.append("head-effective-from-clean-frames")
+
+            cx = float(raw_bbox[0]) + raw_width * 0.5
+            cy = float(raw_bbox[1]) + raw_height * 0.5
+            effective_bbox = [
+                round(cx - effective_width * 0.5, 3),
+                round(cy - effective_height * 0.5, 3),
+                round(effective_width, 3),
+                round(effective_height, 3),
+            ]
+            measurement["headBBox"] = effective_bbox
+            measurement["headHeight"] = effective_bbox[3]
+            measurement["headWidth"] = effective_bbox[2]
+            measurement["confidence"] = min(float(measurement.get("confidence", 0.0)), 0.74)
+            measurement["flags"] = sorted(set(flags))
+            measurement["headWidthContaminated"] = effective_bbox[2] > limit
+
+
+def build_head_templates(poses: list[dict[str, Any]], space: str, limit: float) -> dict[str, dict[str, float]]:
+    grouped: dict[str, list[tuple[float, float]]] = {}
+    for pose in poses:
+        measurement = pose[space]
+        bbox = measurement.get("headBBox", [0, 0, 0, 0])
+        if not isinstance(bbox, list) or len(bbox) < 4:
+            continue
+        width = float(bbox[2])
+        height = float(bbox[3])
+        confidence = float(measurement.get("confidence", 0.0))
+        flags = [str(flag) for flag in measurement.get("flags", [])]
+        wide_thin = height > 0.0 and width / height > HEAD_WIDE_THIN_RATIO
+        if confidence < 0.8 or width <= 0.0 or height <= 0.0 or width > limit or wide_thin:
+            continue
+        if any(flag.startswith("head-") for flag in flags):
+            continue
+        for group in (scale_group_for_pose(pose), str(pose.get("prefix", "")), "__all__"):
+            grouped.setdefault(group, []).append((width, height))
+    return {
+        group: {
+            "width": percentile(values, 0.5, index=0),
+            "height": percentile(values, 0.5, index=1),
+        }
+        for group, values in grouped.items()
+        if values
+    }
+
+
+def head_contamination_summary(poses: list[dict[str, Any]]) -> dict[str, dict[str, int]]:
+    summary: dict[str, dict[str, int]] = {}
+    for space in ("source", "render"):
+        limit = HEAD_WIDTH_LIMITS[space]
+        raw_over_120 = 0
+        effective_over_120 = 0
+        raw_over_limit = 0
+        effective_over_limit = 0
+        raw_wide_thin = 0
+        raw_head_flagged = 0
+        for pose in poses:
+            measurement = pose[space]
+            raw_bbox = measurement.get("rawHeadBBox", measurement.get("headBBox", [0, 0, 0, 0]))
+            bbox = measurement.get("headBBox", [0, 0, 0, 0])
+            raw_width = float(raw_bbox[2]) if isinstance(raw_bbox, list) and len(raw_bbox) >= 4 else 0.0
+            raw_height = float(raw_bbox[3]) if isinstance(raw_bbox, list) and len(raw_bbox) >= 4 else 0.0
+            effective_width = float(bbox[2]) if isinstance(bbox, list) and len(bbox) >= 4 else 0.0
+            raw_over_120 += int(raw_width > 120.0)
+            effective_over_120 += int(effective_width > 120.0)
+            raw_over_limit += int(raw_width > limit)
+            effective_over_limit += int(effective_width > limit)
+            raw_wide_thin += int(raw_height > 0.0 and raw_width / raw_height > HEAD_WIDE_THIN_RATIO)
+            raw_flags = [str(flag) for flag in measurement.get("rawFlags", [])]
+            raw_head_flagged += int(any(flag.startswith("head-") for flag in raw_flags))
+        summary[space] = {
+            "rawOver120": raw_over_120,
+            "effectiveOver120": effective_over_120,
+            "rawOverLimit": raw_over_limit,
+            "effectiveOverLimit": effective_over_limit,
+            "rawWideThin": raw_wide_thin,
+            "rawHeadFlagged": raw_head_flagged,
+        }
+    return summary
+
+
+def scale_group_for_pose(pose: dict[str, Any]) -> str:
+    if str(pose.get("prefix", "")) == "vp":
+        return "held"
+    return str(pose.get("action", pose.get("prefix", "")))
+
+
+def percentile(values: list[tuple[float, float]], q: float, index: int) -> float:
+    selected = sorted(value[index] for value in values)
+    if not selected:
+        return 0.0
+    pos = (len(selected) - 1) * q
+    lower = int(pos)
+    upper = min(lower + 1, len(selected) - 1)
+    if lower == upper:
+        return round(selected[lower], 3)
+    frac = pos - lower
+    return round(selected[lower] * (1.0 - frac) + selected[upper] * frac, 3)
 
 
 def split_pose(pose: str) -> tuple[str, str]:

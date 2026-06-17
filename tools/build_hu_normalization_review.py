@@ -66,6 +66,19 @@ def main() -> int:
         )
 
     summary = transforms_root.get("summary", {})
+    contamination = measurements.get("headContamination", {})
+    scale_groups = transforms_root.get("scaleGroups", {})
+    scale_group_rows = ""
+    if isinstance(scale_groups, dict):
+        for group, info in sorted(scale_groups.items()):
+            if group == "__all__" or not isinstance(info, dict):
+                continue
+            scale_group_rows += (
+                f"<tr><td>{esc(group)}</td><td>{esc(str(info.get('scale', '')))}</td>"
+                f"<td>{esc(str(info.get('medianHeadWidth', '')))}</td>"
+                f"<td>{esc(str(info.get('cleanCount', '')))}</td>"
+                f"<td>{esc(str(info.get('source', '')))}</td></tr>"
+            )
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(
         f"""<!doctype html>
@@ -102,9 +115,15 @@ def main() -> int:
   <span>source-backed <b>{esc(str(measurements.get('counts', {}).get('sourceBacked', '')))}</b></span>
   <span>target <b>{esc(str(transforms_root.get('targetPose', '')))}</b></span>
   <span>scale <b>{esc(str(summary.get('minScale', '')))}..{esc(str(summary.get('maxScale', '')))}</b></span>
+  <span>scale groups <b>{esc(str(summary.get('scaleGroupCount', '')))}</b></span>
+  <span>head width >120 raw/effective <b>{contam_text(contamination)}</b></span>
   <span>flagged <b>{flagged}</b></span>
  </div>
 </header>
+<section>
+ <h2>scale groups <span>constant scale per action group</span></h2>
+ <table><thead><tr><th>group</th><th>scale</th><th>median clean head width</th><th>clean frames</th><th>source</th></tr></thead><tbody>{scale_group_rows}</tbody></table>
+</section>
 {''.join(body)}
 <section>
  <h2>aliases <span>{len(aliases) if isinstance(aliases, list) else 0} entries</span></h2>
@@ -125,13 +144,20 @@ def card(pose: dict[str, Any], transform: Any) -> str:
     bbox = rect(render.get("bbox", [0, 0, 0, 0]))
     foot = render.get("contactFoot", [0.0, 0.0])
     flags = transform.get("flags", []) if isinstance(transform, dict) else []
+    spatial_flags = transform.get("spatialFlags", []) if isinstance(transform, dict) else []
     scale = transform.get("scale", "") if isinstance(transform, dict) else ""
+    scale_group = transform.get("scaleGroup", "") if isinstance(transform, dict) else ""
+    scale_source = transform.get("scaleSource", "") if isinstance(transform, dict) else ""
     offset_x = transform.get("offsetX", "") if isinstance(transform, dict) else ""
     offset_y = transform.get("offsetY", "") if isinstance(transform, dict) else ""
     target = transform.get("targetFoot", foot) if isinstance(transform, dict) else foot
     ground_y = float(target[1]) if isinstance(target, list) and len(target) > 1 else float(foot[1])
     cls = " flagged" if flags else ""
     flag_text = f"<div class=flags>{esc(', '.join(map(str, flags)))}</div>" if flags else ""
+    spatial_text = f"<div class=path>{esc(', '.join(map(str, spatial_flags)))}</div>" if spatial_flags else ""
+    raw_head = render.get("rawHeadBBox", render.get("headBBox", [0, 0, 0, 0]))
+    raw_width = raw_head[2] if isinstance(raw_head, list) and len(raw_head) >= 4 else ""
+    effective_width = head[2]
     return f"""<article class="{cls.strip()}">
  <div class=frame>
   <svg viewBox="0 0 {image.width} {image.height}" role="img" aria-label="{esc(pose_name)}">
@@ -144,9 +170,12 @@ def card(pose: dict[str, Any], transform: Any) -> str:
  </div>
  <div class=meta>
   <div class=pose><strong>{esc(pose_name)}</strong><span>{esc(str(pose.get('grounding', '')))}</span></div>
-  <div>scale {esc(str(scale))} offset {esc(str(offset_x))},{esc(str(offset_y))}</div>
-  <div>head {esc(str(render.get('headHeight', '')))} conf {esc(str(render.get('confidence', '')))}</div>
+  <div>scale {esc(str(scale))} group {esc(str(scale_group))}</div>
+  <div class=path>{esc(str(scale_source))}</div>
+  <div>offset {esc(str(offset_x))},{esc(str(offset_y))}</div>
+  <div>head w raw→eff {esc(str(raw_width))}→{esc(str(effective_width))} h {esc(str(render.get('headHeight', '')))} conf {esc(str(render.get('confidence', '')))}</div>
   <div class=path title="{esc(str(pose.get('sourcePath', '')))}">{esc(str(pose.get('sourceKind', '')))} | {esc(str(pose.get('sourcePath', '')))}</div>
+  {spatial_text}
   {flag_text}
  </div>
 </article>"""
@@ -160,6 +189,19 @@ def rect(values: Any) -> tuple[float, float, float, float]:
 
 def esc(value: str) -> str:
     return html.escape(value, quote=True)
+
+
+def contam_text(value: Any) -> str:
+    if not isinstance(value, dict):
+        return ""
+    source = value.get("source", {})
+    render = value.get("render", {})
+    if not isinstance(source, dict) or not isinstance(render, dict):
+        return ""
+    return (
+        f"source {source.get('rawOver120', '')}/{source.get('effectiveOver120', '')}, "
+        f"render {render.get('rawOver120', '')}/{render.get('effectiveOver120', '')}"
+    )
 
 
 if __name__ == "__main__":
