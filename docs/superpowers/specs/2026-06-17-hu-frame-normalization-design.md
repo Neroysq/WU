@@ -1,7 +1,9 @@
 # Hu Frame Normalization Pass — Design
 
 **Date:** 2026-06-17
-**Status:** design (pre-plan)
+**Status:** ✅ SHIPPED (build 4, commit `b4187d4`, 2026-06-18)
+
+> **✅ COMPLETE.** Hu's 229 `v*` poses normalized: per-action head-size constants (idle 1.00 ref · light/heavy 1.06 · walk 1.04 · entry 1.08 · held 1.04), drift removed, feet planted (except airborne/dash), light lunge moved to presenter travel. **Balance frozen** — combat uses `range_units` (unchanged), so the size pass is purely visual; the reach comparator's "out-of-band" was geometric-only (the drawn blade extends ~5% past the hitbox, a benign visual gap). Detector journey: geometric → occlusion-robust geometric → vision/face-color (build 3) → metric fix to head-area-on-guard-frame (build 4). Three flaws were caught at the review gate by eye (vh_028 height contamination, width under-correction, stale build-3 overlays on build-4 sprites). Deferred: blade-length frame variance (pre-existing); entry foot-y polish.
 **Purpose:** Polish Hu's 237 video-derived poses so they are dimensionally and spatially consistent: **uniform head size**, **no unwanted drift**, and **feet planted on a ground line** (except airborne/dash) — with intended travel (e.g. the light-attack lunge) moved out of the baked pixels and into the presenter. Follows the completed video re-animation (`2026-06-12-hu-video-reanimation-design.md`, `…-reanimation.md`) and the per-action reference (`2026-06-16-hu-action-design-reference.md`). This is the polish pass those docs deferred (blade-length variance is *not* in scope; see §11).
 
 ---
