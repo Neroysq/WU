@@ -51,8 +51,10 @@ Both flow through the **existing** pipeline unchanged in shape:
 
 ## 5. Components (each a focused, independently-testable unit)
 
-1. **Head/foot detector** (`tools/`, new) — per source frame: a **head bbox** (top-of-silhouette region down to the neck inflection) and **foot ground points** (lowest opaque pixel per leg, plus which foot is the consistent contact reference). Emits `measurements.json`. The exact detection heuristic is a plan-level detail; the *contract* is: one head-height metric + one contact-foot point per pose, with the review page (component 3) as the authoritative correctness backstop.
-2. **Normalization solver** (`tools/`, new) — from measurements: `scale = target_head / measured_head` per pose, and the grounding/centering offset per pose (respecting the §3.4 grounded/exempt split). Emits `transforms.json` keyed by pose.
+1. **Head/foot detector** (`tools/`, new) — per source frame: a **head bbox** and **foot ground points** (lowest opaque pixel per leg + the consistent contact foot). Emits `measurements.json`.
+   - **⚠ Occlusion-robust head metric (revised after first build — see §13).** A naive "top-of-silhouette bbox" fails on this character: Hu's blade/raised arm constantly enters the head region, so the head bbox swallows the blade (first build: 149/229 head widths >120px vs a clean ~92px head; scales ranged 0.48–1.72). The head metric **must** constrain the head search to within `bodyColumns` (already computed) and **reject wide-thin blobs** (width ≫ a clean head ⇒ blade contamination), using head-bbox **width** as the contamination signal (the `confidence` field alone under-counted it: 11 vs 149). Foot/contact detection is sound (0/229 misplaced) and is the correctness backstop for the spatial axis.
+2. **Normalization solver** (`tools/`, new) — emits `transforms.json` (scale + grounding/centering offset per pose, respecting the §3.4 split).
+   - **Per-action constant scale (revised — see §13).** A character's head size is **physically constant within an action**, so do **not** trust per-frame head measurements on occluded frames. Derive **one scale per action** from that action's *clean, high-confidence, unoccluded* frames (head width ≈ clean ~92, no contamination flag), and apply it uniformly within the action. A per-frame override is allowed only for a *verified genuine* size difference confirmed on the review page — not from a raw occluded measurement.
 3. **Outlier-review page** (HTML, our usual self-contained `open` channel) — overlays each pose's detected head bbox + ground line + contact-foot marker; flags poses whose head/foot deviates beyond tolerance for a manual nudge. Manual marks override detection and re-run the solver.
 4. **Re-derive runner** — feeds `transforms.json` into `scale_masters` (size) and the install blit (grounding translation), re-pixelizes, re-installs, and re-runs `measure_anchors`.
 5. **Presenter travel** — split the shared light/heavy offset branch by attack id and set `use_fighter_offset` on `hu_attack_light` (and `hu_attack_heavy` only if approved at its Gate 2) so the existing `fighter.gd` lunge drives motion now that frames are planted; re-verify reach.
@@ -151,7 +153,24 @@ Gate 2 per clip + head-aligned montage page
 
 ## 12. Sequencing
 
-1. **Step 0 — salvage** surviving `/tmp` masters into the repo.
-2. **Pilot** on idle + guard + light: build detector + review page, validate the re-derive loop end-to-end (size + grounding + presenter travel), Gate 2.
-3. **Roll out** to all remaining actions, respecting the §3.4 grounded/exempt split.
-4. **Final** `--shot-combat` montage across all 15 states + head-aligned montage; full gates; commit.
+1. **Step 0 — salvage** surviving `/tmp` masters into the repo. ✅ done (`f11f786`).
+2. **Build** detector + solver + review page + batch runner. ✅ done (`a5e0df5`/`8c38b65`/`b80ba01`) — but the size detector failed the review gate (§13).
+3. **Rework size** (§13) — occlusion-robust head metric + per-action constant scale; rebuild measurements/transforms/review; **re-review gate** before any install.
+4. **Install both axes together** (Decision per gate: *hold everything until size is fixed* — no spatial-only intermediate). Re-derive from pristine: per-action scale + grounding/x-pin translation → pixelize → install → `measure_anchors` → anchor-sanity → reach comparator (✋ STOP if out of band).
+5. **Presenter travel** (light; heavy if approved), per-clip Gate 2.
+6. **Final** `--shot-combat` montage + head-aligned montage; full gates; commit.
+
+---
+
+## 13. Gate finding — first build (2026-06-17)
+
+The tooling built and stopped at the review gate before installing art (correct). The review surfaced that the **size/head detector is unreliable**, while the **spatial axis is sound**:
+
+- **Head detector contaminated by the blade/arm.** 149/229 head bboxes wider than 120px (clean head ≈92), scales 0.476–1.724 in a tell-tale **bimodal** distribution — a second cluster at 1.4–1.7x on contiguous *attack* frames (`vl_018–041` all 1.72, `vh_058–084` all 1.52) plus 0.48–0.58 on heavy-windup frames. Confirmed by eyeball: clean light masters `master_001` and `master_011` have identical head size yet were assigned 1.0x vs 1.72x. A head doesn't change size mid-swing — these are detection errors, not real variance.
+- **Foot/contact detection is reliable:** 0/229 contact-feet misplaced. The spatial axis (drift + grounding) is ready.
+
+**Decisions from this gate:**
+- **Do not install** the first-build transforms.
+- **Hold everything until size is fixed** (no spatial-only intermediate ship).
+- Rework size per the revised §5.1/§5.2 (occlusion-robust head metric + per-action constant scale from clean frames); rebuild and **re-review at the same gate**; then install both axes together.
+- Acceptance for the rebuilt size pass: head-width contamination (>120px) drops to ≈0, scale distribution is unimodal/tight (clustered around each action's constant), and no mid-swing scale jumps within an action.
