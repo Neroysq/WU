@@ -206,6 +206,8 @@ def is_clean_scale_sample(render: dict[str, Any]) -> bool:
     width = raw_head_width(render)
     if width < MIN_CLEAN_HEAD_WIDTH:
         return False
+    if "visionHead" in render:
+        return bool(render.get("visionClean", False)) and float(render.get("confidence", 0.0)) >= 0.8
     if bool(render.get("rawHeadWidthContaminated", render.get("headWidthContaminated", False))):
         return False
     if float(render.get("rawConfidence", render.get("confidence", 0.0))) < 0.8:
@@ -215,6 +217,10 @@ def is_clean_scale_sample(render: dict[str, Any]) -> bool:
 
 
 def raw_head_width(render: dict[str, Any]) -> float:
+    if "visionHead" in render:
+        bbox = render.get("headBBox", [0, 0, 0, 0])
+        if isinstance(bbox, list) and len(bbox) >= 4:
+            return float(bbox[2])
     raw_bbox = render.get("rawHeadBBox", render.get("headBBox", [0, 0, 0, 0]))
     if isinstance(raw_bbox, list) and len(raw_bbox) >= 4:
         return float(raw_bbox[2])

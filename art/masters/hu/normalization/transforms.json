@@ -1,6 +1,6 @@
 {
   "id": "hu_normalization_transforms",
-  "generated": "2026-06-17T00:47:32.958338+00:00",
+  "generated": "2026-06-17T01:54:04.008308+00:00",
   "measurements": "art/masters/hu/normalization/measurements.json",
   "targetPose": "vi_002",
   "targetRenderHeadWidth": 46.0,
@@ -32,15 +32,15 @@
   },
   "scaleGroups": {
     "__all__": {
-      "medianHeadWidth": 47.0,
-      "scale": 0.97872,
-      "cleanCount": 184,
+      "medianHeadWidth": 46.0,
+      "scale": 1.0,
+      "cleanCount": 226,
       "source": "all-clean-render-head-width"
     },
     "entry": {
       "medianHeadWidth": 44.0,
       "scale": 1.04545,
-      "cleanCount": 31,
+      "cleanCount": 49,
       "cleanPoses": [
         "vd_001",
         "vd_003",
@@ -63,8 +63,26 @@
         "vd_037",
         "vd_039",
         "vd_041",
+        "vd_043",
+        "vd_045",
+        "vd_047",
+        "vd_049",
+        "vd_051",
+        "vd_053",
+        "vd_055",
+        "vd_057",
+        "vd_059",
+        "vd_061",
+        "vd_063",
+        "vd_065",
+        "vd_067",
+        "vd_069",
+        "vd_071",
+        "vd_073",
+        "vd_075",
         "vd_077",
         "vd_079",
+        "vd_081",
         "vd_083",
         "vd_085",
         "vd_087",
@@ -79,17 +97,28 @@
     "heavy": {
       "medianHeadWidth": 45.0,
       "scale": 1.02222,
-      "cleanCount": 16,
+      "cleanCount": 27,
       "cleanPoses": [
         "vh_001",
         "vh_004",
         "vh_007",
         "vh_010",
         "vh_013",
-        "vh_028",
+        "vh_016",
+        "vh_019",
         "vh_031",
         "vh_034",
         "vh_037",
+        "vh_040",
+        "vh_043",
+        "vh_046",
+        "vh_049",
+        "vh_052",
+        "vh_058",
+        "vh_064",
+        "vh_070",
+        "vh_073",
+        "vh_076",
         "vh_080",
         "vh_084",
         "vh_088",
@@ -103,11 +132,16 @@
     "held": {
       "medianHeadWidth": 46.0,
       "scale": 1.0,
-      "cleanCount": 4,
+      "cleanCount": 9,
       "cleanPoses": [
+        "vp_block",
+        "vp_dash",
+        "vp_fall",
+        "vp_hit",
         "vp_land",
         "vp_peak",
         "vp_rise",
+        "vp_stun_a",
         "vp_stun_b"
       ],
       "source": "action-clean-render-head-width"
@@ -137,13 +171,21 @@
       "source": "action-clean-render-head-width"
     },
     "light": {
-      "medianHeadWidth": 45.0,
-      "scale": 1.02222,
-      "cleanCount": 22,
+      "medianHeadWidth": 45.5,
+      "scale": 1.01099,
+      "cleanCount": 30,
       "cleanPoses": [
         "vl_001",
         "vl_013",
+        "vl_014",
         "vl_015",
+        "vl_017",
+        "vl_018",
+        "vl_022",
+        "vl_026",
+        "vl_030",
+        "vl_035",
+        "vl_041",
         "vl_051",
         "vl_055",
         "vl_060",
@@ -2369,7 +2411,7 @@
     },
     "vl_001": {
       "pose": "vl_001",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 0.25,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2385,13 +2427,13 @@
     },
     "light/master_001": {
       "pose": "vl_001",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_013": {
       "pose": "vl_013",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -9.25,
       "offsetY": -1.0,
       "grounding": "grounded",
@@ -2407,13 +2449,13 @@
     },
     "light/master_002": {
       "pose": "vl_013",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_014": {
       "pose": "vl_014",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -17.75,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2431,13 +2473,13 @@
     },
     "light/master_003": {
       "pose": "vl_014",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_015": {
       "pose": "vl_015",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -44.75,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2455,13 +2497,13 @@
     },
     "light/master_004": {
       "pose": "vl_015",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_017": {
       "pose": "vl_017",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 67.25,
       "offsetY": -2.0,
       "grounding": "grounded",
@@ -2479,13 +2521,13 @@
     },
     "light/master_005": {
       "pose": "vl_017",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_018": {
       "pose": "vl_018",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -67.75,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2503,13 +2545,13 @@
     },
     "light/master_006": {
       "pose": "vl_018",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_022": {
       "pose": "vl_022",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -67.25,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2527,13 +2569,13 @@
     },
     "light/master_007": {
       "pose": "vl_022",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_026": {
       "pose": "vl_026",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -67.25,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2551,13 +2593,13 @@
     },
     "light/master_008": {
       "pose": "vl_026",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_030": {
       "pose": "vl_030",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -67.25,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2575,13 +2617,13 @@
     },
     "light/master_009": {
       "pose": "vl_030",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_035": {
       "pose": "vl_035",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -67.25,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2599,13 +2641,13 @@
     },
     "light/master_010": {
       "pose": "vl_035",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_041": {
       "pose": "vl_041",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -47.75,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2623,13 +2665,13 @@
     },
     "light/master_011": {
       "pose": "vl_041",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_051": {
       "pose": "vl_051",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 52.641,
       "offsetY": -2.0,
       "grounding": "grounded",
@@ -2647,13 +2689,13 @@
     },
     "light/master_012": {
       "pose": "vl_051",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_055": {
       "pose": "vl_055",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 52.641,
       "offsetY": -2.0,
       "grounding": "grounded",
@@ -2671,13 +2713,13 @@
     },
     "light/master_013": {
       "pose": "vl_055",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_060": {
       "pose": "vl_060",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 52.641,
       "offsetY": -2.0,
       "grounding": "grounded",
@@ -2695,13 +2737,13 @@
     },
     "light/master_014": {
       "pose": "vl_060",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_065": {
       "pose": "vl_065",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 52.641,
       "offsetY": -2.0,
       "grounding": "grounded",
@@ -2719,13 +2761,13 @@
     },
     "light/master_015": {
       "pose": "vl_065",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_073": {
       "pose": "vl_073",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 52.641,
       "offsetY": -2.0,
       "grounding": "grounded",
@@ -2743,13 +2785,13 @@
     },
     "light/master_016": {
       "pose": "vl_073",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_079": {
       "pose": "vl_079",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 52.875,
       "offsetY": -2.0,
       "grounding": "grounded",
@@ -2767,13 +2809,13 @@
     },
     "light/master_017": {
       "pose": "vl_079",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_081": {
       "pose": "vl_081",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 33.75,
       "offsetY": 1.0,
       "grounding": "grounded",
@@ -2791,13 +2833,13 @@
     },
     "light/master_018": {
       "pose": "vl_081",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_082": {
       "pose": "vl_082",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 22.75,
       "offsetY": 1.0,
       "grounding": "grounded",
@@ -2815,13 +2857,13 @@
     },
     "light/master_019": {
       "pose": "vl_082",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_083": {
       "pose": "vl_083",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 1.25,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2837,13 +2879,13 @@
     },
     "light/master_020": {
       "pose": "vl_083",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_084": {
       "pose": "vl_084",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 1.25,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2859,13 +2901,13 @@
     },
     "light/master_021": {
       "pose": "vl_084",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_085": {
       "pose": "vl_085",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -0.25,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2881,13 +2923,13 @@
     },
     "light/master_022": {
       "pose": "vl_085",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_086": {
       "pose": "vl_086",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -0.75,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2903,13 +2945,13 @@
     },
     "light/master_023": {
       "pose": "vl_086",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_087": {
       "pose": "vl_087",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -0.75,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2925,13 +2967,13 @@
     },
     "light/master_024": {
       "pose": "vl_087",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_088": {
       "pose": "vl_088",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -0.75,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2947,13 +2989,13 @@
     },
     "light/master_025": {
       "pose": "vl_088",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_089": {
       "pose": "vl_089",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -0.75,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2969,13 +3011,13 @@
     },
     "light/master_026": {
       "pose": "vl_089",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_091": {
       "pose": "vl_091",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -0.75,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -2991,13 +3033,13 @@
     },
     "light/master_027": {
       "pose": "vl_091",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_093": {
       "pose": "vl_093",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 0.25,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -3013,13 +3055,13 @@
     },
     "light/master_028": {
       "pose": "vl_093",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_095": {
       "pose": "vl_095",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 0.25,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -3035,13 +3077,13 @@
     },
     "light/master_029": {
       "pose": "vl_095",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
     "vl_097": {
       "pose": "vl_097",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 0.25,
       "offsetY": 0.0,
       "grounding": "grounded",
@@ -3057,7 +3099,7 @@
     },
     "light/master_030": {
       "pose": "vl_097",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "scaleGroup": "light",
       "flags": []
     },
@@ -6305,7 +6347,7 @@
     {
       "pose": "vl_001",
       "sourceKey": "light/master_001",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 0.25,
       "offsetY": 0.0,
       "flags": [],
@@ -6314,7 +6356,7 @@
     {
       "pose": "vl_013",
       "sourceKey": "light/master_002",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -9.25,
       "offsetY": -1.0,
       "flags": [],
@@ -6323,7 +6365,7 @@
     {
       "pose": "vl_014",
       "sourceKey": "light/master_003",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -17.75,
       "offsetY": 0.0,
       "flags": [],
@@ -6332,7 +6374,7 @@
     {
       "pose": "vl_015",
       "sourceKey": "light/master_004",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -44.75,
       "offsetY": 0.0,
       "flags": [],
@@ -6341,7 +6383,7 @@
     {
       "pose": "vl_017",
       "sourceKey": "light/master_005",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 67.25,
       "offsetY": -2.0,
       "flags": [],
@@ -6350,7 +6392,7 @@
     {
       "pose": "vl_018",
       "sourceKey": "light/master_006",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -67.75,
       "offsetY": 0.0,
       "flags": [],
@@ -6359,7 +6401,7 @@
     {
       "pose": "vl_022",
       "sourceKey": "light/master_007",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -67.25,
       "offsetY": 0.0,
       "flags": [],
@@ -6368,7 +6410,7 @@
     {
       "pose": "vl_026",
       "sourceKey": "light/master_008",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -67.25,
       "offsetY": 0.0,
       "flags": [],
@@ -6377,7 +6419,7 @@
     {
       "pose": "vl_030",
       "sourceKey": "light/master_009",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -67.25,
       "offsetY": 0.0,
       "flags": [],
@@ -6386,7 +6428,7 @@
     {
       "pose": "vl_035",
       "sourceKey": "light/master_010",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -67.25,
       "offsetY": 0.0,
       "flags": [],
@@ -6395,7 +6437,7 @@
     {
       "pose": "vl_041",
       "sourceKey": "light/master_011",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -47.75,
       "offsetY": 0.0,
       "flags": [],
@@ -6404,7 +6446,7 @@
     {
       "pose": "vl_051",
       "sourceKey": "light/master_012",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 52.641,
       "offsetY": -2.0,
       "flags": [],
@@ -6413,7 +6455,7 @@
     {
       "pose": "vl_055",
       "sourceKey": "light/master_013",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 52.641,
       "offsetY": -2.0,
       "flags": [],
@@ -6422,7 +6464,7 @@
     {
       "pose": "vl_060",
       "sourceKey": "light/master_014",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 52.641,
       "offsetY": -2.0,
       "flags": [],
@@ -6431,7 +6473,7 @@
     {
       "pose": "vl_065",
       "sourceKey": "light/master_015",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 52.641,
       "offsetY": -2.0,
       "flags": [],
@@ -6440,7 +6482,7 @@
     {
       "pose": "vl_073",
       "sourceKey": "light/master_016",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 52.641,
       "offsetY": -2.0,
       "flags": [],
@@ -6449,7 +6491,7 @@
     {
       "pose": "vl_079",
       "sourceKey": "light/master_017",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 52.875,
       "offsetY": -2.0,
       "flags": [],
@@ -6458,7 +6500,7 @@
     {
       "pose": "vl_081",
       "sourceKey": "light/master_018",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 33.75,
       "offsetY": 1.0,
       "flags": [],
@@ -6467,7 +6509,7 @@
     {
       "pose": "vl_082",
       "sourceKey": "light/master_019",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 22.75,
       "offsetY": 1.0,
       "flags": [],
@@ -6476,7 +6518,7 @@
     {
       "pose": "vl_083",
       "sourceKey": "light/master_020",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 1.25,
       "offsetY": 0.0,
       "flags": [],
@@ -6485,7 +6527,7 @@
     {
       "pose": "vl_084",
       "sourceKey": "light/master_021",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 1.25,
       "offsetY": 0.0,
       "flags": [],
@@ -6494,7 +6536,7 @@
     {
       "pose": "vl_085",
       "sourceKey": "light/master_022",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -0.25,
       "offsetY": 0.0,
       "flags": [],
@@ -6503,7 +6545,7 @@
     {
       "pose": "vl_086",
       "sourceKey": "light/master_023",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -0.75,
       "offsetY": 0.0,
       "flags": [],
@@ -6512,7 +6554,7 @@
     {
       "pose": "vl_087",
       "sourceKey": "light/master_024",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -0.75,
       "offsetY": 0.0,
       "flags": [],
@@ -6521,7 +6563,7 @@
     {
       "pose": "vl_088",
       "sourceKey": "light/master_025",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -0.75,
       "offsetY": 0.0,
       "flags": [],
@@ -6530,7 +6572,7 @@
     {
       "pose": "vl_089",
       "sourceKey": "light/master_026",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -0.75,
       "offsetY": 0.0,
       "flags": [],
@@ -6539,7 +6581,7 @@
     {
       "pose": "vl_091",
       "sourceKey": "light/master_027",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": -0.75,
       "offsetY": 0.0,
       "flags": [],
@@ -6548,7 +6590,7 @@
     {
       "pose": "vl_093",
       "sourceKey": "light/master_028",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 0.25,
       "offsetY": 0.0,
       "flags": [],
@@ -6557,7 +6599,7 @@
     {
       "pose": "vl_095",
       "sourceKey": "light/master_029",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 0.25,
       "offsetY": 0.0,
       "flags": [],
@@ -6566,7 +6608,7 @@
     {
       "pose": "vl_097",
       "sourceKey": "light/master_030",
-      "scale": 1.02222,
+      "scale": 1.01099,
       "offsetX": 0.25,
       "offsetY": 0.0,
       "flags": [],

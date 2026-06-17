@@ -1,0 +1,4588 @@
+{
+  "id": "hu_vision_head_annotations",
+  "generated": "2026-06-17T01:52:09.150227+00:00",
+  "provider": "local_face_color_component_bootstrap",
+  "coordinateSpace": "render",
+  "annotations": {
+    "vd_001": {
+      "bbox": [
+        150,
+        12,
+        43,
+        48
+      ],
+      "visionBox": [
+        150,
+        12,
+        43,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_001.png"
+    },
+    "vd_003": {
+      "bbox": [
+        150,
+        12,
+        43,
+        47
+      ],
+      "visionBox": [
+        150,
+        12,
+        43,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_003.png"
+    },
+    "vd_005": {
+      "bbox": [
+        150,
+        12,
+        43,
+        47
+      ],
+      "visionBox": [
+        150,
+        12,
+        43,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_005.png"
+    },
+    "vd_007": {
+      "bbox": [
+        150,
+        12,
+        43,
+        47
+      ],
+      "visionBox": [
+        150,
+        12,
+        43,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_007.png"
+    },
+    "vd_009": {
+      "bbox": [
+        150,
+        12,
+        43,
+        47
+      ],
+      "visionBox": [
+        150,
+        12,
+        43,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_009.png"
+    },
+    "vd_011": {
+      "bbox": [
+        150,
+        12,
+        43,
+        47
+      ],
+      "visionBox": [
+        150,
+        12,
+        43,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_011.png"
+    },
+    "vd_013": {
+      "bbox": [
+        150,
+        12,
+        43,
+        47
+      ],
+      "visionBox": [
+        150,
+        12,
+        43,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_013.png"
+    },
+    "vd_015": {
+      "bbox": [
+        150,
+        12,
+        43,
+        47
+      ],
+      "visionBox": [
+        150,
+        12,
+        43,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_015.png"
+    },
+    "vd_017": {
+      "bbox": [
+        150,
+        12,
+        43,
+        47
+      ],
+      "visionBox": [
+        150,
+        12,
+        43,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_017.png"
+    },
+    "vd_019": {
+      "bbox": [
+        151,
+        12,
+        43,
+        45
+      ],
+      "visionBox": [
+        151,
+        12,
+        43,
+        45
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_019.png"
+    },
+    "vd_021": {
+      "bbox": [
+        151,
+        12,
+        43,
+        45
+      ],
+      "visionBox": [
+        151,
+        12,
+        43,
+        45
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_021.png"
+    },
+    "vd_023": {
+      "bbox": [
+        155,
+        12,
+        43,
+        45
+      ],
+      "visionBox": [
+        155,
+        12,
+        43,
+        45
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_023.png"
+    },
+    "vd_025": {
+      "bbox": [
+        155,
+        12,
+        43,
+        45
+      ],
+      "visionBox": [
+        155,
+        12,
+        43,
+        45
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_025.png"
+    },
+    "vd_027": {
+      "bbox": [
+        157,
+        12,
+        43,
+        42
+      ],
+      "visionBox": [
+        157,
+        12,
+        43,
+        42
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_027.png"
+    },
+    "vd_029": {
+      "bbox": [
+        158,
+        13,
+        43,
+        46
+      ],
+      "visionBox": [
+        158,
+        13,
+        43,
+        46
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_029.png"
+    },
+    "vd_031": {
+      "bbox": [
+        161,
+        16,
+        44,
+        43
+      ],
+      "visionBox": [
+        161,
+        16,
+        44,
+        43
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_031.png"
+    },
+    "vd_033": {
+      "bbox": [
+        160,
+        18,
+        44,
+        43
+      ],
+      "visionBox": [
+        160,
+        18,
+        44,
+        43
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_033.png"
+    },
+    "vd_035": {
+      "bbox": [
+        161,
+        19,
+        44,
+        43
+      ],
+      "visionBox": [
+        161,
+        19,
+        44,
+        43
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_035.png"
+    },
+    "vd_037": {
+      "bbox": [
+        167,
+        27,
+        44,
+        44
+      ],
+      "visionBox": [
+        167,
+        27,
+        44,
+        44
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_037.png"
+    },
+    "vd_039": {
+      "bbox": [
+        166,
+        27,
+        44,
+        43
+      ],
+      "visionBox": [
+        166,
+        27,
+        44,
+        43
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_039.png"
+    },
+    "vd_041": {
+      "bbox": [
+        165,
+        27,
+        44,
+        39
+      ],
+      "visionBox": [
+        165,
+        27,
+        44,
+        39
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_041.png"
+    },
+    "vd_043": {
+      "bbox": [
+        158,
+        25,
+        50,
+        63
+      ],
+      "visionBox": [
+        158,
+        21,
+        52,
+        67
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_043.png"
+    },
+    "vd_045": {
+      "bbox": [
+        157,
+        25,
+        49,
+        61
+      ],
+      "visionBox": [
+        157,
+        22,
+        52,
+        64
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_045.png"
+    },
+    "vd_047": {
+      "bbox": [
+        157,
+        25,
+        49,
+        61
+      ],
+      "visionBox": [
+        157,
+        22,
+        52,
+        64
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_047.png"
+    },
+    "vd_049": {
+      "bbox": [
+        158,
+        25,
+        50,
+        62
+      ],
+      "visionBox": [
+        158,
+        22,
+        52,
+        65
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_049.png"
+    },
+    "vd_051": {
+      "bbox": [
+        157,
+        25,
+        49,
+        61
+      ],
+      "visionBox": [
+        157,
+        22,
+        52,
+        64
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_051.png"
+    },
+    "vd_053": {
+      "bbox": [
+        157,
+        25,
+        49,
+        61
+      ],
+      "visionBox": [
+        157,
+        22,
+        52,
+        64
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_053.png"
+    },
+    "vd_055": {
+      "bbox": [
+        157,
+        25,
+        49,
+        61
+      ],
+      "visionBox": [
+        157,
+        22,
+        52,
+        64
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_055.png"
+    },
+    "vd_057": {
+      "bbox": [
+        157,
+        25,
+        49,
+        61
+      ],
+      "visionBox": [
+        157,
+        22,
+        52,
+        64
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_057.png"
+    },
+    "vd_059": {
+      "bbox": [
+        157,
+        24,
+        49,
+        62
+      ],
+      "visionBox": [
+        157,
+        22,
+        52,
+        64
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_059.png"
+    },
+    "vd_061": {
+      "bbox": [
+        157,
+        24,
+        49,
+        62
+      ],
+      "visionBox": [
+        157,
+        22,
+        52,
+        64
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_061.png"
+    },
+    "vd_063": {
+      "bbox": [
+        157,
+        24,
+        49,
+        62
+      ],
+      "visionBox": [
+        157,
+        22,
+        52,
+        64
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_063.png"
+    },
+    "vd_065": {
+      "bbox": [
+        157,
+        24,
+        49,
+        62
+      ],
+      "visionBox": [
+        157,
+        22,
+        52,
+        64
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_065.png"
+    },
+    "vd_067": {
+      "bbox": [
+        157,
+        24,
+        49,
+        62
+      ],
+      "visionBox": [
+        157,
+        22,
+        52,
+        64
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_067.png"
+    },
+    "vd_069": {
+      "bbox": [
+        157,
+        24,
+        49,
+        62
+      ],
+      "visionBox": [
+        157,
+        22,
+        52,
+        64
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_069.png"
+    },
+    "vd_071": {
+      "bbox": [
+        157,
+        24,
+        49,
+        62
+      ],
+      "visionBox": [
+        157,
+        22,
+        52,
+        64
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_071.png"
+    },
+    "vd_073": {
+      "bbox": [
+        157,
+        23,
+        51,
+        63
+      ],
+      "visionBox": [
+        157,
+        21,
+        52,
+        65
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_073.png"
+    },
+    "vd_075": {
+      "bbox": [
+        161,
+        29,
+        49,
+        62
+      ],
+      "visionBox": [
+        161,
+        26,
+        49,
+        65
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_075.png"
+    },
+    "vd_077": {
+      "bbox": [
+        117,
+        49,
+        45,
+        49
+      ],
+      "visionBox": [
+        117,
+        49,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_077.png"
+    },
+    "vd_079": {
+      "bbox": [
+        108,
+        49,
+        45,
+        49
+      ],
+      "visionBox": [
+        108,
+        49,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_079.png"
+    },
+    "vd_081": {
+      "bbox": [
+        94,
+        56,
+        47,
+        45
+      ],
+      "visionBox": [
+        94,
+        56,
+        47,
+        45
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_081.png"
+    },
+    "vd_083": {
+      "bbox": [
+        94,
+        49,
+        44,
+        49
+      ],
+      "visionBox": [
+        94,
+        49,
+        44,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_083.png"
+    },
+    "vd_085": {
+      "bbox": [
+        108,
+        49,
+        44,
+        49
+      ],
+      "visionBox": [
+        108,
+        49,
+        44,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_085.png"
+    },
+    "vd_087": {
+      "bbox": [
+        110,
+        49,
+        44,
+        49
+      ],
+      "visionBox": [
+        110,
+        49,
+        44,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_087.png"
+    },
+    "vd_089": {
+      "bbox": [
+        110,
+        49,
+        44,
+        49
+      ],
+      "visionBox": [
+        110,
+        49,
+        44,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_089.png"
+    },
+    "vd_091": {
+      "bbox": [
+        110,
+        49,
+        44,
+        49
+      ],
+      "visionBox": [
+        110,
+        49,
+        44,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_091.png"
+    },
+    "vd_093": {
+      "bbox": [
+        109,
+        49,
+        45,
+        49
+      ],
+      "visionBox": [
+        109,
+        49,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_093.png"
+    },
+    "vd_095": {
+      "bbox": [
+        109,
+        49,
+        45,
+        49
+      ],
+      "visionBox": [
+        109,
+        49,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_095.png"
+    },
+    "vd_097": {
+      "bbox": [
+        109,
+        49,
+        45,
+        49
+      ],
+      "visionBox": [
+        109,
+        49,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vd_097.png"
+    },
+    "vh_001": {
+      "bbox": [
+        99,
+        122,
+        44,
+        49
+      ],
+      "visionBox": [
+        99,
+        122,
+        44,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_001.png"
+    },
+    "vh_004": {
+      "bbox": [
+        98,
+        121,
+        45,
+        50
+      ],
+      "visionBox": [
+        98,
+        121,
+        45,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_004.png"
+    },
+    "vh_007": {
+      "bbox": [
+        98,
+        121,
+        45,
+        50
+      ],
+      "visionBox": [
+        98,
+        121,
+        45,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_007.png"
+    },
+    "vh_010": {
+      "bbox": [
+        104,
+        121,
+        44,
+        48
+      ],
+      "visionBox": [
+        104,
+        121,
+        44,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_010.png"
+    },
+    "vh_013": {
+      "bbox": [
+        111,
+        121,
+        44,
+        45
+      ],
+      "visionBox": [
+        111,
+        121,
+        44,
+        45
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_013.png"
+    },
+    "vh_016": {
+      "bbox": [
+        118,
+        128,
+        47,
+        42
+      ],
+      "visionBox": [
+        118,
+        128,
+        47,
+        42
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_016.png"
+    },
+    "vh_019": {
+      "bbox": [
+        131,
+        126,
+        46,
+        36
+      ],
+      "visionBox": [
+        128,
+        126,
+        49,
+        36
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_019.png"
+    },
+    "vh_022": {
+      "bbox": [
+        178,
+        110,
+        32,
+        35
+      ],
+      "visionBox": [
+        178,
+        110,
+        32,
+        35
+      ],
+      "clean": false,
+      "occluded": true,
+      "confidence": 0.72,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "review: snapped head unusual w=32 h=35 aspect=0.91",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_022.png"
+    },
+    "vh_025": {
+      "bbox": [
+        165,
+        96,
+        32,
+        36
+      ],
+      "visionBox": [
+        165,
+        96,
+        32,
+        36
+      ],
+      "clean": false,
+      "occluded": true,
+      "confidence": 0.72,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "review: snapped head unusual w=32 h=36 aspect=0.89",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_025.png"
+    },
+    "vh_028": {
+      "bbox": [
+        143,
+        120,
+        31,
+        55
+      ],
+      "visionBox": [
+        143,
+        120,
+        31,
+        55
+      ],
+      "clean": false,
+      "occluded": true,
+      "confidence": 0.72,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "review: snapped head unusual w=31 h=55 aspect=0.56",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_028.png"
+    },
+    "vh_031": {
+      "bbox": [
+        138,
+        116,
+        34,
+        57
+      ],
+      "visionBox": [
+        138,
+        116,
+        34,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_031.png"
+    },
+    "vh_034": {
+      "bbox": [
+        145,
+        119,
+        37,
+        45
+      ],
+      "visionBox": [
+        145,
+        119,
+        37,
+        45
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_034.png"
+    },
+    "vh_037": {
+      "bbox": [
+        145,
+        119,
+        37,
+        45
+      ],
+      "visionBox": [
+        145,
+        119,
+        37,
+        45
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_037.png"
+    },
+    "vh_040": {
+      "bbox": [
+        148,
+        115,
+        41,
+        57
+      ],
+      "visionBox": [
+        148,
+        115,
+        41,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_040.png"
+    },
+    "vh_043": {
+      "bbox": [
+        147,
+        115,
+        45,
+        57
+      ],
+      "visionBox": [
+        147,
+        115,
+        45,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_043.png"
+    },
+    "vh_046": {
+      "bbox": [
+        147,
+        120,
+        45,
+        43
+      ],
+      "visionBox": [
+        147,
+        120,
+        45,
+        43
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_046.png"
+    },
+    "vh_049": {
+      "bbox": [
+        147,
+        120,
+        45,
+        43
+      ],
+      "visionBox": [
+        147,
+        120,
+        45,
+        43
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_049.png"
+    },
+    "vh_052": {
+      "bbox": [
+        165,
+        141,
+        44,
+        41
+      ],
+      "visionBox": [
+        165,
+        141,
+        44,
+        41
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_052.png"
+    },
+    "vh_058": {
+      "bbox": [
+        109,
+        141,
+        45,
+        41
+      ],
+      "visionBox": [
+        109,
+        141,
+        45,
+        41
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_058.png"
+    },
+    "vh_064": {
+      "bbox": [
+        136,
+        143,
+        45,
+        42
+      ],
+      "visionBox": [
+        136,
+        143,
+        45,
+        42
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_064.png"
+    },
+    "vh_070": {
+      "bbox": [
+        136,
+        144,
+        45,
+        41
+      ],
+      "visionBox": [
+        136,
+        144,
+        45,
+        41
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_070.png"
+    },
+    "vh_073": {
+      "bbox": [
+        136,
+        144,
+        45,
+        42
+      ],
+      "visionBox": [
+        136,
+        144,
+        45,
+        42
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_073.png"
+    },
+    "vh_076": {
+      "bbox": [
+        136,
+        144,
+        45,
+        41
+      ],
+      "visionBox": [
+        136,
+        144,
+        45,
+        41
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_076.png"
+    },
+    "vh_080": {
+      "bbox": [
+        138,
+        138,
+        44,
+        41
+      ],
+      "visionBox": [
+        138,
+        138,
+        44,
+        41
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_080.png"
+    },
+    "vh_084": {
+      "bbox": [
+        139,
+        138,
+        41,
+        41
+      ],
+      "visionBox": [
+        139,
+        138,
+        41,
+        41
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_084.png"
+    },
+    "vh_088": {
+      "bbox": [
+        104,
+        125,
+        50,
+        40
+      ],
+      "visionBox": [
+        104,
+        125,
+        50,
+        40
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_088.png"
+    },
+    "vh_091": {
+      "bbox": [
+        98,
+        121,
+        45,
+        50
+      ],
+      "visionBox": [
+        98,
+        121,
+        45,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_091.png"
+    },
+    "vh_094": {
+      "bbox": [
+        98,
+        121,
+        45,
+        50
+      ],
+      "visionBox": [
+        98,
+        121,
+        45,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_094.png"
+    },
+    "vh_096": {
+      "bbox": [
+        99,
+        122,
+        45,
+        49
+      ],
+      "visionBox": [
+        99,
+        122,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_096.png"
+    },
+    "vh_097": {
+      "bbox": [
+        99,
+        122,
+        45,
+        49
+      ],
+      "visionBox": [
+        99,
+        122,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vh_097.png"
+    },
+    "vi_002": {
+      "bbox": [
+        74,
+        21,
+        46,
+        50
+      ],
+      "visionBox": [
+        74,
+        21,
+        46,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vi_002.png"
+    },
+    "vi_008": {
+      "bbox": [
+        74,
+        19,
+        46,
+        51
+      ],
+      "visionBox": [
+        74,
+        19,
+        46,
+        51
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vi_008.png"
+    },
+    "vi_014": {
+      "bbox": [
+        73,
+        15,
+        45,
+        52
+      ],
+      "visionBox": [
+        73,
+        15,
+        45,
+        52
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vi_014.png"
+    },
+    "vi_020": {
+      "bbox": [
+        72,
+        13,
+        46,
+        53
+      ],
+      "visionBox": [
+        72,
+        13,
+        46,
+        53
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vi_020.png"
+    },
+    "vi_026": {
+      "bbox": [
+        72,
+        13,
+        45,
+        52
+      ],
+      "visionBox": [
+        72,
+        13,
+        45,
+        52
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vi_026.png"
+    },
+    "vi_032": {
+      "bbox": [
+        71,
+        12,
+        46,
+        53
+      ],
+      "visionBox": [
+        71,
+        12,
+        46,
+        53
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vi_032.png"
+    },
+    "vi_038": {
+      "bbox": [
+        71,
+        12,
+        46,
+        51
+      ],
+      "visionBox": [
+        71,
+        12,
+        46,
+        51
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vi_038.png"
+    },
+    "vi_044": {
+      "bbox": [
+        71,
+        12,
+        46,
+        51
+      ],
+      "visionBox": [
+        71,
+        12,
+        46,
+        51
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vi_044.png"
+    },
+    "vi_050": {
+      "bbox": [
+        71,
+        12,
+        46,
+        52
+      ],
+      "visionBox": [
+        71,
+        12,
+        46,
+        52
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vi_050.png"
+    },
+    "vi_056": {
+      "bbox": [
+        72,
+        13,
+        45,
+        52
+      ],
+      "visionBox": [
+        72,
+        13,
+        45,
+        52
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vi_056.png"
+    },
+    "vi_062": {
+      "bbox": [
+        73,
+        15,
+        45,
+        52
+      ],
+      "visionBox": [
+        73,
+        15,
+        45,
+        52
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vi_062.png"
+    },
+    "vi_068": {
+      "bbox": [
+        74,
+        18,
+        46,
+        51
+      ],
+      "visionBox": [
+        74,
+        18,
+        46,
+        51
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vi_068.png"
+    },
+    "vi_074": {
+      "bbox": [
+        74,
+        20,
+        46,
+        50
+      ],
+      "visionBox": [
+        74,
+        20,
+        46,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vi_074.png"
+    },
+    "vi_080": {
+      "bbox": [
+        74,
+        20,
+        46,
+        50
+      ],
+      "visionBox": [
+        74,
+        20,
+        46,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vi_080.png"
+    },
+    "vi_086": {
+      "bbox": [
+        73,
+        20,
+        47,
+        51
+      ],
+      "visionBox": [
+        73,
+        20,
+        47,
+        51
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vi_086.png"
+    },
+    "vi_097": {
+      "bbox": [
+        73,
+        18,
+        47,
+        51
+      ],
+      "visionBox": [
+        73,
+        18,
+        47,
+        51
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vi_097.png"
+    },
+    "vl_001": {
+      "bbox": [
+        130,
+        69,
+        44,
+        49
+      ],
+      "visionBox": [
+        130,
+        69,
+        44,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_001.png"
+    },
+    "vl_013": {
+      "bbox": [
+        141,
+        69,
+        46,
+        49
+      ],
+      "visionBox": [
+        141,
+        69,
+        46,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_013.png"
+    },
+    "vl_014": {
+      "bbox": [
+        149,
+        76,
+        47,
+        45
+      ],
+      "visionBox": [
+        149,
+        76,
+        49,
+        45
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_014.png"
+    },
+    "vl_015": {
+      "bbox": [
+        182,
+        80,
+        53,
+        43
+      ],
+      "visionBox": [
+        182,
+        80,
+        56,
+        43
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_015.png"
+    },
+    "vl_017": {
+      "bbox": [
+        199,
+        89,
+        47,
+        45
+      ],
+      "visionBox": [
+        199,
+        89,
+        49,
+        45
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_017.png"
+    },
+    "vl_018": {
+      "bbox": [
+        239,
+        99,
+        46,
+        52
+      ],
+      "visionBox": [
+        239,
+        99,
+        47,
+        52
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_018.png"
+    },
+    "vl_022": {
+      "bbox": [
+        241,
+        101,
+        44,
+        52
+      ],
+      "visionBox": [
+        241,
+        101,
+        45,
+        52
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_022.png"
+    },
+    "vl_026": {
+      "bbox": [
+        241,
+        101,
+        44,
+        52
+      ],
+      "visionBox": [
+        241,
+        101,
+        45,
+        52
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_026.png"
+    },
+    "vl_030": {
+      "bbox": [
+        239,
+        101,
+        46,
+        52
+      ],
+      "visionBox": [
+        239,
+        101,
+        47,
+        52
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_030.png"
+    },
+    "vl_035": {
+      "bbox": [
+        239,
+        101,
+        46,
+        52
+      ],
+      "visionBox": [
+        239,
+        101,
+        47,
+        52
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_035.png"
+    },
+    "vl_041": {
+      "bbox": [
+        215,
+        104,
+        44,
+        43
+      ],
+      "visionBox": [
+        215,
+        104,
+        44,
+        43
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_041.png"
+    },
+    "vl_051": {
+      "bbox": [
+        98,
+        97,
+        54,
+        40
+      ],
+      "visionBox": [
+        98,
+        97,
+        54,
+        40
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_051.png"
+    },
+    "vl_055": {
+      "bbox": [
+        98,
+        97,
+        54,
+        40
+      ],
+      "visionBox": [
+        98,
+        97,
+        54,
+        40
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_055.png"
+    },
+    "vl_060": {
+      "bbox": [
+        98,
+        97,
+        54,
+        40
+      ],
+      "visionBox": [
+        98,
+        97,
+        54,
+        40
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_060.png"
+    },
+    "vl_065": {
+      "bbox": [
+        98,
+        97,
+        55,
+        40
+      ],
+      "visionBox": [
+        98,
+        97,
+        55,
+        40
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_065.png"
+    },
+    "vl_073": {
+      "bbox": [
+        98,
+        97,
+        55,
+        40
+      ],
+      "visionBox": [
+        98,
+        97,
+        55,
+        40
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_073.png"
+    },
+    "vl_079": {
+      "bbox": [
+        98,
+        96,
+        55,
+        41
+      ],
+      "visionBox": [
+        98,
+        96,
+        55,
+        41
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_079.png"
+    },
+    "vl_081": {
+      "bbox": [
+        104,
+        83,
+        54,
+        48
+      ],
+      "visionBox": [
+        104,
+        83,
+        54,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_081.png"
+    },
+    "vl_082": {
+      "bbox": [
+        114,
+        79,
+        52,
+        49
+      ],
+      "visionBox": [
+        114,
+        79,
+        52,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_082.png"
+    },
+    "vl_083": {
+      "bbox": [
+        128,
+        69,
+        45,
+        49
+      ],
+      "visionBox": [
+        128,
+        69,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_083.png"
+    },
+    "vl_084": {
+      "bbox": [
+        128,
+        69,
+        45,
+        49
+      ],
+      "visionBox": [
+        128,
+        69,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_084.png"
+    },
+    "vl_085": {
+      "bbox": [
+        130,
+        69,
+        44,
+        48
+      ],
+      "visionBox": [
+        130,
+        69,
+        44,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_085.png"
+    },
+    "vl_086": {
+      "bbox": [
+        129,
+        69,
+        45,
+        49
+      ],
+      "visionBox": [
+        129,
+        69,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_086.png"
+    },
+    "vl_087": {
+      "bbox": [
+        129,
+        69,
+        45,
+        49
+      ],
+      "visionBox": [
+        129,
+        69,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_087.png"
+    },
+    "vl_088": {
+      "bbox": [
+        129,
+        69,
+        45,
+        49
+      ],
+      "visionBox": [
+        129,
+        69,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_088.png"
+    },
+    "vl_089": {
+      "bbox": [
+        129,
+        69,
+        45,
+        49
+      ],
+      "visionBox": [
+        129,
+        69,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_089.png"
+    },
+    "vl_091": {
+      "bbox": [
+        129,
+        69,
+        45,
+        49
+      ],
+      "visionBox": [
+        129,
+        69,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_091.png"
+    },
+    "vl_093": {
+      "bbox": [
+        129,
+        69,
+        45,
+        49
+      ],
+      "visionBox": [
+        129,
+        69,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_093.png"
+    },
+    "vl_095": {
+      "bbox": [
+        129,
+        69,
+        45,
+        49
+      ],
+      "visionBox": [
+        129,
+        69,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_095.png"
+    },
+    "vl_097": {
+      "bbox": [
+        129,
+        69,
+        45,
+        49
+      ],
+      "visionBox": [
+        129,
+        69,
+        45,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vl_097.png"
+    },
+    "vp_block": {
+      "bbox": [
+        156,
+        33,
+        57,
+        50
+      ],
+      "visionBox": [
+        156,
+        33,
+        57,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_block.png"
+    },
+    "vp_dash": {
+      "bbox": [
+        214,
+        57,
+        59,
+        58
+      ],
+      "visionBox": [
+        214,
+        57,
+        61,
+        58
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_dash.png"
+    },
+    "vp_fall": {
+      "bbox": [
+        185,
+        60,
+        36,
+        43
+      ],
+      "visionBox": [
+        185,
+        60,
+        37,
+        43
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_fall.png"
+    },
+    "vp_hit": {
+      "bbox": [
+        102,
+        49,
+        57,
+        42
+      ],
+      "visionBox": [
+        102,
+        37,
+        57,
+        54
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_hit.png"
+    },
+    "vp_land": {
+      "bbox": [
+        193,
+        44,
+        44,
+        41
+      ],
+      "visionBox": [
+        193,
+        44,
+        44,
+        41
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_land.png"
+    },
+    "vp_peak": {
+      "bbox": [
+        177,
+        45,
+        46,
+        38
+      ],
+      "visionBox": [
+        177,
+        45,
+        46,
+        38
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_peak.png"
+    },
+    "vp_rise": {
+      "bbox": [
+        169,
+        32,
+        42,
+        44
+      ],
+      "visionBox": [
+        169,
+        32,
+        42,
+        44
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_rise.png"
+    },
+    "vp_stun_a": {
+      "bbox": [
+        161,
+        22,
+        52,
+        58
+      ],
+      "visionBox": [
+        161,
+        11,
+        52,
+        69
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_stun_a.png"
+    },
+    "vp_stun_b": {
+      "bbox": [
+        142,
+        12,
+        46,
+        38
+      ],
+      "visionBox": [
+        142,
+        12,
+        46,
+        38
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_stun_b.png"
+    },
+    "vw_002": {
+      "bbox": [
+        77,
+        23,
+        46,
+        48
+      ],
+      "visionBox": [
+        77,
+        23,
+        46,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_002.png"
+    },
+    "vw_003": {
+      "bbox": [
+        76,
+        23,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        23,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_003.png"
+    },
+    "vw_004": {
+      "bbox": [
+        76,
+        23,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        23,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_004.png"
+    },
+    "vw_005": {
+      "bbox": [
+        76,
+        20,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        20,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_005.png"
+    },
+    "vw_006": {
+      "bbox": [
+        76,
+        19,
+        47,
+        46
+      ],
+      "visionBox": [
+        76,
+        19,
+        47,
+        46
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_006.png"
+    },
+    "vw_007": {
+      "bbox": [
+        76,
+        19,
+        47,
+        46
+      ],
+      "visionBox": [
+        76,
+        19,
+        47,
+        46
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_007.png"
+    },
+    "vw_008": {
+      "bbox": [
+        82,
+        22,
+        40,
+        55
+      ],
+      "visionBox": [
+        82,
+        22,
+        40,
+        55
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_008.png"
+    },
+    "vw_009": {
+      "bbox": [
+        82,
+        22,
+        40,
+        55
+      ],
+      "visionBox": [
+        82,
+        22,
+        40,
+        55
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_009.png"
+    },
+    "vw_010": {
+      "bbox": [
+        76,
+        17,
+        47,
+        37
+      ],
+      "visionBox": [
+        76,
+        17,
+        47,
+        37
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_010.png"
+    },
+    "vw_011": {
+      "bbox": [
+        82,
+        18,
+        40,
+        57
+      ],
+      "visionBox": [
+        82,
+        18,
+        40,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_011.png"
+    },
+    "vw_012": {
+      "bbox": [
+        82,
+        22,
+        40,
+        45
+      ],
+      "visionBox": [
+        82,
+        22,
+        40,
+        45
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_012.png"
+    },
+    "vw_013": {
+      "bbox": [
+        82,
+        18,
+        40,
+        57
+      ],
+      "visionBox": [
+        82,
+        18,
+        40,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_013.png"
+    },
+    "vw_014": {
+      "bbox": [
+        76,
+        14,
+        47,
+        37
+      ],
+      "visionBox": [
+        76,
+        14,
+        47,
+        37
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_014.png"
+    },
+    "vw_015": {
+      "bbox": [
+        76,
+        18,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        18,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_015.png"
+    },
+    "vw_016": {
+      "bbox": [
+        76,
+        17,
+        47,
+        49
+      ],
+      "visionBox": [
+        76,
+        17,
+        47,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_016.png"
+    },
+    "vw_017": {
+      "bbox": [
+        76,
+        17,
+        47,
+        49
+      ],
+      "visionBox": [
+        76,
+        17,
+        47,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_017.png"
+    },
+    "vw_018": {
+      "bbox": [
+        76,
+        24,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        24,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_018.png"
+    },
+    "vw_019": {
+      "bbox": [
+        76,
+        25,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        25,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_019.png"
+    },
+    "vw_020": {
+      "bbox": [
+        76,
+        25,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        25,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_020.png"
+    },
+    "vw_021": {
+      "bbox": [
+        76,
+        25,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        25,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_021.png"
+    },
+    "vw_022": {
+      "bbox": [
+        76,
+        23,
+        47,
+        47
+      ],
+      "visionBox": [
+        76,
+        23,
+        47,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_022.png"
+    },
+    "vw_023": {
+      "bbox": [
+        76,
+        23,
+        47,
+        47
+      ],
+      "visionBox": [
+        76,
+        23,
+        47,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_023.png"
+    },
+    "vw_024": {
+      "bbox": [
+        76,
+        23,
+        47,
+        47
+      ],
+      "visionBox": [
+        76,
+        23,
+        47,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_024.png"
+    },
+    "vw_025": {
+      "bbox": [
+        76,
+        21,
+        47,
+        47
+      ],
+      "visionBox": [
+        76,
+        21,
+        47,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_025.png"
+    },
+    "vw_026": {
+      "bbox": [
+        82,
+        27,
+        40,
+        45
+      ],
+      "visionBox": [
+        82,
+        27,
+        40,
+        45
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_026.png"
+    },
+    "vw_027": {
+      "bbox": [
+        82,
+        23,
+        40,
+        57
+      ],
+      "visionBox": [
+        82,
+        23,
+        40,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_027.png"
+    },
+    "vw_028": {
+      "bbox": [
+        73,
+        23,
+        51,
+        57
+      ],
+      "visionBox": [
+        73,
+        23,
+        51,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_028.png"
+    },
+    "vw_029": {
+      "bbox": [
+        82,
+        21,
+        40,
+        57
+      ],
+      "visionBox": [
+        82,
+        21,
+        40,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_029.png"
+    },
+    "vw_030": {
+      "bbox": [
+        82,
+        21,
+        40,
+        57
+      ],
+      "visionBox": [
+        82,
+        21,
+        40,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_030.png"
+    },
+    "vw_031": {
+      "bbox": [
+        82,
+        19,
+        40,
+        57
+      ],
+      "visionBox": [
+        82,
+        19,
+        40,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_031.png"
+    },
+    "vw_032": {
+      "bbox": [
+        82,
+        17,
+        40,
+        57
+      ],
+      "visionBox": [
+        82,
+        17,
+        40,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_032.png"
+    },
+    "vw_033": {
+      "bbox": [
+        82,
+        17,
+        40,
+        57
+      ],
+      "visionBox": [
+        82,
+        17,
+        40,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_033.png"
+    },
+    "vw_034": {
+      "bbox": [
+        76,
+        12,
+        47,
+        47
+      ],
+      "visionBox": [
+        76,
+        12,
+        47,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_034.png"
+    },
+    "vw_035": {
+      "bbox": [
+        76,
+        12,
+        47,
+        47
+      ],
+      "visionBox": [
+        76,
+        12,
+        47,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_035.png"
+    },
+    "vw_036": {
+      "bbox": [
+        76,
+        14,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        14,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_036.png"
+    },
+    "vw_037": {
+      "bbox": [
+        76,
+        14,
+        46,
+        48
+      ],
+      "visionBox": [
+        76,
+        14,
+        46,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_037.png"
+    },
+    "vw_038": {
+      "bbox": [
+        75,
+        17,
+        48,
+        50
+      ],
+      "visionBox": [
+        75,
+        17,
+        48,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_038.png"
+    },
+    "vw_039": {
+      "bbox": [
+        75,
+        17,
+        48,
+        50
+      ],
+      "visionBox": [
+        75,
+        17,
+        48,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_039.png"
+    },
+    "vw_040": {
+      "bbox": [
+        75,
+        23,
+        48,
+        50
+      ],
+      "visionBox": [
+        75,
+        23,
+        48,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_040.png"
+    },
+    "vw_041": {
+      "bbox": [
+        75,
+        23,
+        48,
+        50
+      ],
+      "visionBox": [
+        75,
+        23,
+        48,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_041.png"
+    },
+    "vw_042": {
+      "bbox": [
+        75,
+        24,
+        48,
+        49
+      ],
+      "visionBox": [
+        75,
+        24,
+        48,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_042.png"
+    },
+    "vw_043": {
+      "bbox": [
+        75,
+        24,
+        48,
+        50
+      ],
+      "visionBox": [
+        75,
+        24,
+        48,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_043.png"
+    },
+    "vw_044": {
+      "bbox": [
+        75,
+        24,
+        48,
+        50
+      ],
+      "visionBox": [
+        75,
+        24,
+        48,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_044.png"
+    },
+    "vw_045": {
+      "bbox": [
+        75,
+        24,
+        48,
+        50
+      ],
+      "visionBox": [
+        75,
+        24,
+        48,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_045.png"
+    },
+    "vw_046": {
+      "bbox": [
+        75,
+        24,
+        47,
+        50
+      ],
+      "visionBox": [
+        75,
+        24,
+        47,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_046.png"
+    },
+    "vw_047": {
+      "bbox": [
+        75,
+        24,
+        47,
+        50
+      ],
+      "visionBox": [
+        75,
+        24,
+        47,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_047.png"
+    },
+    "vw_048": {
+      "bbox": [
+        75,
+        24,
+        47,
+        50
+      ],
+      "visionBox": [
+        75,
+        24,
+        47,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_048.png"
+    },
+    "vw_049": {
+      "bbox": [
+        75,
+        24,
+        47,
+        50
+      ],
+      "visionBox": [
+        75,
+        24,
+        47,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_049.png"
+    },
+    "vw_050": {
+      "bbox": [
+        75,
+        23,
+        48,
+        50
+      ],
+      "visionBox": [
+        75,
+        23,
+        48,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_050.png"
+    },
+    "vw_051": {
+      "bbox": [
+        76,
+        23,
+        47,
+        49
+      ],
+      "visionBox": [
+        76,
+        23,
+        47,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_051.png"
+    },
+    "vw_052": {
+      "bbox": [
+        76,
+        23,
+        47,
+        49
+      ],
+      "visionBox": [
+        76,
+        23,
+        47,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_052.png"
+    },
+    "vw_053": {
+      "bbox": [
+        76,
+        20,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        20,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_053.png"
+    },
+    "vw_054": {
+      "bbox": [
+        76,
+        20,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        20,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_054.png"
+    },
+    "vw_055": {
+      "bbox": [
+        76,
+        19,
+        47,
+        46
+      ],
+      "visionBox": [
+        76,
+        19,
+        47,
+        46
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_055.png"
+    },
+    "vw_056": {
+      "bbox": [
+        76,
+        19,
+        47,
+        46
+      ],
+      "visionBox": [
+        76,
+        19,
+        47,
+        46
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_056.png"
+    },
+    "vw_057": {
+      "bbox": [
+        82,
+        22,
+        40,
+        55
+      ],
+      "visionBox": [
+        82,
+        22,
+        40,
+        55
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_057.png"
+    },
+    "vw_058": {
+      "bbox": [
+        76,
+        17,
+        47,
+        37
+      ],
+      "visionBox": [
+        76,
+        17,
+        47,
+        37
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_058.png"
+    },
+    "vw_059": {
+      "bbox": [
+        76,
+        14,
+        47,
+        37
+      ],
+      "visionBox": [
+        76,
+        14,
+        47,
+        37
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_059.png"
+    },
+    "vw_060": {
+      "bbox": [
+        75,
+        18,
+        49,
+        57
+      ],
+      "visionBox": [
+        75,
+        18,
+        49,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_060.png"
+    },
+    "vw_061": {
+      "bbox": [
+        75,
+        18,
+        49,
+        57
+      ],
+      "visionBox": [
+        75,
+        18,
+        49,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_061.png"
+    },
+    "vw_062": {
+      "bbox": [
+        82,
+        18,
+        40,
+        57
+      ],
+      "visionBox": [
+        82,
+        18,
+        40,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_062.png"
+    },
+    "vw_063": {
+      "bbox": [
+        76,
+        18,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        18,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_063.png"
+    },
+    "vw_064": {
+      "bbox": [
+        76,
+        18,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        18,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_064.png"
+    },
+    "vw_065": {
+      "bbox": [
+        76,
+        18,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        18,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_065.png"
+    },
+    "vw_066": {
+      "bbox": [
+        76,
+        24,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        24,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_066.png"
+    },
+    "vw_067": {
+      "bbox": [
+        76,
+        24,
+        47,
+        49
+      ],
+      "visionBox": [
+        76,
+        24,
+        47,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_067.png"
+    },
+    "vw_068": {
+      "bbox": [
+        76,
+        25,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        25,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_068.png"
+    },
+    "vw_069": {
+      "bbox": [
+        76,
+        25,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        25,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_069.png"
+    },
+    "vw_070": {
+      "bbox": [
+        76,
+        25,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        25,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_070.png"
+    },
+    "vw_071": {
+      "bbox": [
+        76,
+        25,
+        47,
+        47
+      ],
+      "visionBox": [
+        76,
+        25,
+        47,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_071.png"
+    },
+    "vw_072": {
+      "bbox": [
+        76,
+        23,
+        47,
+        47
+      ],
+      "visionBox": [
+        76,
+        23,
+        47,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_072.png"
+    },
+    "vw_073": {
+      "bbox": [
+        76,
+        23,
+        47,
+        47
+      ],
+      "visionBox": [
+        76,
+        23,
+        47,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_073.png"
+    },
+    "vw_074": {
+      "bbox": [
+        76,
+        21,
+        47,
+        46
+      ],
+      "visionBox": [
+        76,
+        21,
+        47,
+        46
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_074.png"
+    },
+    "vw_075": {
+      "bbox": [
+        76,
+        21,
+        47,
+        46
+      ],
+      "visionBox": [
+        76,
+        21,
+        47,
+        46
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_075.png"
+    },
+    "vw_076": {
+      "bbox": [
+        82,
+        23,
+        40,
+        57
+      ],
+      "visionBox": [
+        82,
+        23,
+        40,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_076.png"
+    },
+    "vw_077": {
+      "bbox": [
+        82,
+        23,
+        40,
+        57
+      ],
+      "visionBox": [
+        82,
+        23,
+        40,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_077.png"
+    },
+    "vw_078": {
+      "bbox": [
+        82,
+        23,
+        40,
+        57
+      ],
+      "visionBox": [
+        82,
+        23,
+        40,
+        57
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_078.png"
+    },
+    "vw_079": {
+      "bbox": [
+        76,
+        17,
+        45,
+        37
+      ],
+      "visionBox": [
+        76,
+        17,
+        45,
+        37
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_079.png"
+    },
+    "vw_080": {
+      "bbox": [
+        82,
+        22,
+        40,
+        45
+      ],
+      "visionBox": [
+        82,
+        22,
+        40,
+        45
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_080.png"
+    },
+    "vw_081": {
+      "bbox": [
+        82,
+        22,
+        40,
+        45
+      ],
+      "visionBox": [
+        82,
+        22,
+        40,
+        45
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.91,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision face component, alpha-snapped head",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_081.png"
+    },
+    "vw_082": {
+      "bbox": [
+        76,
+        13,
+        46,
+        37
+      ],
+      "visionBox": [
+        76,
+        13,
+        46,
+        37
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_082.png"
+    },
+    "vw_083": {
+      "bbox": [
+        76,
+        12,
+        47,
+        47
+      ],
+      "visionBox": [
+        76,
+        12,
+        47,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_083.png"
+    },
+    "vw_084": {
+      "bbox": [
+        76,
+        12,
+        47,
+        47
+      ],
+      "visionBox": [
+        76,
+        12,
+        47,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_084.png"
+    },
+    "vw_085": {
+      "bbox": [
+        76,
+        12,
+        47,
+        47
+      ],
+      "visionBox": [
+        76,
+        12,
+        47,
+        47
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_085.png"
+    },
+    "vw_086": {
+      "bbox": [
+        76,
+        15,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        15,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_086.png"
+    },
+    "vw_087": {
+      "bbox": [
+        76,
+        15,
+        47,
+        48
+      ],
+      "visionBox": [
+        76,
+        15,
+        47,
+        48
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_087.png"
+    },
+    "vw_088": {
+      "bbox": [
+        75,
+        19,
+        48,
+        49
+      ],
+      "visionBox": [
+        75,
+        19,
+        48,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_088.png"
+    },
+    "vw_089": {
+      "bbox": [
+        75,
+        19,
+        48,
+        49
+      ],
+      "visionBox": [
+        75,
+        19,
+        48,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_089.png"
+    },
+    "vw_090": {
+      "bbox": [
+        76,
+        24,
+        47,
+        49
+      ],
+      "visionBox": [
+        76,
+        24,
+        47,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_090.png"
+    },
+    "vw_091": {
+      "bbox": [
+        76,
+        24,
+        47,
+        49
+      ],
+      "visionBox": [
+        76,
+        24,
+        47,
+        49
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_091.png"
+    },
+    "vw_092": {
+      "bbox": [
+        75,
+        24,
+        48,
+        50
+      ],
+      "visionBox": [
+        75,
+        24,
+        48,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_092.png"
+    },
+    "vw_093": {
+      "bbox": [
+        75,
+        24,
+        48,
+        50
+      ],
+      "visionBox": [
+        75,
+        24,
+        48,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_093.png"
+    },
+    "vw_094": {
+      "bbox": [
+        75,
+        24,
+        48,
+        50
+      ],
+      "visionBox": [
+        75,
+        24,
+        48,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_094.png"
+    },
+    "vw_095": {
+      "bbox": [
+        76,
+        24,
+        46,
+        50
+      ],
+      "visionBox": [
+        76,
+        24,
+        46,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_095.png"
+    },
+    "vw_096": {
+      "bbox": [
+        76,
+        24,
+        46,
+        50
+      ],
+      "visionBox": [
+        76,
+        24,
+        46,
+        50
+      ],
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.96,
+      "provider": "local_face_color_component_bootstrap",
+      "notes": "vision-selected geometric head bbox",
+      "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vw_096.png"
+    }
+  }
+}

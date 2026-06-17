@@ -68,16 +68,20 @@ def main() -> int:
     summary = transforms_root.get("summary", {})
     contamination = measurements.get("headContamination", {})
     scale_groups = transforms_root.get("scaleGroups", {})
+    vision_counts = count_vision_annotations(poses)
     scale_group_rows = ""
     if isinstance(scale_groups, dict):
         for group, info in sorted(scale_groups.items()):
             if group == "__all__" or not isinstance(info, dict):
                 continue
+            clean_poses = info.get("cleanPoses", [])
+            clean_text = ", ".join(map(str, clean_poses)) if isinstance(clean_poses, list) else ""
             scale_group_rows += (
                 f"<tr><td>{esc(group)}</td><td>{esc(str(info.get('scale', '')))}</td>"
                 f"<td>{esc(str(info.get('medianHeadWidth', '')))}</td>"
                 f"<td>{esc(str(info.get('cleanCount', '')))}</td>"
-                f"<td>{esc(str(info.get('source', '')))}</td></tr>"
+                f"<td>{esc(str(info.get('source', '')))}</td>"
+                f"<td>{esc(clean_text)}</td></tr>"
             )
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(
@@ -85,7 +89,7 @@ def main() -> int:
 <meta charset=utf-8>
 <title>Hu normalization review</title>
 <style>
- :root {{ color-scheme: dark; --bg:#14151a; --panel:#20232a; --ink:#ece7dc; --muted:#a9a397; --line:#353a44; --bad:#ff6b62; --ok:#88d18a; --head:#5fd4ff; --foot:#ffd166; }}
+ :root {{ color-scheme: dark; --bg:#14151a; --panel:#20232a; --ink:#ece7dc; --muted:#a9a397; --line:#353a44; --bad:#ff6b62; --ok:#88d18a; --head:#5fd4ff; --vision:#ff9f43; --foot:#ffd166; }}
  * {{ box-sizing:border-box }}
  body {{ margin:0; background:var(--bg); color:var(--ink); font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }}
  header {{ position:sticky; top:0; z-index:3; padding:14px 18px; background:#111318f2; border-bottom:1px solid var(--line); }}
@@ -116,13 +120,14 @@ def main() -> int:
   <span>target <b>{esc(str(transforms_root.get('targetPose', '')))}</b></span>
   <span>scale <b>{esc(str(summary.get('minScale', '')))}..{esc(str(summary.get('maxScale', '')))}</b></span>
   <span>scale groups <b>{esc(str(summary.get('scaleGroupCount', '')))}</b></span>
+  <span>vision heads <b>{vision_counts['total']} ({vision_counts['clean']} clean / {vision_counts['occluded']} held out)</b></span>
   <span>head width >120 raw/effective <b>{contam_text(contamination)}</b></span>
   <span>flagged <b>{flagged}</b></span>
  </div>
 </header>
 <section>
  <h2>scale groups <span>constant scale per action group</span></h2>
- <table><thead><tr><th>group</th><th>scale</th><th>median clean head width</th><th>clean frames</th><th>source</th></tr></thead><tbody>{scale_group_rows}</tbody></table>
+ <table><thead><tr><th>group</th><th>scale</th><th>median clean head width</th><th>clean frames</th><th>source</th><th>clean poses</th></tr></thead><tbody>{scale_group_rows}</tbody></table>
 </section>
 {''.join(body)}
 <section>
@@ -141,6 +146,9 @@ def card(pose: dict[str, Any], transform: Any) -> str:
     image = decode_png_alpha(render_path)
     render = pose["render"]
     head = rect(render.get("headBBox", [0, 0, 0, 0]))
+    vision = render.get("visionHead", {})
+    vision_box = rect(vision.get("visionBox", [0, 0, 0, 0]) if isinstance(vision, dict) else [0, 0, 0, 0])
+    has_vision = isinstance(vision, dict) and bool(vision)
     bbox = rect(render.get("bbox", [0, 0, 0, 0]))
     foot = render.get("contactFoot", [0.0, 0.0])
     flags = transform.get("flags", []) if isinstance(transform, dict) else []
@@ -158,11 +166,25 @@ def card(pose: dict[str, Any], transform: Any) -> str:
     raw_head = render.get("rawHeadBBox", render.get("headBBox", [0, 0, 0, 0]))
     raw_width = raw_head[2] if isinstance(raw_head, list) and len(raw_head) >= 4 else ""
     effective_width = head[2]
+    vision_rect = ""
+    vision_text = ""
+    if has_vision:
+        vision_rect = (
+            f'<rect x="{vision_box[0]}" y="{vision_box[1]}" width="{vision_box[2]}" height="{vision_box[3]}" '
+            'fill="none" stroke="var(--vision)" stroke-width="1.5" stroke-dasharray="4 3" />'
+        )
+        status = "clean" if bool(vision.get("clean", False)) else "held-out"
+        vision_text = (
+            f"<div>vision {esc(status)} box {esc(str(vision.get('bbox', '')))} "
+            f"conf {esc(str(vision.get('confidence', '')))}</div>"
+            f"<div class=path>{esc(str(vision.get('notes', '')))}</div>"
+        )
     return f"""<article class="{cls.strip()}">
  <div class=frame>
   <svg viewBox="0 0 {image.width} {image.height}" role="img" aria-label="{esc(pose_name)}">
    <image href="{image.data_url()}" x="0" y="0" width="{image.width}" height="{image.height}" style="image-rendering:pixelated" />
    <rect x="{bbox[0]}" y="{bbox[1]}" width="{bbox[2]}" height="{bbox[3]}" fill="none" stroke="#777" stroke-width="1" />
+   {vision_rect}
    <rect x="{head[0]}" y="{head[1]}" width="{head[2]}" height="{head[3]}" fill="none" stroke="var(--head)" stroke-width="2" />
    <line x1="0" y1="{ground_y:.3f}" x2="{image.width}" y2="{ground_y:.3f}" stroke="var(--foot)" stroke-width="1.5" stroke-dasharray="5 4" />
    <circle cx="{float(foot[0]):.3f}" cy="{float(foot[1]):.3f}" r="4" fill="var(--foot)" />
@@ -174,6 +196,7 @@ def card(pose: dict[str, Any], transform: Any) -> str:
   <div class=path>{esc(str(scale_source))}</div>
   <div>offset {esc(str(offset_x))},{esc(str(offset_y))}</div>
   <div>head w raw→eff {esc(str(raw_width))}→{esc(str(effective_width))} h {esc(str(render.get('headHeight', '')))} conf {esc(str(render.get('confidence', '')))}</div>
+  {vision_text}
   <div class=path title="{esc(str(pose.get('sourcePath', '')))}">{esc(str(pose.get('sourceKind', '')))} | {esc(str(pose.get('sourcePath', '')))}</div>
   {spatial_text}
   {flag_text}
@@ -189,6 +212,21 @@ def rect(values: Any) -> tuple[float, float, float, float]:
 
 def esc(value: str) -> str:
     return html.escape(value, quote=True)
+
+
+def count_vision_annotations(poses: list[Any]) -> dict[str, int]:
+    total = 0
+    clean = 0
+    for pose in poses:
+        if not isinstance(pose, dict):
+            continue
+        vision = pose.get("render", {}).get("visionHead", {})
+        if not isinstance(vision, dict) or not vision:
+            continue
+        total += 1
+        if bool(vision.get("clean", False)):
+            clean += 1
+    return {"total": total, "clean": clean, "occluded": total - clean}
 
 
 def contam_text(value: Any) -> str:

@@ -54,11 +54,17 @@ def main() -> int:
         type=Path,
         default=Path("art/masters/hu/normalization/measurements.json"),
     )
+    parser.add_argument(
+        "--vision-heads",
+        type=Path,
+        default=Path("art/masters/hu/normalization/vision_heads.json"),
+    )
     args = parser.parse_args()
 
     repo = Path.cwd()
     source_manifest = load_json(args.sources)
     animation_manifest = load_json(args.manifest)
+    vision_heads = load_vision_heads(args.vision_heads)
     source_map = build_source_map(repo, args.sources.parent, source_manifest)
     aliases = source_manifest.get("aliases", {})
 
@@ -99,6 +105,7 @@ def main() -> int:
 
         source_measure = measure_alpha(source_path)
         render_measure = measure_alpha(render_path)
+        apply_vision_head(render_measure, vision_heads.get(pose_name))
         prefix, label = split_pose(pose_name)
         pose_rows.append(
             {
@@ -199,25 +206,75 @@ def build_source_map(repo: Path, source_root: Path, manifest: dict[str, Any]) ->
     return out
 
 
+def load_vision_heads(path: Path) -> dict[str, dict[str, Any]]:
+    if not path.exists():
+        return {}
+    root = load_json(path)
+    annotations = root.get("annotations", {})
+    if not isinstance(annotations, dict):
+        return {}
+    return {str(key): value for key, value in annotations.items() if isinstance(value, dict)}
+
+
+def apply_vision_head(measurement: dict[str, Any], annotation: dict[str, Any] | None) -> None:
+    if not annotation:
+        return
+    bbox = annotation.get("bbox", [])
+    if not isinstance(bbox, list) or len(bbox) < 4:
+        return
+    snapped = [round(float(bbox[0]), 3), round(float(bbox[1]), 3), round(float(bbox[2]), 3), round(float(bbox[3]), 3)]
+    if snapped[2] <= 0.0 or snapped[3] <= 0.0:
+        return
+    measurement["geometricHeadBBox"] = measurement.get("headBBox", [0, 0, 0, 0])
+    measurement["geometricHeadHeight"] = measurement.get("headHeight", 0)
+    measurement["geometricConfidence"] = measurement.get("confidence", 0.0)
+    measurement["geometricFlags"] = list(measurement.get("flags", []))
+    measurement["headBBox"] = snapped
+    measurement["headHeight"] = snapped[3]
+    measurement["headWidth"] = snapped[2]
+    measurement["confidence"] = float(annotation.get("confidence", 0.0))
+    measurement["visionHead"] = {
+        "provider": str(annotation.get("provider", "unknown")),
+        "bbox": snapped,
+        "visionBox": annotation.get("visionBox", snapped),
+        "occluded": bool(annotation.get("occluded", False)),
+        "clean": bool(annotation.get("clean", False)),
+        "confidence": float(annotation.get("confidence", 0.0)),
+        "notes": str(annotation.get("notes", "")),
+    }
+    flags: list[str] = []
+    if bool(annotation.get("occluded", False)):
+        flags.append("vision-occluded")
+    if float(annotation.get("confidence", 0.0)) < 0.8:
+        flags.append("vision-low-confidence")
+    measurement["flags"] = flags
+
+
 def apply_effective_head_metrics(poses: list[dict[str, Any]]) -> None:
     for space in ("source", "render"):
         limit = HEAD_WIDTH_LIMITS[space]
         templates = build_head_templates(poses, space, limit)
         for pose in poses:
             measurement = pose[space]
-            raw_bbox = list(measurement.get("headBBox", [0, 0, 0, 0]))
-            raw_flags = list(measurement.get("flags", []))
+            has_vision = "visionHead" in measurement
+            raw_bbox = list(measurement.get("geometricHeadBBox", measurement.get("headBBox", [0, 0, 0, 0])))
+            raw_flags = list(measurement.get("geometricFlags", measurement.get("flags", [])))
             raw_width = float(raw_bbox[2]) if len(raw_bbox) >= 4 else 0.0
             raw_height = float(raw_bbox[3]) if len(raw_bbox) >= 4 else 0.0
             raw_wide_thin = raw_height > 0.0 and raw_width / raw_height > HEAD_WIDE_THIN_RATIO
             raw_head_flag = any(str(flag).startswith("head-") for flag in raw_flags)
             raw_contaminated = raw_width > limit or raw_wide_thin or raw_head_flag
             measurement["rawHeadBBox"] = raw_bbox
-            measurement["rawHeadHeight"] = measurement.get("headHeight", raw_height)
-            measurement["rawConfidence"] = measurement.get("confidence", 0.0)
+            measurement["rawHeadHeight"] = measurement.get("geometricHeadHeight", raw_height)
+            measurement["rawConfidence"] = measurement.get("geometricConfidence", measurement.get("confidence", 0.0))
             measurement["rawFlags"] = raw_flags
             measurement["rawHeadWidthContaminated"] = raw_contaminated
             measurement["headWidthLimit"] = limit
+            if has_vision:
+                measurement["headWidth"] = float(measurement["headBBox"][2])
+                measurement["headWidthContaminated"] = measurement["headWidth"] > limit
+                measurement["visionClean"] = bool(measurement["visionHead"].get("clean", False))
+                continue
 
             if not raw_contaminated:
                 measurement["headWidth"] = raw_width
