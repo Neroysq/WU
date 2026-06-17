@@ -17,13 +17,13 @@ func run_all() -> Dictionary:
 	var failures: Array[String] = []
 
 	var clip: Variant = TimelineScript.load_from_file("res://assets/animation_clips/hu_attack_light.timeline.json")
-	# Video frames carry ALL body motion (including real lunge travel in-frame);
-	# the only remaining track is the active-window smear.
-	if is_equal_approx(clip.sample_track("offsetX", 0.42, 0.0), 0.0) and clip.sample_track("smear", 0.45) > 0.5 and is_equal_approx(clip.sample_track("smear", 0.30), 0.0):
+	# Video frames carry pose motion; light attack keeps its deliberate presenter travel
+	# in fighter.animation_offset, not in synthetic timeline tracks.
+	if clip.use_fighter_offset and is_equal_approx(clip.sample_track("offsetX", 0.42, 0.0), 0.0) and clip.sample_track("smear", 0.45) > 0.5 and is_equal_approx(clip.sample_track("smear", 0.30), 0.0):
 		passed += 1
 	else:
 		failed += 1
-		failures.append("video-frame clip should have no offsetX track and smear covering the active window")
+		failures.append("light video clip should use fighter offset, no offsetX track, and smear covering the active window")
 
 	if is_equal_approx(clip.sample_track("nonexistent", 0.5, 3.0), 3.0):
 		passed += 1
@@ -73,11 +73,11 @@ func run_all() -> Dictionary:
 	var hu_heavy: Variant = AttackCatalogScript.hu_heavy()
 	var heavy_active_start_t: float = heavy_clip.event_time("attack_active_start", hu_heavy)
 	var heavy_active_end_t: float = heavy_clip.event_time("attack_active_end", hu_heavy)
-	if heavy_clip.pose_at(0.26, hu_heavy) == "vh_028" and heavy_clip.pose_at(heavy_active_start_t - 0.01, hu_heavy) == "vh_052" and heavy_clip.pose_at(heavy_active_start_t, hu_heavy) == "vh_058" and heavy_clip.pose_at(heavy_active_end_t, hu_heavy) == "vh_080" and is_equal_approx(heavy_clip.sample_track("offsetX", 0.50, 0.0), 0.0) and not heavy_clip.has_track("scaleX") and heavy_clip.sample_track("smear", 0.50) > 0.5:
+	if heavy_clip.pose_at(0.26, hu_heavy) == "vh_028" and heavy_clip.pose_at(heavy_active_start_t - 0.01, hu_heavy) == "vh_052" and heavy_clip.pose_at(heavy_active_start_t, hu_heavy) == "vh_058" and heavy_clip.pose_at(heavy_active_end_t, hu_heavy) == "vh_080" and not heavy_clip.use_fighter_offset and is_equal_approx(heavy_clip.sample_track("offsetX", 0.50, 0.0), 0.0) and not heavy_clip.has_track("scaleX") and heavy_clip.sample_track("smear", 0.50) > 0.5:
 		passed += 1
 	else:
 		failed += 1
-		failures.append("heavy video clip should hold readable anticipation, cleave at active start, recover at recovery start, and drop synthetic transform tracks")
+		failures.append("heavy video clip should hold readable anticipation, cleave at active start, recover at recovery start, and remain presenter-stationary")
 
 	var walk: Variant = TimelineScript.load_from_file("res://assets/animation_clips/walk.timeline.json")
 	if walk.rate_mode == "velocity" and walk.pose_at(0.0) == "vw_002" and walk.pose_at(0.5) == "vw_049" and walk.pose_at(0.99) == "vw_096" and not walk.has_track("offsetY") and not walk.has_track("rotation"):

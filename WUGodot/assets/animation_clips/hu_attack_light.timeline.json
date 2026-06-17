@@ -1,6 +1,7 @@
 {
   "id": "hu_attack_light",
   "duration": "fromAttackDef",
+  "useFighterOffset": true,
   "keyposes": [
     { "t": 0.00, "pose": "vl_001" },
     { "t": 0.04, "pose": "vl_013" },

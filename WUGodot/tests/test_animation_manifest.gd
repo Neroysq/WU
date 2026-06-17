@@ -17,7 +17,7 @@ func run_all() -> Dictionary:
 	var pose: Dictionary = manifest.get_pose("strike_extended")
 	var foot: Vector2 = pose.get("footAnchor", Vector2.ZERO) as Vector2
 	var tip: Vector2 = pose.get("weaponTip", Vector2.ZERO) as Vector2
-	if foot.x > 0 and foot.x < 256 and foot.y > 100 and foot.y < 256 and tip.x > foot.x and not (foot == Vector2(128, 238)):
+	if foot.x > 0 and foot.x < 512 and foot.y > 0 and foot.y < 512 and tip.x > foot.x + 80.0 and tip.y < foot.y and not (foot == Vector2(128, 238)):
 		passed += 1
 	else:
 		failed += 1

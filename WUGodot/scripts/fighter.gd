@@ -241,9 +241,11 @@ func _update_animation(dt: float) -> void:
 	animation_timer += dt
 
 	match current_animation:
-		AnimationState.ATTACKING_LIGHT, AnimationState.ATTACKING_HEAVY:
+		AnimationState.ATTACKING_LIGHT:
 			var attack_progress: float = _attack_state.progress()
-			animation_offset.x = sin(attack_progress * PI) * 15.0 * float(facing)
+			animation_offset = Vector2(sin(attack_progress * PI) * 15.0 * float(facing), 0.0)
+		AnimationState.ATTACKING_HEAVY:
+			animation_offset = Vector2.ZERO
 		AnimationState.HIT_REACTION:
 			animation_offset.x = cos(animation_timer * 20.0) * 8.0 * float(-facing)
 			if animation_timer > 0.3:

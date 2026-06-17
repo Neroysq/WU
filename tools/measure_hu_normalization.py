@@ -23,15 +23,15 @@ HEAD_WIDTH_LIMITS = {
 HEAD_WIDE_THIN_RATIO = 1.8
 
 HELD_SOURCES = {
-    "vp_block": "art/keyframes/hu/block/block.png",
-    "vp_dash": "art/keyframes/hu/dash/dash.png",
-    "vp_hit": "art/keyframes/hu/hit/hit.png",
-    "vp_stun_a": "art/keyframes/hu/stunned/stun_a.png",
-    "vp_stun_b": "art/keyframes/hu/stunned/stun_b.png",
-    "vp_rise": "art/keyframes/hu/jump/rise.png",
-    "vp_peak": "art/keyframes/hu/jump/peak.png",
-    "vp_fall": "art/keyframes/hu/jump/fall.png",
-    "vp_land": "art/keyframes/hu/jump/land.png",
+    "vp_hit": {"path": "art/keyframes/hu/hit/hit.png", "sourceKey": "held/master_001"},
+    "vp_stun_a": {"path": "art/keyframes/hu/stunned/stun_a.png", "sourceKey": "held/master_002"},
+    "vp_stun_b": {"path": "art/keyframes/hu/stunned/stun_b.png", "sourceKey": "held/master_003"},
+    "vp_block": {"path": "art/keyframes/hu/block/block.png", "sourceKey": "held/master_004"},
+    "vp_dash": {"path": "art/keyframes/hu/dash/dash.png", "sourceKey": "held/master_005"},
+    "vp_rise": {"path": "art/keyframes/hu/jump/rise.png", "sourceKey": "held/master_006"},
+    "vp_peak": {"path": "art/keyframes/hu/jump/peak.png", "sourceKey": "held/master_007"},
+    "vp_fall": {"path": "art/keyframes/hu/jump/fall.png", "sourceKey": "held/master_008"},
+    "vp_land": {"path": "art/keyframes/hu/jump/land.png", "sourceKey": "held/master_009"},
 }
 
 EXEMPT_POSES = {"vp_dash", "vp_rise", "vp_peak", "vp_fall"}
@@ -178,12 +178,12 @@ def build_source_map(repo: Path, source_root: Path, manifest: dict[str, Any]) ->
         prefix = walk.get("pose_prefix", "vw")
         labels = walk.get("labels", [])
         source_labels = walk.get("source_master_labels", labels)
-        for label, source_label in zip(labels, source_labels):
+        for index, (label, source_label) in enumerate(zip(labels, source_labels), start=1):
             master = f"master_{source_label}"
             out[f"{prefix}_{label}"] = {
                 "path": repo / source_root / "walk" / "masters" / f"{master}.png",
                 "kind": "walk_master",
-                "sourceKey": f"walk/{master}",
+                "sourceKey": f"walk/master_{index:03d}",
             }
 
     idle = actions.get("idle_ref", {})
@@ -197,11 +197,11 @@ def build_source_map(repo: Path, source_root: Path, manifest: dict[str, Any]) ->
                 "sourceKey": "idle_ref/master_001",
             }
 
-    for pose, path in HELD_SOURCES.items():
+    for pose, info in HELD_SOURCES.items():
         out[pose] = {
-            "path": repo / path,
+            "path": repo / str(info["path"]),
             "kind": "keyframe",
-            "sourceKey": f"held/{pose}",
+            "sourceKey": str(info["sourceKey"]),
         }
     return out
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import os
 from collections import defaultdict
 from pathlib import Path
 from typing import Any
@@ -83,9 +84,9 @@ def main() -> int:
                 f"<td>{esc(str(info.get('source', '')))}</td>"
                 f"<td>{esc(clean_text)}</td></tr>"
             )
+    montage = head_aligned_montage(grouped, args.out.parent)
     args.out.parent.mkdir(parents=True, exist_ok=True)
-    args.out.write_text(
-        f"""<!doctype html>
+    doc = f"""<!doctype html>
 <meta charset=utf-8>
 <title>Hu normalization review</title>
 <style>
@@ -100,6 +101,10 @@ def main() -> int:
  h2 {{ margin:0 0 12px; font-size:15px; }}
  h2 span {{ color:var(--muted); font-weight:400 }}
  .grid {{ display:grid; grid-template-columns:repeat(auto-fill, minmax(210px, 1fr)); gap:12px; align-items:start }}
+ .montages {{ display:grid; grid-template-columns:repeat(auto-fill, minmax(320px, 1fr)); gap:12px }}
+ .montage {{ background:var(--panel); border:1px solid var(--line); border-radius:6px; overflow:hidden }}
+ .montage h3 {{ margin:0; padding:8px 10px; font-size:12px; border-bottom:1px solid var(--line) }}
+ .montage .meta {{ border-top:1px solid var(--line) }}
  article {{ background:var(--panel); border:1px solid var(--line); border-radius:6px; overflow:hidden }}
  article.flagged {{ border-color:#7c3f3b }}
  .frame {{ background-color:#181b21; background-image:linear-gradient(45deg,#232832 25%,transparent 25%),linear-gradient(-45deg,#232832 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#232832 75%),linear-gradient(-45deg,transparent 75%,#232832 75%); background-size:20px 20px; background-position:0 0,0 10px,10px -10px,-10px 0; }}
@@ -125,6 +130,7 @@ def main() -> int:
   <span>flagged <b>{flagged}</b></span>
  </div>
 </header>
+{montage}
 <section>
  <h2>scale groups <span>constant scale per action group</span></h2>
  <table><thead><tr><th>group</th><th>scale</th><th>median clean head width</th><th>clean frames</th><th>source</th><th>clean poses</th></tr></thead><tbody>{scale_group_rows}</tbody></table>
@@ -135,9 +141,90 @@ def main() -> int:
  <table><thead><tr><th>alias</th><th>source pose</th><th>path</th></tr></thead><tbody>{alias_rows}</tbody></table>
 </section>
 """
-    )
+    args.out.write_text("\n".join(line.rstrip() for line in doc.splitlines()) + "\n")
     print(f"wrote {args.out} flagged={flagged}")
     return 0
+
+
+def head_aligned_montage(grouped: dict[str, list[dict[str, Any]]], out_dir: Path) -> str:
+    groups: list[tuple[str, list[dict[str, Any]]]] = [
+        ("all", [pose for poses in grouped.values() for pose in poses]),
+    ]
+    groups.extend((prefix, poses) for prefix, poses in sorted(grouped.items()))
+
+    cards = []
+    for label, poses in groups:
+        items = []
+        min_x = min_y = float("inf")
+        max_x = max_y = float("-inf")
+        for pose in sorted(poses, key=lambda p: str(p.get("pose", ""))):
+            render = pose.get("render", {})
+            if not isinstance(render, dict):
+                continue
+            head = rect(render.get("headBBox", [0, 0, 0, 0]))
+            if head[2] <= 0.0 or head[3] <= 0.0:
+                continue
+            render_path = Path(str(pose.get("renderPath", "")))
+            image = decode_png_alpha(render_path)
+            head_cx = head[0] + head[2] * 0.5
+            head_cy = head[1] + head[3] * 0.5
+            x = -head_cx
+            y = -head_cy
+            min_x = min(min_x, x)
+            min_y = min(min_y, y)
+            max_x = max(max_x, x + image.width)
+            max_y = max(max_y, y + image.height)
+            items.append(
+                {
+                    "href": os.path.relpath(render_path, out_dir),
+                    "pose": str(pose.get("pose", "")),
+                    "x": x,
+                    "y": y,
+                    "width": image.width,
+                    "height": image.height,
+                    "head": (head[0] + x, head[1] + y, head[2], head[3]),
+                }
+            )
+        if not items:
+            continue
+
+        pad = 18.0
+        view_x = min_x - pad
+        view_y = min_y - pad
+        view_w = max_x - min_x + pad * 2.0
+        view_h = max_y - min_y + pad * 2.0
+        opacity = 0.045 if label == "all" else 0.16
+        image_nodes = []
+        rect_nodes = []
+        for item in items:
+            image_nodes.append(
+                f'<image href="{esc(str(item["href"]))}" x="{item["x"]:.3f}" y="{item["y"]:.3f}" '
+                f'width="{item["width"]}" height="{item["height"]}" opacity="{opacity}" style="image-rendering:pixelated" />'
+            )
+            hx, hy, hw, hh = item["head"]
+            rect_nodes.append(
+                f'<rect x="{hx:.3f}" y="{hy:.3f}" width="{hw:.3f}" height="{hh:.3f}" '
+                'fill="none" stroke="var(--head)" stroke-width="1" opacity="0.28" />'
+            )
+        cards.append(
+            f"""<div class=montage>
+ <h3>{esc(label)} <span>{len(items)} head-aligned poses</span></h3>
+ <svg viewBox="{view_x:.3f} {view_y:.3f} {view_w:.3f} {view_h:.3f}" role="img" aria-label="{esc(label)} head-aligned montage">
+  <line x1="{view_x:.3f}" y1="0" x2="{view_x + view_w:.3f}" y2="0" stroke="var(--head)" stroke-width="1" opacity="0.7" />
+  <line x1="0" y1="{view_y:.3f}" x2="0" y2="{view_y + view_h:.3f}" stroke="var(--head)" stroke-width="1" opacity="0.7" />
+  {''.join(image_nodes)}
+  {''.join(rect_nodes)}
+ </svg>
+ <div class=meta>heads share center crosshair; blue boxes show final detected head size</div>
+</div>"""
+        )
+
+    if not cards:
+        return ""
+    return (
+        "<section><h2>head-aligned montage <span>final size overlay</span></h2>"
+        f"<div class=montages>{''.join(cards)}</div></section>"
+    )
 
 
 def card(pose: dict[str, Any], transform: Any) -> str:

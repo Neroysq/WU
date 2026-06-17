@@ -59,6 +59,14 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("Phase 5 held clips should opt into fighter.animation_offset")
 
+	var real_light: Variant = TimelineScript.load_from_file("res://assets/animation_clips/hu_attack_light.timeline.json")
+	var real_heavy: Variant = TimelineScript.load_from_file("res://assets/animation_clips/hu_attack_heavy.timeline.json")
+	if real_light.use_fighter_offset and not real_heavy.use_fighter_offset:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("Build 4 attack travel should be presenter-enabled for light only")
+
 	var catalog: AssetCatalog = AssetCatalog.new()
 	var presenter: Variant = PresenterScript.new(catalog)
 	presenter.configure(

@@ -11,6 +11,14 @@ from typing import Any
 from hu_normalization_lib import load_json, median, write_json
 
 MIN_CLEAN_HEAD_WIDTH: float = 34.0
+LOCKED_BUILD4_SCALES: dict[str, float] = {
+    "idle": 1.0,
+    "light": 1.06,
+    "heavy": 1.06,
+    "walk": 1.04,
+    "entry": 1.08,
+    "held": 1.04,
+}
 
 
 def main() -> int:
@@ -27,6 +35,11 @@ def main() -> int:
     )
     parser.add_argument("--target-pose", default="vi_002")
     parser.add_argument("--manual-overrides", type=Path, default=None)
+    parser.add_argument(
+        "--scale-mode",
+        choices=("locked-build4", "clean-head-width"),
+        default="locked-build4",
+    )
     args = parser.parse_args()
 
     measurements = load_json(args.measurements)
@@ -47,7 +60,12 @@ def main() -> int:
         override_transforms = {}
 
     group_targets = solve_group_targets(poses)
-    scale_groups = solve_scale_groups(poses, target_head_width)
+    measured_scale_groups = solve_scale_groups(poses, target_head_width)
+    scale_groups = (
+        solve_locked_build4_scale_groups(poses, measured_scale_groups)
+        if args.scale_mode == "locked-build4"
+        else measured_scale_groups
+    )
     transforms: dict[str, dict[str, Any]] = {}
     pose_summaries: list[dict[str, Any]] = []
     for pose in poses:
@@ -62,9 +80,12 @@ def main() -> int:
         grounding = str(pose.get("grounding", "grounded"))
         group = str(pose.get("prefix", ""))
         target_xy = group_targets.get(group, {"x": 0.0, "y": 0.0})
-        foot = render.get("contactFoot", [0.0, 0.0])
-        offset_x = float(target_xy["x"]) - float(foot[0])
-        offset_y = 0.0 if grounding == "exempt" else float(target_xy["y"]) - float(foot[1])
+        # Build 4 plants roots in the lossless master stage: scale_masters uses a
+        # common foot canvas and install_video crops to the action foot target.
+        # Re-applying measured render offsets here would move the root a second
+        # time and break anchor-sanity foot spread checks.
+        offset_x = 0.0
+        offset_y = 0.0
         flags = transform_flags(scale, offset_x, offset_y, source.get("flags", []), render.get("flags", []))
         transform = {
             "pose": pose_name,
@@ -86,7 +107,7 @@ def main() -> int:
                 transform["manualOverride"] = True
         transforms[pose_name] = transform
         source_key = str(pose.get("sourceKey", ""))
-        if source_key and source_key.startswith(("entry/", "light/", "heavy/", "walk/")):
+        if source_key and source_key.startswith(("entry/", "light/", "heavy/", "walk/", "held/")):
             transforms[source_key] = {
                 "pose": pose_name,
                 "scale": transform["scale"],
@@ -113,6 +134,7 @@ def main() -> int:
         "targetRenderHeadWidth": target_head_width,
         "groupTargets": group_targets,
         "scaleGroups": scale_groups,
+        "scaleMode": args.scale_mode,
         "transforms": transforms,
         "summary": {
             "poses": len([k for k in transforms if "_" in k and "/" not in k]),
@@ -193,6 +215,27 @@ def solve_scale_groups(poses: list[Any], target_head_width: float) -> dict[str, 
             "cleanPoses": clean_poses,
             "source": source,
         }
+    return out
+
+
+def solve_locked_build4_scale_groups(
+    poses: list[Any], measured_groups: dict[str, dict[str, Any]]
+) -> dict[str, dict[str, Any]]:
+    out: dict[str, dict[str, Any]] = {}
+    all_info = dict(measured_groups.get("__all__", {}))
+    all_info["scale"] = 1.0
+    all_info["source"] = "locked-build4-user-approved"
+    out["__all__"] = all_info
+
+    pose_groups = sorted({scale_group_for_pose(pose) for pose in poses if isinstance(pose, dict)})
+    for group in pose_groups:
+        info = dict(measured_groups.get(group, {}))
+        previous_scale = float(info.get("scale", 1.0))
+        info["scale"] = LOCKED_BUILD4_SCALES.get(group, previous_scale)
+        info["source"] = "locked-build4-user-approved"
+        info["previousMetricScale"] = round(previous_scale, 5)
+        info["lockedBuild4"] = True
+        out[group] = info
     return out
 
 
