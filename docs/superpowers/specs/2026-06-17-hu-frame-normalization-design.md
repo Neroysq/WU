@@ -187,4 +187,19 @@ Build 3 (provider `local_face_color_component_bootstrap` — a local skin/face-c
 
 **Decision (build 4): change the size metric, keep the build-3 detector.** Derive the per-action scale from head **area (sqrt) or height on the shared guard-start frame** (`vl_001`/`vh_001` vs idle `vi_050`), not width-median over all frames. The guard frame is upright/identical across actions → isolates true size with no foreshortening confound (measuring height on a foreshortened cleave frame would be wrong). For walk/held (no guard frame), use the most upright clean frame compared to idle the same way. Re-review acceptance: **guard-pose head area matches idle within tolerance across all actions** (heads visibly uniform), not just a tight scale distribution.
 
+### Build 4 — locked per-action constants (2026-06-17, user-approved by eyeball)
+
+Derived from head height/area on the upright **guard/keyframe** frame vs idle (`vi_050`, head H≈52), cross-checked that body height also matches (head/body ratio ~0.28 is consistent across idle/light/heavy/walk, so scaling for the head fixes the whole character — no head-vs-body tension). User eyeballed the head-aligned and full-body previews and approved:
+
+| action | scale | note |
+|---|---|---|
+| idle | 1.00 | reference (biggest head — all others scale up to it) |
+| light | 1.06 | guard H49 ×3 frames agree; head+body both match after |
+| heavy | 1.06 | guard H49 ×2 frames agree |
+| walk | 1.04 | upright H50 (reverses build-3's wrong-way 0.979) |
+| entry | 1.08 | from sheathed `vd_001` H48 (`vd_049` was a detection glitch) |
+| held | 1.04 | from upright `vp_block`; verify at Gate 2 (held poses are dynamic) |
+
+These replace the build-3 width-median constants. Apply uniformly per action (within-action ratio is trusted — see below). **Median-over-all-frames is NOT used** (foreshortening on cleave/dynamic frames biases it, e.g. heavy median gave a wrong 1.13 vs the correct guard-frame 1.06).
+
 **Simplifying principle (user, 2026-06-17): within-action size ratio is trustworthy.** The video generation maintains character size across an action's frames — the inconsistency is purely at the **keyframe/action level** (each action's seed produced a slightly different base size). Therefore: (a) the per-action *constant* model is correct — no per-frame correction, and per-frame occlusion/measurement noise is irrelevant; (b) we need exactly **one reliable head measurement per action** (its guard-start keyframe), not 229; (c) validation reduces to "do the per-action keyframe heads match idle?" — a handful of frames. The keyframe sets the size; the animation inherits it.
