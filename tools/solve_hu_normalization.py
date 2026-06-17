@@ -19,6 +19,17 @@ LOCKED_BUILD4_SCALES: dict[str, float] = {
     "entry": 1.08,
     "held": 1.04,
 }
+LOCKED_BUILD5_HELD_SCALES: dict[str, float] = {
+    "vp_hit": 0.82483,
+    "vp_stun_a": 1.01787,
+    "vp_stun_b": 0.99667,
+    "vp_block": 0.99667,
+    "vp_dash": 1.04,
+    "vp_rise": 0.99667,
+    "vp_peak": 1.01787,
+    "vp_fall": 1.04,
+    "vp_land": 0.99667,
+}
 
 
 def main() -> int:
@@ -37,7 +48,7 @@ def main() -> int:
     parser.add_argument("--manual-overrides", type=Path, default=None)
     parser.add_argument(
         "--scale-mode",
-        choices=("locked-build4", "clean-head-width"),
+        choices=("locked-build4", "locked-build5-held", "clean-head-width"),
         default="locked-build4",
     )
     args = parser.parse_args()
@@ -61,11 +72,11 @@ def main() -> int:
 
     group_targets = solve_group_targets(poses)
     measured_scale_groups = solve_scale_groups(poses, target_head_width)
-    scale_groups = (
-        solve_locked_build4_scale_groups(poses, measured_scale_groups)
-        if args.scale_mode == "locked-build4"
-        else measured_scale_groups
-    )
+    if args.scale_mode in ("locked-build4", "locked-build5-held"):
+        scale_groups = solve_locked_build4_scale_groups(poses, measured_scale_groups, args.scale_mode)
+    else:
+        scale_groups = measured_scale_groups
+    scale_review_min = 0.78 if args.scale_mode == "locked-build5-held" else 0.85
     transforms: dict[str, dict[str, Any]] = {}
     pose_summaries: list[dict[str, Any]] = []
     for pose in poses:
@@ -77,6 +88,10 @@ def main() -> int:
         scale_group = scale_group_for_pose(pose)
         scale_info = scale_groups.get(scale_group, scale_groups.get("__all__", {"scale": 1.0}))
         scale = float(scale_info["scale"])
+        scale_source = str(scale_info.get("source", "fallback"))
+        if args.scale_mode == "locked-build5-held" and pose_name in LOCKED_BUILD5_HELD_SCALES:
+            scale = LOCKED_BUILD5_HELD_SCALES[pose_name]
+            scale_source = "locked-build5-held-manual-head-width"
         grounding = str(pose.get("grounding", "grounded"))
         group = str(pose.get("prefix", ""))
         target_xy = group_targets.get(group, {"x": 0.0, "y": 0.0})
@@ -86,7 +101,14 @@ def main() -> int:
         # time and break anchor-sanity foot spread checks.
         offset_x = 0.0
         offset_y = 0.0
-        flags = transform_flags(scale, offset_x, offset_y, source.get("flags", []), render.get("flags", []))
+        flags = transform_flags(
+            scale,
+            offset_x,
+            offset_y,
+            source.get("flags", []),
+            render.get("flags", []),
+            scale_review_min,
+        )
         transform = {
             "pose": pose_name,
             "scale": round(scale, 5),
@@ -94,7 +116,7 @@ def main() -> int:
             "offsetY": round(offset_y, 3),
             "grounding": grounding,
             "scaleGroup": scale_group,
-            "scaleSource": str(scale_info.get("source", "fallback")),
+            "scaleSource": scale_source,
             "sourceKey": str(pose.get("sourceKey", "")),
             "targetFoot": [round(float(target_xy["x"]), 3), round(float(target_xy["y"]), 3)],
             "flags": flags,
@@ -112,7 +134,7 @@ def main() -> int:
                 "pose": pose_name,
                 "scale": transform["scale"],
                 "scaleGroup": scale_group,
-                "flags": flags,
+                "flags": list(transform.get("flags", flags)),
             }
         pose_summaries.append(
             {
@@ -135,6 +157,7 @@ def main() -> int:
         "groupTargets": group_targets,
         "scaleGroups": scale_groups,
         "scaleMode": args.scale_mode,
+        "lockedBuild5HeldScales": LOCKED_BUILD5_HELD_SCALES if args.scale_mode == "locked-build5-held" else {},
         "transforms": transforms,
         "summary": {
             "poses": len([k for k in transforms if "_" in k and "/" not in k]),
@@ -219,7 +242,7 @@ def solve_scale_groups(poses: list[Any], target_head_width: float) -> dict[str, 
 
 
 def solve_locked_build4_scale_groups(
-    poses: list[Any], measured_groups: dict[str, dict[str, Any]]
+    poses: list[Any], measured_groups: dict[str, dict[str, Any]], scale_mode: str
 ) -> dict[str, dict[str, Any]]:
     out: dict[str, dict[str, Any]] = {}
     all_info = dict(measured_groups.get("__all__", {}))
@@ -235,6 +258,9 @@ def solve_locked_build4_scale_groups(
         info["source"] = "locked-build4-user-approved"
         info["previousMetricScale"] = round(previous_scale, 5)
         info["lockedBuild4"] = True
+        if scale_mode == "locked-build5-held" and group == "held":
+            info["source"] = "locked-build5-held-user-approved"
+            info["lockedBuild5HeldPerPose"] = True
         out[group] = info
     return out
 
@@ -270,9 +296,16 @@ def raw_head_width(render: dict[str, Any]) -> float:
     return 0.0
 
 
-def transform_flags(scale: float, offset_x: float, offset_y: float, source_flags: Any, render_flags: Any) -> list[str]:
+def transform_flags(
+    scale: float,
+    offset_x: float,
+    offset_y: float,
+    source_flags: Any,
+    render_flags: Any,
+    scale_review_min: float = 0.85,
+) -> list[str]:
     flags: list[str] = []
-    if scale < 0.85 or scale > 1.18:
+    if scale < scale_review_min or scale > 1.18:
         flags.append("scale-review")
     for flag in list(source_flags or []):
         if str(flag).startswith("head-") and "effective" not in str(flag):

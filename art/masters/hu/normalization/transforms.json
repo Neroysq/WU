@@ -1,6 +1,6 @@
 {
   "id": "hu_normalization_transforms",
-  "generated": "2026-06-17T21:56:37.168665+00:00",
+  "generated": "2026-06-17T22:33:52.084157+00:00",
   "measurements": "art/masters/hu/normalization/measurements.json",
   "targetPose": "vi_002",
   "targetRenderHeadWidth": 46.0,
@@ -22,8 +22,8 @@
       "y": 380.0
     },
     "vp": {
-      "x": 413.4,
-      "y": 382.0
+      "x": 410.3,
+      "y": 371.0
     },
     "vw": {
       "x": 163.5,
@@ -34,7 +34,7 @@
     "__all__": {
       "medianHeadWidth": 49.0,
       "scale": 1.0,
-      "cleanCount": 170,
+      "cleanCount": 179,
       "source": "locked-build4-user-approved"
     },
     "entry": {
@@ -134,13 +134,24 @@
       "lockedBuild4": true
     },
     "held": {
-      "medianHeadWidth": 49.0,
+      "medianHeadWidth": 47.0,
       "scale": 1.04,
-      "cleanCount": 0,
-      "cleanPoses": [],
-      "source": "locked-build4-user-approved",
-      "previousMetricScale": 0.93878,
-      "lockedBuild4": true
+      "cleanCount": 9,
+      "cleanPoses": [
+        "vp_block",
+        "vp_dash",
+        "vp_fall",
+        "vp_hit",
+        "vp_land",
+        "vp_peak",
+        "vp_rise",
+        "vp_stun_a",
+        "vp_stun_b"
+      ],
+      "source": "locked-build5-held-user-approved",
+      "previousMetricScale": 0.97872,
+      "lockedBuild4": true,
+      "lockedBuild5HeldPerPose": true
     },
     "idle": {
       "medianHeadWidth": 46.0,
@@ -267,7 +278,18 @@
       "lockedBuild4": true
     }
   },
-  "scaleMode": "locked-build4",
+  "scaleMode": "locked-build5-held",
+  "lockedBuild5HeldScales": {
+    "vp_hit": 0.82483,
+    "vp_stun_a": 1.01787,
+    "vp_stun_b": 0.99667,
+    "vp_block": 0.99667,
+    "vp_dash": 1.04,
+    "vp_rise": 0.99667,
+    "vp_peak": 1.01787,
+    "vp_fall": 1.04,
+    "vp_land": 0.99667
+  },
   "transforms": {
     "vd_001": {
       "pose": "vd_001",
@@ -2925,23 +2947,23 @@
     },
     "vp_block": {
       "pose": "vp_block",
-      "scale": 1.04,
+      "scale": 0.99667,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "held",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build5-held-manual-head-width",
       "sourceKey": "held/master_004",
       "targetFoot": [
-        413.4,
-        382.0
+        410.3,
+        371.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "held/master_004": {
       "pose": "vp_block",
-      "scale": 1.04,
+      "scale": 0.99667,
       "scaleGroup": "held",
       "flags": []
     },
@@ -2952,11 +2974,11 @@
       "offsetY": 0.0,
       "grounding": "exempt",
       "scaleGroup": "held",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build5-held-manual-head-width",
       "sourceKey": "held/master_005",
       "targetFoot": [
-        413.4,
-        382.0
+        410.3,
+        371.0
       ],
       "flags": [],
       "spatialFlags": []
@@ -2974,11 +2996,11 @@
       "offsetY": 0.0,
       "grounding": "exempt",
       "scaleGroup": "held",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build5-held-manual-head-width",
       "sourceKey": "held/master_008",
       "targetFoot": [
-        413.4,
-        382.0
+        410.3,
+        371.0
       ],
       "flags": [],
       "spatialFlags": []
@@ -2991,133 +3013,133 @@
     },
     "vp_hit": {
       "pose": "vp_hit",
-      "scale": 1.04,
+      "scale": 0.82483,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "held",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build5-held-manual-head-width",
       "sourceKey": "held/master_001",
       "targetFoot": [
-        413.4,
-        382.0
+        410.3,
+        371.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "held/master_001": {
       "pose": "vp_hit",
-      "scale": 1.04,
+      "scale": 0.82483,
       "scaleGroup": "held",
       "flags": []
     },
     "vp_land": {
       "pose": "vp_land",
-      "scale": 1.04,
+      "scale": 0.99667,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "held",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build5-held-manual-head-width",
       "sourceKey": "held/master_009",
       "targetFoot": [
-        413.4,
-        382.0
+        410.3,
+        371.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "held/master_009": {
       "pose": "vp_land",
-      "scale": 1.04,
+      "scale": 0.99667,
       "scaleGroup": "held",
       "flags": []
     },
     "vp_peak": {
       "pose": "vp_peak",
-      "scale": 1.04,
+      "scale": 1.01787,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "exempt",
       "scaleGroup": "held",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build5-held-manual-head-width",
       "sourceKey": "held/master_007",
       "targetFoot": [
-        413.4,
-        382.0
+        410.3,
+        371.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "held/master_007": {
       "pose": "vp_peak",
-      "scale": 1.04,
+      "scale": 1.01787,
       "scaleGroup": "held",
       "flags": []
     },
     "vp_rise": {
       "pose": "vp_rise",
-      "scale": 1.04,
+      "scale": 0.99667,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "exempt",
       "scaleGroup": "held",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build5-held-manual-head-width",
       "sourceKey": "held/master_006",
       "targetFoot": [
-        413.4,
-        382.0
+        410.3,
+        371.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "held/master_006": {
       "pose": "vp_rise",
-      "scale": 1.04,
+      "scale": 0.99667,
       "scaleGroup": "held",
       "flags": []
     },
     "vp_stun_a": {
       "pose": "vp_stun_a",
-      "scale": 1.04,
+      "scale": 1.01787,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "held",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build5-held-manual-head-width",
       "sourceKey": "held/master_002",
       "targetFoot": [
-        413.4,
-        382.0
+        410.3,
+        371.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "held/master_002": {
       "pose": "vp_stun_a",
-      "scale": 1.04,
+      "scale": 1.01787,
       "scaleGroup": "held",
       "flags": []
     },
     "vp_stun_b": {
       "pose": "vp_stun_b",
-      "scale": 1.04,
+      "scale": 0.99667,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "held",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build5-held-manual-head-width",
       "sourceKey": "held/master_003",
       "targetFoot": [
-        413.4,
-        382.0
+        410.3,
+        371.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "held/master_003": {
       "pose": "vp_stun_b",
-      "scale": 1.04,
+      "scale": 0.99667,
       "scaleGroup": "held",
       "flags": []
     },
@@ -5217,7 +5239,7 @@
     "sourceKeys": 213,
     "flagged": 0,
     "maxScale": 1.08,
-    "minScale": 1.0,
+    "minScale": 0.82483,
     "scaleGroupCount": 6
   },
   "poses": [
@@ -6349,7 +6371,7 @@
     {
       "pose": "vp_block",
       "sourceKey": "held/master_004",
-      "scale": 1.04,
+      "scale": 0.99667,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6376,7 +6398,7 @@
     {
       "pose": "vp_hit",
       "sourceKey": "held/master_001",
-      "scale": 1.04,
+      "scale": 0.82483,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6385,7 +6407,7 @@
     {
       "pose": "vp_land",
       "sourceKey": "held/master_009",
-      "scale": 1.04,
+      "scale": 0.99667,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6394,7 +6416,7 @@
     {
       "pose": "vp_peak",
       "sourceKey": "held/master_007",
-      "scale": 1.04,
+      "scale": 1.01787,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6403,7 +6425,7 @@
     {
       "pose": "vp_rise",
       "sourceKey": "held/master_006",
-      "scale": 1.04,
+      "scale": 0.99667,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6412,7 +6434,7 @@
     {
       "pose": "vp_stun_a",
       "sourceKey": "held/master_002",
-      "scale": 1.04,
+      "scale": 1.01787,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6421,7 +6443,7 @@
     {
       "pose": "vp_stun_b",
       "sourceKey": "held/master_003",
-      "scale": 1.04,
+      "scale": 0.99667,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],

@@ -2775,112 +2775,49 @@
     },
     "vp_block": {
       "chestAnchor": [
-        334,
-        189
+        335,
+        186
       ],
       "footAnchor": [
         334,
         382
       ],
       "hurtbox": [
-        215,
-        31,
-        237,
-        351
+        220,
+        35,
+        229,
+        273
       ],
       "path": "res://assets/sprites/characters/hu/vp_block.png",
       "weaponTip": [
-        525,
-        149
+        517,
+        148
       ]
     },
     "vp_dash": {
       "chestAnchor": [
-        333,
-        221
+        354,
+        211
       ],
       "footAnchor": [
         334,
         382
       ],
       "hurtbox": [
-        168,
-        90,
-        330,
-        292
+        209,
+        80,
+        289,
+        230
       ],
       "path": "res://assets/sprites/characters/hu/vp_dash.png",
       "weaponTip": [
         527,
-        229
+        219
       ]
     },
     "vp_fall": {
       "chestAnchor": [
-        333,
-        225
-      ],
-      "footAnchor": [
-        334,
-        382
-      ],
-      "hurtbox": [
-        267,
-        97,
-        131,
-        285
-      ],
-      "path": "res://assets/sprites/characters/hu/vp_fall.png",
-      "weaponTip": [
-        520,
-        125
-      ]
-    },
-    "vp_hit": {
-      "chestAnchor": [
-        333,
-        245
-      ],
-      "footAnchor": [
-        334,
-        382
-      ],
-      "hurtbox": [
-        182,
-        132,
-        302,
-        250
-      ],
-      "path": "res://assets/sprites/characters/hu/vp_hit.png",
-      "weaponTip": [
-        600,
-        37
-      ]
-    },
-    "vp_land": {
-      "chestAnchor": [
-        333,
-        204
-      ],
-      "footAnchor": [
-        334,
-        382
-      ],
-      "hurtbox": [
-        223,
-        59,
-        220,
-        323
-      ],
-      "path": "res://assets/sprites/characters/hu/vp_land.png",
-      "weaponTip": [
-        585,
-        377
-      ]
-    },
-    "vp_peak": {
-      "chestAnchor": [
-        334,
+        326,
         214
       ],
       "footAnchor": [
@@ -2888,78 +2825,141 @@
         382
       ],
       "hurtbox": [
-        242,
-        76,
-        184,
-        306
+        253,
+        86,
+        146,
+        285
+      ],
+      "path": "res://assets/sprites/characters/hu/vp_fall.png",
+      "weaponTip": [
+        520,
+        115
+      ]
+    },
+    "vp_hit": {
+      "chestAnchor": [
+        334,
+        262
+      ],
+      "footAnchor": [
+        334,
+        382
+      ],
+      "hurtbox": [
+        215,
+        173,
+        238,
+        162
+      ],
+      "path": "res://assets/sprites/characters/hu/vp_hit.png",
+      "weaponTip": [
+        545,
+        98
+      ]
+    },
+    "vp_land": {
+      "chestAnchor": [
+        334,
+        201
+      ],
+      "footAnchor": [
+        334,
+        382
+      ],
+      "hurtbox": [
+        227,
+        62,
+        213,
+        309
+      ],
+      "path": "res://assets/sprites/characters/hu/vp_land.png",
+      "weaponTip": [
+        574,
+        367
+      ]
+    },
+    "vp_peak": {
+      "chestAnchor": [
+        334,
+        207
+      ],
+      "footAnchor": [
+        334,
+        382
+      ],
+      "hurtbox": [
+        244,
+        73,
+        180,
+        298
       ],
       "path": "res://assets/sprites/characters/hu/vp_peak.png",
       "weaponTip": [
-        592,
-        109
+        587,
+        104
       ]
     },
     "vp_rise": {
       "chestAnchor": [
-        334,
-        199
+        333,
+        197
       ],
       "footAnchor": [
         334,
         382
       ],
       "hurtbox": [
-        245,
-        50,
-        177,
-        279
+        248,
+        54,
+        170,
+        266
       ],
       "path": "res://assets/sprites/characters/hu/vp_rise.png",
       "weaponTip": [
-        585,
-        72
+        575,
+        75
       ]
     },
     "vp_stun_a": {
       "chestAnchor": [
-        333,
-        190
+        334,
+        183
       ],
       "footAnchor": [
         334,
         382
       ],
       "hurtbox": [
-        272,
-        32,
-        122,
-        350
+        274,
+        29,
+        119,
+        342
       ],
       "path": "res://assets/sprites/characters/hu/vp_stun_a.png",
       "weaponTip": [
-        537,
-        332
+        533,
+        323
       ]
     },
     "vp_stun_b": {
       "chestAnchor": [
-        333,
-        188
+        334,
+        186
       ],
       "footAnchor": [
         334,
         382
       ],
       "hurtbox": [
-        249,
-        30,
-        168,
-        344
+        253,
+        34,
+        161,
+        330
       ],
       "path": "res://assets/sprites/characters/hu/vp_stun_b.png",
       "weaponTip": [
-        550,
-        338
+        541,
+        329
       ]
     },
     "vw_002": {

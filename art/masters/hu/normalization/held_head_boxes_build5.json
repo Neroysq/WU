@@ -1,0 +1,124 @@
+{
+  "id": "hu_build5_held_head_boxes",
+  "coordinateSpace": "render",
+  "provider": "manual_build5_held_head_core",
+  "scaleBasis": {
+    "targetPose": "vi_002",
+    "targetRenderHeadWidth": 46.0,
+    "build4HeldScale": 1.04,
+    "metric": "manual head-core bbox width",
+    "notes": "Held poses are independent keyframes, not one generated action clip. These boxes exclude trailing hair, scarf, neck, sword, and shoulder contamination so the scale pass follows the same head-core convention as idle."
+  },
+  "scaleInputs": {
+    "vp_hit": {
+      "bbox": [202, 88, 58, 65],
+      "derivedScale": 0.82483,
+      "notes": "Head core, excluding trailing hair and neck."
+    },
+    "vp_stun_a": {
+      "bbox": [318, 60, 47, 60],
+      "derivedScale": 1.01787,
+      "notes": "Head core, excluding wobble effects and scarf."
+    },
+    "vp_stun_b": {
+      "bbox": [288, 48, 48, 62],
+      "derivedScale": 0.99667,
+      "notes": "Head core, excluding trailing hair and shoulder."
+    },
+    "vp_block": {
+      "bbox": [322, 84, 48, 60],
+      "derivedScale": 0.99667,
+      "notes": "Face-forward head core, excluding side hair mass and collar."
+    },
+    "vp_dash": {
+      "bbox": [216, 144, 46, 46],
+      "derivedScale": 1.04,
+      "notes": "Profile head core, excluding blade/arm overlap."
+    },
+    "vp_rise": {
+      "bbox": [323, 73, 48, 72],
+      "derivedScale": 0.99667,
+      "notes": "Head core, excluding scarf/collar."
+    },
+    "vp_peak": {
+      "bbox": [352, 94, 47, 67],
+      "derivedScale": 1.01787,
+      "notes": "Head core, excluding topknot and collar."
+    },
+    "vp_fall": {
+      "bbox": [350, 116, 46, 58],
+      "derivedScale": 1.04,
+      "notes": "Head core, excluding collar."
+    },
+    "vp_land": {
+      "bbox": [370, 84, 48, 60],
+      "derivedScale": 0.99667,
+      "notes": "Head core, excluding topknot and collar."
+    }
+  },
+  "annotations": {
+    "vp_hit": {
+      "bbox": [234, 128, 46, 58],
+      "clean": true,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core"
+    },
+    "vp_stun_a": {
+      "bbox": [318, 58, 47, 60],
+      "clean": true,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core"
+    },
+    "vp_stun_b": {
+      "bbox": [289, 49, 48, 62],
+      "clean": true,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core"
+    },
+    "vp_block": {
+      "bbox": [322, 84, 48, 60],
+      "clean": true,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core"
+    },
+    "vp_dash": {
+      "bbox": [216, 136, 46, 46],
+      "clean": true,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core"
+    },
+    "vp_rise": {
+      "bbox": [323, 75, 48, 72],
+      "clean": true,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core"
+    },
+    "vp_peak": {
+      "bbox": [352, 89, 47, 67],
+      "clean": true,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core"
+    },
+    "vp_fall": {
+      "bbox": [350, 105, 46, 58],
+      "clean": true,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core"
+    },
+    "vp_land": {
+      "bbox": [370, 84, 48, 60],
+      "clean": true,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core"
+    }
+  }
+}

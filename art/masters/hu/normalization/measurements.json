@@ -1,6 +1,6 @@
 {
   "id": "hu_normalization_measurements",
-  "generated": "2026-06-17T21:56:34.096825+00:00",
+  "generated": "2026-06-17T22:33:52.041066+00:00",
   "sourceManifest": "art/masters/hu/normalization/manifest.json",
   "animationManifest": "WUGodot/assets/animation_manifests/hu.manifest.json",
   "counts": {
@@ -21,7 +21,7 @@
       "rawOver120": 6,
       "effectiveOver120": 0,
       "rawOverLimit": 148,
-      "effectiveOverLimit": 34,
+      "effectiveOverLimit": 25,
       "rawWideThin": 40,
       "rawHeadFlagged": 2
     }
@@ -15988,76 +15988,73 @@
         "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_block.png",
         "size": [
           679,
-          395
+          385
         ],
         "bbox": [
-          192,
-          31,
-          334,
-          352
+          198,
+          35,
+          320,
+          337
         ],
         "bodyColumns": [
-          215,
-          452
+          220,
+          449
         ],
         "headBBox": [
-          292.0,
-          60.0,
-          91.0,
-          89.0
+          322.0,
+          84.0,
+          48.0,
+          60.0
         ],
-        "headHeight": 89.0,
+        "headHeight": 60.0,
         "contactFoot": [
-          447.0,
-          382.0
+          443.5,
+          371.0
         ],
-        "confidence": 0.72,
-        "flags": [
-          "vision-occluded",
-          "vision-low-confidence"
-        ],
+        "confidence": 0.99,
+        "flags": [],
         "geometricHeadBBox": [
-          239,
-          31,
-          142,
-          80
+          243,
+          35,
+          136,
+          77
         ],
-        "geometricHeadHeight": 80,
+        "geometricHeadHeight": 77,
         "geometricConfidence": 0.82,
         "geometricFlags": [],
-        "headWidth": 91.0,
+        "headWidth": 48.0,
         "visionHead": {
-          "provider": "local_face_color_component_bootstrap",
+          "provider": "manual_build5_held_head_core",
           "bbox": [
-            292.0,
-            60.0,
-            91.0,
-            89.0
+            322.0,
+            84.0,
+            48.0,
+            60.0
           ],
           "visionBox": [
-            292,
-            60,
-            91,
-            89
+            322,
+            84,
+            48,
+            60
           ],
-          "occluded": true,
-          "clean": false,
-          "confidence": 0.72,
-          "notes": "review: snapped head unusual w=91 h=89 aspect=1.02"
+          "occluded": false,
+          "clean": true,
+          "confidence": 0.99,
+          "notes": "final installed build-5 head core"
         },
         "rawHeadBBox": [
-          239,
-          31,
-          142,
-          80
+          243,
+          35,
+          136,
+          77
         ],
-        "rawHeadHeight": 80,
+        "rawHeadHeight": 77,
         "rawConfidence": 0.82,
         "rawFlags": [],
         "rawHeadWidthContaminated": true,
         "headWidthLimit": 60.0,
-        "headWidthContaminated": true,
-        "visionClean": false
+        "headWidthContaminated": false,
+        "visionClean": true
       }
     },
     {
@@ -16121,76 +16118,73 @@
         "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_dash.png",
         "size": [
           679,
-          395
+          385
         ],
         "bbox": [
           0,
-          90,
+          80,
           528,
-          293
+          292
         ],
         "bodyColumns": [
           157,
           498
         ],
         "headBBox": [
-          210.0,
-          137.0,
-          61.0,
-          55.0
+          216.0,
+          136.0,
+          46.0,
+          46.0
         ],
-        "headHeight": 55.0,
+        "headHeight": 46.0,
         "contactFoot": [
           167.5,
-          382.0
+          371.0
         ],
-        "confidence": 0.72,
-        "flags": [
-          "vision-occluded",
-          "vision-low-confidence"
-        ],
+        "confidence": 0.99,
+        "flags": [],
         "geometricHeadBBox": [
-          268,
-          90,
-          231,
-          59
+          276,
+          80,
+          223,
+          58
         ],
-        "geometricHeadHeight": 59,
+        "geometricHeadHeight": 58,
         "geometricConfidence": 0.82,
         "geometricFlags": [],
-        "headWidth": 61.0,
+        "headWidth": 46.0,
         "visionHead": {
-          "provider": "local_face_color_component_bootstrap",
+          "provider": "manual_build5_held_head_core",
           "bbox": [
-            210.0,
-            137.0,
-            61.0,
-            55.0
+            216.0,
+            136.0,
+            46.0,
+            46.0
           ],
           "visionBox": [
-            210,
-            137,
-            61,
-            55
+            216,
+            136,
+            46,
+            46
           ],
-          "occluded": true,
-          "clean": false,
-          "confidence": 0.72,
-          "notes": "review: snapped head unusual w=61 h=55 aspect=1.11"
+          "occluded": false,
+          "clean": true,
+          "confidence": 0.99,
+          "notes": "final installed build-5 head core"
         },
         "rawHeadBBox": [
-          268,
-          90,
-          231,
-          59
+          276,
+          80,
+          223,
+          58
         ],
-        "rawHeadHeight": 59,
+        "rawHeadHeight": 58,
         "rawConfidence": 0.82,
         "rawFlags": [],
         "rawHeadWidthContaminated": true,
         "headWidthLimit": 60.0,
-        "headWidthContaminated": true,
-        "visionClean": false
+        "headWidthContaminated": false,
+        "visionClean": true
       }
     },
     {
@@ -16254,11 +16248,11 @@
         "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_fall.png",
         "size": [
           679,
-          395
+          385
         ],
         "bbox": [
           209,
-          97,
+          86,
           312,
           286
         ],
@@ -16267,63 +16261,60 @@
           398
         ],
         "headBBox": [
-          338.0,
-          108.0,
-          68.0,
-          81.0
+          350.0,
+          105.0,
+          46.0,
+          58.0
         ],
-        "headHeight": 81.0,
+        "headHeight": 58.0,
         "contactFoot": [
           288.5,
-          382.0
+          371.0
         ],
-        "confidence": 0.72,
-        "flags": [
-          "vision-occluded",
-          "vision-low-confidence"
-        ],
+        "confidence": 0.99,
+        "flags": [],
         "geometricHeadBBox": [
           324,
-          97,
+          86,
           75,
-          57
+          58
         ],
-        "geometricHeadHeight": 57,
+        "geometricHeadHeight": 58,
         "geometricConfidence": 0.82,
         "geometricFlags": [],
-        "headWidth": 68.0,
+        "headWidth": 46.0,
         "visionHead": {
-          "provider": "local_face_color_component_bootstrap",
+          "provider": "manual_build5_held_head_core",
           "bbox": [
-            338.0,
-            108.0,
-            68.0,
-            81.0
+            350.0,
+            105.0,
+            46.0,
+            58.0
           ],
           "visionBox": [
-            338,
-            108,
-            68,
-            81
+            350,
+            105,
+            46,
+            58
           ],
-          "occluded": true,
-          "clean": false,
-          "confidence": 0.72,
-          "notes": "review: snapped head unusual w=68 h=81 aspect=0.84"
+          "occluded": false,
+          "clean": true,
+          "confidence": 0.99,
+          "notes": "final installed build-5 head core"
         },
         "rawHeadBBox": [
           324,
-          97,
+          86,
           75,
-          57
+          58
         ],
-        "rawHeadHeight": 57,
+        "rawHeadHeight": 58,
         "rawConfidence": 0.82,
         "rawFlags": [],
         "rawHeadWidthContaminated": true,
         "headWidthLimit": 60.0,
-        "headWidthContaminated": true,
-        "visionClean": false
+        "headWidthContaminated": false,
+        "visionClean": true
       }
     },
     {
@@ -16387,76 +16378,73 @@
         "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_hit.png",
         "size": [
           679,
-          395
+          385
         ],
         "bbox": [
-          102,
-          33,
-          499,
-          350
+          150,
+          95,
+          396,
+          277
         ],
         "bodyColumns": [
-          185,
-          484
+          215,
+          453
         ],
         "headBBox": [
-          187.0,
-          71.0,
-          91.0,
-          92.0
+          234.0,
+          128.0,
+          46.0,
+          58.0
         ],
-        "headHeight": 92.0,
+        "headHeight": 58.0,
         "contactFoot": [
-          443.5,
-          382.0
+          421.0,
+          371.0
         ],
-        "confidence": 0.72,
-        "flags": [
-          "vision-occluded",
-          "vision-low-confidence"
-        ],
+        "confidence": 0.99,
+        "flags": [],
         "geometricHeadBBox": [
-          185,
-          83,
-          300,
-          60
+          215,
+          135,
+          239,
+          47
         ],
-        "geometricHeadHeight": 60,
+        "geometricHeadHeight": 47,
         "geometricConfidence": 0.82,
         "geometricFlags": [],
-        "headWidth": 91.0,
+        "headWidth": 46.0,
         "visionHead": {
-          "provider": "local_face_color_component_bootstrap",
+          "provider": "manual_build5_held_head_core",
           "bbox": [
-            187.0,
-            71.0,
-            91.0,
-            92.0
+            234.0,
+            128.0,
+            46.0,
+            58.0
           ],
           "visionBox": [
-            187,
-            71,
-            91,
-            92
+            234,
+            128,
+            46,
+            58
           ],
-          "occluded": true,
-          "clean": false,
-          "confidence": 0.72,
-          "notes": "review: snapped head unusual w=91 h=92 aspect=0.99"
+          "occluded": false,
+          "clean": true,
+          "confidence": 0.99,
+          "notes": "final installed build-5 head core"
         },
         "rawHeadBBox": [
-          185,
-          83,
-          300,
-          60
+          215,
+          135,
+          239,
+          47
         ],
-        "rawHeadHeight": 60,
+        "rawHeadHeight": 47,
         "rawConfidence": 0.82,
         "rawFlags": [],
         "rawHeadWidthContaminated": true,
         "headWidthLimit": 60.0,
-        "headWidthContaminated": true,
-        "visionClean": false
+        "headWidthContaminated": false,
+        "visionClean": true
       }
     },
     {
@@ -16520,76 +16508,73 @@
         "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_land.png",
         "size": [
           679,
-          395
+          385
         ],
         "bbox": [
-          180,
-          59,
-          406,
-          324
+          187,
+          62,
+          388,
+          310
         ],
         "bodyColumns": [
-          223,
-          443
+          228,
+          439
         ],
         "headBBox": [
-          358.0,
-          77.0,
-          76.0,
-          76.0
+          370.0,
+          84.0,
+          48.0,
+          60.0
         ],
-        "headHeight": 76.0,
+        "headHeight": 60.0,
         "contactFoot": [
-          413.4,
-          382.0
+          410.3,
+          371.0
         ],
-        "confidence": 0.72,
-        "flags": [
-          "vision-occluded",
-          "vision-low-confidence"
-        ],
+        "confidence": 0.99,
+        "flags": [],
         "geometricHeadBBox": [
           330,
-          59,
-          106,
-          65
+          62,
+          101,
+          62
         ],
-        "geometricHeadHeight": 65,
+        "geometricHeadHeight": 62,
         "geometricConfidence": 0.82,
         "geometricFlags": [],
-        "headWidth": 76.0,
+        "headWidth": 48.0,
         "visionHead": {
-          "provider": "local_face_color_component_bootstrap",
+          "provider": "manual_build5_held_head_core",
           "bbox": [
-            358.0,
-            77.0,
-            76.0,
-            76.0
+            370.0,
+            84.0,
+            48.0,
+            60.0
           ],
           "visionBox": [
-            358,
-            77,
-            76,
-            76
+            370,
+            84,
+            48,
+            60
           ],
-          "occluded": true,
-          "clean": false,
-          "confidence": 0.72,
-          "notes": "review: snapped head unusual w=76 h=76 aspect=1.00"
+          "occluded": false,
+          "clean": true,
+          "confidence": 0.99,
+          "notes": "final installed build-5 head core"
         },
         "rawHeadBBox": [
           330,
-          59,
-          106,
-          65
+          62,
+          101,
+          62
         ],
-        "rawHeadHeight": 65,
+        "rawHeadHeight": 62,
         "rawConfidence": 0.82,
         "rawFlags": [],
         "rawHeadWidthContaminated": true,
         "headWidthLimit": 60.0,
-        "headWidthContaminated": true,
-        "visionClean": false
+        "headWidthContaminated": false,
+        "visionClean": true
       }
     },
     {
@@ -16653,76 +16638,73 @@
         "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_peak.png",
         "size": [
           679,
-          395
+          385
         ],
         "bbox": [
-          209,
-          76,
-          384,
-          307
+          212,
+          73,
+          376,
+          299
         ],
         "bodyColumns": [
-          242,
-          424
+          244,
+          422
         ],
         "headBBox": [
-          340.0,
-          87.0,
-          72.0,
-          95.0
+          352.0,
+          89.0,
+          47.0,
+          67.0
         ],
-        "headHeight": 95.0,
+        "headHeight": 67.0,
         "contactFoot": [
-          252.0,
-          382.0
+          253.5,
+          371.0
         ],
-        "confidence": 0.72,
-        "flags": [
-          "vision-occluded",
-          "vision-low-confidence"
-        ],
+        "confidence": 0.99,
+        "flags": [],
         "geometricHeadBBox": [
           319,
-          76,
-          89,
-          74
+          73,
+          87,
+          72
         ],
-        "geometricHeadHeight": 74,
+        "geometricHeadHeight": 72,
         "geometricConfidence": 0.82,
         "geometricFlags": [],
-        "headWidth": 72.0,
+        "headWidth": 47.0,
         "visionHead": {
-          "provider": "local_face_color_component_bootstrap",
+          "provider": "manual_build5_held_head_core",
           "bbox": [
-            340.0,
-            87.0,
-            72.0,
-            95.0
+            352.0,
+            89.0,
+            47.0,
+            67.0
           ],
           "visionBox": [
-            340,
-            87,
-            72,
-            95
+            352,
+            89,
+            47,
+            67
           ],
-          "occluded": true,
-          "clean": false,
-          "confidence": 0.72,
-          "notes": "review: snapped head unusual w=72 h=95 aspect=0.76"
+          "occluded": false,
+          "clean": true,
+          "confidence": 0.99,
+          "notes": "final installed build-5 head core"
         },
         "rawHeadBBox": [
           319,
-          76,
-          89,
-          74
+          73,
+          87,
+          72
         ],
-        "rawHeadHeight": 74,
+        "rawHeadHeight": 72,
         "rawConfidence": 0.82,
         "rawFlags": [],
         "rawHeadWidthContaminated": true,
         "headWidthLimit": 60.0,
-        "headWidthContaminated": true,
-        "visionClean": false
+        "headWidthContaminated": false,
+        "visionClean": true
       }
     },
     {
@@ -16786,76 +16768,73 @@
         "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_rise.png",
         "size": [
           679,
-          395
+          385
         ],
         "bbox": [
-          199,
-          50,
-          387,
-          333
+          205,
+          54,
+          371,
+          318
         ],
         "bodyColumns": [
-          245,
-          422
+          248,
+          418
         ],
         "headBBox": [
-          310.0,
-          65.0,
-          79.0,
-          97.0
+          323.0,
+          75.0,
+          48.0,
+          72.0
         ],
-        "headHeight": 97.0,
+        "headHeight": 72.0,
         "contactFoot": [
-          246.5,
-          382.0
+          250.0,
+          371.0
         ],
-        "confidence": 0.72,
-        "flags": [
-          "vision-occluded",
-          "vision-low-confidence"
-        ],
+        "confidence": 0.99,
+        "flags": [],
         "geometricHeadBBox": [
-          302,
-          50,
-          83,
-          87
+          303,
+          54,
+          80,
+          83
         ],
-        "geometricHeadHeight": 87,
+        "geometricHeadHeight": 83,
         "geometricConfidence": 0.82,
         "geometricFlags": [],
-        "headWidth": 79.0,
+        "headWidth": 48.0,
         "visionHead": {
-          "provider": "local_face_color_component_bootstrap",
+          "provider": "manual_build5_held_head_core",
           "bbox": [
-            310.0,
-            65.0,
-            79.0,
-            97.0
+            323.0,
+            75.0,
+            48.0,
+            72.0
           ],
           "visionBox": [
-            310,
-            65,
-            79,
-            97
+            323,
+            75,
+            48,
+            72
           ],
-          "occluded": true,
-          "clean": false,
-          "confidence": 0.72,
-          "notes": "review: snapped head unusual w=79 h=97 aspect=0.81"
+          "occluded": false,
+          "clean": true,
+          "confidence": 0.99,
+          "notes": "final installed build-5 head core"
         },
         "rawHeadBBox": [
-          302,
-          50,
-          83,
-          87
+          303,
+          54,
+          80,
+          83
         ],
-        "rawHeadHeight": 87,
+        "rawHeadHeight": 83,
         "rawConfidence": 0.82,
         "rawFlags": [],
         "rawHeadWidthContaminated": true,
         "headWidthLimit": 60.0,
-        "headWidthContaminated": true,
-        "visionClean": false
+        "headWidthContaminated": false,
+        "visionClean": true
       }
     },
     {
@@ -16919,76 +16898,73 @@
         "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_stun_a.png",
         "size": [
           679,
-          395
+          385
         ],
         "bbox": [
-          224,
-          14,
-          314,
-          369
+          227,
+          12,
+          307,
+          360
         ],
         "bodyColumns": [
-          272,
-          398
+          274,
+          397
         ],
         "headBBox": [
-          299.0,
-          30.0,
-          86.0,
-          90.0
+          318.0,
+          58.0,
+          47.0,
+          60.0
         ],
-        "headHeight": 90.0,
+        "headHeight": 60.0,
         "contactFoot": [
-          285.0,
-          382.0
+          286.5,
+          371.0
         ],
-        "confidence": 0.72,
-        "flags": [
-          "vision-occluded",
-          "vision-low-confidence"
-        ],
+        "confidence": 0.99,
+        "flags": [],
         "geometricHeadBBox": [
-          272,
-          14,
-          117,
-          74
+          274,
+          12,
+          114,
+          72
         ],
-        "geometricHeadHeight": 74,
+        "geometricHeadHeight": 72,
         "geometricConfidence": 0.82,
         "geometricFlags": [],
-        "headWidth": 86.0,
+        "headWidth": 47.0,
         "visionHead": {
-          "provider": "local_face_color_component_bootstrap",
+          "provider": "manual_build5_held_head_core",
           "bbox": [
-            299.0,
-            30.0,
-            86.0,
-            90.0
+            318.0,
+            58.0,
+            47.0,
+            60.0
           ],
           "visionBox": [
-            299,
-            30,
-            86,
-            90
+            318,
+            58,
+            47,
+            60
           ],
-          "occluded": true,
-          "clean": false,
-          "confidence": 0.72,
-          "notes": "review: snapped head unusual w=86 h=90 aspect=0.96"
+          "occluded": false,
+          "clean": true,
+          "confidence": 0.99,
+          "notes": "final installed build-5 head core"
         },
         "rawHeadBBox": [
-          272,
-          14,
-          117,
-          74
+          274,
+          12,
+          114,
+          72
         ],
-        "rawHeadHeight": 74,
+        "rawHeadHeight": 72,
         "rawConfidence": 0.82,
         "rawFlags": [],
         "rawHeadWidthContaminated": true,
         "headWidthLimit": 60.0,
-        "headWidthContaminated": true,
-        "visionClean": false
+        "headWidthContaminated": false,
+        "visionClean": true
       }
     },
     {
@@ -17052,76 +17028,73 @@
         "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_stun_b.png",
         "size": [
           679,
-          395
+          385
         ],
         "bbox": [
-          218,
-          12,
-          333,
-          371
+          223,
+          17,
+          319,
+          355
         ],
         "bodyColumns": [
-          251,
-          417
+          254,
+          414
         ],
         "headBBox": [
-          267.0,
-          20.0,
-          83.0,
-          89.0
+          289.0,
+          49.0,
+          48.0,
+          62.0
         ],
-        "headHeight": 89.0,
+        "headHeight": 62.0,
         "contactFoot": [
-          255.5,
-          382.0
+          258.5,
+          371.0
         ],
-        "confidence": 0.72,
-        "flags": [
-          "vision-occluded",
-          "vision-low-confidence"
-        ],
+        "confidence": 0.99,
+        "flags": [],
         "geometricHeadBBox": [
-          251,
-          12,
-          89,
-          74
+          254,
+          17,
+          86,
+          71
         ],
-        "geometricHeadHeight": 74,
+        "geometricHeadHeight": 71,
         "geometricConfidence": 0.82,
         "geometricFlags": [],
-        "headWidth": 83.0,
+        "headWidth": 48.0,
         "visionHead": {
-          "provider": "local_face_color_component_bootstrap",
+          "provider": "manual_build5_held_head_core",
           "bbox": [
-            267.0,
-            20.0,
-            83.0,
-            89.0
+            289.0,
+            49.0,
+            48.0,
+            62.0
           ],
           "visionBox": [
-            267,
-            20,
-            83,
-            89
+            289,
+            49,
+            48,
+            62
           ],
-          "occluded": true,
-          "clean": false,
-          "confidence": 0.72,
-          "notes": "review: snapped head unusual w=83 h=89 aspect=0.93"
+          "occluded": false,
+          "clean": true,
+          "confidence": 0.99,
+          "notes": "final installed build-5 head core"
         },
         "rawHeadBBox": [
-          251,
-          12,
-          89,
-          74
+          254,
+          17,
+          86,
+          71
         ],
-        "rawHeadHeight": 74,
+        "rawHeadHeight": 71,
         "rawConfidence": 0.82,
         "rawFlags": [],
         "rawHeadWidthContaminated": true,
         "headWidthLimit": 60.0,
-        "headWidthContaminated": true,
-        "visionClean": false
+        "headWidthContaminated": false,
+        "visionClean": true
       }
     },
     {

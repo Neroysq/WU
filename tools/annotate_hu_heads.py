@@ -36,10 +36,12 @@ def main() -> int:
         type=Path,
         default=Path("art/masters/hu/normalization/vision_heads.json"),
     )
+    parser.add_argument("--manual-overrides", type=Path, default=None)
     args = parser.parse_args()
 
     repo = Path.cwd()
     manifest = load_json(args.manifest)
+    manual_overrides = load_manual_overrides(args.manual_overrides) if args.manual_overrides else {}
     poses = manifest.get("poses", {})
     if not isinstance(poses, dict):
         raise ValueError("manifest poses must be an object")
@@ -57,7 +59,11 @@ def main() -> int:
         render_path = repo / render_key.replace("res://", "WUGodot/")
         if not render_path.exists():
             continue
-        annotations[pose_name] = annotate_one(render_path)
+        manual = manual_overrides.get(pose_name)
+        if manual:
+            annotations[pose_name] = manual_annotation(manual, render_path)
+        else:
+            annotations[pose_name] = annotate_one(render_path)
 
     out = {
         "id": "hu_vision_head_annotations",
@@ -68,8 +74,43 @@ def main() -> int:
     }
     write_json(args.out, out)
     clean = sum(1 for item in annotations.values() if bool(item.get("clean", False)))
-    print(f"wrote {args.out} annotations={len(annotations)} clean={clean}")
+    print(
+        f"wrote {args.out} annotations={len(annotations)} clean={clean} "
+        f"manual={len([name for name in annotations if name in manual_overrides])}"
+    )
     return 0
+
+
+def load_manual_overrides(path: Path) -> dict[str, dict[str, Any]]:
+    payload = load_json(path)
+    annotations = payload.get("annotations", payload)
+    if not isinstance(annotations, dict):
+        return {}
+    out: dict[str, dict[str, Any]] = {}
+    for pose_name, annotation_payload in annotations.items():
+        if not isinstance(annotation_payload, dict):
+            continue
+        bbox = annotation_payload.get("bbox")
+        if not isinstance(bbox, list) or len(bbox) < 4:
+            continue
+        out[str(pose_name)] = dict(annotation_payload)
+    return out
+
+
+def manual_annotation(payload: dict[str, Any], path: Path) -> dict[str, Any]:
+    bbox = tuple(int(round(float(v))) for v in payload["bbox"][:4])
+    vision_box_values = payload.get("visionBox", payload["bbox"])
+    vision_box = tuple(int(round(float(v))) for v in vision_box_values[:4])
+    return {
+        "bbox": list(bbox),
+        "visionBox": list(vision_box),
+        "clean": bool(payload.get("clean", True)),
+        "occluded": bool(payload.get("occluded", False)),
+        "confidence": round(float(payload.get("confidence", 0.99)), 3),
+        "provider": str(payload.get("provider", "manual_head_annotation")),
+        "notes": str(payload.get("notes", "manual head annotation")),
+        "path": path.as_posix(),
+    }
 
 
 def annotate_one(path: Path) -> dict[str, Any]:

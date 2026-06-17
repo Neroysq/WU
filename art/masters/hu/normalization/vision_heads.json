@@ -1,6 +1,6 @@
 {
   "id": "hu_vision_head_annotations",
-  "generated": "2026-06-17T21:54:37.318934+00:00",
+  "generated": "2026-06-17T22:32:01.433472+00:00",
   "provider": "local_face_color_component_bootstrap",
   "coordinateSpace": "render",
   "annotations": {
@@ -2506,182 +2506,182 @@
     },
     "vp_block": {
       "bbox": [
-        292,
-        60,
-        91,
-        89
+        322,
+        84,
+        48,
+        60
       ],
       "visionBox": [
-        292,
-        60,
-        91,
-        89
+        322,
+        84,
+        48,
+        60
       ],
-      "clean": false,
-      "occluded": true,
-      "confidence": 0.72,
-      "provider": "local_face_color_component_bootstrap",
-      "notes": "review: snapped head unusual w=91 h=89 aspect=1.02",
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core",
       "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_block.png"
     },
     "vp_dash": {
       "bbox": [
-        210,
-        137,
-        61,
-        55
+        216,
+        136,
+        46,
+        46
       ],
       "visionBox": [
-        210,
-        137,
-        61,
-        55
+        216,
+        136,
+        46,
+        46
       ],
-      "clean": false,
-      "occluded": true,
-      "confidence": 0.72,
-      "provider": "local_face_color_component_bootstrap",
-      "notes": "review: snapped head unusual w=61 h=55 aspect=1.11",
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core",
       "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_dash.png"
     },
     "vp_fall": {
       "bbox": [
-        338,
-        108,
-        68,
-        81
+        350,
+        105,
+        46,
+        58
       ],
       "visionBox": [
-        338,
-        108,
-        68,
-        81
+        350,
+        105,
+        46,
+        58
       ],
-      "clean": false,
-      "occluded": true,
-      "confidence": 0.72,
-      "provider": "local_face_color_component_bootstrap",
-      "notes": "review: snapped head unusual w=68 h=81 aspect=0.84",
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core",
       "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_fall.png"
     },
     "vp_hit": {
       "bbox": [
-        187,
-        71,
-        91,
-        92
+        234,
+        128,
+        46,
+        58
       ],
       "visionBox": [
-        187,
-        71,
-        91,
-        92
+        234,
+        128,
+        46,
+        58
       ],
-      "clean": false,
-      "occluded": true,
-      "confidence": 0.72,
-      "provider": "local_face_color_component_bootstrap",
-      "notes": "review: snapped head unusual w=91 h=92 aspect=0.99",
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core",
       "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_hit.png"
     },
     "vp_land": {
       "bbox": [
-        358,
-        77,
-        76,
-        76
+        370,
+        84,
+        48,
+        60
       ],
       "visionBox": [
-        358,
-        77,
-        76,
-        76
+        370,
+        84,
+        48,
+        60
       ],
-      "clean": false,
-      "occluded": true,
-      "confidence": 0.72,
-      "provider": "local_face_color_component_bootstrap",
-      "notes": "review: snapped head unusual w=76 h=76 aspect=1.00",
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core",
       "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_land.png"
     },
     "vp_peak": {
       "bbox": [
-        340,
-        87,
-        72,
-        95
+        352,
+        89,
+        47,
+        67
       ],
       "visionBox": [
-        340,
-        87,
-        72,
-        95
+        352,
+        89,
+        47,
+        67
       ],
-      "clean": false,
-      "occluded": true,
-      "confidence": 0.72,
-      "provider": "local_face_color_component_bootstrap",
-      "notes": "review: snapped head unusual w=72 h=95 aspect=0.76",
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core",
       "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_peak.png"
     },
     "vp_rise": {
       "bbox": [
-        310,
-        65,
-        79,
-        97
+        323,
+        75,
+        48,
+        72
       ],
       "visionBox": [
-        310,
-        65,
-        79,
-        97
+        323,
+        75,
+        48,
+        72
       ],
-      "clean": false,
-      "occluded": true,
-      "confidence": 0.72,
-      "provider": "local_face_color_component_bootstrap",
-      "notes": "review: snapped head unusual w=79 h=97 aspect=0.81",
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core",
       "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_rise.png"
     },
     "vp_stun_a": {
       "bbox": [
-        299,
-        30,
-        86,
-        90
+        318,
+        58,
+        47,
+        60
       ],
       "visionBox": [
-        299,
-        30,
-        86,
-        90
+        318,
+        58,
+        47,
+        60
       ],
-      "clean": false,
-      "occluded": true,
-      "confidence": 0.72,
-      "provider": "local_face_color_component_bootstrap",
-      "notes": "review: snapped head unusual w=86 h=90 aspect=0.96",
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core",
       "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_stun_a.png"
     },
     "vp_stun_b": {
       "bbox": [
-        267,
-        20,
-        83,
-        89
+        289,
+        49,
+        48,
+        62
       ],
       "visionBox": [
-        267,
-        20,
-        83,
-        89
+        289,
+        49,
+        48,
+        62
       ],
-      "clean": false,
-      "occluded": true,
-      "confidence": 0.72,
-      "provider": "local_face_color_component_bootstrap",
-      "notes": "review: snapped head unusual w=83 h=89 aspect=0.93",
+      "clean": true,
+      "occluded": false,
+      "confidence": 0.99,
+      "provider": "manual_build5_held_head_core",
+      "notes": "final installed build-5 head core",
       "path": "/Users/animula/GitReps/WU/WUGodot/assets/sprites/characters/hu/vp_stun_b.png"
     },
     "vw_002": {
