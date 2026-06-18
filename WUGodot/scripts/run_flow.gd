@@ -1,6 +1,8 @@
 class_name RunFlow
 extends RefCounted
 
+const BoonOfferScript = preload("res://scripts/boons/boon_offer.gd")
+
 static func combat_victory_outcome(node: MapNode, gold_multiplier: int) -> Dictionary:
 	var base_gold: int = 15
 	if node != null:
@@ -20,9 +22,9 @@ static func combat_victory_outcome(node: MapNode, gold_multiplier: int) -> Dicti
 
 	if node != null and node.node_type == MapNode.NodeType.BOSS:
 		return {"gold": gold_gained, "next": "victory"}
-	return {"gold": gold_gained, "next": "reward"}
+	return {"gold": gold_gained, "next": "boon_offer"}
 
-static func travel_decision(node: MapNode, player: Fighter) -> Dictionary:
+static func travel_decision(node: MapNode, player: Fighter, run_state: Variant = null) -> Dictionary:
 	match node.node_type:
 		MapNode.NodeType.BATTLE, MapNode.NodeType.ELITE, MapNode.NodeType.BOSS:
 			return {"scene": "combat", "node": node, "combat_gold_multiplier": 1}
@@ -45,11 +47,47 @@ static func travel_decision(node: MapNode, player: Fighter) -> Dictionary:
 		MapNode.NodeType.REST:
 			return {"scene": "rest"}
 		MapNode.NodeType.MASTER:
-			var rewards: Array = generate_master_rewards(_owned_ids(player))
-			if rewards.is_empty():
+			var offer_payload: Dictionary = generate_boon_offer_payload(run_state, node)
+			if (offer_payload.get("offers", []) as Array).is_empty():
 				return {"scene": "map", "mark_cleared": true}
-			return {"scene": "reward", "rewards": rewards}
+			return offer_payload
 	return {"scene": "map"}
+
+static func generate_boon_offer_payload(run_state: Variant, node: MapNode = null, school: String = "", rng: RandomNumberGenerator = null) -> Dictionary:
+	var roll_rng: RandomNumberGenerator = _rng(rng)
+	var loadout: Variant = run_state.boon_loadout if run_state != null else null
+	var depth: int = node.tier if node != null else 0
+	var school_id: String = school
+	var offers: Array[Dictionary] = []
+
+	if not school_id.is_empty():
+		offers = BoonOfferScript.generate(loadout, school_id, depth, roll_rng)
+	else:
+		var candidates: Array[String] = _offer_school_pool()
+		while not candidates.is_empty():
+			var idx: int = roll_rng.randi_range(0, candidates.size() - 1)
+			school_id = candidates[idx]
+			candidates.remove_at(idx)
+			offers = BoonOfferScript.generate(loadout, school_id, depth, roll_rng)
+			if offers.size() == 3:
+				break
+			if offers.is_empty():
+				school_id = ""
+
+	return {
+		"scene": "boon_offer",
+		"school": school_id,
+		"offers": offers,
+	}
+
+static func apply_boon_offer_selection(run_state: Variant, offer: Dictionary) -> bool:
+	if run_state == null or run_state.boon_loadout == null:
+		return false
+	var boon_id: String = str(offer.get("boon_id", ""))
+	var tier: String = str(offer.get("tier", "common"))
+	if boon_id.is_empty():
+		return false
+	return run_state.boon_loadout.add_boon(boon_id, tier)
 
 static func generate_technique_rewards(count: int, owned_ids: Array[String]) -> Array:
 	var rewards: Array = []
@@ -93,3 +131,19 @@ static func _owned_ids(player: Fighter) -> Array[String]:
 	if player != null and player.technique_engine != null:
 		return player.technique_engine.technique_ids()
 	return []
+
+static func _offer_school_pool() -> Array[String]:
+	var schools: Array[String] = []
+	for raw_boon in DataManager.get_all_boons().values():
+		var boon: Dictionary = raw_boon as Dictionary
+		var school: String = str(boon.get("school", ""))
+		if not school.is_empty() and not schools.has(school):
+			schools.append(school)
+	return schools
+
+static func _rng(rng: RandomNumberGenerator) -> RandomNumberGenerator:
+	if rng != null:
+		return rng
+	var generated: RandomNumberGenerator = RandomNumberGenerator.new()
+	generated.randomize()
+	return generated

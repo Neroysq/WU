@@ -105,6 +105,7 @@ func _build_controllers() -> Dictionary:
 		SceneContext.SCENE_MAIN_MENU: MenuScene.new(),
 		SceneContext.SCENE_MAP: MapScene.new(),
 		SceneContext.SCENE_REWARD: RewardScene.new(),
+		SceneContext.SCENE_BOON_OFFER: BoonOfferScene.new(),
 		SceneContext.SCENE_EVENT: EventScene.new(),
 		SceneContext.SCENE_SHOP: ShopScene.new(),
 		SceneContext.SCENE_REST: RestScene.new(),
@@ -155,6 +156,12 @@ func _on_combat_end(victory: bool) -> void:
 		if str(outcome.get("next", "")) == "victory":
 			_ctx.run_end_time = Time.get_ticks_msec() / 1000.0
 			_set_scene(SceneContext.SCENE_VICTORY)
+		elif str(outcome.get("next", "")) == "boon_offer":
+			var offer_payload: Dictionary = RunFlow.generate_boon_offer_payload(_ctx.run_state, node)
+			if (offer_payload.get("offers", []) as Array).is_empty():
+				_set_scene(SceneContext.SCENE_MAP)
+			else:
+				_set_scene(SceneContext.SCENE_BOON_OFFER, offer_payload)
 		else:
 			_set_scene(SceneContext.SCENE_REWARD)
 	else:

@@ -13,19 +13,19 @@ func run_all() -> Dictionary:
 
 	var duel: Variant = MapNodeScript.new(1, 1, MapNodeScript.NodeType.BATTLE, [])
 	var outcome: Dictionary = RunFlowScript.combat_victory_outcome(duel, 1)
-	if int(outcome.get("gold", -1)) == 15 and str(outcome.get("next", "")) == "reward":
+	if int(outcome.get("gold", -1)) == 15 and str(outcome.get("next", "")) == "boon_offer":
 		passed += 1
 	else:
 		failed += 1
-		failures.append("duel victory should award 15 gold and route to reward")
+		failures.append("duel victory should award 15 gold and route to boon offer")
 
 	var elite: Variant = MapNodeScript.new(2, 1, MapNodeScript.NodeType.ELITE, [])
 	outcome = RunFlowScript.combat_victory_outcome(elite, 2)
-	if int(outcome.get("gold", -1)) == 60 and str(outcome.get("next", "")) == "reward":
+	if int(outcome.get("gold", -1)) == 60 and str(outcome.get("next", "")) == "boon_offer":
 		passed += 1
 	else:
 		failed += 1
-		failures.append("elite victory should award 30 gold times multiplier")
+		failures.append("elite victory should award 30 gold times multiplier and route to boon offer")
 
 	var ambush: Variant = MapNodeScript.new(3, 1, MapNodeScript.NodeType.AMBUSH, [])
 	ambush.ambush_remaining = 2
@@ -38,11 +38,11 @@ func run_all() -> Dictionary:
 
 	ambush.ambush_remaining = 1
 	outcome = RunFlowScript.combat_victory_outcome(ambush, 1)
-	if int(outcome.get("gold", -1)) == 10 and str(outcome.get("next", "")) == "reward" and ambush.ambush_remaining == 0:
+	if int(outcome.get("gold", -1)) == 10 and str(outcome.get("next", "")) == "boon_offer" and ambush.ambush_remaining == 0:
 		passed += 1
 	else:
 		failed += 1
-		failures.append("final ambush win should route to reward")
+		failures.append("final ambush win should route to boon offer")
 
 	var boss: Variant = MapNodeScript.new(4, 6, MapNodeScript.NodeType.BOSS, [])
 	outcome = RunFlowScript.combat_victory_outcome(boss, 1)
@@ -69,11 +69,29 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("event travel should assign a persistent event_id")
 
-	var rewards: Array = RunFlowScript.generate_technique_rewards(3, [])
-	if rewards.size() == 3:
+	var run: Variant = RunState.create_procedural_run(123)
+	run.bind_boon_loadout(player.technique_engine, player)
+	var offer_payload: Dictionary = RunFlowScript.generate_boon_offer_payload(run, duel)
+	if str(offer_payload.get("scene", "")) == "boon_offer" and (offer_payload.get("offers", []) as Array).size() == 3:
 		passed += 1
 	else:
 		failed += 1
-		failures.append("technique reward generation should return requested count")
+		failures.append("boon offer payload generation should produce 3 offers")
+
+	var offers: Array = offer_payload.get("offers", []) as Array
+	var added: bool = not offers.is_empty() and RunFlowScript.apply_boon_offer_selection(run, offers[0] as Dictionary)
+	if added and not run.boon_loadout.serialize().is_empty():
+		passed += 1
+	else:
+		failed += 1
+		failures.append("selecting a boon offer should add it to the run loadout")
+
+	var master: Variant = MapNodeScript.new(7, 3, MapNodeScript.NodeType.MASTER, [])
+	decision = RunFlowScript.travel_decision(master, player, run)
+	if str(decision.get("scene", "")) == "boon_offer" and (decision.get("offers", []) as Array).size() == 3:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("master travel should produce a boon offer")
 
 	return {"passed": passed, "failed": failed, "failures": failures}

@@ -31,7 +31,7 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 		var chosen: MapNode = next_nodes[selection_idx]
 		ctx.run_state.advance_to(chosen.id)
 		selection_idx = 0
-		_apply_travel_decision(ctx, RunFlow.travel_decision(chosen, ctx.player))
+		_apply_travel_decision(ctx, RunFlow.travel_decision(chosen, ctx.player, ctx.run_state))
 
 func draw(ctx: Variant, canvas: CanvasItem) -> void:
 	UiDraw.background(canvas)
@@ -106,6 +106,8 @@ func _apply_travel_decision(ctx: Variant, decision: Dictionary) -> void:
 			ctx.goto(SceneContext.SCENE_REST)
 		"reward":
 			ctx.goto(SceneContext.SCENE_REWARD, {"rewards": decision.get("rewards", [])})
+		"boon_offer":
+			ctx.goto(SceneContext.SCENE_BOON_OFFER, decision)
 		_:
 			ctx.goto(SceneContext.SCENE_MAP)
 
