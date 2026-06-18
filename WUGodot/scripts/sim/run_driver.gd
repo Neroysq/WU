@@ -2,6 +2,7 @@ class_name RunDriver
 extends RefCounted
 
 const MAX_NODE_STEPS: int = 64
+const EncounterResolverScript = preload("res://scripts/encounter_resolver.gd")
 
 func run(seed: int, player_policy: PlayerPolicy = null, decision_policy: DecisionPolicy = null, build: Dictionary = {}) -> RunTranscript:
 	RngService.set_run_seed(seed)
@@ -16,7 +17,9 @@ func run(seed: int, player_policy: PlayerPolicy = null, decision_policy: Decisio
 	transcript.decision_policy = decision_policy.get_script().resource_path.get_file().get_basename()
 
 	var player: Fighter = EnemyFactory.create_player()
-	var run_state: RunState = RunState.create_procedural_run()
+	var run_state: RunState = build.get("run_state_override", null) as RunState
+	if run_state == null:
+		run_state = RunState.create_procedural_run()
 	run_state.bind_boon_loadout(player.technique_engine, player)
 	var sim: CombatSim = CombatSim.new()
 
@@ -37,7 +40,8 @@ func run(seed: int, player_policy: PlayerPolicy = null, decision_policy: Decisio
 		_snapshot_build(transcript, run_state, node)
 		if node_result == "defeat":
 			transcript.outcome = "defeat"
-			transcript.death = {"node_id": node.id, "tier": node.tier, "type": node.node_type}
+			if transcript.death.is_empty():
+				transcript.death = {"node_id": node.id, "tier": node.tier, "type": node.node_type}
 			break
 		if node_result == "victory":
 			transcript.outcome = "victory"
@@ -73,9 +77,12 @@ func _resolve_node(decision: Dictionary, node: MapNode, player: Fighter, run_sta
 
 func _resolve_combat_node(node: MapNode, player: Fighter, run_state: RunState, player_policy: PlayerPolicy, decision_policy: DecisionPolicy, sim: CombatSim, transcript: RunTranscript, gold_multiplier: int) -> String:
 	while true:
-		var combat_result: CombatResult = sim.simulate(player, node, player_policy, 60.0, "", transcript.seed)
+		var wave: int = EncounterResolverScript.wave_index_for_node(run_state, node)
+		var encounter: Dictionary = EncounterResolverScript.begin_encounter(run_state, node, wave)
+		var combat_result: CombatResult = sim.simulate(player, node, player_policy, 60.0, str(encounter.get("archetype", "")), transcript.seed, encounter)
 		transcript.combats.append(combat_result.to_dict())
 		if combat_result.winner != "player":
+			transcript.death = combat_result.to_dict()
 			return "defeat"
 		var outcome: Dictionary = RunFlow.combat_victory_outcome(node, gold_multiplier)
 		var gold_gained: int = int(outcome.get("gold", 0))

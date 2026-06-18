@@ -3,14 +3,19 @@ extends RefCounted
 
 const BoonLoadoutScript = preload("res://scripts/boons/boon_loadout.gd")
 const RngServiceScript = preload("res://scripts/sim/rng_service.gd")
+const EncounterResolverScript = preload("res://scripts/encounter_resolver.gd")
 
 var nodes: Array[MapNode] = []
+var chapter: int = 1
 var current_node_id: int = 0
 var max_tier: int = 0
 var legend_seen_this_run: bool = false
 var boon_loadout: Variant = BoonLoadoutScript.new()
 var favored_school: String = ""
 var insight: int = 0
+var normal_combats_started: int = 0
+var last_archetype_by_pool: Dictionary = {}
+var last_ambush_rank_by_node: Dictionary = {}
 
 static func create_simple_three_tier() -> RunState:
 	return create_procedural_run()
@@ -25,6 +30,7 @@ static func create_procedural_run(seed_value: int = -1) -> RunState:
 
 	var next_id: int = 0
 	var tier_nodes: Array = []
+	var curve: Dictionary = DataManager.get_difficulty_curve(run.chapter)
 
 	var start: MapNode = MapNode.new(next_id, 0, MapNode.NodeType.EVENT, [])
 	run.nodes.append(start)
@@ -48,6 +54,8 @@ static func create_procedural_run(seed_value: int = -1) -> RunState:
 			for idx in range(node_count):
 				var node_type: int = _pick_node_type(rng, tier, idx)
 				var node: MapNode = MapNode.new(next_id, tier, node_type, [])
+				if node.node_type == MapNode.NodeType.AMBUSH:
+					node.ambush_remaining = EncounterResolverScript.ambush_length(curve, tier)
 				run.nodes.append(node)
 				bucket.append(node)
 				next_id += 1
@@ -65,31 +73,46 @@ static func create_procedural_run(seed_value: int = -1) -> RunState:
 	return run
 
 static func _pick_node_type(rng: RandomNumberGenerator, tier: int, idx: int) -> int:
-	if tier == 4:
-		if idx == 0:
+	var curve: Dictionary = DataManager.get_difficulty_curve(1)
+	var weights_by_tier: Dictionary = curve.get("node_type_weights_by_tier", {}) as Dictionary
+	var weights: Dictionary = weights_by_tier.get(str(tier), {}) as Dictionary
+	if weights.is_empty():
+		return MapNode.NodeType.BATTLE
+
+	var total: int = 0
+	for weight in weights.values():
+		total += maxi(0, int(weight))
+	if total <= 0:
+		return MapNode.NodeType.BATTLE
+
+	var roll: int = rng.randi_range(1, total)
+	var cursor: int = 0
+	for key in weights.keys():
+		cursor += maxi(0, int(weights[key]))
+		if roll <= cursor:
+			return _node_type_from_key(str(key))
+	return MapNode.NodeType.BATTLE
+
+static func _node_type_from_key(key: String) -> int:
+	match key.to_upper():
+		"BATTLE", "DUEL":
+			return MapNode.NodeType.BATTLE
+		"ELITE":
 			return MapNode.NodeType.ELITE
-		if idx == 1:
+		"AMBUSH":
+			return MapNode.NodeType.AMBUSH
+		"MASTER":
+			return MapNode.NodeType.MASTER
+		"EVENT":
+			return MapNode.NodeType.EVENT
+		"SHOP":
 			return MapNode.NodeType.SHOP
-		var late_pool: Array[int] = [
-			MapNode.NodeType.BATTLE,
-			MapNode.NodeType.EVENT,
-			MapNode.NodeType.SHOP,
-		]
-		return int(late_pool[rng.randi_range(0, late_pool.size() - 1)])
-
-	if idx == 0:
-		return MapNode.NodeType.BATTLE
-
-	var roll: float = rng.randf()
-	if roll < 0.4:
-		return MapNode.NodeType.BATTLE
-	if roll < 0.6:
-		return MapNode.NodeType.EVENT
-	if roll < 0.75:
-		return MapNode.NodeType.AMBUSH
-	if roll < 0.85:
-		return MapNode.NodeType.SHOP
-	return MapNode.NodeType.ELITE
+		"REST":
+			return MapNode.NodeType.REST
+		"BOSS":
+			return MapNode.NodeType.BOSS
+		_:
+			return MapNode.NodeType.BATTLE
 
 static func _connect_tiers(prev_nodes: Array, next_nodes: Array, rng: RandomNumberGenerator) -> void:
 	var incoming: Dictionary = {}
@@ -204,10 +227,18 @@ func serialize() -> Dictionary:
 		"boon_loadout": boon_loadout.serialize(),
 		"favored_school": favored_school,
 		"insight": insight,
+		"chapter": chapter,
+		"normal_combats_started": normal_combats_started,
+		"last_archetype_by_pool": last_archetype_by_pool.duplicate(true),
+		"last_ambush_rank_by_node": last_ambush_rank_by_node.duplicate(true),
 	}
 
 func restore(data: Dictionary, engine: Variant = null, fighter: Variant = null) -> void:
 	favored_school = str(data.get("favored_school", ""))
 	insight = int(data.get("insight", 0))
+	chapter = int(data.get("chapter", 1))
+	normal_combats_started = int(data.get("normal_combats_started", 0))
+	last_archetype_by_pool = (data.get("last_archetype_by_pool", {}) as Dictionary).duplicate(true)
+	last_ambush_rank_by_node = (data.get("last_ambush_rank_by_node", {}) as Dictionary).duplicate(true)
 	boon_loadout.bind(engine, fighter)
 	boon_loadout.restore(data.get("boon_loadout", {}) as Dictionary)

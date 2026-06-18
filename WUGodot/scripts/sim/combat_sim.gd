@@ -3,7 +3,7 @@ extends RefCounted
 
 const DT: float = 1.0 / 60.0
 
-func simulate(player: Fighter, node: MapNode, policy: PlayerPolicy, max_time: float = 60.0, forced_archetype: String = "", seed: int = -1) -> CombatResult:
+func simulate(player: Fighter, node: MapNode, policy: PlayerPolicy, max_time: float = 60.0, forced_archetype: String = "", seed: int = -1, encounter: Dictionary = {}) -> CombatResult:
 	if player == null:
 		player = EnemyFactory.create_player()
 	if policy == null:
@@ -15,6 +15,10 @@ func simulate(player: Fighter, node: MapNode, policy: PlayerPolicy, max_time: fl
 	var result: CombatResult = CombatResult.new()
 	result.seed = seed
 	result.enemy_archetype = enemy.archetype_id
+	result.node_id = int(encounter.get("node_id", node.id if node != null else -1))
+	result.normal_combat_ordinal = int(encounter.get("normal_combat_ordinal", -1))
+	result.pool_class = str(encounter.get("pool_class", ""))
+	result.ambush_wave = int(encounter.get("ambush_wave", 0))
 	result.node_type = node.node_type if node != null else -1
 	result.tier = node.tier if node != null else 0
 	result.player_hp_before = player.health_current
@@ -56,4 +60,3 @@ func simulate(player: Fighter, node: MapNode, policy: PlayerPolicy, max_time: fl
 	result.damage_dealt = maxf(0.0, result.enemy_hp_before - result.enemy_hp_after)
 	result.damage_taken = maxf(0.0, result.player_hp_before - result.player_hp_after)
 	return result
-

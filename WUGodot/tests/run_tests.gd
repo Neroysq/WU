@@ -22,6 +22,8 @@ const _TEST_MODULES: Array[String] = [
 	"res://tests/test_decision_policy.gd",
 	"res://tests/test_combat_sim.gd",
 	"res://tests/test_run_driver.gd",
+	"res://tests/test_encounter_resolver.gd",
+	"res://tests/test_difficulty_runstate.gd",
 	"res://tests/test_jump_hooks.gd",
 	"res://tests/test_venom_effect.gd",
 	"res://tests/test_jolt_effect.gd",

@@ -9,6 +9,7 @@ const DEV_SHOT_STATE_PREFIX: String = "--shot-state="
 const DEV_CAPTURE_SPEC_PREFIX: String = "--capture-spec="
 const DEV_SHOT_DEFAULT_DIR: String = "user://shot-combat"
 const DEV_CAPTURE_DEFAULT_DIR: String = "user://capture"
+const EncounterResolverScript = preload("res://scripts/encounter_resolver.gd")
 
 const _ACTION_CAPTURE := {
 	"ATTACKING_LIGHT": {"prep": "attack_light_full", "frames": 32, "loop": false},
@@ -186,7 +187,9 @@ func _setup_combat_for_node(node: MapNode) -> void:
 	if _ctx.run_state != null and not _ctx.run_state.legend_seen_this_run:
 		show_controls_legend = true
 		_ctx.run_state.legend_seen_this_run = true
-	_combat_scene.setup_combat(_ctx.player, node, show_controls_legend)
+	var wave: int = EncounterResolverScript.wave_index_for_node(_ctx.run_state, node)
+	var encounter: Dictionary = EncounterResolverScript.begin_encounter(_ctx.run_state, node, wave)
+	_combat_scene.setup_combat(_ctx.player, node, show_controls_legend, str(encounter.get("archetype", "")))
 	_combat_scene.on_enter()
 	_current_scene = SceneContext.SCENE_COMBAT
 	_ctx.current_scene = SceneContext.SCENE_COMBAT

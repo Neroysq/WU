@@ -46,13 +46,25 @@ func run_all() -> Dictionary:
 		failures.append("ProcRecorder should capture boon procs and status applications during sim frames")
 
 	RngService.set_run_seed(32)
-	var result: CombatResult = CombatSim.new().simulate(EnemyFactory.create_player(), node, HeuristicPlayer.new(0.8), 3.0, "bandit_swordsman", 32)
+	var encounter: Dictionary = {
+		"node_id": node.id,
+		"normal_combat_ordinal": 0,
+		"pool_class": "weak",
+		"ambush_wave": 0,
+	}
+	var result: CombatResult = CombatSim.new().simulate(EnemyFactory.create_player(), node, HeuristicPlayer.new(0.8), 3.0, "bandit_swordsman", 32, encounter)
 	if not result.winner.is_empty() and result.frames > 0:
 		passed += 1
 	else:
 		failed += 1
 		failures.append("CombatSim should return a terminal result or timeout")
 
+	var result_dict: Dictionary = result.to_dict()
+	if int(result_dict.get("node_id", -1)) == node.id and int(result_dict.get("normal_combat_ordinal", -1)) == 0 and str(result_dict.get("pool_class", "")) == "weak" and int(result_dict.get("ambush_wave", -1)) == 0:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("CombatSim should copy encounter metadata into CombatResult")
+
 	RngService.clear_run_seed()
 	return {"passed": passed, "failed": failed, "failures": failures}
-

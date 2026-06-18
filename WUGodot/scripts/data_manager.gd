@@ -13,6 +13,7 @@ static var _schools: Dictionary = {}
 static var _boons: Dictionary = {}
 static var _events: Array[Dictionary] = []
 static var _attacks: Dictionary = {}
+static var _difficulty_curves: Dictionary = {}
 
 # Required numeric fields: a typo (for example "range_unit") must fail loudly,
 # not silently fall back to an AttackDefinition default. Flags stay optional.
@@ -32,6 +33,7 @@ static func initialize() -> void:
 	_load_techniques()
 	_load_schools()
 	_load_boons()
+	_load_difficulty_curves()
 	_load_events()
 	_load_rewards()
 	_load_visual_profiles()
@@ -49,6 +51,7 @@ static func reload_data() -> void:
 	_boons.clear()
 	_events.clear()
 	_attacks.clear()
+	_difficulty_curves.clear()
 	initialize()
 
 static func get_character(name: String) -> Dictionary:
@@ -115,6 +118,13 @@ static func get_enemy_archetypes_for_difficulty(difficulty: String) -> Array[Str
 		if str(data.get("difficulty", "")) == difficulty:
 			result.append(str(key))
 	return result
+
+static func get_difficulty_curve(chapter: int = 1) -> Dictionary:
+	if _difficulty_curves.is_empty():
+		_load_difficulty_curves()
+	if _difficulty_curves.has(chapter):
+		return (_difficulty_curves[chapter] as Dictionary).duplicate(true)
+	return _default_difficulty_curve(chapter)
 
 static func get_events() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
@@ -244,6 +254,20 @@ static func _load_boons() -> void:
 		if boon_id.is_empty():
 			continue
 		_boons[boon_id] = (entry as Dictionary).duplicate(true)
+
+static func _load_difficulty_curves() -> void:
+	_difficulty_curves.clear()
+	var root: Dictionary = _load_json_file("res://data/Difficulty/DifficultyCurve.json")
+	var raw_chapters: Array = []
+	if typeof(root.get("chapters", [])) == TYPE_ARRAY:
+		raw_chapters = root.get("chapters", []) as Array
+	for entry in raw_chapters:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var chapter: int = int((entry as Dictionary).get("chapter", 1))
+		_difficulty_curves[chapter] = _normalize_difficulty_curve(entry as Dictionary, chapter)
+	if _difficulty_curves.is_empty():
+		_difficulty_curves[1] = _default_difficulty_curve(1)
 
 static func _load_events() -> void:
 	var dir: DirAccess = DirAccess.open("res://data/Events")
@@ -490,6 +514,41 @@ static func _default_enemy_data() -> Dictionary:
 		"colorAccent": Color8(210, 60, 60),
 		"halfWidth": 22.0,
 		"height": 88.0,
+	}
+
+static func _normalize_difficulty_curve(raw: Dictionary, chapter: int) -> Dictionary:
+	var curve: Dictionary = _default_difficulty_curve(chapter)
+	for key in raw.keys():
+		curve[key] = raw[key]
+	curve["chapter"] = chapter
+	return curve
+
+static func _default_difficulty_curve(chapter: int = 1) -> Dictionary:
+	return {
+		"chapter": chapter,
+		"weak_pool": ["bandit_swordsman", "bandit_spearman"],
+		"strong_pool": ["wandering_ronin", "sect_disciple"],
+		"elite_pool": ["sect_disciple", "masked_assassin"],
+		"boss": "iron_bear",
+		"weak_count": 1,
+		"no_immediate_repeat": true,
+		"archetype_rank": {
+			"bandit_spearman": 1,
+			"bandit_swordsman": 1,
+			"wandering_ronin": 2,
+			"sect_disciple": 3,
+			"masked_assassin": 4,
+			"iron_bear": 9,
+		},
+		"ambush": {
+			"length_by_tier": {"1": 3, "4": 4},
+			"escalate": true,
+		},
+		"node_type_weights_by_tier": {
+			"1": {"BATTLE": 100},
+			"2": {"BATTLE": 70, "ELITE": 15, "AMBUSH": 15, "SHOP": 0},
+			"4": {"BATTLE": 45, "ELITE": 30, "AMBUSH": 25},
+		},
 	}
 
 static func _default_game_settings() -> Dictionary:

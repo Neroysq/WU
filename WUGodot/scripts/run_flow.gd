@@ -3,6 +3,7 @@ extends RefCounted
 
 const BoonOfferScript = preload("res://scripts/boons/boon_offer.gd")
 const RngServiceScript = preload("res://scripts/sim/rng_service.gd")
+const EncounterResolverScript = preload("res://scripts/encounter_resolver.gd")
 
 static func combat_victory_outcome(node: MapNode, gold_multiplier: int) -> Dictionary:
 	var base_gold: int = 15
@@ -34,7 +35,8 @@ static func travel_decision(node: MapNode, player: Fighter, run_state: Variant =
 			return {"scene": "combat", "node": node, "combat_gold_multiplier": 1}
 		MapNode.NodeType.AMBUSH:
 			if node.ambush_remaining <= 0:
-				node.ambush_remaining = 3
+				var chapter: int = int(run_state.chapter) if run_state != null else 1
+				node.ambush_remaining = EncounterResolverScript.ambush_length(DataManager.get_difficulty_curve(chapter), node.tier)
 			return {"scene": "combat", "node": node, "combat_gold_multiplier": 1}
 		MapNode.NodeType.EVENT:
 			var event_data: Dictionary = {}

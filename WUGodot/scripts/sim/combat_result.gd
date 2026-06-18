@@ -3,6 +3,10 @@ extends RefCounted
 
 var seed: int = -1
 var enemy_archetype: String = ""
+var node_id: int = -1
+var normal_combat_ordinal: int = -1
+var pool_class: String = ""
+var ambush_wave: int = 0
 var node_type: int = -1
 var tier: int = 0
 var winner: String = ""
@@ -24,6 +28,10 @@ func to_dict() -> Dictionary:
 	return {
 		"seed": seed,
 		"enemy_archetype": enemy_archetype,
+		"node_id": node_id,
+		"normal_combat_ordinal": normal_combat_ordinal,
+		"pool_class": pool_class,
+		"ambush_wave": ambush_wave,
 		"node_type": node_type,
 		"tier": tier,
 		"winner": winner,
@@ -41,4 +49,3 @@ func to_dict() -> Dictionary:
 		"status_applications": status_applications.duplicate(true),
 		"timed_out": timed_out,
 	}
-
