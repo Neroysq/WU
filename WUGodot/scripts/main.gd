@@ -54,6 +54,7 @@ func start_new_run() -> void:
 	_ctx = SceneContext.new()
 	_ctx.player = EnemyFactory.create_player()
 	_ctx.run_state = RunState.create_procedural_run()
+	_ctx.run_state.bind_boon_loadout(_ctx.player.technique_engine, _ctx.player)
 	_ctx.run_start_time = Time.get_ticks_msec() / 1000.0
 	_ctx.run_end_time = 0.0
 	_ctx.run_gold_earned = 0
@@ -183,6 +184,7 @@ func _run_dev_combat_shots() -> void:
 	_ctx = SceneContext.new()
 	_ctx.player = EnemyFactory.create_player()
 	_ctx.run_state = RunState.create_procedural_run()
+	_ctx.run_state.bind_boon_loadout(_ctx.player.technique_engine, _ctx.player)
 	_ctx.run_state.legend_seen_this_run = true
 	var node_type: int = MapNode.NodeType.BOSS if _dev_shot_archetype == "iron_bear" else MapNode.NodeType.BATTLE
 	var node: MapNode = MapNode.new(9001, 1, node_type, [])
@@ -247,6 +249,7 @@ func _run_dev_action_shots() -> void:
 	_ctx = SceneContext.new()
 	_ctx.player = EnemyFactory.create_player()
 	_ctx.run_state = RunState.create_procedural_run()
+	_ctx.run_state.bind_boon_loadout(_ctx.player.technique_engine, _ctx.player)
 	_ctx.run_state.legend_seen_this_run = true
 	var node: MapNode = MapNode.new(9001, 1, MapNode.NodeType.BATTLE, [])
 	_combat_scene.setup_combat(_ctx.player, node, false, "")

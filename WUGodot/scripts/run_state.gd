@@ -1,10 +1,13 @@
 class_name RunState
 extends RefCounted
 
+const BoonLoadoutScript = preload("res://scripts/boons/boon_loadout.gd")
+
 var nodes: Array[MapNode] = []
 var current_node_id: int = 0
 var max_tier: int = 0
 var legend_seen_this_run: bool = false
+var boon_loadout: Variant = BoonLoadoutScript.new()
 
 static func create_simple_three_tier() -> RunState:
 	return create_procedural_run()
@@ -159,3 +162,15 @@ func index_in_tier(target: MapNode) -> int:
 			return index
 		index += 1
 	return 0
+
+func bind_boon_loadout(engine: Variant, fighter: Variant) -> void:
+	boon_loadout.bind(engine, fighter)
+
+func serialize() -> Dictionary:
+	return {
+		"boon_loadout": boon_loadout.serialize(),
+	}
+
+func restore(data: Dictionary, engine: Variant = null, fighter: Variant = null) -> void:
+	boon_loadout.bind(engine, fighter)
+	boon_loadout.restore(data.get("boon_loadout", {}) as Dictionary)

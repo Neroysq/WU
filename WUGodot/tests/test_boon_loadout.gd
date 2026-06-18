@@ -3,6 +3,7 @@ extends RefCounted
 const BoonLoadoutScript = preload("res://scripts/boons/boon_loadout.gd")
 const FighterScript = preload("res://scripts/fighter.gd")
 const Registry = preload("res://scripts/techniques/technique_registry.gd")
+const RunStateScript = preload("res://scripts/run_state.gd")
 const TechniqueEngineScript = preload("res://scripts/technique_engine.gd")
 
 func _seed_test_boons() -> void:
@@ -129,5 +130,31 @@ func run_all() -> Dictionary:
 	else:
 		failed += 1
 		failures.append("active_schools and duo eligibility should reflect held boons")
+
+	var run: Variant = RunStateScript.create_procedural_run(123)
+	var run_engine: Variant = TechniqueEngineScript.new()
+	var run_fighter: Variant = FighterScript.new()
+	run_fighter.technique_engine = run_engine
+	run.bind_boon_loadout(run_engine, run_fighter)
+	if run.boon_loadout.slots.is_empty() and run.boon_loadout.passives.is_empty():
+		passed += 1
+	else:
+		failed += 1
+		failures.append("fresh run state should expose an empty BoonLoadout")
+
+	run.boon_loadout.add_boon("test_light_alt", "rare")
+	var serialized: Dictionary = run.serialize()
+	var serialized_text: String = str(serialized)
+	var restored: Variant = RunStateScript.new()
+	var restored_engine: Variant = TechniqueEngineScript.new()
+	var restored_fighter: Variant = FighterScript.new()
+	restored_fighter.technique_engine = restored_engine
+	restored.restore(serialized, restored_engine, restored_fighter)
+	if serialized_text.find("#") == -1 and restored_engine.has_effect("test_light_alt#0") and restored_engine.has_effect("test_light_alt#1") \
+			and restored_engine.technique_ids().is_empty() and str(((restored.boon_loadout.slots["light"] as Dictionary).get("tier", ""))) == "rare":
+		passed += 1
+	else:
+		failed += 1
+		failures.append("run-state boon serialization should store boon ids/tiers and restore effects without fake technique ids")
 
 	return {"passed": passed, "failed": failed, "failures": failures}
