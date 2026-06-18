@@ -35,7 +35,7 @@
 
 **Files:** Create `WUGodot/data/Difficulty/DifficultyCurve.json`; Modify `data_manager.gd`; Test `test_encounter_resolver.gd`
 
-- [ ] **Step 1: Failing test** — `DataManager.get_difficulty_curve(1)` returns a dict with `weak_pool`, `strong_pool`, `elite_pool` (containing `masked_assassin`, NOT in `strong_pool`), `boss == "iron_bear"`, `weak_count == 1`.
+- [ ] **Step 1: Failing test** — `DataManager.get_difficulty_curve(1)` returns a dict with `weak_pool`, `strong_pool`, `elite_pool` (containing `masked_assassin`, NOT in `strong_pool`), `boss == "iron_bear"`, `weak_count == 1`, and an `archetype_rank` map; **and it works COLD** — calling it (or `RunState.create_procedural_run`) without `DataManager.initialize()` (as `test_map_generator.gd` does) returns a usable curve, not `{}` (reviewer P2).
 - [ ] **Step 2:** Register test in `run_tests.gd`; run → FAIL.
 - [ ] **Step 3: Implement** — write `DifficultyCurve.json` (dict root, mirror existing loaders):
 ```json
@@ -46,38 +46,40 @@
   "boss": "iron_bear",
   "weak_count": 1,
   "no_immediate_repeat": true,
+  "archetype_rank": {"bandit_spearman":1,"bandit_swordsman":1,"wandering_ronin":2,"sect_disciple":3,"masked_assassin":4,"iron_bear":9},
   "ambush": { "length_by_tier": {"1":3,"4":4}, "escalate": true },
   "node_type_weights_by_tier": {
     "1": {"BATTLE":100},
     "2": {"BATTLE":70,"ELITE":15,"AMBUSH":15,"SHOP":0},
     "4": {"BATTLE":45,"ELITE":30,"AMBUSH":25} } } ] }
 ```
-In `data_manager.gd`, load it in `initialize()` (read `root.get("chapters", [])`), add `get_difficulty_curve(chapter:int) -> Dictionary`. Add to `reload_data()`.
+In `data_manager.gd`, add `get_difficulty_curve(chapter:int) -> Dictionary` that **lazy-loads** the file on first call (like the attacks lazy-load) and returns a built-in **default curve** if the file is missing/cold — so `RunState`/`_pick_node_type` never get `{}` in headless tests. Also load in `initialize()`/`reload_data()` for the live path.
 - [ ] **Step 4:** Run → PASS.
 - [ ] **Step 5: Commit** — `data(difficulty): chapter-1 difficulty curve + loader`.
 
-### Task 2: `EncounterResolver.resolve`
+### Task 2: `EncounterResolver.begin_encounter` (single select + mutate)
 
 **Files:** Create `WUGodot/scripts/encounter_resolver.gd`; Test `test_encounter_resolver.gd`
 
-- [ ] **Step 1: Failing tests** — `EncounterResolver.resolve(run_state, node, wave)` returns `{archetype, pool_class}`: for a BATTLE node with `run_state.normal_combats_started == 0` and `weak_count == 1` → `pool_class == "weak"` and archetype ∈ weak_pool; with `normal_combats_started == 1` → `"strong"` ∈ strong_pool; ELITE node → `"elite"` ∈ elite_pool (never `masked_assassin` in a weak/strong result); BOSS → `{"iron_bear","boss"}`. Anti-repeat: two consecutive weak resolves don't return the same archetype. Determinism: seeded `RngService` ⇒ reproducible.
+**Reviewer P1:** make selection **and** the state mutation (counter + last_archetype) happen in **one shared call** so live and harness can't diverge. The call sites never mutate run_state themselves.
+
+- [ ] **Step 1: Failing tests** — `EncounterResolver.begin_encounter(run_state, node, wave)` returns `{archetype, pool_class, normal_combat_ordinal, ambush_wave}` AND mutates run_state: for a BATTLE node with `normal_combats_started==0`, `weak_count==1` → `pool_class=="weak"`, archetype ∈ weak_pool, `normal_combat_ordinal==0`, and **after the call** `normal_combats_started==1`; a second call → `"strong"` ∈ strong_pool, ordinal 1; an ELITE/BOSS call → `"elite"`/`"boss"` and **does NOT** advance `normal_combats_started`; **anti-repeat** — two consecutive same-pool calls don't return the same archetype (the helper alone satisfies this, no manual test mutation); seeded `RngService` ⇒ reproducible.
 - [ ] **Step 2:** Run → FAIL.
-- [ ] **Step 3: Implement** — `resolve(run_state, node, wave)`:
+- [ ] **Step 3: Implement** — a pure `_select(c, run_state, node, wave) -> {archetype, pool_class}` (boss/elite/weak-vs-strong via `run_state.normal_combats_started < weak_count`, ambush escalation by rank — Task 1), plus the public mutator:
 ```gdscript
-static func resolve(run_state, node, wave: int = 0) -> Dictionary:
-    var c: Dictionary = DataManager.get_difficulty_curve(run_state.chapter)
-    var rng = RngService.stream("enemy_pick")
-    match node.node_type:
-        MapNode.NodeType.BOSS: return {"archetype": c["boss"], "pool_class": "boss"}
-        MapNode.NodeType.ELITE: return {"archetype": _pick(c["elite_pool"], rng, run_state), "pool_class": "elite"}
-        _:
-            var weak: bool = run_state.normal_combats_started < int(c["weak_count"])
-            var pool: Array = c["weak_pool"] if weak else c["strong_pool"]
-            return {"archetype": _pick(pool, rng, run_state, c.get("no_immediate_repeat", true)), "pool_class": "weak" if weak else "strong"}
+static func begin_encounter(run_state, node, wave: int = 0) -> Dictionary:
+    var c := DataManager.get_difficulty_curve(run_state.chapter)
+    var sel := _select(c, run_state, node, wave)          # reads pre-increment counter
+    var ordinal := run_state.normal_combats_started
+    if sel.pool_class in ["weak", "strong"]:
+        run_state.normal_combats_started += 1             # normal-only, once
+    run_state.last_archetype = sel.archetype              # anti-repeat memory, once
+    return {"archetype": sel.archetype, "pool_class": sel.pool_class,
+            "normal_combat_ordinal": ordinal, "ambush_wave": wave}
 ```
-`_pick` honors anti-repeat (avoid `run_state.last_archetype`); wave can bias escalation within ambush (later waves prefer the tougher end of the pool). **Selection uses the pre-increment counter; the increment happens at the call site (Task 4).** Add `chapter` to `RunState` (default 1).
+`_select` honors anti-repeat (avoid `run_state.last_archetype`). Add `chapter:int=1`, `normal_combats_started:int=0`, `last_archetype:String` to `RunState`.
 - [ ] **Step 4:** Run → PASS.
-- [ ] **Step 5: Commit** — `feat(difficulty): EncounterResolver (weak/strong/elite/boss)`.
+- [ ] **Step 5: Commit** — `feat(difficulty): EncounterResolver.begin_encounter (select+mutate once)`.
 
 ### Task 3: Wire resolver into live + harness via `forced_archetype`
 
@@ -85,7 +87,7 @@ static func resolve(run_state, node, wave: int = 0) -> Dictionary:
 
 - [ ] **Step 1: Failing test** — driving a combat node through `run_driver` produces an enemy whose archetype equals `EncounterResolver.resolve(...)`'s for that node/ordinal (assert the resolved archetype reaches the fight). `enemy_factory.create_enemy_for_node` is no longer the decision-maker for resolved paths.
 - [ ] **Step 2:** Run → FAIL.
-- [ ] **Step 3: Implement** — live: in `main._setup_combat_for_node` (~`main.gd:184`, has `run_state`), call `EncounterResolver.resolve(run_state, node, wave)` and pass `result.archetype` as `forced_archetype` into `combat_scene.setup_combat(...)`. Harness: in `run_driver._resolve_combat_node`, resolve before each `sim.simulate(...)` and pass the archetype as the `forced_archetype` arg (already a param). Keep `enemy_factory._pick_archetype_for_node` as a seeded fallback only.
+- [ ] **Step 3: Implement** — both sites call **`begin_encounter`** (which mutates run_state once) and pass `result.archetype` as `forced_archetype`; **neither site touches the counter/last_archetype itself** (reviewer P1). Live: `main._setup_combat_for_node` (~`main.gd:184`) → `begin_encounter(run_state, node, wave)` → `combat_scene.setup_combat(..., forced_archetype=result.archetype)`. Harness: `run_driver._resolve_combat_node` → `begin_encounter(...)` before each `sim.simulate(...)`. **Per ambush wave:** the ambush re-combat loop (both sites) calls `begin_encounter` again each wave with the wave index (`ambush_length − ambush_remaining`). Keep `enemy_factory._pick_archetype_for_node` as a seeded fallback only. Stash the returned `{pool_class, normal_combat_ordinal, ambush_wave}` for telemetry (Task 6).
 - [ ] **Step 4:** Run → PASS (existing combat/scene tests green).
 - [ ] **Step 5: Commit** — `feat(difficulty): resolve archetype at live+harness call sites`.
 
@@ -93,15 +95,15 @@ static func resolve(run_state, node, wave: int = 0) -> Dictionary:
 
 # Phase 2 — Counter + node mix
 
-### Task 4: `normal_combats_started` gate counter
+### Task 4: end-to-end counter semantics through the driver
 
-**Files:** Modify `run_state.gd`, `run_driver.gd`, `main.gd`; Test `test_difficulty_runstate.gd`
+**Files:** Test `test_difficulty_runstate.gd` (the `RunState` fields + mutation live in Task 2's `begin_encounter`)
 
-- [ ] **Step 1: Failing tests** — with `weak_count==1`: the **first** normal fight resolves `weak`, the **second** normal fight resolves `strong`; an **elite** or **boss** fight does **not** advance the counter (a normal fight after an elite still uses the right ordinal); each **ambush wave** advances it (3-wave ambush consumes 3 ordinals).
-- [ ] **Step 2:** Run → FAIL.
-- [ ] **Step 3: Implement** — add `normal_combats_started: int = 0` to `RunState` + `last_archetype: String`. At each call site, the order is: **resolve (reads pre-increment value) → if `pool_class in ["weak","strong"]`, `run_state.normal_combats_started += 1`** and set `last_archetype`. Increment per ambush **wave** (the `run_driver` ambush loop and the live ambush re-combat path), not on node-clear. Elite/boss never increment.
+- [ ] **Step 1: Failing tests (integration)** — drive a full run via `run_driver` and assert end-to-end (not just the unit helper): across a seeded run, the **first** normal fight is `weak`, the **second** `strong`; an **elite/boss** between two normals does **not** shift the normal ordinal; a **3-wave ambush** advances `normal_combats_started` by 3 and yields `ambush_wave` 0,1,2. (Catches a call site that forgot to route through `begin_encounter` or double-counts.)
+- [ ] **Step 2:** Run → FAIL (until Task 3's wiring routes every fight, incl. ambush waves, through `begin_encounter`).
+- [ ] **Step 3: Fix wiring** as needed so all combats (live + harness, incl. each ambush wave) go through `begin_encounter` exactly once.
 - [ ] **Step 4:** Run → PASS.
-- [ ] **Step 5: Commit** — `feat(difficulty): normal-combat gate counter (pre-increment, normal-only)`.
+- [ ] **Step 5: Commit** — `test(difficulty): end-to-end counter semantics`.
 
 ### Task 5: Node-type mix + ambush by tier
 
@@ -135,15 +137,15 @@ static func resolve(run_state, node, wave: int = 0) -> Dictionary:
 
 **Files:** `test_encounter_resolver.gd`, `test_difficulty_runstate.gd`
 
-- [ ] **Step 1: Tests** — over many seeded resolves: (a) **no weak-pool archetype** appears at `normal_combat_ordinal >= weak_count`; (b) `masked_assassin` appears **only** from elite resolves; (c) **enemy stats are unchanged** vs `data/Enemies/*.json` (no inflation — assert a resolved enemy's `health_max` equals its archetype data); (d) ambush waves escalate (later wave's pool index ≥ earlier).
+- [ ] **Step 1: Tests** — over many seeded resolves: (a) **no weak-pool archetype** appears at `normal_combat_ordinal >= weak_count`; (b) `masked_assassin` appears **only** from elite resolves; (c) **enemy stats are unchanged** vs `data/Enemies/*.json` (no inflation — assert a resolved enemy's `health_max` equals its archetype data); (d) ambush waves escalate by **`archetype_rank`** (a later wave's chosen archetype has rank ≥ the earlier wave's — a deterministic strength order, not a shaky array index; reviewer P2).
 - [ ] **Step 2–4:** Run → PASS; commit `test(difficulty): structure gates`.
 
 ### Task 8: Harness acceptance check
 
 **Files:** Create `WUGodot/tools/check_difficulty_curve.py`; uses `run.sh --playtest-batch`
 
-- [ ] **Step 1:** `check_difficulty_curve.py <batch_summary.json>` asserts the §5 thresholds: mid-depth win rate non-rising within ±5 pp; **boss win rate ≥10 pp below the pre-boss rate (or highest death share)**; **tier-1 deaths < 20%** of all deaths. Exit non-zero on violation.
-- [ ] **Step 2: Run** — `./run.sh --playtest-batch --seeds 1..50 --player heuristic --decision greedy --out /tmp/curve.json` then `python3 tools/check_difficulty_curve.py /tmp/curve.json`.
+- [ ] **Step 1:** `check_difficulty_curve.py <batch_summary.json>` **computes its own metrics from `summary.transcripts[].combats[]`** (which carry `normal_combat_ordinal`/`tier`/`pool_class`/`node_id`/`winner` after Task 6 — today's `BatchRunner` only emits aggregates, so derive per-ordinal/tier/pool win rates and death-share-by-node in the script; alternatively extend `batch_runner.gd` to emit `win_rate_by_normal_ordinal`/`by_tier`/`by_pool_class`). Assert: **win-rate by `normal_combat_ordinal` is non-rising within ±5 pp** across mid-depth. **Boss metric (reviewer P1 — define carefully):** boss win rate conditional on *reaching* the boss is **biased upward** (only strong runs get there), so the **primary, selection-robust acceptance is death-share**: the boss node has the **highest death share of any node reached**; *report* the conditional boss win rate too (with the bias caveat) and require it ≥10 pp below the pre-boss pool win rate. **`tier`-1 deaths < 20%** of all deaths. Exit non-zero on violation.
+- [ ] **Step 2: Run** — `./run.sh --playtest-batch --seeds 1..50 --player heuristic --decision greedy --out /tmp/curve.json` then `python3 WUGodot/tools/check_difficulty_curve.py /tmp/curve.json` (reviewer P3 — path under `WUGodot/tools/`).
 - [ ] **Step 3: Commit** — `feat(difficulty): harness acceptance check`.
 
 ### Task 9: Tune to the curve
@@ -155,7 +157,7 @@ static func resolve(run_state, node, wave: int = 0) -> Dictionary:
 
 ## Self-Review
 
-- **Spec coverage:** weak/strong/elite/boss pools + gate (Task 1/2), resolver boundary via forced_archetype live+harness (Task 3), normal-only pre-increment counter (Task 4), per-tier node mix + ambush length (Task 5), telemetry node/ordinal/pool/wave (Task 6), structure gates incl. no-inflation + elite-only assassin (Task 7), harness acceptance thresholds (Task 8), harness-gated escalation not silent inflation (Task 9).
-- **No placeholders:** resolver + counter + data shown; node-type weights are data (tuned in Task 9), gated by tests.
-- **Type consistency:** `EncounterResolver.resolve(run_state, node, wave) -> {archetype, pool_class}`, `run_state.normal_combats_started` (pre-increment, normal-only), `sim.simulate(..., encounter, seed)`, CombatResult `node_id/normal_combat_ordinal/pool_class/ambush_wave`.
-- **Load-bearing:** Task 3 must route BOTH live and harness through the resolver (no divergence); Task 4 increment is normal-only and per-ambush-wave (the off-by-one/scope fix); Task 7(c) guards against accidental stat inflation.
+- **Spec coverage:** pools+gate+`archetype_rank`+cold-safe loader (Task 1), `begin_encounter` single select+mutate (Task 2), wired at both call sites via forced_archetype incl. per-ambush-wave (Task 3), end-to-end counter semantics (Task 4), per-tier node mix + ambush length (Task 5), telemetry node/ordinal/pool/wave (Task 6), structure gates incl. no-inflation + elite-only assassin + rank-escalation (Task 7), harness acceptance from transcripts with selection-robust boss metric (Task 8), harness-gated escalation not silent inflation (Task 9).
+- **No placeholders:** `begin_encounter` + data shown; node-type weights are data (tuned in Task 9), gated by tests.
+- **Type consistency:** `EncounterResolver.begin_encounter(run_state, node, wave) -> {archetype, pool_class, normal_combat_ordinal, ambush_wave}` (selects on pre-increment, mutates once), `run_state.normal_combats_started` (normal-only), `sim.simulate(..., encounter, seed)`, CombatResult `node_id/normal_combat_ordinal/pool_class/ambush_wave`.
+- **Load-bearing (reviewer P1):** **all** mutation lives in `begin_encounter` (one shared call) — call sites never touch the counter, so live and harness can't drift; every fight incl. each ambush wave routes through it exactly once (Task 4 integration test guards this); Task 7(c) guards against accidental stat inflation; Task 8 metrics derive from per-combat transcript fields and treat the boss death-share (not the selection-biased conditional win rate) as primary.
