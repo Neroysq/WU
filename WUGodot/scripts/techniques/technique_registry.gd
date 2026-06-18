@@ -33,6 +33,10 @@ const MomentumAerialEffectScript = preload("res://scripts/techniques/effects/mom
 const MomentumEffectScript = preload("res://scripts/techniques/effects/momentum_effect.gd")
 const MomentumFlurryEffectScript = preload("res://scripts/techniques/effects/momentum_flurry_effect.gd")
 const MomentumSpeedEffectScript = preload("res://scripts/techniques/effects/momentum_speed_effect.gd")
+const IntentCritVsMarkedEffectScript = preload("res://scripts/techniques/effects/intent_crit_vs_marked_effect.gd")
+const IntentDashFlashEffectScript = preload("res://scripts/techniques/effects/intent_dash_flash_effect.gd")
+const IntentMarkEffectScript = preload("res://scripts/techniques/effects/intent_mark_effect.gd")
+const IntentReachEffectScript = preload("res://scripts/techniques/effects/intent_reach_effect.gd")
 
 static func has_effect(id: String) -> bool:
 	var data: Dictionary = DataManager.get_technique(id)
@@ -126,5 +130,13 @@ static func _new_effect_for_type(effect_type: String) -> Variant:
 			return MomentumAerialEffectScript.new()
 		"momentum_speed":
 			return MomentumSpeedEffectScript.new()
+		"intent_mark":
+			return IntentMarkEffectScript.new()
+		"intent_reach":
+			return IntentReachEffectScript.new()
+		"intent_crit_vs_marked":
+			return IntentCritVsMarkedEffectScript.new()
+		"intent_dash_flash":
+			return IntentDashFlashEffectScript.new()
 		_:
 			return null

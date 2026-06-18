@@ -261,7 +261,7 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 	var attack_def: Variant = attacker._attack_state.def
 	var attack_is_perilous: bool = attack_def != null and not attack_def.is_parryable
 	var attack_ignores_block: bool = attack_def != null and attack_def.ignores_block
-	var attack_range: float = attack_def.range_units if attack_def != null else attacker.attack_range
+	var attack_range: float = (attack_def.range_units if attack_def != null else attacker.attack_range) + attacker.attack_range_bonus
 
 	var in_range: bool = absf(defender.position.x - attacker.position.x) <= attack_range + defender.half_width
 	var vertical_range: bool = absf(defender.position.y - attacker.position.y) <= defender.height + 20.0
@@ -367,6 +367,10 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 			_clear_venom(defender)
 		if ctx.jolt_timer > 0.0:
 			defender.jolt_timer = maxf(defender.jolt_timer, ctx.jolt_timer)
+		if ctx.consume_intent_marks:
+			defender.intent_marks = 0
+		if ctx.intent_marks > 0:
+			defender.intent_marks = mini(defender.intent_marks + ctx.intent_marks, ctx.intent_mark_cap)
 		if defender.health_current <= 0.0 and defender.technique_engine != null:
 			if defender.technique_engine.check_lethal_save(defender):
 				emit_signal("camera_shake", 16.0)

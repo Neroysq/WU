@@ -17,6 +17,9 @@ class HitContext extends RefCounted:
 	var venom_slow_multiplier: float = 1.0
 	var consume_venom: bool = false
 	var jolt_timer: float = 0.0
+	var intent_marks: int = 0
+	var intent_mark_cap: int = 3
+	var consume_intent_marks: bool = false
 	var extra_hits: Array[Dictionary] = []
 	var reflect_to_attacker: float = 0.0
 	var messages: Array[String] = []

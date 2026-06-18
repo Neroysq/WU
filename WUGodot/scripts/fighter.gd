@@ -127,6 +127,8 @@ var jolt_timer: float = 0.0
 var deflect_riposte_armed: bool = false
 var momentum: float = 0.0
 var momentum_landing_burst_ready: bool = false
+var intent_marks: int = 0
+var attack_range_bonus: float = 0.0
 var is_grabbed: bool = false
 var _grab_timer: float = 0.0
 
@@ -188,6 +190,7 @@ func reset_for_combat() -> void:
 	deflect_riposte_armed = false
 	momentum = 0.0
 	momentum_landing_burst_ready = false
+	intent_marks = 0
 	_phoenix_invuln_timer = 0.0
 	is_grabbed = false
 	_grab_timer = 0.0
@@ -319,8 +322,8 @@ func dash_phase_label() -> String:
 
 func current_attack_range() -> float:
 	if _attack_state.is_active() and _attack_state.def != null:
-		return _attack_state.def.range_units
-	return attack_range
+		return _attack_state.def.range_units + attack_range_bonus
+	return attack_range + attack_range_bonus
 
 func current_telegraph_color() -> Color:
 	if not _attack_state.is_active():
