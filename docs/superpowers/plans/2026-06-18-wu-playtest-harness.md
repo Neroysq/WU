@@ -218,15 +218,32 @@ Refactor `combat_scene`'s per-frame gameplay lines to call `CombatStep.advance(.
 
 ---
 
-# Phase 6 — Visual capture
+# Phase 6 — Visual capture  ⚠️ REDO (first attempt shipped a stub)
 
-### Task 13: `VisualCapture` + state-spec + `run.sh --capture`
+> **The shipped `visual_capture.gd` is a STUB** — `_write_png` does `Image.create(640,360); img.fill(color)`, never rendering the game, and runs under `--headless` (no renderer). It must be redone to render real states like the working `--shot-combat` path. **Delete/replace the headless stub; route `--capture` through `main.gd` (non-headless).**
 
-**Files:** Create `visual_capture.gd`; Modify `main.gd`, `run.sh`; Test: import-clean + manual
+### Task 13 (redo): real `--capture` via the non-headless scene path
 
-- [ ] **Step 1: Implement** — a JSON state-spec (`{kind:"matchup"|"ui"|"character", ...}`): `matchup` (build/loadout + archetype + combat state → reuse `CombatSetup` + the `--shot` readback), `ui` (boon_offer/loadout/reward/map rendered with given data), `character` (built-up Hu pose set). Drive to a reachable state with `RunDriver` when the spec references `{seed, after_node}`. Save PNG(s) (+ GIF via `assemble_action_review.py` for sequences) to `--out`.
-- [ ] **Step 2: Verify** — `run.sh --capture /tmp/spec.json --out /tmp/cap` writes the requested PNGs for each kind; import clean.
-- [ ] **Step 3: Commit** — `feat(sim): arbitrary-state visual capture`.
+**Files:** Modify `main.gd`, `run.sh`; **delete** `WUGodot/scripts/sim/visual_capture.gd` (stub); Create `WUGodot/tools/assert_nonblank.py`; Test: the non-blank gate below + import-clean.
+
+- [ ] **Step 1: Re-route the CLI (no `--headless`).** In `run.sh`, the `--capture` case must mirror `--shot-combat` (which renders) — drop `--headless`, drop the stub script, route to `main.gd`:
+  ```bash
+  --capture)
+      SPEC="${2:?usage: ./run.sh --capture spec.json [out_dir]}"
+      OUT="${3:-/tmp/wu-capture}"
+      exec "$GODOT" --path "$PROJECT_DIR" -- --capture "--capture-spec=$SPEC" "--shot-dir=$OUT"
+      ;;
+  ```
+- [ ] **Step 2: `main.gd` capture handler.** Add a `DEV_CAPTURE_FLAG = "--capture"` + `--capture-spec=` parse in `_ready()` (mirroring the `--shot-combat` branch) → `call_deferred("_run_dev_capture")`. Implement `_run_dev_capture()` reading the JSON spec `{kind, ...}` and using the **exact existing readback** (`await get_tree().process_frame` ×2 → `await RenderingServer.frame_post_draw` → `get_viewport().get_texture().get_image().save_png(path)`):
+  - **`matchup`** — build a `BoonLoadout` from `spec.build` (`[{boon_id,tier}]`) onto the player, then `_combat_scene.setup_combat(player, node_or_archetype)` — the **FULL** setup (`CombatSetup` gameplay **+ presenter/visual/background** visual config; the visual half is required to render anything), `dev_set_capture_mode(true)`, `dev_prepare_capture_state(spec.state)`, then readback. (If `spec` gives `{seed, after_node}`, use `RunDriver` to reach that build first, then capture.)
+  - **`ui`** — set the requested scene via the real controller (`SceneContext.SCENE_BOON_OFFER` / `loadout_view` / reward / map) with `spec.payload`, `queue_redraw()`, await frames, readback. Reuse the live scene router so the screen renders exactly as in-game.
+  - **`character`** — player with `spec.build`, idle/guard pose, readback.
+  Save to `--shot-dir`; for sequences, emit `frame_%03d.png` + reuse `assemble_action_review.py` for a GIF. `get_tree().quit(0)` when done.
+- [ ] **Step 3: Non-blank gate (this is what would have caught the stub).** Create `tools/assert_nonblank.py` that loads a PNG and fails if it's effectively one flat color (e.g., `< 8` distinct colors or near-zero pixel variance). Run after capture: `python3 tools/assert_nonblank.py /tmp/wu-capture/matchup.png` → must PASS (the old stub fails this).
+- [ ] **Step 4: Verify** — `./run.sh --capture /tmp/spec-matchup.json /tmp/cap` renders an actual Hu-vs-enemy frame (open it / `assert_nonblank` passes); repeat for a `ui` spec (e.g. boon offer) and `character`; `./run.sh --import` clean; `./run.sh --test` still 0 failed.
+- [ ] **Step 5: Commit** — `feat(sim): real --capture via non-headless scene render (replaces stub)`.
+
+> Reviewer/agent acceptance: the matchup PNG shows Hu + the enemy at the requested state; the ui PNG shows the actual screen; neither is a flat fill.
 
 ---
 
