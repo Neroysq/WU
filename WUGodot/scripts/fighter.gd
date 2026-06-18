@@ -118,6 +118,11 @@ var is_stunned: bool = false
 var was_hit_this_swing: bool = false
 var bleed_timer: float = 0.0
 var bleed_dps: float = 0.0
+var venom_stacks: int = 0
+var venom_timer: float = 0.0
+var venom_dps: float = 0.0
+var venom_slow_multiplier: float = 1.0
+var _venom_slow_delta: float = 0.0
 var is_grabbed: bool = false
 var _grab_timer: float = 0.0
 
@@ -168,6 +173,13 @@ func reset_for_combat() -> void:
 	_ai_decision_timer = 0.0
 	bleed_timer = 0.0
 	bleed_dps = 0.0
+	venom_stacks = 0
+	venom_timer = 0.0
+	venom_dps = 0.0
+	venom_slow_multiplier = 1.0
+	if not is_equal_approx(_venom_slow_delta, 0.0):
+		move_speed -= _venom_slow_delta
+	_venom_slow_delta = 0.0
 	_phoenix_invuln_timer = 0.0
 	is_grabbed = false
 	_grab_timer = 0.0

@@ -17,6 +17,10 @@ const LowHpBoostEffectScript = preload("res://scripts/techniques/effects/low_hp_
 const PhoenixEffectScript = preload("res://scripts/techniques/effects/phoenix_effect.gd")
 const StanceDrunkenEffectScript = preload("res://scripts/techniques/effects/stance_drunken_effect.gd")
 const StanceTigerEffectScript = preload("res://scripts/techniques/effects/stance_tiger_effect.gd")
+const VenomEffectScript = preload("res://scripts/techniques/effects/venom_effect.gd")
+const VenomHeavyDetonateEffectScript = preload("res://scripts/techniques/effects/venom_heavy_detonate_effect.gd")
+const VenomSlowEffectScript = preload("res://scripts/techniques/effects/venom_slow_effect.gd")
+const VenomSpreadEffectScript = preload("res://scripts/techniques/effects/venom_spread_effect.gd")
 
 static func has_effect(id: String) -> bool:
 	var data: Dictionary = DataManager.get_technique(id)
@@ -78,5 +82,13 @@ static func _new_effect_for_type(effect_type: String) -> Variant:
 			return StanceDrunkenEffectScript.new()
 		"stance_tiger":
 			return StanceTigerEffectScript.new()
+		"venom":
+			return VenomEffectScript.new()
+		"venom_slow":
+			return VenomSlowEffectScript.new()
+		"venom_spread":
+			return VenomSpreadEffectScript.new()
+		"venom_heavy_detonate":
+			return VenomHeavyDetonateEffectScript.new()
 		_:
 			return null

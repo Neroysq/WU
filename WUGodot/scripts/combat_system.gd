@@ -358,6 +358,13 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 		if ctx.bleed_timer > 0.0:
 			defender.bleed_timer = ctx.bleed_timer
 			defender.bleed_dps = ctx.bleed_dps
+		if ctx.venom_stacks > 0:
+			defender.venom_stacks += ctx.venom_stacks
+			defender.venom_timer = maxf(defender.venom_timer, ctx.venom_timer)
+			defender.venom_dps = maxf(defender.venom_dps, ctx.venom_dps)
+			_apply_venom_slow(defender, ctx.venom_slow_multiplier)
+		if ctx.consume_venom:
+			_clear_venom(defender)
 		if defender.health_current <= 0.0 and defender.technique_engine != null:
 			if defender.technique_engine.check_lethal_save(defender):
 				emit_signal("camera_shake", 16.0)
@@ -431,6 +438,16 @@ func clamp_world_bounds(fighter: Fighter) -> void:
 	fighter.position.x = clampf(fighter.position.x, GameConstants.WORLD_BOUNDS_LEFT, GameConstants.WORLD_BOUNDS_RIGHT)
 
 func tick_effects(fighter: Fighter, dt: float) -> void:
+	if fighter.venom_timer > 0.0 and fighter.venom_stacks > 0:
+		var venom_damage: float = fighter.venom_dps * float(fighter.venom_stacks) * dt
+		fighter.health_current -= venom_damage
+		fighter.health_current = maxf(fighter.health_current, 0.0)
+		fighter.venom_timer -= dt
+		if fighter.venom_timer <= 0.0:
+			_clear_venom(fighter)
+		if venom_damage > 0.1:
+			emit_signal("damage_dealt", fighter.position + Vector2(0.0, -fighter.height - 34.0), venom_damage, false)
+
 	if fighter.bleed_timer > 0.0:
 		var bleed_damage: float = fighter.bleed_dps * dt
 		fighter.health_current -= bleed_damage
@@ -441,3 +458,22 @@ func tick_effects(fighter: Fighter, dt: float) -> void:
 			fighter.bleed_dps = 0.0
 		if bleed_damage > 0.1:
 			emit_signal("damage_dealt", fighter.position + Vector2(0.0, -fighter.height - 20.0), bleed_damage, false)
+
+func _apply_venom_slow(fighter: Fighter, multiplier: float) -> void:
+	if multiplier >= 1.0:
+		return
+	if not is_equal_approx(fighter._venom_slow_delta, 0.0):
+		fighter.move_speed -= fighter._venom_slow_delta
+	var clamped: float = clampf(multiplier, 0.1, 1.0)
+	fighter.venom_slow_multiplier = clamped
+	fighter._venom_slow_delta = fighter.move_speed * (clamped - 1.0)
+	fighter.move_speed += fighter._venom_slow_delta
+
+func _clear_venom(fighter: Fighter) -> void:
+	fighter.venom_stacks = 0
+	fighter.venom_timer = 0.0
+	fighter.venom_dps = 0.0
+	fighter.venom_slow_multiplier = 1.0
+	if not is_equal_approx(fighter._venom_slow_delta, 0.0):
+		fighter.move_speed -= fighter._venom_slow_delta
+	fighter._venom_slow_delta = 0.0

@@ -11,6 +11,11 @@ class HitContext extends RefCounted:
 	var heal_attacker: float = 0.0
 	var bleed_timer: float = 0.0
 	var bleed_dps: float = 0.0
+	var venom_stacks: int = 0
+	var venom_timer: float = 0.0
+	var venom_dps: float = 0.0
+	var venom_slow_multiplier: float = 1.0
+	var consume_venom: bool = false
 	var extra_hits: Array[Dictionary] = []
 	var reflect_to_attacker: float = 0.0
 	var messages: Array[String] = []
