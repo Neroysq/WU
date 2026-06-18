@@ -99,7 +99,7 @@ static func begin_encounter(run_state, node, wave: int = 0) -> Dictionary:
 
 **Files:** Test `test_difficulty_runstate.gd` (the `RunState` fields + mutation live in Task 2's `begin_encounter`)
 
-- [ ] **Step 1: Failing tests (integration)** — drive a full run via `run_driver` and assert end-to-end (not just the unit helper): across a seeded run, the **first** normal fight is `weak`, the **second** `strong`; an **elite/boss** between two normals does **not** shift the normal ordinal; a **3-wave ambush** advances `normal_combats_started` by 3 and yields `ambush_wave` 0,1,2. (Catches a call site that forgot to route through `begin_encounter` or double-counts.)
+- [ ] **Step 1: Failing tests (integration)** — assert end-to-end over a **crafted node sequence** (battle → elite → battle → 3-wave ambush), NOT a random seeded map. `run_driver.run` currently builds its own procedural run (`run_driver.gd:19`), so add a **test-only injectable `RunState`** (optional `run_state_override` param) — or drive `_resolve_combat_node` directly over the crafted nodes — so the test is deterministic, not seed-dependent (reviewer P3). Assert: first normal `weak`, second `strong`; the elite between them does **not** shift the normal ordinal; the 3-wave ambush advances `normal_combats_started` by 3 with `ambush_wave` 0,1,2.
 - [ ] **Step 2:** Run → FAIL (until Task 3's wiring routes every fight, incl. ambush waves, through `begin_encounter`).
 - [ ] **Step 3: Fix wiring** as needed so all combats (live + harness, incl. each ambush wave) go through `begin_encounter` exactly once.
 - [ ] **Step 4:** Run → PASS.
@@ -109,9 +109,9 @@ static func begin_encounter(run_state, node, wave: int = 0) -> Dictionary:
 
 **Files:** Modify `run_state.gd` (`_pick_node_type`), `run_flow.gd`/ambush setup; Test `test_difficulty_runstate.gd`
 
-- [ ] **Step 1: Failing tests** — `_pick_node_type` honors `node_type_weights_by_tier` (tier 1 → only BATTLE; tier 4 → ELITE/AMBUSH possible); a generated map has more elite/ambush at tier 4 than tier 1 (statistically, over seeds); ambush length follows `length_by_tier` (tier 4 ambush longer than tier 1).
+- [ ] **Step 1: Failing tests** — `_pick_node_type` honors `node_type_weights_by_tier` (tier 1 → only BATTLE; tier 4 → ELITE/AMBUSH possible); a generated map has more elite/ambush at tier 4 than tier 1 (statistically, over seeds); ambush length follows `length_by_tier` with a **fallback**: a tier with a configured length uses it; a tier without one (e.g. tier 2, which CAN roll AMBUSH but has no `length_by_tier["2"]`) uses the **nearest lower configured tier, else default 3** — never 0/crash (reviewer P2).
 - [ ] **Step 2:** Run → FAIL.
-- [ ] **Step 3: Implement** — `_pick_node_type(rng, tier, idx)` reads the curve's `node_type_weights_by_tier[str(tier)]` (weighted pick) instead of hardcoded logic; set `ambush_remaining` from `ambush.length_by_tier[str(tier)]` when creating AMBUSH nodes. Seed via `RngService.stream("map")`.
+- [ ] **Step 3: Implement** — `_pick_node_type(rng, tier, idx)` reads `node_type_weights_by_tier[str(tier)]` (weighted pick) instead of hardcoded logic. Add a shared helper `ambush_length(curve, tier) -> int` = exact `length_by_tier[str(tier)]`, else nearest lower configured tier, else `3`. Set `ambush_remaining` from it when creating AMBUSH nodes, **and replace the hardcoded `3` in `RunFlow.travel_decision` (`run_flow.gd:35`) with the same helper** so live and generation agree. Seed via `RngService.stream("map")`.
 - [ ] **Step 4:** Run → PASS.
 - [ ] **Step 5: Commit** — `feat(difficulty): per-tier node-type weights + ambush length`.
 
