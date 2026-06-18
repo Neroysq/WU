@@ -29,6 +29,10 @@ const DeflectEffectScript = preload("res://scripts/techniques/effects/deflect_ef
 const DeflectRedirectEffectScript = preload("res://scripts/techniques/effects/deflect_redirect_effect.gd")
 const DeflectReduceEffectScript = preload("res://scripts/techniques/effects/deflect_reduce_effect.gd")
 const DeflectRiposteDmgEffectScript = preload("res://scripts/techniques/effects/deflect_riposte_dmg_effect.gd")
+const MomentumAerialEffectScript = preload("res://scripts/techniques/effects/momentum_aerial_effect.gd")
+const MomentumEffectScript = preload("res://scripts/techniques/effects/momentum_effect.gd")
+const MomentumFlurryEffectScript = preload("res://scripts/techniques/effects/momentum_flurry_effect.gd")
+const MomentumSpeedEffectScript = preload("res://scripts/techniques/effects/momentum_speed_effect.gd")
 
 static func has_effect(id: String) -> bool:
 	var data: Dictionary = DataManager.get_technique(id)
@@ -114,5 +118,13 @@ static func _new_effect_for_type(effect_type: String) -> Variant:
 			return DeflectReduceEffectScript.new()
 		"deflect_redirect":
 			return DeflectRedirectEffectScript.new()
+		"momentum":
+			return MomentumEffectScript.new()
+		"momentum_flurry":
+			return MomentumFlurryEffectScript.new()
+		"momentum_aerial":
+			return MomentumAerialEffectScript.new()
+		"momentum_speed":
+			return MomentumSpeedEffectScript.new()
 		_:
 			return null
