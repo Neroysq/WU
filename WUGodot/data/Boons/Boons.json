@@ -65,6 +65,13 @@
       "requires": {"schools": ["venom", "thunder"]},
       "effect": {"type": "jolt_amp", "multiplier": 1.2}
     },
+    {
+      "id": "venom_mastery",
+      "school": "venom",
+      "kind": "mastery",
+      "requires": {"counts": {"venom": 3}},
+      "effect": {"type": "venom_heavy_detonate", "damage_per_stack": 5.0}
+    },
 
     {
       "id": "thunder_light",
@@ -130,6 +137,13 @@
       "kind": "duo",
       "requires": {"schools": ["thunder", "sword"]},
       "effect": {"type": "intent_dash_flash", "marks": 1, "max": 3, "range": 140.0}
+    },
+    {
+      "id": "thunder_mastery",
+      "school": "thunder",
+      "kind": "mastery",
+      "requires": {"counts": {"thunder": 3}},
+      "effect": {"type": "jolt_dash_discharge", "damage": 12.0, "message": "天雷!"}
     },
 
     {
@@ -201,6 +215,13 @@
       "kind": "duo",
       "requires": {"schools": ["soft", "iron"]},
       "effect": {"type": "deflect_reduce", "multiplier": 0.75}
+    },
+    {
+      "id": "soft_mastery",
+      "school": "soft",
+      "kind": "mastery",
+      "requires": {"counts": {"soft": 3}},
+      "effect": {"type": "deflect", "damage": 8.0, "message": "柔化!"}
     },
 
     {
@@ -307,6 +328,13 @@
       "kind": "duo",
       "requires": {"schools": ["iron", "soft"]},
       "effect": {"type": "stat_delta", "flat": {"posture_max": 20.0, "posture_current": 20.0}}
+    },
+    {
+      "id": "iron_mastery",
+      "school": "iron",
+      "kind": "mastery",
+      "requires": {"counts": {"iron": 3}},
+      "effect": {"type": "stat_delta", "flat": {"health_max": 24.0, "health_current": 24.0, "posture_max": 24.0, "posture_current": 24.0}}
     },
 
     {
@@ -415,6 +443,13 @@
       "requires": {"schools": ["wind", "sword"]},
       "effect": {"type": "momentum_flurry", "threshold": 45.0, "damage": 5.0, "cost": 10.0}
     },
+    {
+      "id": "wind_mastery",
+      "school": "wind",
+      "kind": "mastery",
+      "requires": {"counts": {"wind": 3}},
+      "effect": {"type": "momentum_speed", "move_speed": 32.0}
+    },
 
     {
       "id": "sword_widows_kiss",
@@ -494,6 +529,13 @@
       "kind": "duo",
       "requires": {"schools": ["sword", "wind"]},
       "effect": {"type": "intent_mark", "marks": 1, "max": 4, "burst_per_mark": 7.0}
+    },
+    {
+      "id": "sword_mastery",
+      "school": "sword",
+      "kind": "mastery",
+      "requires": {"counts": {"sword": 3}},
+      "effect": {"type": "intent_crit_vs_marked", "multiplier": 1.5}
     }
   ]
 }

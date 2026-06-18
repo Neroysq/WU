@@ -26,6 +26,7 @@ func run_all() -> Dictionary:
 		var move_count: int = 0
 		var passive_count: int = 0
 		var duo_count: int = 0
+		var mastery_count: int = 0
 		var slots: Dictionary = {}
 		for boon in boons:
 			match str(boon.get("kind", "")):
@@ -36,11 +37,13 @@ func run_all() -> Dictionary:
 					passive_count += 1
 				"duo":
 					duo_count += 1
-		if move_count >= 3 and slots.size() >= 3 and passive_count >= 2 and duo_count >= 1:
+				"mastery":
+					mastery_count += 1
+		if move_count >= 3 and slots.size() >= 3 and passive_count >= 2 and duo_count >= 1 and mastery_count >= 1:
 			passed += 1
 		else:
 			failed += 1
-			failures.append("%s should have >=3 move boons across >=3 slots, >=2 passives, >=1 duo" % school_id)
+			failures.append("%s should have >=3 move boons across >=3 slots, >=2 passives, >=1 duo, >=1 mastery" % school_id)
 
 	for raw_boon in DataManager.get_all_boons().values():
 		var boon: Dictionary = raw_boon as Dictionary
