@@ -1,0 +1,39 @@
+{
+  "boons": [
+    {
+      "id": "venom_light",
+      "school": "venom",
+      "kind": "move",
+      "slot": "light",
+      "tiers": {
+        "common": {
+          "effect": {
+            "type": "venom",
+            "stacks": 1
+          }
+        },
+        "rare": {
+          "riders": [
+            {
+              "type": "venom_slow"
+            }
+          ]
+        },
+        "epic": {
+          "riders": [
+            {
+              "type": "venom_spread"
+            }
+          ]
+        },
+        "legendary": {
+          "riders": [
+            {
+              "type": "venom_heavy_detonate"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

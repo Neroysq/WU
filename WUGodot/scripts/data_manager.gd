@@ -7,6 +7,8 @@ static var _visual_profiles: Dictionary = {}
 static var _game_settings: Dictionary = {}
 static var _rewards: Array[Dictionary] = []
 static var _techniques: Dictionary = {}
+static var _schools: Dictionary = {}
+static var _boons: Dictionary = {}
 static var _events: Array[Dictionary] = []
 static var _attacks: Dictionary = {}
 
@@ -26,6 +28,8 @@ static func initialize() -> void:
 	_load_game_settings()
 	_load_attacks()
 	_load_techniques()
+	_load_schools()
+	_load_boons()
 	_load_events()
 	_load_rewards()
 	_load_visual_profiles()
@@ -39,6 +43,8 @@ static func reload_data() -> void:
 	_game_settings.clear()
 	_rewards.clear()
 	_techniques.clear()
+	_schools.clear()
+	_boons.clear()
 	_events.clear()
 	_attacks.clear()
 	initialize()
@@ -78,6 +84,27 @@ static func get_technique(id: String) -> Dictionary:
 
 static func get_all_techniques() -> Dictionary:
 	return _techniques.duplicate(true)
+
+static func get_school(id: String) -> Dictionary:
+	if _schools.has(id):
+		return (_schools[id] as Dictionary).duplicate(true)
+	return {}
+
+static func get_boon(id: String) -> Dictionary:
+	if _boons.has(id):
+		return (_boons[id] as Dictionary).duplicate(true)
+	return {}
+
+static func get_all_boons() -> Dictionary:
+	return _boons.duplicate(true)
+
+static func get_boons_for_school(school_id: String) -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+	for boon_id in _boons.keys():
+		var boon: Dictionary = _boons[boon_id] as Dictionary
+		if str(boon.get("school", "")) == school_id:
+			result.append(boon.duplicate(true))
+	return result
 
 static func get_enemy_archetypes_for_difficulty(difficulty: String) -> Array[String]:
 	var result: Array[String] = []
@@ -191,6 +218,32 @@ static func _load_techniques() -> void:
 				continue
 			_techniques[tech_id] = (entry as Dictionary).duplicate(true)
 	dir.list_dir_end()
+
+static func _load_schools() -> void:
+	var root: Dictionary = _load_json_file("res://data/Schools/Schools.json")
+	var raw_schools: Array = []
+	if typeof(root.get("schools", [])) == TYPE_ARRAY:
+		raw_schools = root.get("schools", []) as Array
+	for entry in raw_schools:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var school_id: String = str((entry as Dictionary).get("id", ""))
+		if school_id.is_empty():
+			continue
+		_schools[school_id] = (entry as Dictionary).duplicate(true)
+
+static func _load_boons() -> void:
+	var root: Dictionary = _load_json_file("res://data/Boons/Boons.json")
+	var raw_boons: Array = []
+	if typeof(root.get("boons", [])) == TYPE_ARRAY:
+		raw_boons = root.get("boons", []) as Array
+	for entry in raw_boons:
+		if typeof(entry) != TYPE_DICTIONARY:
+			continue
+		var boon_id: String = str((entry as Dictionary).get("id", ""))
+		if boon_id.is_empty():
+			continue
+		_boons[boon_id] = (entry as Dictionary).duplicate(true)
 
 static func _load_events() -> void:
 	var dir: DirAccess = DirAccess.open("res://data/Events")

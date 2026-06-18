@@ -17,4 +17,28 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("create_effect_from_data should build stat_delta from raw effect data with a supplied id")
 
+	DataManager.reload_data()
+	var school: Dictionary = DataManager.get_school("venom")
+	if str(school.get("signature", "")) == "venom":
+		passed += 1
+	else:
+		failed += 1
+		failures.append("DataManager.get_school should load the venom school")
+
+	var boon: Dictionary = DataManager.get_boon("venom_light")
+	var tiers: Dictionary = boon.get("tiers", {}) as Dictionary
+	var common: Dictionary = tiers.get("common", {}) as Dictionary
+	if str(boon.get("kind", "")) == "move" and str(boon.get("slot", "")) == "light" and typeof(common.get("effect", {})) == TYPE_DICTIONARY:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("DataManager.get_boon should load venom_light with common effect data")
+
+	var venom_boons: Array[Dictionary] = DataManager.get_boons_for_school("venom")
+	if venom_boons.size() == 1 and str(venom_boons[0].get("id", "")) == "venom_light":
+		passed += 1
+	else:
+		failed += 1
+		failures.append("DataManager.get_boons_for_school should return venom boons")
+
 	return {"passed": passed, "failed": failed, "failures": failures}

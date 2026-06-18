@@ -1,0 +1,12 @@
+{
+  "schools": [
+    {
+      "id": "venom",
+      "name": "Venom Sect",
+      "hanzi": "毒",
+      "signature": "venom",
+      "themeColor": "#7ec850",
+      "blurb": "Snowballing poison."
+    }
+  ]
+}
