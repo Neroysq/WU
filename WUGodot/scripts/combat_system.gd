@@ -365,6 +365,8 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 			_apply_venom_slow(defender, ctx.venom_slow_multiplier)
 		if ctx.consume_venom:
 			_clear_venom(defender)
+		if ctx.jolt_timer > 0.0:
+			defender.jolt_timer = maxf(defender.jolt_timer, ctx.jolt_timer)
 		if defender.health_current <= 0.0 and defender.technique_engine != null:
 			if defender.technique_engine.check_lethal_save(defender):
 				emit_signal("camera_shake", 16.0)
@@ -438,6 +440,9 @@ func clamp_world_bounds(fighter: Fighter) -> void:
 	fighter.position.x = clampf(fighter.position.x, GameConstants.WORLD_BOUNDS_LEFT, GameConstants.WORLD_BOUNDS_RIGHT)
 
 func tick_effects(fighter: Fighter, dt: float) -> void:
+	if fighter.jolt_timer > 0.0:
+		fighter.jolt_timer = maxf(fighter.jolt_timer - dt, 0.0)
+
 	if fighter.venom_timer > 0.0 and fighter.venom_stacks > 0:
 		var venom_damage: float = fighter.venom_dps * float(fighter.venom_stacks) * dt
 		fighter.health_current -= venom_damage

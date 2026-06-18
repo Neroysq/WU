@@ -13,6 +13,7 @@ const _TEST_MODULES: Array[String] = [
 	"res://tests/test_boon_loadout.gd",
 	"res://tests/test_jump_hooks.gd",
 	"res://tests/test_venom_effect.gd",
+	"res://tests/test_jolt_effect.gd",
 	"res://tests/test_ai_brain.gd",
 	"res://tests/test_boss_controller.gd",
 	"res://tests/test_event_runner.gd",

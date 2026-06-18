@@ -123,6 +123,7 @@ var venom_timer: float = 0.0
 var venom_dps: float = 0.0
 var venom_slow_multiplier: float = 1.0
 var _venom_slow_delta: float = 0.0
+var jolt_timer: float = 0.0
 var is_grabbed: bool = false
 var _grab_timer: float = 0.0
 
@@ -180,6 +181,7 @@ func reset_for_combat() -> void:
 	if not is_equal_approx(_venom_slow_delta, 0.0):
 		move_speed -= _venom_slow_delta
 	_venom_slow_delta = 0.0
+	jolt_timer = 0.0
 	_phoenix_invuln_timer = 0.0
 	is_grabbed = false
 	_grab_timer = 0.0

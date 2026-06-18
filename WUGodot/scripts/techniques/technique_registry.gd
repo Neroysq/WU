@@ -21,6 +21,10 @@ const VenomEffectScript = preload("res://scripts/techniques/effects/venom_effect
 const VenomHeavyDetonateEffectScript = preload("res://scripts/techniques/effects/venom_heavy_detonate_effect.gd")
 const VenomSlowEffectScript = preload("res://scripts/techniques/effects/venom_slow_effect.gd")
 const VenomSpreadEffectScript = preload("res://scripts/techniques/effects/venom_spread_effect.gd")
+const JoltAmpEffectScript = preload("res://scripts/techniques/effects/jolt_amp_effect.gd")
+const JoltDashDischargeEffectScript = preload("res://scripts/techniques/effects/jolt_dash_discharge_effect.gd")
+const JoltEffectScript = preload("res://scripts/techniques/effects/jolt_effect.gd")
+const JoltNovaEffectScript = preload("res://scripts/techniques/effects/jolt_nova_effect.gd")
 
 static func has_effect(id: String) -> bool:
 	var data: Dictionary = DataManager.get_technique(id)
@@ -90,5 +94,13 @@ static func _new_effect_for_type(effect_type: String) -> Variant:
 			return VenomSpreadEffectScript.new()
 		"venom_heavy_detonate":
 			return VenomHeavyDetonateEffectScript.new()
+		"jolt":
+			return JoltEffectScript.new()
+		"jolt_amp":
+			return JoltAmpEffectScript.new()
+		"jolt_nova":
+			return JoltNovaEffectScript.new()
+		"jolt_dash_discharge":
+			return JoltDashDischargeEffectScript.new()
 		_:
 			return null
