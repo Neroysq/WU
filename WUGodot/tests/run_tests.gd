@@ -10,6 +10,7 @@ const _TEST_MODULES: Array[String] = [
 	"res://tests/test_technique_combat.gd",
 	"res://tests/test_technique_registry.gd",
 	"res://tests/test_boon_factory.gd",
+	"res://tests/test_boon_loadout.gd",
 	"res://tests/test_ai_brain.gd",
 	"res://tests/test_boss_controller.gd",
 	"res://tests/test_event_runner.gd",

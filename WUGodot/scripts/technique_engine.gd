@@ -44,6 +44,31 @@ func remove(id: String, fighter: Fighter) -> void:
 		_effects.erase(effect)
 	_technique_ids.erase(id)
 
+func add_effect(effect: Variant, fighter: Variant) -> void:
+	if effect == null or _effects.has(effect):
+		return
+	if not str(effect.id).is_empty() and _effect_by_id(effect.id) != null:
+		return
+	if effect.exclusive_group != "":
+		for existing in _effects.duplicate():
+			if existing.exclusive_group != effect.exclusive_group:
+				continue
+			if _technique_ids.has(existing.id):
+				remove(existing.id, fighter)
+			else:
+				remove_effect(existing, fighter)
+	_effects.append(effect)
+	_sort_effects()
+	effect.on_add(fighter)
+
+func remove_effect(effect: Variant, fighter: Variant) -> void:
+	if effect == null or not _effects.has(effect):
+		return
+	if _active_stance_id == effect.id:
+		deactivate_stance(fighter)
+	effect.on_remove(fighter)
+	_effects.erase(effect)
+
 func _install_effect(effect: Variant, fighter: Variant) -> void:
 	if effect.exclusive_group != "":
 		for existing in _effects.duplicate():
