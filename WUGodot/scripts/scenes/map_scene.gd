@@ -4,6 +4,7 @@ extends RefCounted
 const SceneContext = preload("res://scripts/scene_context.gd")
 const UiDraw = preload("res://scripts/ui/ui_draw.gd")
 const MenuSceneScript = preload("res://scripts/scenes/menu_scene.gd")
+const LoadoutViewScript = preload("res://scripts/scenes/loadout_view.gd")
 
 var selection_idx: int = 0
 
@@ -88,6 +89,8 @@ func draw(ctx: Variant, canvas: CanvasItem) -> void:
 		UiDraw.text(canvas, "Selected Route", footer.position.x + 26.0, footer.position.y + 34.0, GameConstants.COLOR_TEXT_HINT, 15)
 		UiDraw.text(canvas, _get_node_type_label(selected_node.node_type), footer.position.x + 26.0, footer.position.y + 56.0, GameConstants.COLOR_TEXT_HEADING, 22)
 		UiDraw.text(canvas, "Branches narrow after the master's gate and rest shrine.", footer.end.x - 420.0, footer.position.y + 46.0, GameConstants.COLOR_TEXT_BODY, 15)
+
+	LoadoutViewScript.draw(canvas, ctx, Rect2(float(GameConstants.VIEW_WIDTH) - 390.0, 140.0, 348.0, 500.0), ctx.cursor_flash)
 
 func _apply_travel_decision(ctx: Variant, decision: Dictionary) -> void:
 	if bool(decision.get("mark_cleared", false)):
