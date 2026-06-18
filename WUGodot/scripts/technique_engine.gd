@@ -131,6 +131,18 @@ func dispatch_post_hit(ctx: Variant) -> void:
 	for effect in _effects:
 		effect.post_hit(ctx)
 
+func dispatch_jump(fighter: Variant) -> void:
+	for effect in _effects:
+		effect.on_jump(fighter)
+
+func dispatch_land(fighter: Variant) -> void:
+	for effect in _effects:
+		effect.on_land(fighter)
+
+func dispatch_aerial_hit(ctx: Variant) -> void:
+	for effect in _effects:
+		effect.modify_aerial_hit(ctx)
+
 func dispatch_parry_success(fighter: Fighter) -> bool:
 	var handled := false
 	for effect in _effects:

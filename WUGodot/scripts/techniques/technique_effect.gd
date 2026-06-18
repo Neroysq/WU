@@ -60,6 +60,15 @@ func on_dash_end(_fighter: Variant, _enemy: Variant) -> Dictionary:
 func on_dash_through(_fighter: Variant) -> void:
 	pass
 
+func on_jump(_fighter: Variant) -> void:
+	pass
+
+func on_land(_fighter: Variant) -> void:
+	pass
+
+func modify_aerial_hit(_ctx: Variant) -> void:
+	pass
+
 func on_kill(_fighter: Variant) -> void:
 	pass
 

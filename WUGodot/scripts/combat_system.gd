@@ -41,6 +41,8 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 
 	if bool(input_state.get("jump_pressed", false)) and fighter.can_jump():
 		fighter.start_jump()
+		if fighter.technique_engine != null:
+			fighter.technique_engine.dispatch_jump(fighter)
 		emit_signal("spawn_particles", fighter.position + Vector2(0, 5), 12, GameConstants.COLOR_LIGHT_BLUE)
 
 	if bool(input_state.get("dash_pressed", false)) and fighter.can_dash():
@@ -122,6 +124,8 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 	if fighter.position.y >= GameConstants.GROUND_Y:
 		if (not fighter.is_grounded) and fighter.velocity.y > 100.0:
 			fighter.land()
+			if fighter.technique_engine != null:
+				fighter.technique_engine.dispatch_land(fighter)
 			emit_signal("spawn_particles", Vector2(fighter.position.x, GameConstants.GROUND_Y + 5.0), 8, GameConstants.COLOR_INK_MID)
 		fighter.position.y = GameConstants.GROUND_Y
 		fighter.velocity.y = 0.0
@@ -325,6 +329,8 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 		ctx.posture_damage = (attack_def.posture_damage if attack_def != null else attacker.attack_posture_damage) * combo_damage_bonus
 		if attacker.technique_engine != null:
 			attacker.technique_engine.dispatch_outgoing_hit(ctx)
+			if not attacker.is_grounded:
+				attacker.technique_engine.dispatch_aerial_hit(ctx)
 		for message in ctx.messages:
 			emit_signal("show_feedback", message, 0.5)
 
