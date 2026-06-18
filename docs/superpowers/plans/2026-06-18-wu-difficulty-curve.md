@@ -16,7 +16,7 @@
 
 **Create:**
 - `WUGodot/data/Difficulty/DifficultyCurve.json` — chapter pools + weak_count + node-type weights + ambush config.
-- `WUGodot/scripts/encounter_resolver.gd` — `resolve(run_state, node, wave) -> {archetype, pool_class}`.
+- `WUGodot/scripts/encounter_resolver.gd` — `begin_encounter(run_state, node, wave) -> {archetype, pool_class, normal_combat_ordinal, ambush_wave}` (selects + mutates run_state once).
 - `WUGodot/tools/check_difficulty_curve.py` — assert harness batch acceptance thresholds.
 - `WUGodot/tests/test_encounter_resolver.gd`, `test_difficulty_runstate.gd`.
 
@@ -63,7 +63,7 @@ In `data_manager.gd`, add `get_difficulty_curve(chapter:int) -> Dictionary` that
 
 **Reviewer P1:** make selection **and** the state mutation (counter + last_archetype) happen in **one shared call** so live and harness can't diverge. The call sites never mutate run_state themselves.
 
-- [ ] **Step 1: Failing tests** — `EncounterResolver.begin_encounter(run_state, node, wave)` returns `{archetype, pool_class, normal_combat_ordinal, ambush_wave}` AND mutates run_state: for a BATTLE node with `normal_combats_started==0`, `weak_count==1` → `pool_class=="weak"`, archetype ∈ weak_pool, `normal_combat_ordinal==0`, and **after the call** `normal_combats_started==1`; a second call → `"strong"` ∈ strong_pool, ordinal 1; an ELITE/BOSS call → `"elite"`/`"boss"` and **does NOT** advance `normal_combats_started`; **anti-repeat** — two consecutive same-pool calls don't return the same archetype (the helper alone satisfies this, no manual test mutation); seeded `RngService` ⇒ reproducible.
+- [ ] **Step 1: Failing tests** — `EncounterResolver.begin_encounter(run_state, node, wave)` returns `{archetype, pool_class, normal_combat_ordinal, ambush_wave}` AND mutates run_state: for a BATTLE node with `normal_combats_started==0`, `weak_count==1` → `pool_class=="weak"`, archetype ∈ weak_pool, `normal_combat_ordinal==0`, and **after the call** `normal_combats_started==1`; a second call → `"strong"` ∈ strong_pool, ordinal 1; an ELITE/BOSS call → `"elite"`/`"boss"` and **does NOT** advance `normal_combats_started`; **anti-repeat is per-pool** (reviewer P2) — two consecutive *same-pool* calls don't repeat an archetype, but an elite `sect_disciple` must NOT suppress the next strong `sect_disciple` (it's in both pools); seeded `RngService` ⇒ reproducible.
 - [ ] **Step 2:** Run → FAIL.
 - [ ] **Step 3: Implement** — a pure `_select(c, run_state, node, wave) -> {archetype, pool_class}` (boss/elite/weak-vs-strong via `run_state.normal_combats_started < weak_count`, ambush escalation by rank — Task 1), plus the public mutator:
 ```gdscript
@@ -73,11 +73,11 @@ static func begin_encounter(run_state, node, wave: int = 0) -> Dictionary:
     var ordinal := run_state.normal_combats_started
     if sel.pool_class in ["weak", "strong"]:
         run_state.normal_combats_started += 1             # normal-only, once
-    run_state.last_archetype = sel.archetype              # anti-repeat memory, once
+    run_state.last_archetype_by_pool[sel.pool_class] = sel.archetype   # per-pool memory
     return {"archetype": sel.archetype, "pool_class": sel.pool_class,
             "normal_combat_ordinal": ordinal, "ambush_wave": wave}
 ```
-`_select` honors anti-repeat (avoid `run_state.last_archetype`). Add `chapter:int=1`, `normal_combats_started:int=0`, `last_archetype:String` to `RunState`.
+`_select` honors **per-pool** anti-repeat (avoid `run_state.last_archetype_by_pool.get(pool_class, "")` — not a global last, so a shared archetype like `sect_disciple` isn't suppressed across pools). Add `chapter:int=1`, `normal_combats_started:int=0`, `last_archetype_by_pool:Dictionary={}` to `RunState`.
 - [ ] **Step 4:** Run → PASS.
 - [ ] **Step 5: Commit** — `feat(difficulty): EncounterResolver.begin_encounter (select+mutate once)`.
 
@@ -85,7 +85,7 @@ static func begin_encounter(run_state, node, wave: int = 0) -> Dictionary:
 
 **Files:** Modify `main.gd` (`_setup_combat_for_node`), `sim/run_driver.gd`, `sim/combat_sim.gd`; Test `test_difficulty_runstate.gd`
 
-- [ ] **Step 1: Failing test** — driving a combat node through `run_driver` produces an enemy whose archetype equals `EncounterResolver.resolve(...)`'s for that node/ordinal (assert the resolved archetype reaches the fight). `enemy_factory.create_enemy_for_node` is no longer the decision-maker for resolved paths.
+- [ ] **Step 1: Failing test** — driving a combat node through `run_driver`, the fight's `CombatResult.enemy_archetype` equals the archetype that `begin_encounter(...)` produced for that node/ordinal (assert the resolved archetype reaches the fight). `enemy_factory.create_enemy_for_node` is no longer the decision-maker for resolved paths.
 - [ ] **Step 2:** Run → FAIL.
 - [ ] **Step 3: Implement** — both sites call **`begin_encounter`** (which mutates run_state once) and pass `result.archetype` as `forced_archetype`; **neither site touches the counter/last_archetype itself** (reviewer P1). Live: `main._setup_combat_for_node` (~`main.gd:184`) → `begin_encounter(run_state, node, wave)` → `combat_scene.setup_combat(..., forced_archetype=result.archetype)`. Harness: `run_driver._resolve_combat_node` → `begin_encounter(...)` before each `sim.simulate(...)`. **Per ambush wave:** the ambush re-combat loop (both sites) calls `begin_encounter` again each wave with the wave index (`ambush_length − ambush_remaining`). Keep `enemy_factory._pick_archetype_for_node` as a seeded fallback only. Stash the returned `{pool_class, normal_combat_ordinal, ambush_wave}` for telemetry (Task 6).
 - [ ] **Step 4:** Run → PASS (existing combat/scene tests green).
@@ -144,7 +144,7 @@ static func begin_encounter(run_state, node, wave: int = 0) -> Dictionary:
 
 **Files:** Create `WUGodot/tools/check_difficulty_curve.py`; uses `run.sh --playtest-batch`
 
-- [ ] **Step 1:** `check_difficulty_curve.py <batch_summary.json>` **computes its own metrics from `summary.transcripts[].combats[]`** (which carry `normal_combat_ordinal`/`tier`/`pool_class`/`node_id`/`winner` after Task 6 — today's `BatchRunner` only emits aggregates, so derive per-ordinal/tier/pool win rates and death-share-by-node in the script; alternatively extend `batch_runner.gd` to emit `win_rate_by_normal_ordinal`/`by_tier`/`by_pool_class`). Assert: **win-rate by `normal_combat_ordinal` is non-rising within ±5 pp** across mid-depth. **Boss metric (reviewer P1 — define carefully):** boss win rate conditional on *reaching* the boss is **biased upward** (only strong runs get there), so the **primary, selection-robust acceptance is death-share**: the boss node has the **highest death share of any node reached**; *report* the conditional boss win rate too (with the bias caveat) and require it ≥10 pp below the pre-boss pool win rate. **`tier`-1 deaths < 20%** of all deaths. Exit non-zero on violation.
+- [ ] **Step 1:** `check_difficulty_curve.py <batch_summary.json>` **computes its own metrics from `summary.transcripts[].combats[]`** (which carry `normal_combat_ordinal`/`tier`/`pool_class`/`node_id`/`winner` after Task 6 — today's `BatchRunner` only emits aggregates, so derive per-ordinal/tier/pool win rates and death-share-by-node in the script; alternatively extend `batch_runner.gd` to emit `win_rate_by_normal_ordinal`/`by_tier`/`by_pool_class`). Assert: **win-rate by `normal_combat_ordinal` is non-rising within ±5 pp** across mid-depth. **Boss metric (reviewer P1):** boss win rate conditional on *reaching* the boss is **biased upward** (only strong runs get there), so it is **report-only, never a gate**. The boss **gate is death-share**: the boss node has the **highest death share of any reached node**. **`tier`-1 deaths < 20%** of all deaths. Exit non-zero on violation. (Gates: ordinal win-rate non-rising ±5pp · boss = highest death share · tier-1 deaths < 20%. The conditional boss win rate is printed for context only.)
 - [ ] **Step 2: Run** — `./run.sh --playtest-batch --seeds 1..50 --player heuristic --decision greedy --out /tmp/curve.json` then `python3 WUGodot/tools/check_difficulty_curve.py /tmp/curve.json` (reviewer P3 — path under `WUGodot/tools/`).
 - [ ] **Step 3: Commit** — `feat(difficulty): harness acceptance check`.
 
