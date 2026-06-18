@@ -34,7 +34,7 @@ func _init() -> void:
 		if img.is_compressed():
 			img.decompress()
 		var m: Dictionary = AnchorMeasureScript.measure(img)
-		pose["footAnchor"] = _stable_root(pose_name, _iv(m["footAnchor"] as Vector2))
+		pose["footAnchor"] = _stable_root(pose_name, _iv(m["footAnchor"] as Vector2), img.get_size())
 		pose["weaponTip"] = _iv(m["weaponTip"] as Vector2)
 		pose["chestAnchor"] = _iv(m["chestAnchor"] as Vector2)
 		var hb: Rect2 = m["hurtbox"] as Rect2
@@ -52,11 +52,18 @@ func _init() -> void:
 func _iv(v: Vector2) -> Array:
 	return [int(round(v.x)), int(round(v.y))]
 
-func _stable_root(pose_name: String, fallback: Array) -> Array:
+func _stable_root(pose_name: String, fallback: Array, canvas_size: Vector2i) -> Array:
 	var prefix: String = pose_name.get_slice("_", 0)
-	if STABLE_ROOTS.has(prefix):
-		return (STABLE_ROOTS[prefix] as Array).duplicate()
-	return fallback
+	if not STABLE_ROOTS.has(prefix):
+		return fallback
+	var root: Array = (STABLE_ROOTS[prefix] as Array).duplicate()
+	if root.size() < 2:
+		return fallback
+	if int(root[0]) < 0 or int(root[0]) >= canvas_size.x:
+		return fallback
+	if int(root[1]) < 0 or int(root[1]) >= canvas_size.y:
+		return [int(root[0]), int(fallback[1])]
+	return root
 
 func _refresh_aliases(poses: Dictionary) -> void:
 	for alias_name in ALIASES.keys():

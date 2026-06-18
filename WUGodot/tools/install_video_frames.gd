@@ -81,13 +81,15 @@ func _init() -> void:
 			img.decompress()
 		var crop: int = int(round(foot.x)) - foot_x
 		var used: Rect2i = img.get_used_rect()
-		if crop < 0 or crop >= img.get_width() or used.position.x < crop:
+		if crop >= img.get_width() or (crop > 0 and used.position.x < crop):
 			printerr("crop %d invalid for %s (content min x %d)" % [crop, src, used.position.x])
 			quit(1)
 			return
-		var cropped: Image = Image.create(img.get_width() - crop, img.get_height(), false, Image.FORMAT_RGBA8)
+		var src_rect: Rect2i = Rect2i(maxi(crop, 0), 0, img.get_width() - maxi(crop, 0), img.get_height())
+		var pad_left: int = maxi(-crop, 0)
+		var cropped: Image = Image.create(src_rect.size.x + pad_left, img.get_height(), false, Image.FORMAT_RGBA8)
 		cropped.fill(Color(0, 0, 0, 0))
-		cropped.blit_rect(img, Rect2i(crop, 0, img.get_width() - crop, img.get_height()), Vector2i.ZERO)
+		cropped.blit_rect(img, src_rect, Vector2i(pad_left, 0))
 
 		var pose_name: String = "%s_%s" % [prefix, str(entry["label"])]
 		var transform: Dictionary = _pose_transform(pose_name)

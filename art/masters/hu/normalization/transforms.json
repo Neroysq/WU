@@ -1,13 +1,13 @@
 {
   "id": "hu_normalization_transforms",
-  "generated": "2026-06-17T22:33:52.084157+00:00",
+  "generated": "2026-06-17T23:22:37.007140+00:00",
   "measurements": "art/masters/hu/normalization/measurements.json",
   "targetPose": "vi_002",
   "targetRenderHeadWidth": 46.0,
   "groupTargets": {
     "vd": {
-      "x": 197.0,
-      "y": 381.0
+      "x": 200.5,
+      "y": 219.0
     },
     "vh": {
       "x": 235.714,
@@ -22,24 +22,24 @@
       "y": 380.0
     },
     "vp": {
-      "x": 410.3,
-      "y": 371.0
+      "x": 370.167,
+      "y": 219.0
     },
     "vw": {
-      "x": 163.5,
-      "y": 381.0
+      "x": 181.724,
+      "y": 219.0
     }
   },
   "scaleGroups": {
     "__all__": {
-      "medianHeadWidth": 49.0,
+      "medianHeadWidth": 48.0,
       "scale": 1.0,
-      "cleanCount": 179,
+      "cleanCount": 225,
       "source": "locked-build4-user-approved"
     },
     "entry": {
-      "medianHeadWidth": 47.0,
-      "scale": 1.08,
+      "medianHeadWidth": 43.0,
+      "scale": 0.968,
       "cleanCount": 49,
       "cleanPoses": [
         "vd_001",
@@ -92,9 +92,10 @@
         "vd_095",
         "vd_097"
       ],
-      "source": "locked-build4-user-approved",
-      "previousMetricScale": 0.97872,
-      "lockedBuild4": true
+      "source": "locked-build6-user-approved",
+      "previousMetricScale": 1.06977,
+      "lockedBuild4": true,
+      "lockedBuild6": true
     },
     "heavy": {
       "medianHeadWidth": 47.0,
@@ -129,17 +130,17 @@
         "vh_096",
         "vh_097"
       ],
-      "source": "locked-build4-user-approved",
+      "source": "locked-build6-user-approved",
       "previousMetricScale": 0.97872,
-      "lockedBuild4": true
+      "lockedBuild4": true,
+      "lockedBuild6": true
     },
     "held": {
-      "medianHeadWidth": 47.0,
+      "medianHeadWidth": 52.0,
       "scale": 1.04,
-      "cleanCount": 9,
+      "cleanCount": 8,
       "cleanPoses": [
         "vp_block",
-        "vp_dash",
         "vp_fall",
         "vp_hit",
         "vp_land",
@@ -148,10 +149,10 @@
         "vp_stun_a",
         "vp_stun_b"
       ],
-      "source": "locked-build5-held-user-approved",
-      "previousMetricScale": 0.97872,
+      "source": "locked-build6-user-approved",
+      "previousMetricScale": 0.88462,
       "lockedBuild4": true,
-      "lockedBuild5HeldPerPose": true
+      "lockedBuild6HeldPerPose": true
     },
     "idle": {
       "medianHeadWidth": 46.0,
@@ -175,9 +176,10 @@
         "vi_086",
         "vi_097"
       ],
-      "source": "locked-build4-user-approved",
+      "source": "locked-build6-user-approved",
       "previousMetricScale": 1.0,
-      "lockedBuild4": true
+      "lockedBuild4": true,
+      "lockedBuild6": true
     },
     "light": {
       "medianHeadWidth": 47.5,
@@ -215,33 +217,58 @@
         "vl_095",
         "vl_097"
       ],
-      "source": "locked-build4-user-approved",
+      "source": "locked-build6-user-approved",
       "previousMetricScale": 0.96842,
-      "lockedBuild4": true
+      "lockedBuild4": true,
+      "lockedBuild6": true
     },
     "walk": {
-      "medianHeadWidth": 58.0,
-      "scale": 1.04,
-      "cleanCount": 48,
+      "medianHeadWidth": 48.0,
+      "scale": 0.728,
+      "cleanCount": 95,
       "cleanPoses": [
+        "vw_002",
+        "vw_003",
         "vw_004",
         "vw_005",
         "vw_006",
+        "vw_007",
         "vw_008",
         "vw_009",
+        "vw_010",
         "vw_011",
         "vw_012",
         "vw_013",
+        "vw_014",
+        "vw_015",
+        "vw_016",
+        "vw_017",
+        "vw_018",
+        "vw_019",
+        "vw_020",
+        "vw_021",
         "vw_022",
         "vw_023",
+        "vw_024",
+        "vw_025",
         "vw_026",
         "vw_027",
+        "vw_028",
+        "vw_029",
         "vw_030",
+        "vw_031",
+        "vw_032",
+        "vw_033",
+        "vw_034",
+        "vw_035",
         "vw_036",
+        "vw_037",
         "vw_038",
         "vw_039",
         "vw_040",
+        "vw_041",
         "vw_042",
+        "vw_043",
         "vw_044",
         "vw_045",
         "vw_046",
@@ -252,1120 +279,1152 @@
         "vw_051",
         "vw_052",
         "vw_053",
+        "vw_054",
         "vw_055",
+        "vw_056",
         "vw_057",
         "vw_058",
+        "vw_059",
+        "vw_060",
+        "vw_061",
         "vw_062",
         "vw_063",
         "vw_064",
         "vw_065",
+        "vw_066",
         "vw_067",
+        "vw_068",
+        "vw_069",
+        "vw_070",
         "vw_071",
         "vw_072",
         "vw_073",
         "vw_074",
+        "vw_075",
+        "vw_076",
         "vw_077",
         "vw_078",
+        "vw_079",
+        "vw_080",
+        "vw_081",
+        "vw_082",
         "vw_083",
+        "vw_084",
+        "vw_085",
+        "vw_086",
+        "vw_087",
+        "vw_088",
+        "vw_089",
         "vw_090",
+        "vw_091",
         "vw_092",
         "vw_093",
         "vw_094",
+        "vw_095",
         "vw_096"
       ],
-      "source": "locked-build4-user-approved",
-      "previousMetricScale": 0.7931,
-      "lockedBuild4": true
+      "source": "locked-build6-user-approved",
+      "previousMetricScale": 0.95833,
+      "lockedBuild4": true,
+      "lockedBuild6": true
     }
   },
-  "scaleMode": "locked-build5-held",
-  "lockedBuild5HeldScales": {
-    "vp_hit": 0.82483,
-    "vp_stun_a": 1.01787,
-    "vp_stun_b": 0.99667,
-    "vp_block": 0.99667,
-    "vp_dash": 1.04,
-    "vp_rise": 0.99667,
-    "vp_peak": 1.01787,
-    "vp_fall": 1.04,
-    "vp_land": 0.99667
+  "scaleMode": "locked-build6-retune",
+  "lockedBuild5HeldScales": {},
+  "lockedBuild6ActionScales": {
+    "idle": 1.0,
+    "light": 1.06,
+    "heavy": 1.06,
+    "walk": 0.728,
+    "entry": 0.968
+  },
+  "lockedBuild6HeldScales": {
+    "vp_hit": 0.561,
+    "vp_stun_a": 0.56,
+    "vp_stun_b": 0.548,
+    "vp_block": 0.528,
+    "vp_dash": 0.551,
+    "vp_rise": 0.598,
+    "vp_peak": 0.651,
+    "vp_fall": 0.759,
+    "vp_land": 0.568
   },
   "transforms": {
     "vd_001": {
       "pose": "vd_001",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_001",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_001": {
       "pose": "vd_001",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_003": {
       "pose": "vd_003",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_002",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_002": {
       "pose": "vd_003",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_005": {
       "pose": "vd_005",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_003",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_003": {
       "pose": "vd_005",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_007": {
       "pose": "vd_007",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_004",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_004": {
       "pose": "vd_007",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_009": {
       "pose": "vd_009",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_005",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_005": {
       "pose": "vd_009",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_011": {
       "pose": "vd_011",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_006",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_006": {
       "pose": "vd_011",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_013": {
       "pose": "vd_013",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_007",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_007": {
       "pose": "vd_013",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_015": {
       "pose": "vd_015",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_008",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_008": {
       "pose": "vd_015",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_017": {
       "pose": "vd_017",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_009",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_009": {
       "pose": "vd_017",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_019": {
       "pose": "vd_019",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_010",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_010": {
       "pose": "vd_019",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_021": {
       "pose": "vd_021",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_011",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_011": {
       "pose": "vd_021",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_023": {
       "pose": "vd_023",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_012",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_012": {
       "pose": "vd_023",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_025": {
       "pose": "vd_025",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_013",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_013": {
       "pose": "vd_025",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_027": {
       "pose": "vd_027",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_014",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_014": {
       "pose": "vd_027",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_029": {
       "pose": "vd_029",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_015",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_015": {
       "pose": "vd_029",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_031": {
       "pose": "vd_031",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_016",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_016": {
       "pose": "vd_031",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_033": {
       "pose": "vd_033",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_017",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_017": {
       "pose": "vd_033",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_035": {
       "pose": "vd_035",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_018",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_018": {
       "pose": "vd_035",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_037": {
       "pose": "vd_037",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_019",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_019": {
       "pose": "vd_037",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_039": {
       "pose": "vd_039",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_020",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_020": {
       "pose": "vd_039",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_041": {
       "pose": "vd_041",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_021",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_021": {
       "pose": "vd_041",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_043": {
       "pose": "vd_043",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_022",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_022": {
       "pose": "vd_043",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_045": {
       "pose": "vd_045",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_023",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_023": {
       "pose": "vd_045",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_047": {
       "pose": "vd_047",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_024",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_024": {
       "pose": "vd_047",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_049": {
       "pose": "vd_049",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_025",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_025": {
       "pose": "vd_049",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_051": {
       "pose": "vd_051",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_026",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_026": {
       "pose": "vd_051",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_053": {
       "pose": "vd_053",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_027",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_027": {
       "pose": "vd_053",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_055": {
       "pose": "vd_055",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_028",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_028": {
       "pose": "vd_055",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_057": {
       "pose": "vd_057",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_029",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_029": {
       "pose": "vd_057",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_059": {
       "pose": "vd_059",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_030",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_030": {
       "pose": "vd_059",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_061": {
       "pose": "vd_061",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_031",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_031": {
       "pose": "vd_061",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_063": {
       "pose": "vd_063",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_032",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_032": {
       "pose": "vd_063",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_065": {
       "pose": "vd_065",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_033",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_033": {
       "pose": "vd_065",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_067": {
       "pose": "vd_067",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_034",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_034": {
       "pose": "vd_067",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_069": {
       "pose": "vd_069",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_035",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_035": {
       "pose": "vd_069",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_071": {
       "pose": "vd_071",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_036",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_036": {
       "pose": "vd_071",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_073": {
       "pose": "vd_073",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_037",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_037": {
       "pose": "vd_073",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_075": {
       "pose": "vd_075",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_038",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_038": {
       "pose": "vd_075",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_077": {
       "pose": "vd_077",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_039",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_039": {
       "pose": "vd_077",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_079": {
       "pose": "vd_079",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_040",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_040": {
       "pose": "vd_079",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_081": {
       "pose": "vd_081",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_041",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_041": {
       "pose": "vd_081",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_083": {
       "pose": "vd_083",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_042",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_042": {
       "pose": "vd_083",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_085": {
       "pose": "vd_085",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_043",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_043": {
       "pose": "vd_085",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_087": {
       "pose": "vd_087",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_044",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_044": {
       "pose": "vd_087",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_089": {
       "pose": "vd_089",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_045",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_045": {
       "pose": "vd_089",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_091": {
       "pose": "vd_091",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_046",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_046": {
       "pose": "vd_091",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_093": {
       "pose": "vd_093",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_047",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_047": {
       "pose": "vd_093",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_095": {
       "pose": "vd_095",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_048",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_048": {
       "pose": "vd_095",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
     "vd_097": {
       "pose": "vd_097",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "entry",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "entry/master_049",
       "targetFoot": [
-        197.0,
-        381.0
+        200.5,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "entry/master_049": {
       "pose": "vd_097",
-      "scale": 1.08,
+      "scale": 0.968,
       "scaleGroup": "entry",
       "flags": []
     },
@@ -1376,7 +1435,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_001",
       "targetFoot": [
         235.714,
@@ -1398,7 +1457,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_002",
       "targetFoot": [
         235.714,
@@ -1420,7 +1479,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_003",
       "targetFoot": [
         235.714,
@@ -1442,7 +1501,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_004",
       "targetFoot": [
         235.714,
@@ -1464,7 +1523,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_005",
       "targetFoot": [
         235.714,
@@ -1486,7 +1545,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_006",
       "targetFoot": [
         235.714,
@@ -1508,7 +1567,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_007",
       "targetFoot": [
         235.714,
@@ -1530,7 +1589,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_008",
       "targetFoot": [
         235.714,
@@ -1552,7 +1611,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_009",
       "targetFoot": [
         235.714,
@@ -1574,7 +1633,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_010",
       "targetFoot": [
         235.714,
@@ -1596,7 +1655,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_011",
       "targetFoot": [
         235.714,
@@ -1618,7 +1677,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_012",
       "targetFoot": [
         235.714,
@@ -1640,7 +1699,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_013",
       "targetFoot": [
         235.714,
@@ -1662,7 +1721,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_014",
       "targetFoot": [
         235.714,
@@ -1684,7 +1743,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_015",
       "targetFoot": [
         235.714,
@@ -1706,7 +1765,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_016",
       "targetFoot": [
         235.714,
@@ -1728,7 +1787,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_017",
       "targetFoot": [
         235.714,
@@ -1750,7 +1809,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_018",
       "targetFoot": [
         235.714,
@@ -1772,7 +1831,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_019",
       "targetFoot": [
         235.714,
@@ -1794,7 +1853,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_020",
       "targetFoot": [
         235.714,
@@ -1816,7 +1875,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_021",
       "targetFoot": [
         235.714,
@@ -1838,7 +1897,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_022",
       "targetFoot": [
         235.714,
@@ -1860,7 +1919,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_023",
       "targetFoot": [
         235.714,
@@ -1882,7 +1941,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_024",
       "targetFoot": [
         235.714,
@@ -1904,7 +1963,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_025",
       "targetFoot": [
         235.714,
@@ -1926,7 +1985,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_026",
       "targetFoot": [
         235.714,
@@ -1948,7 +2007,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_027",
       "targetFoot": [
         235.714,
@@ -1970,7 +2029,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_028",
       "targetFoot": [
         235.714,
@@ -1992,7 +2051,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_029",
       "targetFoot": [
         235.714,
@@ -2014,7 +2073,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "heavy",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "heavy/master_030",
       "targetFoot": [
         235.714,
@@ -2036,7 +2095,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "idle",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "idle_ref/master_001",
       "targetFoot": [
         115.357,
@@ -2052,7 +2111,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "idle",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "",
       "targetFoot": [
         115.357,
@@ -2068,7 +2127,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "idle",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "",
       "targetFoot": [
         115.357,
@@ -2084,7 +2143,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "idle",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "",
       "targetFoot": [
         115.357,
@@ -2100,7 +2159,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "idle",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "",
       "targetFoot": [
         115.357,
@@ -2116,7 +2175,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "idle",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "",
       "targetFoot": [
         115.357,
@@ -2132,7 +2191,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "idle",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "",
       "targetFoot": [
         115.357,
@@ -2148,7 +2207,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "idle",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "",
       "targetFoot": [
         115.357,
@@ -2164,7 +2223,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "idle",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "",
       "targetFoot": [
         115.357,
@@ -2180,7 +2239,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "idle",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "",
       "targetFoot": [
         115.357,
@@ -2196,7 +2255,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "idle",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "",
       "targetFoot": [
         115.357,
@@ -2212,7 +2271,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "idle",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "",
       "targetFoot": [
         115.357,
@@ -2228,7 +2287,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "idle",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "",
       "targetFoot": [
         115.357,
@@ -2244,7 +2303,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "idle",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "",
       "targetFoot": [
         115.357,
@@ -2260,7 +2319,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "idle",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "",
       "targetFoot": [
         115.357,
@@ -2276,7 +2335,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "idle",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "",
       "targetFoot": [
         115.357,
@@ -2292,7 +2351,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_001",
       "targetFoot": [
         237.0,
@@ -2314,7 +2373,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_002",
       "targetFoot": [
         237.0,
@@ -2336,7 +2395,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_003",
       "targetFoot": [
         237.0,
@@ -2358,7 +2417,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_004",
       "targetFoot": [
         237.0,
@@ -2380,7 +2439,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_005",
       "targetFoot": [
         237.0,
@@ -2402,7 +2461,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_006",
       "targetFoot": [
         237.0,
@@ -2424,7 +2483,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_007",
       "targetFoot": [
         237.0,
@@ -2446,7 +2505,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_008",
       "targetFoot": [
         237.0,
@@ -2468,7 +2527,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_009",
       "targetFoot": [
         237.0,
@@ -2490,7 +2549,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_010",
       "targetFoot": [
         237.0,
@@ -2512,7 +2571,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_011",
       "targetFoot": [
         237.0,
@@ -2534,7 +2593,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_012",
       "targetFoot": [
         237.0,
@@ -2556,7 +2615,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_013",
       "targetFoot": [
         237.0,
@@ -2578,7 +2637,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_014",
       "targetFoot": [
         237.0,
@@ -2600,7 +2659,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_015",
       "targetFoot": [
         237.0,
@@ -2622,7 +2681,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_016",
       "targetFoot": [
         237.0,
@@ -2644,7 +2703,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_017",
       "targetFoot": [
         237.0,
@@ -2666,7 +2725,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_018",
       "targetFoot": [
         237.0,
@@ -2688,7 +2747,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_019",
       "targetFoot": [
         237.0,
@@ -2710,7 +2769,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_020",
       "targetFoot": [
         237.0,
@@ -2732,7 +2791,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_021",
       "targetFoot": [
         237.0,
@@ -2754,7 +2813,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_022",
       "targetFoot": [
         237.0,
@@ -2776,7 +2835,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_023",
       "targetFoot": [
         237.0,
@@ -2798,7 +2857,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_024",
       "targetFoot": [
         237.0,
@@ -2820,7 +2879,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_025",
       "targetFoot": [
         237.0,
@@ -2842,7 +2901,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_026",
       "targetFoot": [
         237.0,
@@ -2864,7 +2923,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_027",
       "targetFoot": [
         237.0,
@@ -2886,7 +2945,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_028",
       "targetFoot": [
         237.0,
@@ -2908,7 +2967,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_029",
       "targetFoot": [
         237.0,
@@ -2930,7 +2989,7 @@
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "light",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "light/master_030",
       "targetFoot": [
         237.0,
@@ -2947,2289 +3006,2289 @@
     },
     "vp_block": {
       "pose": "vp_block",
-      "scale": 0.99667,
+      "scale": 0.528,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "held",
-      "scaleSource": "locked-build5-held-manual-head-width",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "held/master_004",
       "targetFoot": [
-        410.3,
-        371.0
+        370.167,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "held/master_004": {
       "pose": "vp_block",
-      "scale": 0.99667,
+      "scale": 0.528,
       "scaleGroup": "held",
       "flags": []
     },
     "vp_dash": {
       "pose": "vp_dash",
-      "scale": 1.04,
+      "scale": 0.551,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "exempt",
       "scaleGroup": "held",
-      "scaleSource": "locked-build5-held-manual-head-width",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "held/master_005",
       "targetFoot": [
-        410.3,
-        371.0
+        370.167,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "held/master_005": {
       "pose": "vp_dash",
-      "scale": 1.04,
+      "scale": 0.551,
       "scaleGroup": "held",
       "flags": []
     },
     "vp_fall": {
       "pose": "vp_fall",
-      "scale": 1.04,
+      "scale": 0.759,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "exempt",
       "scaleGroup": "held",
-      "scaleSource": "locked-build5-held-manual-head-width",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "held/master_008",
       "targetFoot": [
-        410.3,
-        371.0
+        370.167,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "held/master_008": {
       "pose": "vp_fall",
-      "scale": 1.04,
+      "scale": 0.759,
       "scaleGroup": "held",
       "flags": []
     },
     "vp_hit": {
       "pose": "vp_hit",
-      "scale": 0.82483,
+      "scale": 0.561,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "held",
-      "scaleSource": "locked-build5-held-manual-head-width",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "held/master_001",
       "targetFoot": [
-        410.3,
-        371.0
+        370.167,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "held/master_001": {
       "pose": "vp_hit",
-      "scale": 0.82483,
+      "scale": 0.561,
       "scaleGroup": "held",
       "flags": []
     },
     "vp_land": {
       "pose": "vp_land",
-      "scale": 0.99667,
+      "scale": 0.568,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "held",
-      "scaleSource": "locked-build5-held-manual-head-width",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "held/master_009",
       "targetFoot": [
-        410.3,
-        371.0
+        370.167,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "held/master_009": {
       "pose": "vp_land",
-      "scale": 0.99667,
+      "scale": 0.568,
       "scaleGroup": "held",
       "flags": []
     },
     "vp_peak": {
       "pose": "vp_peak",
-      "scale": 1.01787,
+      "scale": 0.651,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "exempt",
       "scaleGroup": "held",
-      "scaleSource": "locked-build5-held-manual-head-width",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "held/master_007",
       "targetFoot": [
-        410.3,
-        371.0
+        370.167,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "held/master_007": {
       "pose": "vp_peak",
-      "scale": 1.01787,
+      "scale": 0.651,
       "scaleGroup": "held",
       "flags": []
     },
     "vp_rise": {
       "pose": "vp_rise",
-      "scale": 0.99667,
+      "scale": 0.598,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "exempt",
       "scaleGroup": "held",
-      "scaleSource": "locked-build5-held-manual-head-width",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "held/master_006",
       "targetFoot": [
-        410.3,
-        371.0
+        370.167,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "held/master_006": {
       "pose": "vp_rise",
-      "scale": 0.99667,
+      "scale": 0.598,
       "scaleGroup": "held",
       "flags": []
     },
     "vp_stun_a": {
       "pose": "vp_stun_a",
-      "scale": 1.01787,
+      "scale": 0.56,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "held",
-      "scaleSource": "locked-build5-held-manual-head-width",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "held/master_002",
       "targetFoot": [
-        410.3,
-        371.0
+        370.167,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "held/master_002": {
       "pose": "vp_stun_a",
-      "scale": 1.01787,
+      "scale": 0.56,
       "scaleGroup": "held",
       "flags": []
     },
     "vp_stun_b": {
       "pose": "vp_stun_b",
-      "scale": 0.99667,
+      "scale": 0.548,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "held",
-      "scaleSource": "locked-build5-held-manual-head-width",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "held/master_003",
       "targetFoot": [
-        410.3,
-        371.0
+        370.167,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "held/master_003": {
       "pose": "vp_stun_b",
-      "scale": 0.99667,
+      "scale": 0.548,
       "scaleGroup": "held",
       "flags": []
     },
     "vw_002": {
       "pose": "vw_002",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_001",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_001": {
       "pose": "vw_002",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_003": {
       "pose": "vw_003",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_002",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_002": {
       "pose": "vw_003",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_004": {
       "pose": "vw_004",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_003",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_003": {
       "pose": "vw_004",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_005": {
       "pose": "vw_005",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_004",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_004": {
       "pose": "vw_005",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_006": {
       "pose": "vw_006",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_005",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_005": {
       "pose": "vw_006",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_007": {
       "pose": "vw_007",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_006",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_006": {
       "pose": "vw_007",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_008": {
       "pose": "vw_008",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_007",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_007": {
       "pose": "vw_008",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_009": {
       "pose": "vw_009",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_008",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_008": {
       "pose": "vw_009",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_010": {
       "pose": "vw_010",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_009",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_009": {
       "pose": "vw_010",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_011": {
       "pose": "vw_011",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_010",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_010": {
       "pose": "vw_011",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_012": {
       "pose": "vw_012",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_011",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_011": {
       "pose": "vw_012",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_013": {
       "pose": "vw_013",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_012",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_012": {
       "pose": "vw_013",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_014": {
       "pose": "vw_014",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_013",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_013": {
       "pose": "vw_014",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_015": {
       "pose": "vw_015",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_014",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_014": {
       "pose": "vw_015",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_016": {
       "pose": "vw_016",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_015",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_015": {
       "pose": "vw_016",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_017": {
       "pose": "vw_017",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_016",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_016": {
       "pose": "vw_017",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_018": {
       "pose": "vw_018",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_017",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_017": {
       "pose": "vw_018",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_019": {
       "pose": "vw_019",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_018",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_018": {
       "pose": "vw_019",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_020": {
       "pose": "vw_020",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_019",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_019": {
       "pose": "vw_020",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_021": {
       "pose": "vw_021",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_020",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_020": {
       "pose": "vw_021",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_022": {
       "pose": "vw_022",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_021",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_021": {
       "pose": "vw_022",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_023": {
       "pose": "vw_023",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_022",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_022": {
       "pose": "vw_023",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_024": {
       "pose": "vw_024",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_023",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_023": {
       "pose": "vw_024",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_025": {
       "pose": "vw_025",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_024",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_024": {
       "pose": "vw_025",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_026": {
       "pose": "vw_026",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_025",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_025": {
       "pose": "vw_026",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_027": {
       "pose": "vw_027",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_026",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_026": {
       "pose": "vw_027",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_028": {
       "pose": "vw_028",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_027",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_027": {
       "pose": "vw_028",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_029": {
       "pose": "vw_029",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_028",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_028": {
       "pose": "vw_029",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_030": {
       "pose": "vw_030",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_029",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_029": {
       "pose": "vw_030",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_031": {
       "pose": "vw_031",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_030",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_030": {
       "pose": "vw_031",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_032": {
       "pose": "vw_032",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_031",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_031": {
       "pose": "vw_032",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_033": {
       "pose": "vw_033",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_032",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_032": {
       "pose": "vw_033",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_034": {
       "pose": "vw_034",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_033",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_033": {
       "pose": "vw_034",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_035": {
       "pose": "vw_035",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_034",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_034": {
       "pose": "vw_035",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_036": {
       "pose": "vw_036",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_035",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_035": {
       "pose": "vw_036",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_037": {
       "pose": "vw_037",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_036",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_036": {
       "pose": "vw_037",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_038": {
       "pose": "vw_038",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_037",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_037": {
       "pose": "vw_038",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_039": {
       "pose": "vw_039",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_038",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_038": {
       "pose": "vw_039",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_040": {
       "pose": "vw_040",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_039",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_039": {
       "pose": "vw_040",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_041": {
       "pose": "vw_041",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_040",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_040": {
       "pose": "vw_041",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_042": {
       "pose": "vw_042",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_041",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_041": {
       "pose": "vw_042",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_043": {
       "pose": "vw_043",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_042",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_042": {
       "pose": "vw_043",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_044": {
       "pose": "vw_044",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_043",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_043": {
       "pose": "vw_044",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_045": {
       "pose": "vw_045",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_044",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_044": {
       "pose": "vw_045",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_046": {
       "pose": "vw_046",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_045",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_045": {
       "pose": "vw_046",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_047": {
       "pose": "vw_047",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_046",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_046": {
       "pose": "vw_047",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_048": {
       "pose": "vw_048",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_047",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_047": {
       "pose": "vw_048",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_049": {
       "pose": "vw_049",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_048",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_048": {
       "pose": "vw_049",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_050": {
       "pose": "vw_050",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_049",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_049": {
       "pose": "vw_050",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_051": {
       "pose": "vw_051",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_050",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_050": {
       "pose": "vw_051",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_052": {
       "pose": "vw_052",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_051",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_051": {
       "pose": "vw_052",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_053": {
       "pose": "vw_053",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_052",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_052": {
       "pose": "vw_053",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_054": {
       "pose": "vw_054",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_053",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_053": {
       "pose": "vw_054",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_055": {
       "pose": "vw_055",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_054",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_054": {
       "pose": "vw_055",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_056": {
       "pose": "vw_056",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_055",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_055": {
       "pose": "vw_056",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_057": {
       "pose": "vw_057",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_056",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_056": {
       "pose": "vw_057",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_058": {
       "pose": "vw_058",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_057",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_057": {
       "pose": "vw_058",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_059": {
       "pose": "vw_059",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_058",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_058": {
       "pose": "vw_059",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_060": {
       "pose": "vw_060",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_059",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_059": {
       "pose": "vw_060",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_061": {
       "pose": "vw_061",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_060",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_060": {
       "pose": "vw_061",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_062": {
       "pose": "vw_062",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_061",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_061": {
       "pose": "vw_062",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_063": {
       "pose": "vw_063",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_062",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_062": {
       "pose": "vw_063",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_064": {
       "pose": "vw_064",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_063",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_063": {
       "pose": "vw_064",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_065": {
       "pose": "vw_065",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_064",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_064": {
       "pose": "vw_065",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_066": {
       "pose": "vw_066",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_065",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_065": {
       "pose": "vw_066",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_067": {
       "pose": "vw_067",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_066",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_066": {
       "pose": "vw_067",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_068": {
       "pose": "vw_068",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_067",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_067": {
       "pose": "vw_068",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_069": {
       "pose": "vw_069",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_068",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_068": {
       "pose": "vw_069",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_070": {
       "pose": "vw_070",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_069",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_069": {
       "pose": "vw_070",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_071": {
       "pose": "vw_071",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_070",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_070": {
       "pose": "vw_071",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_072": {
       "pose": "vw_072",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_071",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_071": {
       "pose": "vw_072",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_073": {
       "pose": "vw_073",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_072",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_072": {
       "pose": "vw_073",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_074": {
       "pose": "vw_074",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_073",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_073": {
       "pose": "vw_074",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_075": {
       "pose": "vw_075",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_074",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_074": {
       "pose": "vw_075",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_076": {
       "pose": "vw_076",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_075",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_075": {
       "pose": "vw_076",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_077": {
       "pose": "vw_077",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_076",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_076": {
       "pose": "vw_077",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_078": {
       "pose": "vw_078",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_077",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_077": {
       "pose": "vw_078",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_079": {
       "pose": "vw_079",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_078",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_078": {
       "pose": "vw_079",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_080": {
       "pose": "vw_080",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_079",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_079": {
       "pose": "vw_080",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_081": {
       "pose": "vw_081",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_080",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_080": {
       "pose": "vw_081",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_082": {
       "pose": "vw_082",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_081",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_081": {
       "pose": "vw_082",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_083": {
       "pose": "vw_083",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_082",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_082": {
       "pose": "vw_083",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_084": {
       "pose": "vw_084",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_083",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_083": {
       "pose": "vw_084",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_085": {
       "pose": "vw_085",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_084",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_084": {
       "pose": "vw_085",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_086": {
       "pose": "vw_086",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_085",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_085": {
       "pose": "vw_086",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_087": {
       "pose": "vw_087",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_086",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_086": {
       "pose": "vw_087",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_088": {
       "pose": "vw_088",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_087",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_087": {
       "pose": "vw_088",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_089": {
       "pose": "vw_089",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_088",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_088": {
       "pose": "vw_089",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_090": {
       "pose": "vw_090",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_089",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_089": {
       "pose": "vw_090",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_091": {
       "pose": "vw_091",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_090",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_090": {
       "pose": "vw_091",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_092": {
       "pose": "vw_092",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_091",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_091": {
       "pose": "vw_092",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_093": {
       "pose": "vw_093",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_092",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_092": {
       "pose": "vw_093",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_094": {
       "pose": "vw_094",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_093",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_093": {
       "pose": "vw_094",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_095": {
       "pose": "vw_095",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_094",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_094": {
       "pose": "vw_095",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     },
     "vw_096": {
       "pose": "vw_096",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "grounding": "grounded",
       "scaleGroup": "walk",
-      "scaleSource": "locked-build4-user-approved",
+      "scaleSource": "locked-build6-user-approved",
       "sourceKey": "walk/master_095",
       "targetFoot": [
-        163.5,
-        381.0
+        181.724,
+        219.0
       ],
       "flags": [],
       "spatialFlags": []
     },
     "walk/master_095": {
       "pose": "vw_096",
-      "scale": 1.04,
+      "scale": 0.728,
       "scaleGroup": "walk",
       "flags": []
     }
@@ -5238,15 +5297,15 @@
     "poses": 229,
     "sourceKeys": 213,
     "flagged": 0,
-    "maxScale": 1.08,
-    "minScale": 0.82483,
+    "maxScale": 1.06,
+    "minScale": 0.528,
     "scaleGroupCount": 6
   },
   "poses": [
     {
       "pose": "vd_001",
       "sourceKey": "entry/master_001",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5255,7 +5314,7 @@
     {
       "pose": "vd_003",
       "sourceKey": "entry/master_002",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5264,7 +5323,7 @@
     {
       "pose": "vd_005",
       "sourceKey": "entry/master_003",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5273,7 +5332,7 @@
     {
       "pose": "vd_007",
       "sourceKey": "entry/master_004",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5282,7 +5341,7 @@
     {
       "pose": "vd_009",
       "sourceKey": "entry/master_005",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5291,7 +5350,7 @@
     {
       "pose": "vd_011",
       "sourceKey": "entry/master_006",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5300,7 +5359,7 @@
     {
       "pose": "vd_013",
       "sourceKey": "entry/master_007",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5309,7 +5368,7 @@
     {
       "pose": "vd_015",
       "sourceKey": "entry/master_008",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5318,7 +5377,7 @@
     {
       "pose": "vd_017",
       "sourceKey": "entry/master_009",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5327,7 +5386,7 @@
     {
       "pose": "vd_019",
       "sourceKey": "entry/master_010",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5336,7 +5395,7 @@
     {
       "pose": "vd_021",
       "sourceKey": "entry/master_011",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5345,7 +5404,7 @@
     {
       "pose": "vd_023",
       "sourceKey": "entry/master_012",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5354,7 +5413,7 @@
     {
       "pose": "vd_025",
       "sourceKey": "entry/master_013",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5363,7 +5422,7 @@
     {
       "pose": "vd_027",
       "sourceKey": "entry/master_014",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5372,7 +5431,7 @@
     {
       "pose": "vd_029",
       "sourceKey": "entry/master_015",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5381,7 +5440,7 @@
     {
       "pose": "vd_031",
       "sourceKey": "entry/master_016",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5390,7 +5449,7 @@
     {
       "pose": "vd_033",
       "sourceKey": "entry/master_017",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5399,7 +5458,7 @@
     {
       "pose": "vd_035",
       "sourceKey": "entry/master_018",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5408,7 +5467,7 @@
     {
       "pose": "vd_037",
       "sourceKey": "entry/master_019",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5417,7 +5476,7 @@
     {
       "pose": "vd_039",
       "sourceKey": "entry/master_020",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5426,7 +5485,7 @@
     {
       "pose": "vd_041",
       "sourceKey": "entry/master_021",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5435,7 +5494,7 @@
     {
       "pose": "vd_043",
       "sourceKey": "entry/master_022",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5444,7 +5503,7 @@
     {
       "pose": "vd_045",
       "sourceKey": "entry/master_023",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5453,7 +5512,7 @@
     {
       "pose": "vd_047",
       "sourceKey": "entry/master_024",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5462,7 +5521,7 @@
     {
       "pose": "vd_049",
       "sourceKey": "entry/master_025",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5471,7 +5530,7 @@
     {
       "pose": "vd_051",
       "sourceKey": "entry/master_026",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5480,7 +5539,7 @@
     {
       "pose": "vd_053",
       "sourceKey": "entry/master_027",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5489,7 +5548,7 @@
     {
       "pose": "vd_055",
       "sourceKey": "entry/master_028",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5498,7 +5557,7 @@
     {
       "pose": "vd_057",
       "sourceKey": "entry/master_029",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5507,7 +5566,7 @@
     {
       "pose": "vd_059",
       "sourceKey": "entry/master_030",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5516,7 +5575,7 @@
     {
       "pose": "vd_061",
       "sourceKey": "entry/master_031",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5525,7 +5584,7 @@
     {
       "pose": "vd_063",
       "sourceKey": "entry/master_032",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5534,7 +5593,7 @@
     {
       "pose": "vd_065",
       "sourceKey": "entry/master_033",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5543,7 +5602,7 @@
     {
       "pose": "vd_067",
       "sourceKey": "entry/master_034",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5552,7 +5611,7 @@
     {
       "pose": "vd_069",
       "sourceKey": "entry/master_035",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5561,7 +5620,7 @@
     {
       "pose": "vd_071",
       "sourceKey": "entry/master_036",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5570,7 +5629,7 @@
     {
       "pose": "vd_073",
       "sourceKey": "entry/master_037",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5579,7 +5638,7 @@
     {
       "pose": "vd_075",
       "sourceKey": "entry/master_038",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5588,7 +5647,7 @@
     {
       "pose": "vd_077",
       "sourceKey": "entry/master_039",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5597,7 +5656,7 @@
     {
       "pose": "vd_079",
       "sourceKey": "entry/master_040",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5606,7 +5665,7 @@
     {
       "pose": "vd_081",
       "sourceKey": "entry/master_041",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5615,7 +5674,7 @@
     {
       "pose": "vd_083",
       "sourceKey": "entry/master_042",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5624,7 +5683,7 @@
     {
       "pose": "vd_085",
       "sourceKey": "entry/master_043",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5633,7 +5692,7 @@
     {
       "pose": "vd_087",
       "sourceKey": "entry/master_044",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5642,7 +5701,7 @@
     {
       "pose": "vd_089",
       "sourceKey": "entry/master_045",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5651,7 +5710,7 @@
     {
       "pose": "vd_091",
       "sourceKey": "entry/master_046",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5660,7 +5719,7 @@
     {
       "pose": "vd_093",
       "sourceKey": "entry/master_047",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5669,7 +5728,7 @@
     {
       "pose": "vd_095",
       "sourceKey": "entry/master_048",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -5678,7 +5737,7 @@
     {
       "pose": "vd_097",
       "sourceKey": "entry/master_049",
-      "scale": 1.08,
+      "scale": 0.968,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6371,7 +6430,7 @@
     {
       "pose": "vp_block",
       "sourceKey": "held/master_004",
-      "scale": 0.99667,
+      "scale": 0.528,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6380,7 +6439,7 @@
     {
       "pose": "vp_dash",
       "sourceKey": "held/master_005",
-      "scale": 1.04,
+      "scale": 0.551,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6389,7 +6448,7 @@
     {
       "pose": "vp_fall",
       "sourceKey": "held/master_008",
-      "scale": 1.04,
+      "scale": 0.759,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6398,7 +6457,7 @@
     {
       "pose": "vp_hit",
       "sourceKey": "held/master_001",
-      "scale": 0.82483,
+      "scale": 0.561,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6407,7 +6466,7 @@
     {
       "pose": "vp_land",
       "sourceKey": "held/master_009",
-      "scale": 0.99667,
+      "scale": 0.568,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6416,7 +6475,7 @@
     {
       "pose": "vp_peak",
       "sourceKey": "held/master_007",
-      "scale": 1.01787,
+      "scale": 0.651,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6425,7 +6484,7 @@
     {
       "pose": "vp_rise",
       "sourceKey": "held/master_006",
-      "scale": 0.99667,
+      "scale": 0.598,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6434,7 +6493,7 @@
     {
       "pose": "vp_stun_a",
       "sourceKey": "held/master_002",
-      "scale": 1.01787,
+      "scale": 0.56,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6443,7 +6502,7 @@
     {
       "pose": "vp_stun_b",
       "sourceKey": "held/master_003",
-      "scale": 0.99667,
+      "scale": 0.548,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6452,7 +6511,7 @@
     {
       "pose": "vw_002",
       "sourceKey": "walk/master_001",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6461,7 +6520,7 @@
     {
       "pose": "vw_003",
       "sourceKey": "walk/master_002",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6470,7 +6529,7 @@
     {
       "pose": "vw_004",
       "sourceKey": "walk/master_003",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6479,7 +6538,7 @@
     {
       "pose": "vw_005",
       "sourceKey": "walk/master_004",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6488,7 +6547,7 @@
     {
       "pose": "vw_006",
       "sourceKey": "walk/master_005",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6497,7 +6556,7 @@
     {
       "pose": "vw_007",
       "sourceKey": "walk/master_006",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6506,7 +6565,7 @@
     {
       "pose": "vw_008",
       "sourceKey": "walk/master_007",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6515,7 +6574,7 @@
     {
       "pose": "vw_009",
       "sourceKey": "walk/master_008",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6524,7 +6583,7 @@
     {
       "pose": "vw_010",
       "sourceKey": "walk/master_009",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6533,7 +6592,7 @@
     {
       "pose": "vw_011",
       "sourceKey": "walk/master_010",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6542,7 +6601,7 @@
     {
       "pose": "vw_012",
       "sourceKey": "walk/master_011",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6551,7 +6610,7 @@
     {
       "pose": "vw_013",
       "sourceKey": "walk/master_012",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6560,7 +6619,7 @@
     {
       "pose": "vw_014",
       "sourceKey": "walk/master_013",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6569,7 +6628,7 @@
     {
       "pose": "vw_015",
       "sourceKey": "walk/master_014",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6578,7 +6637,7 @@
     {
       "pose": "vw_016",
       "sourceKey": "walk/master_015",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6587,7 +6646,7 @@
     {
       "pose": "vw_017",
       "sourceKey": "walk/master_016",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6596,7 +6655,7 @@
     {
       "pose": "vw_018",
       "sourceKey": "walk/master_017",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6605,7 +6664,7 @@
     {
       "pose": "vw_019",
       "sourceKey": "walk/master_018",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6614,7 +6673,7 @@
     {
       "pose": "vw_020",
       "sourceKey": "walk/master_019",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6623,7 +6682,7 @@
     {
       "pose": "vw_021",
       "sourceKey": "walk/master_020",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6632,7 +6691,7 @@
     {
       "pose": "vw_022",
       "sourceKey": "walk/master_021",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6641,7 +6700,7 @@
     {
       "pose": "vw_023",
       "sourceKey": "walk/master_022",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6650,7 +6709,7 @@
     {
       "pose": "vw_024",
       "sourceKey": "walk/master_023",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6659,7 +6718,7 @@
     {
       "pose": "vw_025",
       "sourceKey": "walk/master_024",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6668,7 +6727,7 @@
     {
       "pose": "vw_026",
       "sourceKey": "walk/master_025",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6677,7 +6736,7 @@
     {
       "pose": "vw_027",
       "sourceKey": "walk/master_026",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6686,7 +6745,7 @@
     {
       "pose": "vw_028",
       "sourceKey": "walk/master_027",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6695,7 +6754,7 @@
     {
       "pose": "vw_029",
       "sourceKey": "walk/master_028",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6704,7 +6763,7 @@
     {
       "pose": "vw_030",
       "sourceKey": "walk/master_029",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6713,7 +6772,7 @@
     {
       "pose": "vw_031",
       "sourceKey": "walk/master_030",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6722,7 +6781,7 @@
     {
       "pose": "vw_032",
       "sourceKey": "walk/master_031",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6731,7 +6790,7 @@
     {
       "pose": "vw_033",
       "sourceKey": "walk/master_032",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6740,7 +6799,7 @@
     {
       "pose": "vw_034",
       "sourceKey": "walk/master_033",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6749,7 +6808,7 @@
     {
       "pose": "vw_035",
       "sourceKey": "walk/master_034",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6758,7 +6817,7 @@
     {
       "pose": "vw_036",
       "sourceKey": "walk/master_035",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6767,7 +6826,7 @@
     {
       "pose": "vw_037",
       "sourceKey": "walk/master_036",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6776,7 +6835,7 @@
     {
       "pose": "vw_038",
       "sourceKey": "walk/master_037",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6785,7 +6844,7 @@
     {
       "pose": "vw_039",
       "sourceKey": "walk/master_038",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6794,7 +6853,7 @@
     {
       "pose": "vw_040",
       "sourceKey": "walk/master_039",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6803,7 +6862,7 @@
     {
       "pose": "vw_041",
       "sourceKey": "walk/master_040",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6812,7 +6871,7 @@
     {
       "pose": "vw_042",
       "sourceKey": "walk/master_041",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6821,7 +6880,7 @@
     {
       "pose": "vw_043",
       "sourceKey": "walk/master_042",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6830,7 +6889,7 @@
     {
       "pose": "vw_044",
       "sourceKey": "walk/master_043",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6839,7 +6898,7 @@
     {
       "pose": "vw_045",
       "sourceKey": "walk/master_044",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6848,7 +6907,7 @@
     {
       "pose": "vw_046",
       "sourceKey": "walk/master_045",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6857,7 +6916,7 @@
     {
       "pose": "vw_047",
       "sourceKey": "walk/master_046",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6866,7 +6925,7 @@
     {
       "pose": "vw_048",
       "sourceKey": "walk/master_047",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6875,7 +6934,7 @@
     {
       "pose": "vw_049",
       "sourceKey": "walk/master_048",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6884,7 +6943,7 @@
     {
       "pose": "vw_050",
       "sourceKey": "walk/master_049",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6893,7 +6952,7 @@
     {
       "pose": "vw_051",
       "sourceKey": "walk/master_050",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6902,7 +6961,7 @@
     {
       "pose": "vw_052",
       "sourceKey": "walk/master_051",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6911,7 +6970,7 @@
     {
       "pose": "vw_053",
       "sourceKey": "walk/master_052",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6920,7 +6979,7 @@
     {
       "pose": "vw_054",
       "sourceKey": "walk/master_053",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6929,7 +6988,7 @@
     {
       "pose": "vw_055",
       "sourceKey": "walk/master_054",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6938,7 +6997,7 @@
     {
       "pose": "vw_056",
       "sourceKey": "walk/master_055",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6947,7 +7006,7 @@
     {
       "pose": "vw_057",
       "sourceKey": "walk/master_056",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6956,7 +7015,7 @@
     {
       "pose": "vw_058",
       "sourceKey": "walk/master_057",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6965,7 +7024,7 @@
     {
       "pose": "vw_059",
       "sourceKey": "walk/master_058",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6974,7 +7033,7 @@
     {
       "pose": "vw_060",
       "sourceKey": "walk/master_059",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6983,7 +7042,7 @@
     {
       "pose": "vw_061",
       "sourceKey": "walk/master_060",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -6992,7 +7051,7 @@
     {
       "pose": "vw_062",
       "sourceKey": "walk/master_061",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7001,7 +7060,7 @@
     {
       "pose": "vw_063",
       "sourceKey": "walk/master_062",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7010,7 +7069,7 @@
     {
       "pose": "vw_064",
       "sourceKey": "walk/master_063",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7019,7 +7078,7 @@
     {
       "pose": "vw_065",
       "sourceKey": "walk/master_064",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7028,7 +7087,7 @@
     {
       "pose": "vw_066",
       "sourceKey": "walk/master_065",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7037,7 +7096,7 @@
     {
       "pose": "vw_067",
       "sourceKey": "walk/master_066",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7046,7 +7105,7 @@
     {
       "pose": "vw_068",
       "sourceKey": "walk/master_067",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7055,7 +7114,7 @@
     {
       "pose": "vw_069",
       "sourceKey": "walk/master_068",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7064,7 +7123,7 @@
     {
       "pose": "vw_070",
       "sourceKey": "walk/master_069",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7073,7 +7132,7 @@
     {
       "pose": "vw_071",
       "sourceKey": "walk/master_070",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7082,7 +7141,7 @@
     {
       "pose": "vw_072",
       "sourceKey": "walk/master_071",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7091,7 +7150,7 @@
     {
       "pose": "vw_073",
       "sourceKey": "walk/master_072",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7100,7 +7159,7 @@
     {
       "pose": "vw_074",
       "sourceKey": "walk/master_073",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7109,7 +7168,7 @@
     {
       "pose": "vw_075",
       "sourceKey": "walk/master_074",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7118,7 +7177,7 @@
     {
       "pose": "vw_076",
       "sourceKey": "walk/master_075",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7127,7 +7186,7 @@
     {
       "pose": "vw_077",
       "sourceKey": "walk/master_076",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7136,7 +7195,7 @@
     {
       "pose": "vw_078",
       "sourceKey": "walk/master_077",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7145,7 +7204,7 @@
     {
       "pose": "vw_079",
       "sourceKey": "walk/master_078",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7154,7 +7213,7 @@
     {
       "pose": "vw_080",
       "sourceKey": "walk/master_079",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7163,7 +7222,7 @@
     {
       "pose": "vw_081",
       "sourceKey": "walk/master_080",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7172,7 +7231,7 @@
     {
       "pose": "vw_082",
       "sourceKey": "walk/master_081",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7181,7 +7240,7 @@
     {
       "pose": "vw_083",
       "sourceKey": "walk/master_082",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7190,7 +7249,7 @@
     {
       "pose": "vw_084",
       "sourceKey": "walk/master_083",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7199,7 +7258,7 @@
     {
       "pose": "vw_085",
       "sourceKey": "walk/master_084",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7208,7 +7267,7 @@
     {
       "pose": "vw_086",
       "sourceKey": "walk/master_085",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7217,7 +7276,7 @@
     {
       "pose": "vw_087",
       "sourceKey": "walk/master_086",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7226,7 +7285,7 @@
     {
       "pose": "vw_088",
       "sourceKey": "walk/master_087",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7235,7 +7294,7 @@
     {
       "pose": "vw_089",
       "sourceKey": "walk/master_088",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7244,7 +7303,7 @@
     {
       "pose": "vw_090",
       "sourceKey": "walk/master_089",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7253,7 +7312,7 @@
     {
       "pose": "vw_091",
       "sourceKey": "walk/master_090",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7262,7 +7321,7 @@
     {
       "pose": "vw_092",
       "sourceKey": "walk/master_091",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7271,7 +7330,7 @@
     {
       "pose": "vw_093",
       "sourceKey": "walk/master_092",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7280,7 +7339,7 @@
     {
       "pose": "vw_094",
       "sourceKey": "walk/master_093",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7289,7 +7348,7 @@
     {
       "pose": "vw_095",
       "sourceKey": "walk/master_094",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],
@@ -7298,7 +7357,7 @@
     {
       "pose": "vw_096",
       "sourceKey": "walk/master_095",
-      "scale": 1.04,
+      "scale": 0.728,
       "offsetX": 0.0,
       "offsetY": 0.0,
       "flags": [],

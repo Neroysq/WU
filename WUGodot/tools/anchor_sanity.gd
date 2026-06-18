@@ -37,7 +37,9 @@ func _init() -> void:
 			group["min"] = minf(float(group["min"]), foot.x)
 			group["max"] = maxf(float(group["max"]), foot.x)
 
-		if foot.y < canvas_h * 0.4:
+		if foot.y < 0.0 or foot.y >= canvas_h:
+			fails.append("%s: stored foot outside canvas (y=%.0f canvas_h=%.0f)" % [pose_name, foot.y, canvas_h])
+		elif foot.y < canvas_h * 0.4:
 			fails.append("%s: stored foot too high (y=%.0f)" % [pose_name, foot.y])
 		if hb.size.x < 8.0 or hb.size.y < 30.0:
 			fails.append("%s: stored body box degenerate (%s)" % [pose_name, str(hb.size)])

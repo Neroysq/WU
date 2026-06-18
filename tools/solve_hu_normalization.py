@@ -30,6 +30,24 @@ LOCKED_BUILD5_HELD_SCALES: dict[str, float] = {
     "vp_fall": 1.04,
     "vp_land": 0.99667,
 }
+LOCKED_BUILD6_ACTION_SCALES: dict[str, float] = {
+    "idle": 1.0,
+    "light": 1.06,
+    "heavy": 1.06,
+    "walk": 0.728,
+    "entry": 0.968,
+}
+LOCKED_BUILD6_HELD_SCALES: dict[str, float] = {
+    "vp_hit": 0.561,
+    "vp_stun_a": 0.56,
+    "vp_stun_b": 0.548,
+    "vp_block": 0.528,
+    "vp_dash": 0.551,
+    "vp_rise": 0.598,
+    "vp_peak": 0.651,
+    "vp_fall": 0.759,
+    "vp_land": 0.568,
+}
 
 
 def main() -> int:
@@ -48,7 +66,7 @@ def main() -> int:
     parser.add_argument("--manual-overrides", type=Path, default=None)
     parser.add_argument(
         "--scale-mode",
-        choices=("locked-build4", "locked-build5-held", "clean-head-width"),
+        choices=("locked-build4", "locked-build5-held", "locked-build6-retune", "clean-head-width"),
         default="locked-build4",
     )
     args = parser.parse_args()
@@ -72,11 +90,11 @@ def main() -> int:
 
     group_targets = solve_group_targets(poses)
     measured_scale_groups = solve_scale_groups(poses, target_head_width)
-    if args.scale_mode in ("locked-build4", "locked-build5-held"):
+    if args.scale_mode in ("locked-build4", "locked-build5-held", "locked-build6-retune"):
         scale_groups = solve_locked_build4_scale_groups(poses, measured_scale_groups, args.scale_mode)
     else:
         scale_groups = measured_scale_groups
-    scale_review_min = 0.78 if args.scale_mode == "locked-build5-held" else 0.85
+    scale_review_min = 0.5 if args.scale_mode == "locked-build6-retune" else 0.78 if args.scale_mode == "locked-build5-held" else 0.85
     transforms: dict[str, dict[str, Any]] = {}
     pose_summaries: list[dict[str, Any]] = []
     for pose in poses:
@@ -92,6 +110,9 @@ def main() -> int:
         if args.scale_mode == "locked-build5-held" and pose_name in LOCKED_BUILD5_HELD_SCALES:
             scale = LOCKED_BUILD5_HELD_SCALES[pose_name]
             scale_source = "locked-build5-held-manual-head-width"
+        elif args.scale_mode == "locked-build6-retune" and pose_name in LOCKED_BUILD6_HELD_SCALES:
+            scale = LOCKED_BUILD6_HELD_SCALES[pose_name]
+            scale_source = "locked-build6-user-approved"
         grounding = str(pose.get("grounding", "grounded"))
         group = str(pose.get("prefix", ""))
         target_xy = group_targets.get(group, {"x": 0.0, "y": 0.0})
@@ -158,6 +179,8 @@ def main() -> int:
         "scaleGroups": scale_groups,
         "scaleMode": args.scale_mode,
         "lockedBuild5HeldScales": LOCKED_BUILD5_HELD_SCALES if args.scale_mode == "locked-build5-held" else {},
+        "lockedBuild6ActionScales": LOCKED_BUILD6_ACTION_SCALES if args.scale_mode == "locked-build6-retune" else {},
+        "lockedBuild6HeldScales": LOCKED_BUILD6_HELD_SCALES if args.scale_mode == "locked-build6-retune" else {},
         "transforms": transforms,
         "summary": {
             "poses": len([k for k in transforms if "_" in k and "/" not in k]),
@@ -258,9 +281,16 @@ def solve_locked_build4_scale_groups(
         info["source"] = "locked-build4-user-approved"
         info["previousMetricScale"] = round(previous_scale, 5)
         info["lockedBuild4"] = True
+        if scale_mode == "locked-build6-retune" and group in LOCKED_BUILD6_ACTION_SCALES:
+            info["scale"] = LOCKED_BUILD6_ACTION_SCALES[group]
+            info["source"] = "locked-build6-user-approved"
+            info["lockedBuild6"] = True
         if scale_mode == "locked-build5-held" and group == "held":
             info["source"] = "locked-build5-held-user-approved"
             info["lockedBuild5HeldPerPose"] = True
+        elif scale_mode == "locked-build6-retune" and group == "held":
+            info["source"] = "locked-build6-user-approved"
+            info["lockedBuild6HeldPerPose"] = True
         out[group] = info
     return out
 

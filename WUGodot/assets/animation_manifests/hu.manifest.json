@@ -150,1031 +150,1031 @@
     },
     "vd_001": {
       "chestAnchor": [
-        225,
-        256
+        226,
+        107
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        192,
-        154,
-        66,
-        227
+        196,
+        16,
+        59,
+        199
       ],
       "path": "res://assets/sprites/characters/hu/vd_001.png",
       "weaponTip": [
-        281,
-        253
+        275,
+        105
       ]
     },
     "vd_003": {
       "chestAnchor": [
-        225,
-        256
+        226,
+        107
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        192,
-        154,
-        66,
-        227
+        196,
+        16,
+        59,
+        203
       ],
       "path": "res://assets/sprites/characters/hu/vd_003.png",
       "weaponTip": [
-        281,
-        253
+        275,
+        106
       ]
     },
     "vd_005": {
       "chestAnchor": [
-        225,
-        256
+        226,
+        107
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        192,
-        154,
-        66,
-        227
+        196,
+        16,
+        59,
+        203
       ],
       "path": "res://assets/sprites/characters/hu/vd_005.png",
       "weaponTip": [
-        281,
-        253
+        275,
+        106
       ]
     },
     "vd_007": {
       "chestAnchor": [
-        225,
-        256
+        226,
+        107
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        192,
-        154,
-        66,
-        227
+        196,
+        16,
+        59,
+        203
       ],
       "path": "res://assets/sprites/characters/hu/vd_007.png",
       "weaponTip": [
-        281,
-        253
+        275,
+        105
       ]
     },
     "vd_009": {
       "chestAnchor": [
-        225,
-        256
+        226,
+        107
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        192,
-        154,
-        66,
-        227
+        196,
+        16,
+        59,
+        203
       ],
       "path": "res://assets/sprites/characters/hu/vd_009.png",
       "weaponTip": [
-        281,
-        253
+        275,
+        105
       ]
     },
     "vd_011": {
       "chestAnchor": [
-        225,
-        256
+        226,
+        107
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        192,
-        154,
-        66,
-        227
+        196,
+        16,
+        59,
+        203
       ],
       "path": "res://assets/sprites/characters/hu/vd_011.png",
       "weaponTip": [
-        281,
-        253
+        275,
+        106
       ]
     },
     "vd_013": {
       "chestAnchor": [
-        225,
-        256
+        226,
+        107
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        192,
-        154,
-        66,
-        227
+        196,
+        16,
+        59,
+        199
       ],
       "path": "res://assets/sprites/characters/hu/vd_013.png",
       "weaponTip": [
-        281,
-        253
+        275,
+        106
       ]
     },
     "vd_015": {
       "chestAnchor": [
-        225,
-        256
+        226,
+        107
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        192,
-        154,
-        66,
-        227
+        196,
+        16,
+        59,
+        199
       ],
       "path": "res://assets/sprites/characters/hu/vd_015.png",
       "weaponTip": [
-        281,
-        253
+        275,
+        106
       ]
     },
     "vd_017": {
       "chestAnchor": [
         225,
-        256
+        107
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        192,
-        154,
-        66,
-        227
+        196,
+        16,
+        58,
+        203
       ],
       "path": "res://assets/sprites/characters/hu/vd_017.png",
       "weaponTip": [
-        281,
-        253
+        275,
+        106
       ]
     },
     "vd_019": {
       "chestAnchor": [
         225,
-        256
+        107
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        192,
-        154,
-        65,
-        227
+        196,
+        16,
+        58,
+        203
       ],
       "path": "res://assets/sprites/characters/hu/vd_019.png",
       "weaponTip": [
-        281,
-        253
+        275,
+        107
       ]
     },
     "vd_021": {
       "chestAnchor": [
         225,
-        256
+        107
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        192,
-        154,
-        65,
-        227
+        196,
+        16,
+        58,
+        203
       ],
       "path": "res://assets/sprites/characters/hu/vd_021.png",
       "weaponTip": [
-        281,
-        254
+        275,
+        107
       ]
     },
     "vd_023": {
       "chestAnchor": [
         227,
-        256
+        107
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        194,
-        154,
-        65,
-        227
+        197,
+        15,
+        59,
+        204
       ],
       "path": "res://assets/sprites/characters/hu/vd_023.png",
       "weaponTip": [
-        282,
-        256
+        277,
+        108
       ]
     },
     "vd_025": {
       "chestAnchor": [
         227,
-        256
+        107
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        194,
-        154,
-        65,
-        227
+        197,
+        15,
+        59,
+        204
       ],
       "path": "res://assets/sprites/characters/hu/vd_025.png",
       "weaponTip": [
-        282,
-        256
+        277,
+        108
       ]
     },
     "vd_027": {
       "chestAnchor": [
         229,
-        256
+        107
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        195,
-        154,
-        67,
-        227
+        198,
+        16,
+        61,
+        203
       ],
       "path": "res://assets/sprites/characters/hu/vd_027.png",
       "weaponTip": [
-        283,
-        250
+        277,
+        109
       ]
     },
     "vd_029": {
       "chestAnchor": [
-        230,
-        257
+        229,
+        107
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        195,
-        155,
-        69,
-        226
+        198,
+        16,
+        62,
+        203
       ],
       "path": "res://assets/sprites/characters/hu/vd_029.png",
       "weaponTip": [
-        283,
-        251
+        277,
+        110
       ]
     },
     "vd_031": {
       "chestAnchor": [
         229,
-        258
+        110
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        190,
-        158,
-        78,
-        223
+        194,
+        20,
+        70,
+        199
       ],
       "path": "res://assets/sprites/characters/hu/vd_031.png",
       "weaponTip": [
-        280,
-        265
+        275,
+        123
       ]
     },
     "vd_033": {
       "chestAnchor": [
         226,
-        259
+        110
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        184,
-        160,
-        83,
-        221
+        188,
+        21,
+        75,
+        198
       ],
       "path": "res://assets/sprites/characters/hu/vd_033.png",
       "weaponTip": [
-        277,
-        266
+        272,
+        124
       ]
     },
     "vd_035": {
       "chestAnchor": [
-        228,
-        260
+        229,
+        111
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        183,
-        161,
-        90,
-        220
+        188,
+        22,
+        81,
+        197
       ],
       "path": "res://assets/sprites/characters/hu/vd_035.png",
       "weaponTip": [
-        277,
-        325
+        272,
+        171
       ]
     },
     "vd_037": {
       "chestAnchor": [
         226,
-        265
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        171,
-        170,
-        109,
-        209
+        177,
+        30,
+        98,
+        171
       ],
       "path": "res://assets/sprites/characters/hu/vd_037.png",
       "weaponTip": [
-        294,
-        371
+        287,
+        210
       ]
     },
     "vd_039": {
       "chestAnchor": [
         226,
-        265
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        170,
-        170,
-        112,
-        203
+        176,
+        30,
+        100,
+        183
       ],
       "path": "res://assets/sprites/characters/hu/vd_039.png",
       "weaponTip": [
-        294,
-        371
+        287,
+        211
       ]
     },
     "vd_041": {
       "chestAnchor": [
         227,
-        265
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        170,
-        170,
-        113,
-        203
+        176,
+        30,
+        101,
+        183
       ],
       "path": "res://assets/sprites/characters/hu/vd_041.png",
       "weaponTip": [
-        294,
-        371
+        287,
+        211
       ]
     },
     "vd_043": {
       "chestAnchor": [
         223,
-        264
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        164,
-        168,
-        118,
-        213
+        170,
+        28,
+        106,
+        185
       ],
       "path": "res://assets/sprites/characters/hu/vd_043.png",
       "weaponTip": [
-        294,
-        333
+        288,
+        144
       ]
     },
     "vd_045": {
       "chestAnchor": [
-        221,
-        264
+        222,
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        161,
         168,
-        120,
-        213
+        28,
+        108,
+        191
       ],
       "path": "res://assets/sprites/characters/hu/vd_045.png",
       "weaponTip": [
-        295,
-        298
+        288,
+        145
       ]
     },
     "vd_047": {
       "chestAnchor": [
-        222,
-        264
+        223,
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        163,
-        168,
-        118,
-        213
+        170,
+        28,
+        106,
+        191
       ],
       "path": "res://assets/sprites/characters/hu/vd_047.png",
       "weaponTip": [
-        295,
-        298
+        288,
+        145
       ]
     },
     "vd_049": {
       "chestAnchor": [
         223,
-        264
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        163,
-        168,
-        119,
-        213
+        170,
+        28,
+        106,
+        184
       ],
       "path": "res://assets/sprites/characters/hu/vd_049.png",
       "weaponTip": [
-        296,
-        297
+        289,
+        145
       ]
     },
     "vd_051": {
       "chestAnchor": [
-        222,
-        264
+        223,
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        162,
-        168,
-        119,
-        213
+        170,
+        28,
+        106,
+        191
       ],
       "path": "res://assets/sprites/characters/hu/vd_051.png",
       "weaponTip": [
-        295,
-        298
+        288,
+        145
       ]
     },
     "vd_053": {
       "chestAnchor": [
-        222,
-        264
+        223,
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        162,
-        168,
-        119,
-        206
+        170,
+        28,
+        106,
+        191
       ],
       "path": "res://assets/sprites/characters/hu/vd_053.png",
       "weaponTip": [
-        295,
-        298
+        288,
+        145
       ]
     },
     "vd_055": {
       "chestAnchor": [
-        222,
-        264
+        223,
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        162,
-        168,
-        119,
-        206
+        170,
+        28,
+        106,
+        191
       ],
       "path": "res://assets/sprites/characters/hu/vd_055.png",
       "weaponTip": [
-        295,
-        298
+        288,
+        145
       ]
     },
     "vd_057": {
       "chestAnchor": [
-        222,
-        264
+        223,
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        162,
-        168,
-        119,
-        206
+        170,
+        28,
+        106,
+        191
       ],
       "path": "res://assets/sprites/characters/hu/vd_057.png",
       "weaponTip": [
-        295,
-        298
+        288,
+        145
       ]
     },
     "vd_059": {
       "chestAnchor": [
-        222,
-        263
+        223,
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        162,
-        167,
-        119,
-        214
+        170,
+        28,
+        106,
+        191
       ],
       "path": "res://assets/sprites/characters/hu/vd_059.png",
       "weaponTip": [
-        295,
-        298
+        288,
+        145
       ]
     },
     "vd_061": {
       "chestAnchor": [
-        222,
-        263
+        223,
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        162,
-        167,
-        119,
-        214
+        170,
+        28,
+        106,
+        191
       ],
       "path": "res://assets/sprites/characters/hu/vd_061.png",
       "weaponTip": [
-        295,
-        298
+        288,
+        145
       ]
     },
     "vd_063": {
       "chestAnchor": [
-        222,
-        263
+        223,
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        162,
-        167,
-        119,
-        214
+        170,
+        28,
+        106,
+        191
       ],
       "path": "res://assets/sprites/characters/hu/vd_063.png",
       "weaponTip": [
-        295,
-        298
+        288,
+        145
       ]
     },
     "vd_065": {
       "chestAnchor": [
-        222,
-        263
+        223,
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        162,
-        167,
-        119,
-        214
+        170,
+        28,
+        106,
+        191
       ],
       "path": "res://assets/sprites/characters/hu/vd_065.png",
       "weaponTip": [
-        295,
-        298
+        288,
+        145
       ]
     },
     "vd_067": {
       "chestAnchor": [
-        222,
-        263
+        223,
+        113
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        162,
-        167,
-        119,
-        214
+        170,
+        27,
+        106,
+        185
       ],
       "path": "res://assets/sprites/characters/hu/vd_067.png",
       "weaponTip": [
-        295,
-        298
+        288,
+        145
       ]
     },
     "vd_069": {
       "chestAnchor": [
-        222,
-        263
+        223,
+        113
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        162,
-        167,
-        119,
-        214
+        170,
+        27,
+        106,
+        185
       ],
       "path": "res://assets/sprites/characters/hu/vd_069.png",
       "weaponTip": [
-        295,
-        298
+        288,
+        145
       ]
     },
     "vd_071": {
       "chestAnchor": [
-        222,
-        263
+        223,
+        113
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        162,
-        167,
-        119,
-        207
+        169,
+        27,
+        107,
+        192
       ],
       "path": "res://assets/sprites/characters/hu/vd_071.png",
       "weaponTip": [
-        295,
-        298
+        288,
+        145
       ]
     },
     "vd_073": {
       "chestAnchor": [
-        222,
-        263
+        223,
+        113
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        162,
-        166,
-        119,
-        208
+        169,
+        26,
+        107,
+        193
       ],
       "path": "res://assets/sprites/characters/hu/vd_073.png",
       "weaponTip": [
-        296,
-        297
+        289,
+        145
       ]
     },
     "vd_075": {
       "chestAnchor": [
         225,
-        266
+        116
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        165,
-        172,
-        120,
-        152
+        171,
+        32,
+        108,
+        187
       ],
       "path": "res://assets/sprites/characters/hu/vd_075.png",
       "weaponTip": [
-        299,
-        372
+        291,
+        211
       ]
     },
     "vd_077": {
       "chestAnchor": [
-        196,
-        278
+        199,
+        127
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        143,
-        194,
-        105,
-        160
+        152,
+        51,
+        94,
+        167
       ],
       "path": "res://assets/sprites/characters/hu/vd_077.png",
       "weaponTip": [
-        357,
-        207
+        344,
+        64
       ]
     },
     "vd_079": {
       "chestAnchor": [
-        233,
-        278
+        232,
+        127
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        133,
-        194,
-        199,
-        161
+        143,
+        51,
+        178,
+        167
       ],
       "path": "res://assets/sprites/characters/hu/vd_079.png",
       "weaponTip": [
-        371,
-        225
+        353,
+        80
       ]
     },
     "vd_081": {
       "chestAnchor": [
-        232,
-        267
+        231,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        141,
-        174,
-        181,
-        204
+        150,
+        34,
+        162,
+        184
       ],
       "path": "res://assets/sprites/characters/hu/vd_081.png",
       "weaponTip": [
-        387,
-        224
+        370,
+        78
       ]
     },
     "vd_083": {
       "chestAnchor": [
-        171,
-        278
+        169,
+        127
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        118,
-        193,
-        105,
-        162
+        115,
+        51,
+        108,
+        167
       ],
       "path": "res://assets/sprites/characters/hu/vd_083.png",
       "weaponTip": [
-        332,
-        205
+        321,
+        61
       ]
     },
     "vd_085": {
       "chestAnchor": [
-        186,
-        278
+        190,
+        127
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        133,
-        193,
-        105,
-        162
+        143,
+        51,
+        94,
+        144
       ],
       "path": "res://assets/sprites/characters/hu/vd_085.png",
       "weaponTip": [
-        347,
-        205
+        335,
+        61
       ]
     },
     "vd_087": {
       "chestAnchor": [
-        188,
-        278
+        192,
+        127
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        136,
-        193,
-        104,
-        161
+        145,
+        51,
+        94,
+        167
       ],
       "path": "res://assets/sprites/characters/hu/vd_087.png",
       "weaponTip": [
-        349,
-        205
+        336,
+        62
       ]
     },
     "vd_089": {
       "chestAnchor": [
-        188,
-        278
+        192,
+        127
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        136,
-        193,
-        104,
-        161
+        145,
+        51,
+        94,
+        167
       ],
       "path": "res://assets/sprites/characters/hu/vd_089.png",
       "weaponTip": [
-        349,
-        205
+        336,
+        62
       ]
     },
     "vd_091": {
       "chestAnchor": [
-        188,
-        278
+        192,
+        127
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        136,
-        193,
-        104,
-        161
+        145,
+        51,
+        94,
+        167
       ],
       "path": "res://assets/sprites/characters/hu/vd_091.png",
       "weaponTip": [
-        349,
-        205
+        336,
+        62
       ]
     },
     "vd_093": {
       "chestAnchor": [
-        188,
-        278
+        192,
+        127
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        136,
-        193,
-        104,
-        161
+        145,
+        51,
+        94,
+        145
       ],
       "path": "res://assets/sprites/characters/hu/vd_093.png",
       "weaponTip": [
-        349,
-        205
+        336,
+        62
       ]
     },
     "vd_095": {
       "chestAnchor": [
-        189,
-        278
+        192,
+        127
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        138,
-        193,
-        102,
-        160
+        145,
+        51,
+        94,
+        145
       ],
       "path": "res://assets/sprites/characters/hu/vd_095.png",
       "weaponTip": [
-        349,
-        205
+        336,
+        62
       ]
     },
     "vd_097": {
       "chestAnchor": [
-        189,
-        278
+        192,
+        127
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        138,
-        193,
-        102,
-        160
+        145,
+        51,
+        94,
+        145
       ],
       "path": "res://assets/sprites/characters/hu/vd_097.png",
       "weaponTip": [
-        349,
-        205
+        336,
+        62
       ]
     },
     "vh_001": {
@@ -2776,2185 +2776,2185 @@
     "vp_block": {
       "chestAnchor": [
         335,
-        186
+        122
       ],
       "footAnchor": [
         334,
-        382
+        219
       ],
       "hurtbox": [
-        220,
-        35,
-        229,
-        273
+        274,
+        42,
+        121,
+        176
       ],
       "path": "res://assets/sprites/characters/hu/vp_block.png",
       "weaponTip": [
-        517,
-        148
+        430,
+        102
       ]
     },
     "vp_dash": {
       "chestAnchor": [
-        354,
-        211
+        333,
+        134
       ],
       "footAnchor": [
         334,
-        382
+        219
       ],
       "hurtbox": [
-        209,
-        80,
-        289,
-        230
+        244,
+        65,
+        177,
+        122
       ],
       "path": "res://assets/sprites/characters/hu/vp_dash.png",
       "weaponTip": [
-        527,
-        219
+        436,
+        137
       ]
     },
     "vp_fall": {
       "chestAnchor": [
-        326,
-        214
+        328,
+        105
       ],
       "footAnchor": [
         334,
-        382
+        219
       ],
       "hurtbox": [
-        253,
-        86,
-        146,
-        285
+        274,
+        12,
+        107,
+        207
       ],
       "path": "res://assets/sprites/characters/hu/vp_fall.png",
       "weaponTip": [
-        520,
-        115
+        470,
+        33
       ]
     },
     "vp_hit": {
       "chestAnchor": [
         334,
-        262
+        131
       ],
       "footAnchor": [
         334,
-        382
+        219
       ],
       "hurtbox": [
-        215,
-        173,
-        238,
-        162
+        252,
+        59,
+        163,
+        160
       ],
       "path": "res://assets/sprites/characters/hu/vp_hit.png",
       "weaponTip": [
-        545,
-        98
+        477,
+        34
       ]
     },
     "vp_land": {
       "chestAnchor": [
-        334,
-        201
+        332,
+        123
       ],
       "footAnchor": [
         334,
-        382
+        220
       ],
       "hurtbox": [
-        227,
-        62,
-        213,
-        309
+        273,
+        44,
+        118,
+        176
       ],
       "path": "res://assets/sprites/characters/hu/vp_land.png",
       "weaponTip": [
-        574,
-        367
+        471,
+        218
       ]
     },
     "vp_peak": {
       "chestAnchor": [
         334,
-        207
+        115
       ],
       "footAnchor": [
         334,
-        382
+        220
       ],
       "hurtbox": [
-        244,
-        73,
-        180,
-        298
+        277,
+        29,
+        114,
+        191
       ],
       "path": "res://assets/sprites/characters/hu/vp_peak.png",
       "weaponTip": [
-        587,
-        104
+        495,
+        48
       ]
     },
     "vp_rise": {
       "chestAnchor": [
-        333,
-        197
+        334,
+        115
       ],
       "footAnchor": [
         334,
-        382
+        219
       ],
       "hurtbox": [
-        248,
-        54,
-        170,
-        266
+        283,
+        29,
+        102,
+        160
       ],
       "path": "res://assets/sprites/characters/hu/vp_rise.png",
       "weaponTip": [
-        575,
-        75
+        478,
+        42
       ]
     },
     "vp_stun_a": {
       "chestAnchor": [
         334,
-        183
+        116
       ],
       "footAnchor": [
         334,
-        382
+        219
       ],
       "hurtbox": [
-        274,
-        29,
-        119,
-        342
+        301,
+        31,
+        65,
+        188
       ],
       "path": "res://assets/sprites/characters/hu/vp_stun_a.png",
       "weaponTip": [
-        533,
-        323
+        442,
+        193
       ]
     },
     "vp_stun_b": {
       "chestAnchor": [
         334,
-        186
+        118
       ],
       "footAnchor": [
         334,
-        382
+        219
       ],
       "hurtbox": [
-        253,
-        34,
-        161,
-        330
+        289,
+        35,
+        89,
+        179
       ],
       "path": "res://assets/sprites/characters/hu/vp_stun_b.png",
       "weaponTip": [
-        541,
-        329
+        447,
+        196
       ]
     },
     "vw_002": {
       "chestAnchor": [
-        162,
-        240
+        181,
+        120
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        81,
         124,
-        161,
-        255
+        39,
+        113,
+        170
       ],
       "path": "res://assets/sprites/characters/hu/vw_002.png",
       "weaponTip": [
-        399,
-        140
+        346,
+        51
       ]
     },
     "vw_003": {
       "chestAnchor": [
-        162,
-        239
+        181,
+        120
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        81,
-        123,
-        161,
-        256
+        124,
+        39,
+        113,
+        179
       ],
       "path": "res://assets/sprites/characters/hu/vw_003.png",
       "weaponTip": [
-        399,
-        140
+        346,
+        51
       ]
     },
     "vw_004": {
       "chestAnchor": [
-        162,
-        239
+        181,
+        120
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        81,
-        123,
-        161,
-        256
+        124,
+        39,
+        113,
+        179
       ],
       "path": "res://assets/sprites/characters/hu/vw_004.png",
       "weaponTip": [
-        399,
-        140
+        346,
+        51
       ]
     },
     "vw_005": {
       "chestAnchor": [
-        172,
-        237
+        188,
+        119
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        109,
-        120,
-        125,
-        259
+        144,
+        37,
+        87,
+        163
       ],
       "path": "res://assets/sprites/characters/hu/vw_005.png",
       "weaponTip": [
-        398,
-        137
+        346,
+        49
       ]
     },
     "vw_006": {
       "chestAnchor": [
-        163,
-        237
+        182,
+        118
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        99,
-        119,
-        128,
-        261
+        137,
+        36,
+        89,
+        183
       ],
       "path": "res://assets/sprites/characters/hu/vw_006.png",
       "weaponTip": [
-        399,
-        136
+        346,
+        49
       ]
     },
     "vw_007": {
       "chestAnchor": [
-        165,
-        236
+        182,
+        118
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        103,
-        118,
-        123,
-        263
+        138,
+        36,
+        87,
+        183
       ],
       "path": "res://assets/sprites/characters/hu/vw_007.png",
       "weaponTip": [
-        399,
-        134
+        346,
+        48
       ]
     },
     "vw_008": {
       "chestAnchor": [
-        167,
-        235
+        185,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        116,
-        115,
-        102,
-        266
+        149,
+        34,
+        71,
+        185
       ],
       "path": "res://assets/sprites/characters/hu/vw_008.png",
       "weaponTip": [
-        399,
-        133
+        346,
+        46
       ]
     },
     "vw_009": {
       "chestAnchor": [
-        167,
-        235
+        185,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        116,
-        115,
-        102,
-        266
+        149,
+        34,
+        71,
+        185
       ],
       "path": "res://assets/sprites/characters/hu/vw_009.png",
       "weaponTip": [
-        399,
-        133
+        346,
+        46
       ]
     },
     "vw_010": {
       "chestAnchor": [
-        167,
-        235
+        185,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        116,
-        115,
-        102,
-        266
+        149,
+        33,
+        71,
+        186
       ],
       "path": "res://assets/sprites/characters/hu/vw_010.png",
       "weaponTip": [
-        399,
-        133
+        346,
+        46
       ]
     },
     "vw_011": {
       "chestAnchor": [
-        168,
-        233
+        185,
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        128,
-        111,
-        80,
-        269
+        158,
+        30,
+        54,
+        189
       ],
       "path": "res://assets/sprites/characters/hu/vw_011.png",
       "weaponTip": [
-        399,
-        129
+        346,
+        43
       ]
     },
     "vw_012": {
       "chestAnchor": [
-        172,
-        232
+        188,
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        129,
-        110,
-        85,
-        271
+        158,
+        30,
+        59,
+        189
       ],
       "path": "res://assets/sprites/characters/hu/vw_012.png",
       "weaponTip": [
-        399,
-        128
+        346,
+        42
       ]
     },
     "vw_013": {
       "chestAnchor": [
-        172,
-        232
+        188,
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        129,
-        110,
-        85,
-        271
+        158,
+        30,
+        59,
+        189
       ],
       "path": "res://assets/sprites/characters/hu/vw_013.png",
       "weaponTip": [
-        399,
-        128
+        346,
+        42
       ]
     },
     "vw_014": {
       "chestAnchor": [
-        171,
-        233
+        188,
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        127,
-        111,
-        87,
-        269
+        157,
+        30,
+        61,
+        189
       ],
       "path": "res://assets/sprites/characters/hu/vw_014.png",
       "weaponTip": [
-        399,
-        128
+        346,
+        42
       ]
     },
     "vw_015": {
       "chestAnchor": [
-        178,
-        235
+        192,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        116,
-        116,
-        123,
-        265
+        148,
+        34,
+        87,
+        183
       ],
       "path": "res://assets/sprites/characters/hu/vw_015.png",
       "weaponTip": [
-        399,
-        133
+        346,
+        46
       ]
     },
     "vw_016": {
       "chestAnchor": [
-        176,
-        235
+        191,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        111,
-        116,
-        129,
-        264
+        145,
+        34,
+        91,
+        185
       ],
       "path": "res://assets/sprites/characters/hu/vw_016.png",
       "weaponTip": [
-        399,
-        133
+        346,
+        47
       ]
     },
     "vw_017": {
       "chestAnchor": [
-        176,
-        235
+        191,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        111,
-        116,
-        130,
-        264
+        145,
+        34,
+        91,
+        185
       ],
       "path": "res://assets/sprites/characters/hu/vw_017.png",
       "weaponTip": [
-        399,
-        133
+        346,
+        47
       ]
     },
     "vw_018": {
       "chestAnchor": [
-        167,
-        240
+        184,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        90,
-        125,
-        153,
-        219
+        131,
+        40,
+        106,
+        179
       ],
       "path": "res://assets/sprites/characters/hu/vw_018.png",
       "weaponTip": [
-        399,
-        141
+        346,
+        51
       ]
     },
     "vw_019": {
       "chestAnchor": [
-        161,
-        241
+        181,
+        122
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        83,
-        127,
-        155,
-        254
+        126,
+        42,
+        109,
+        177
       ],
       "path": "res://assets/sprites/characters/hu/vw_019.png",
       "weaponTip": [
-        399,
-        143
+        347,
+        53
       ]
     },
     "vw_020": {
       "chestAnchor": [
-        161,
-        241
+        181,
+        122
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        84,
-        127,
-        154,
-        254
+        126,
+        42,
+        109,
+        177
       ],
       "path": "res://assets/sprites/characters/hu/vw_020.png",
       "weaponTip": [
-        399,
-        143
+        347,
+        53
       ]
     },
     "vw_021": {
       "chestAnchor": [
-        161,
-        241
+        181,
+        122
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        83,
-        127,
-        155,
-        254
+        126,
+        42,
+        109,
+        177
       ],
       "path": "res://assets/sprites/characters/hu/vw_021.png",
       "weaponTip": [
-        399,
-        143
+        347,
+        53
       ]
     },
     "vw_022": {
       "chestAnchor": [
-        159,
-        240
+        179,
+        120
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        89,
-        124,
-        140,
-        255
+        130,
+        39,
+        98,
+        180
       ],
       "path": "res://assets/sprites/characters/hu/vw_022.png",
       "weaponTip": [
-        399,
-        141
+        346,
+        52
       ]
     },
     "vw_023": {
       "chestAnchor": [
-        159,
-        240
+        179,
+        120
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        89,
-        124,
-        140,
-        255
+        130,
+        39,
+        98,
+        154
       ],
       "path": "res://assets/sprites/characters/hu/vw_023.png",
       "weaponTip": [
-        399,
-        141
+        346,
+        52
       ]
     },
     "vw_024": {
       "chestAnchor": [
-        159,
-        240
+        179,
+        120
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        89,
-        124,
-        140,
-        220
+        130,
+        39,
+        98,
+        154
       ],
       "path": "res://assets/sprites/characters/hu/vw_024.png",
       "weaponTip": [
-        399,
-        142
+        346,
+        52
       ]
     },
     "vw_025": {
       "chestAnchor": [
-        163,
-        239
+        180,
+        119
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        98,
-        122,
-        129,
-        259
+        134,
+        38,
+        92,
+        181
       ],
       "path": "res://assets/sprites/characters/hu/vw_025.png",
       "weaponTip": [
-        398,
-        140
+        346,
+        50
       ]
     },
     "vw_026": {
       "chestAnchor": [
-        161,
-        236
+        180,
+        118
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        110,
-        118,
-        102,
-        263
+        144,
+        35,
+        72,
+        184
       ],
       "path": "res://assets/sprites/characters/hu/vw_026.png",
       "weaponTip": [
-        399,
-        135
+        346,
+        48
       ]
     },
     "vw_027": {
       "chestAnchor": [
-        161,
-        236
+        180,
+        118
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        110,
-        118,
-        101,
-        263
+        145,
+        35,
+        70,
+        184
       ],
       "path": "res://assets/sprites/characters/hu/vw_027.png",
       "weaponTip": [
-        399,
-        135
+        346,
+        47
       ]
     },
     "vw_028": {
       "chestAnchor": [
-        161,
-        236
+        180,
+        118
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        110,
-        118,
-        101,
-        263
+        145,
+        35,
+        70,
+        184
       ],
       "path": "res://assets/sprites/characters/hu/vw_028.png",
       "weaponTip": [
-        399,
-        135
+        346,
+        47
       ]
     },
     "vw_029": {
       "chestAnchor": [
-        162,
-        235
+        181,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        117,
-        115,
-        90,
-        266
+        150,
+        33,
+        62,
+        186
       ],
       "path": "res://assets/sprites/characters/hu/vw_029.png",
       "weaponTip": [
-        399,
-        132
+        346,
+        46
       ]
     },
     "vw_030": {
       "chestAnchor": [
-        162,
-        235
+        181,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        118,
-        115,
-        88,
-        266
+        150,
+        33,
+        62,
+        186
       ],
       "path": "res://assets/sprites/characters/hu/vw_030.png",
       "weaponTip": [
-        399,
-        132
+        346,
+        45
       ]
     },
     "vw_031": {
       "chestAnchor": [
-        170,
-        233
+        186,
+        116
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        129,
-        112,
-        81,
-        269
+        157,
+        31,
+        57,
+        188
       ],
       "path": "res://assets/sprites/characters/hu/vw_031.png",
       "weaponTip": [
-        399,
-        129
+        347,
+        43
       ]
     },
     "vw_032": {
       "chestAnchor": [
-        171,
-        231
+        189,
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        129,
-        109,
-        83,
-        272
+        158,
+        29,
+        61,
+        190
       ],
       "path": "res://assets/sprites/characters/hu/vw_032.png",
       "weaponTip": [
-        399,
-        126
+        347,
+        42
       ]
     },
     "vw_033": {
       "chestAnchor": [
-        171,
-        231
+        189,
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        129,
-        109,
-        83,
-        272
+        158,
+        29,
+        61,
+        190
       ],
       "path": "res://assets/sprites/characters/hu/vw_033.png",
       "weaponTip": [
-        399,
-        126
+        346,
+        41
       ]
     },
     "vw_034": {
       "chestAnchor": [
-        178,
-        231
+        192,
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        124,
-        108,
-        108,
-        273
+        154,
+        28,
+        76,
+        191
       ],
       "path": "res://assets/sprites/characters/hu/vw_034.png",
       "weaponTip": [
-        399,
-        125
+        346,
+        41
       ]
     },
     "vw_035": {
       "chestAnchor": [
-        178,
-        231
+        192,
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        124,
-        108,
-        108,
-        273
+        154,
+        28,
+        76,
+        191
       ],
       "path": "res://assets/sprites/characters/hu/vw_035.png",
       "weaponTip": [
-        399,
-        125
+        346,
+        41
       ]
     },
     "vw_036": {
       "chestAnchor": [
-        179,
-        232
+        193,
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        114,
-        110,
-        129,
-        271
+        148,
+        30,
+        89,
+        180
       ],
       "path": "res://assets/sprites/characters/hu/vw_036.png",
       "weaponTip": [
-        399,
-        128
+        346,
+        42
       ]
     },
     "vw_037": {
       "chestAnchor": [
-        178,
-        233
+        192,
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        114,
-        111,
-        128,
-        253
+        147,
+        30,
+        90,
+        189
       ],
       "path": "res://assets/sprites/characters/hu/vw_037.png",
       "weaponTip": [
-        398,
-        128
+        346,
+        42
       ]
     },
     "vw_038": {
       "chestAnchor": [
-        173,
-        235
+        189,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        97,
-        115,
-        151,
-        266
+        136,
+        33,
+        105,
+        186
       ],
       "path": "res://assets/sprites/characters/hu/vw_038.png",
       "weaponTip": [
-        399,
-        133
+        346,
+        46
       ]
     },
     "vw_039": {
       "chestAnchor": [
-        173,
-        235
+        189,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        97,
-        116,
-        151,
-        265
+        136,
+        34,
+        105,
+        185
       ],
       "path": "res://assets/sprites/characters/hu/vw_039.png",
       "weaponTip": [
-        399,
-        133
+        346,
+        46
       ]
     },
     "vw_040": {
       "chestAnchor": [
-        165,
-        240
+        183,
+        120
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        80,
         124,
-        169,
-        255
+        39,
+        118,
+        155
       ],
       "path": "res://assets/sprites/characters/hu/vw_040.png",
       "weaponTip": [
-        399,
-        140
+        347,
+        51
       ]
     },
     "vw_041": {
       "chestAnchor": [
-        165,
-        240
+        183,
+        120
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        80,
-        124,
-        169,
-        255
+        123,
+        39,
+        119,
+        155
       ],
       "path": "res://assets/sprites/characters/hu/vw_041.png",
       "weaponTip": [
-        399,
-        141
+        347,
+        51
       ]
     },
     "vw_042": {
       "chestAnchor": [
-        162,
-        241
+        181,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        76,
-        126,
-        172,
-        253
+        120,
+        41,
+        121,
+        153
       ],
       "path": "res://assets/sprites/characters/hu/vw_042.png",
       "weaponTip": [
-        399,
-        141
+        346,
+        52
       ]
     },
     "vw_043": {
       "chestAnchor": [
-        163,
-        241
+        181,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        77,
-        126,
-        171,
-        255
+        121,
+        41,
+        120,
+        177
       ],
       "path": "res://assets/sprites/characters/hu/vw_043.png",
       "weaponTip": [
-        399,
-        142
+        347,
+        52
       ]
     },
     "vw_044": {
       "chestAnchor": [
-        163,
-        241
+        181,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        77,
-        126,
-        171,
-        255
+        121,
+        41,
+        120,
+        177
       ],
       "path": "res://assets/sprites/characters/hu/vw_044.png",
       "weaponTip": [
-        399,
-        142
+        347,
+        52
       ]
     },
     "vw_045": {
       "chestAnchor": [
-        162,
-        241
+        181,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        76,
-        126,
-        172,
-        253
+        121,
+        41,
+        120,
+        153
       ],
       "path": "res://assets/sprites/characters/hu/vw_045.png",
       "weaponTip": [
-        398,
-        142
+        346,
+        52
       ]
     },
     "vw_046": {
       "chestAnchor": [
-        162,
-        241
+        181,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        76,
-        126,
-        171,
-        255
+        121,
+        41,
+        120,
+        153
       ],
       "path": "res://assets/sprites/characters/hu/vw_046.png",
       "weaponTip": [
-        398,
-        142
+        346,
+        52
       ]
     },
     "vw_047": {
       "chestAnchor": [
-        161,
-        241
+        181,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        75,
-        126,
-        172,
-        255
+        120,
+        41,
+        121,
+        153
       ],
       "path": "res://assets/sprites/characters/hu/vw_047.png",
       "weaponTip": [
-        398,
-        142
+        346,
+        52
       ]
     },
     "vw_048": {
       "chestAnchor": [
-        161,
-        241
+        181,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        75,
-        126,
-        172,
-        255
+        120,
+        41,
+        121,
+        153
       ],
       "path": "res://assets/sprites/characters/hu/vw_048.png",
       "weaponTip": [
-        398,
-        142
+        346,
+        52
       ]
     },
     "vw_049": {
       "chestAnchor": [
-        161,
-        241
+        181,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        75,
-        126,
-        172,
-        253
+        120,
+        41,
+        121,
+        153
       ],
       "path": "res://assets/sprites/characters/hu/vw_049.png",
       "weaponTip": [
-        398,
-        142
+        346,
+        52
       ]
     },
     "vw_050": {
       "chestAnchor": [
-        162,
-        240
+        181,
+        120
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        76,
-        124,
-        171,
-        257
+        121,
+        39,
+        119,
+        169
       ],
       "path": "res://assets/sprites/characters/hu/vw_050.png",
       "weaponTip": [
-        399,
-        141
+        346,
+        52
       ]
     },
     "vw_051": {
       "chestAnchor": [
-        162,
-        240
+        180,
+        120
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        76,
-        124,
-        171,
-        255
+        120,
+        39,
+        120,
+        155
       ],
       "path": "res://assets/sprites/characters/hu/vw_051.png",
       "weaponTip": [
-        398,
-        141
+        346,
+        51
       ]
     },
     "vw_052": {
       "chestAnchor": [
-        162,
-        240
+        181,
+        120
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        76,
-        124,
-        171,
-        255
+        121,
+        39,
+        119,
+        179
       ],
       "path": "res://assets/sprites/characters/hu/vw_052.png",
       "weaponTip": [
-        398,
-        141
+        346,
+        51
       ]
     },
     "vw_053": {
       "chestAnchor": [
-        172,
-        237
+        188,
+        119
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        108,
-        120,
-        128,
-        233
+        143,
+        37,
+        89,
+        162
       ],
       "path": "res://assets/sprites/characters/hu/vw_053.png",
       "weaponTip": [
-        398,
-        138
+        346,
+        49
       ]
     },
     "vw_054": {
       "chestAnchor": [
-        172,
-        237
+        188,
+        119
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        108,
-        120,
-        127,
-        259
+        143,
+        37,
+        89,
+        162
       ],
       "path": "res://assets/sprites/characters/hu/vw_054.png",
       "weaponTip": [
-        398,
-        137
+        346,
+        49
       ]
     },
     "vw_055": {
       "chestAnchor": [
-        165,
-        236
+        183,
+        118
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        103,
-        118,
-        123,
-        263
+        140,
+        35,
+        86,
+        184
       ],
       "path": "res://assets/sprites/characters/hu/vw_055.png",
       "weaponTip": [
-        399,
-        136
+        346,
+        48
       ]
     },
     "vw_056": {
       "chestAnchor": [
-        165,
-        236
+        183,
+        118
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        103,
-        118,
-        123,
-        262
+        140,
+        35,
+        86,
+        184
       ],
       "path": "res://assets/sprites/characters/hu/vw_056.png",
       "weaponTip": [
-        399,
-        135
+        346,
+        48
       ]
     },
     "vw_057": {
       "chestAnchor": [
-        167,
-        235
+        185,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        116,
-        115,
-        102,
-        266
+        149,
+        33,
+        71,
+        186
       ],
       "path": "res://assets/sprites/characters/hu/vw_057.png",
       "weaponTip": [
-        399,
-        133
+        346,
+        46
       ]
     },
     "vw_058": {
       "chestAnchor": [
-        167,
-        235
+        185,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        116,
-        115,
-        102,
-        266
+        149,
+        33,
+        71,
+        186
       ],
       "path": "res://assets/sprites/characters/hu/vw_058.png",
       "weaponTip": [
-        399,
-        133
+        346,
+        46
       ]
     },
     "vw_059": {
       "chestAnchor": [
-        169,
-        233
+        186,
+        116
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        129,
-        112,
-        79,
-        269
+        158,
+        31,
+        55,
+        188
       ],
       "path": "res://assets/sprites/characters/hu/vw_059.png",
       "weaponTip": [
-        399,
-        128
+        346,
+        43
       ]
     },
     "vw_060": {
       "chestAnchor": [
-        172,
-        233
+        188,
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        129,
-        111,
-        85,
-        270
+        158,
+        30,
+        59,
+        189
       ],
       "path": "res://assets/sprites/characters/hu/vw_060.png",
       "weaponTip": [
-        399,
-        128
+        346,
+        42
       ]
     },
     "vw_061": {
       "chestAnchor": [
-        172,
-        233
+        188,
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        129,
-        111,
-        85,
-        270
+        158,
+        30,
+        59,
+        189
       ],
       "path": "res://assets/sprites/characters/hu/vw_061.png",
       "weaponTip": [
-        399,
-        128
+        346,
+        42
       ]
     },
     "vw_062": {
       "chestAnchor": [
-        172,
-        233
+        188,
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        129,
-        111,
-        85,
-        270
+        158,
+        30,
+        60,
+        189
       ],
       "path": "res://assets/sprites/characters/hu/vw_062.png",
       "weaponTip": [
-        399,
-        128
+        346,
+        43
       ]
     },
     "vw_063": {
       "chestAnchor": [
-        178,
-        235
+        193,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        116,
-        116,
-        124,
-        265
+        149,
+        34,
+        87,
+        185
       ],
       "path": "res://assets/sprites/characters/hu/vw_063.png",
       "weaponTip": [
-        399,
-        134
+        346,
+        46
       ]
     },
     "vw_064": {
       "chestAnchor": [
-        178,
-        235
+        193,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        116,
-        116,
-        124,
-        265
+        149,
+        34,
+        87,
+        185
       ],
       "path": "res://assets/sprites/characters/hu/vw_064.png",
       "weaponTip": [
-        399,
-        133
+        346,
+        46
       ]
     },
     "vw_065": {
       "chestAnchor": [
-        178,
-        235
+        193,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        116,
-        116,
-        124,
-        265
+        149,
+        34,
+        87,
+        185
       ],
       "path": "res://assets/sprites/characters/hu/vw_065.png",
       "weaponTip": [
-        399,
-        134
+        346,
+        46
       ]
     },
     "vw_066": {
       "chestAnchor": [
-        167,
-        240
+        185,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        90,
-        125,
-        153,
-        256
+        131,
+        40,
+        108,
+        179
       ],
       "path": "res://assets/sprites/characters/hu/vw_066.png",
       "weaponTip": [
-        399,
-        141
+        346,
+        51
       ]
     },
     "vw_067": {
       "chestAnchor": [
-        167,
-        240
+        184,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        90,
-        125,
-        154,
-        256
+        131,
+        40,
+        106,
+        179
       ],
       "path": "res://assets/sprites/characters/hu/vw_067.png",
       "weaponTip": [
-        399,
-        141
+        346,
+        51
       ]
     },
     "vw_068": {
       "chestAnchor": [
-        160,
-        241
+        179,
+        122
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        82,
-        127,
-        155,
-        254
+        124,
+        42,
+        110,
+        177
       ],
       "path": "res://assets/sprites/characters/hu/vw_068.png",
       "weaponTip": [
-        398,
-        143
+        346,
+        53
       ]
     },
     "vw_069": {
       "chestAnchor": [
-        160,
-        241
+        179,
+        122
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        83,
-        127,
-        154,
-        254
+        125,
+        42,
+        108,
+        177
       ],
       "path": "res://assets/sprites/characters/hu/vw_069.png",
       "weaponTip": [
-        399,
-        144
+        346,
+        53
       ]
     },
     "vw_070": {
       "chestAnchor": [
-        160,
-        241
+        179,
+        122
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        83,
-        127,
-        153,
-        253
+        126,
+        42,
+        106,
+        152
       ],
       "path": "res://assets/sprites/characters/hu/vw_070.png",
       "weaponTip": [
-        399,
-        143
+        346,
+        53
       ]
     },
     "vw_071": {
       "chestAnchor": [
-        159,
-        241
+        179,
+        122
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        82,
-        127,
-        154,
-        254
+        126,
+        42,
+        106,
+        152
       ],
       "path": "res://assets/sprites/characters/hu/vw_071.png",
       "weaponTip": [
-        399,
-        143
+        346,
+        53
       ]
     },
     "vw_072": {
       "chestAnchor": [
-        160,
-        240
+        179,
+        120
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        90,
-        124,
-        139,
-        257
+        130,
+        39,
+        98,
+        180
       ],
       "path": "res://assets/sprites/characters/hu/vw_072.png",
       "weaponTip": [
-        399,
-        141
+        346,
+        52
       ]
     },
     "vw_073": {
       "chestAnchor": [
-        160,
-        240
+        179,
+        120
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        90,
-        124,
-        139,
-        257
+        130,
+        39,
+        98,
+        180
       ],
       "path": "res://assets/sprites/characters/hu/vw_073.png",
       "weaponTip": [
-        399,
-        141
+        346,
+        52
       ]
     },
     "vw_074": {
       "chestAnchor": [
-        161,
-        238
+        180,
+        119
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        97,
-        121,
-        127,
-        260
+        135,
+        37,
+        89,
+        182
       ],
       "path": "res://assets/sprites/characters/hu/vw_074.png",
       "weaponTip": [
-        399,
-        138
+        346,
+        50
       ]
     },
     "vw_075": {
       "chestAnchor": [
-        164,
-        238
+        180,
+        119
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        101,
-        121,
-        125,
-        260
+        135,
+        37,
+        89,
+        182
       ],
       "path": "res://assets/sprites/characters/hu/vw_075.png",
       "weaponTip": [
-        399,
-        138
+        346,
+        50
       ]
     },
     "vw_076": {
       "chestAnchor": [
-        161,
-        236
+        180,
+        118
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        111,
-        118,
-        100,
-        263
+        145,
+        35,
+        70,
+        184
       ],
       "path": "res://assets/sprites/characters/hu/vw_076.png",
       "weaponTip": [
-        399,
-        134
+        346,
+        48
       ]
     },
     "vw_077": {
       "chestAnchor": [
-        161,
-        236
+        180,
+        118
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        111,
-        118,
-        100,
-        263
+        144,
+        35,
+        71,
+        184
       ],
       "path": "res://assets/sprites/characters/hu/vw_077.png",
       "weaponTip": [
-        399,
-        134
+        346,
+        48
       ]
     },
     "vw_078": {
       "chestAnchor": [
-        161,
-        236
+        180,
+        118
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        111,
-        118,
-        99,
-        263
+        145,
+        35,
+        69,
+        184
       ],
       "path": "res://assets/sprites/characters/hu/vw_078.png",
       "weaponTip": [
-        399,
-        134
+        346,
+        48
       ]
     },
     "vw_079": {
       "chestAnchor": [
-        162,
-        235
+        181,
+        117
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        120,
-        115,
-        84,
-        266
+        151,
+        33,
+        59,
+        186
       ],
       "path": "res://assets/sprites/characters/hu/vw_079.png",
       "weaponTip": [
-        399,
-        132
+        346,
+        45
       ]
     },
     "vw_080": {
       "chestAnchor": [
-        171,
-        232
+        187,
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        129,
-        110,
-        83,
-        271
+        158,
+        29,
+        58,
+        190
       ],
       "path": "res://assets/sprites/characters/hu/vw_080.png",
       "weaponTip": [
-        399,
-        127
+        346,
+        42
       ]
     },
     "vw_081": {
       "chestAnchor": [
-        171,
-        232
+        187,
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        129,
-        110,
-        83,
-        271
+        158,
+        29,
+        58,
+        190
       ],
       "path": "res://assets/sprites/characters/hu/vw_081.png",
       "weaponTip": [
-        399,
-        127
+        346,
+        42
       ]
     },
     "vw_082": {
       "chestAnchor": [
-        171,
-        231
+        187,
+        115
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        129,
-        109,
-        83,
-        272
+        158,
+        29,
+        57,
+        190
       ],
       "path": "res://assets/sprites/characters/hu/vw_082.png",
       "weaponTip": [
-        399,
-        126
+        346,
+        41
       ]
     },
     "vw_083": {
       "chestAnchor": [
-        178,
-        231
+        192,
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        124,
-        108,
-        108,
-        273
+        154,
+        28,
+        76,
+        191
       ],
       "path": "res://assets/sprites/characters/hu/vw_083.png",
       "weaponTip": [
-        399,
-        125
+        346,
+        41
       ]
     },
     "vw_084": {
       "chestAnchor": [
-        178,
-        231
+        192,
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        124,
-        108,
-        108,
-        273
+        154,
+        28,
+        76,
+        191
       ],
       "path": "res://assets/sprites/characters/hu/vw_084.png",
       "weaponTip": [
-        399,
-        125
+        346,
+        41
       ]
     },
     "vw_085": {
       "chestAnchor": [
-        178,
-        231
+        192,
+        114
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        124,
-        108,
-        108,
-        273
+        154,
+        28,
+        76,
+        191
       ],
       "path": "res://assets/sprites/characters/hu/vw_085.png",
       "weaponTip": [
-        399,
-        125
+        346,
+        41
       ]
     },
     "vw_086": {
       "chestAnchor": [
-        178,
-        233
+        192,
+        116
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        113,
-        112,
-        130,
-        269
+        146,
+        31,
+        91,
+        188
       ],
       "path": "res://assets/sprites/characters/hu/vw_086.png",
       "weaponTip": [
-        399,
-        129
+        346,
+        43
       ]
     },
     "vw_087": {
       "chestAnchor": [
-        178,
-        233
+        192,
+        116
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        113,
-        112,
-        130,
-        269
+        146,
+        31,
+        91,
+        179
       ],
       "path": "res://assets/sprites/characters/hu/vw_087.png",
       "weaponTip": [
-        399,
-        130
+        347,
+        43
       ]
     },
     "vw_088": {
       "chestAnchor": [
-        172,
-        236
+        188,
+        118
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        96,
-        118,
-        151,
-        263
+        135,
+        35,
+        105,
+        184
       ],
       "path": "res://assets/sprites/characters/hu/vw_088.png",
       "weaponTip": [
-        399,
-        135
+        346,
+        47
       ]
     },
     "vw_089": {
       "chestAnchor": [
-        172,
-        236
+        188,
+        118
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        97,
-        118,
-        150,
-        263
+        135,
+        35,
+        105,
+        184
       ],
       "path": "res://assets/sprites/characters/hu/vw_089.png",
       "weaponTip": [
-        399,
-        135
+        346,
+        47
       ]
     },
     "vw_090": {
       "chestAnchor": [
-        164,
-        240
+        182,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        79,
-        125,
-        170,
-        256
+        123,
+        40,
+        118,
+        179
       ],
       "path": "res://assets/sprites/characters/hu/vw_090.png",
       "weaponTip": [
-        399,
-        141
+        346,
+        51
       ]
     },
     "vw_091": {
       "chestAnchor": [
-        164,
-        240
+        182,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        79,
-        125,
-        170,
-        256
+        123,
+        40,
+        118,
+        179
       ],
       "path": "res://assets/sprites/characters/hu/vw_091.png",
       "weaponTip": [
-        399,
-        141
+        347,
+        51
       ]
     },
     "vw_092": {
       "chestAnchor": [
-        162,
-        241
+        181,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        77,
-        126,
-        170,
-        255
+        121,
+        41,
+        120,
+        154
       ],
       "path": "res://assets/sprites/characters/hu/vw_092.png",
       "weaponTip": [
-        399,
-        142
+        346,
+        53
       ]
     },
     "vw_093": {
       "chestAnchor": [
-        162,
-        241
+        181,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        77,
-        126,
-        170,
-        253
+        121,
+        41,
+        120,
+        153
       ],
       "path": "res://assets/sprites/characters/hu/vw_093.png",
       "weaponTip": [
-        398,
-        143
+        346,
+        53
       ]
     },
     "vw_094": {
       "chestAnchor": [
-        162,
-        241
+        181,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        77,
-        126,
-        170,
-        255
+        121,
+        41,
+        119,
+        178
       ],
       "path": "res://assets/sprites/characters/hu/vw_094.png",
       "weaponTip": [
-        399,
-        143
+        346,
+        52
       ]
     },
     "vw_095": {
       "chestAnchor": [
-        162,
-        241
+        181,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        77,
-        126,
-        170,
-        255
+        121,
+        41,
+        120,
+        178
       ],
       "path": "res://assets/sprites/characters/hu/vw_095.png",
       "weaponTip": [
-        398,
-        142
+        346,
+        52
       ]
     },
     "vw_096": {
       "chestAnchor": [
-        163,
-        240
+        182,
+        121
       ],
       "footAnchor": [
         224,
-        382
+        219
       ],
       "hurtbox": [
-        79,
-        125,
-        167,
-        256
+        123,
+        40,
+        117,
+        179
       ],
       "path": "res://assets/sprites/characters/hu/vw_096.png",
       "weaponTip": [
-        398,
-        142
+        346,
+        52
       ]
     },
     "windup": {
