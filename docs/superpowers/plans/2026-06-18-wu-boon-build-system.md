@@ -354,3 +354,31 @@ Each task: write failing tests → run FAIL → implement + register type → ru
 - **Type consistency:** `create_effect_from_data(effect_data, id)`, `BoonFactory.build_boon_effects(boon, tier)`, `BoonLoadout.add_boon(id, tier)` / `upgrade_boon(id)`, `TechniqueEngine.add_effect/remove_effect`, boon-instance ids `"<boonId>#<n>"` — used consistently across tasks.
 - **Load-bearing rule (reviewer P1):** boon effects live ONLY in the engine's `_effects`, never in `_technique_ids` — so `technique_ids()`/`save_state()`/`load_state()` stay legacy-only and the `"<boonId>#<n>"` instance ids never leak into the legacy save/identity path. Boons persist/rebuild via `BoonLoadout` `{boon_id, tier}` (Tasks 2 & 6, with explicit tests). All new effect data uses **dict-root** JSON (`{"schools":[…]}` / `{"boons":[…]}`); new hooks broadcast via public `dispatch_jump/land/aerial_hit` (Task 7), not private `_effects`; spread/arc are v1 single-enemy no-ops (Tasks 8–9); register every `test_*.gd` in `WUGodot/tests/run_tests.gd` `_TEST_MODULES`.
 - **Other risk:** Tasks 1–2 must not regress existing technique tests (the factory/engine refactor is load-bearing); confirm the exact bleed-style status apply/tick path (Task 8) and hook dispatch sites (Task 7) against current `combat_system.gd`/`fighter.gd` before coding.
+
+---
+
+# Follow-up F1 — Real boon descriptions on offer cards + loadout (post-ship)
+
+> Surfaced by the playtest harness `--capture ui`: offer cards read generic **"Adds move effects."** and show the raw boon **id** (`venom_light`). Boons must read like a Hades boon — a name + what they actually do at the offered tier (base + cumulative riders). Boon data today is only `type`+`params` (no name/desc).
+
+### Task F1: `BoonText` describer + names
+
+**Files:** Create `WUGodot/scripts/boons/boon_text.gd`; Modify `WUGodot/scripts/scenes/boon_offer_scene.gd` (`_offer_label`/`_offer_n`), `WUGodot/scripts/scenes/loadout_view.gd` (tooltips), `WUGodot/data/Boons/Boons.json` (add `name`); Test `WUGodot/tests/test_boon_text.gd`.
+
+- [ ] **Step 1: Failing tests** — (a) `BoonText.describe(DataManager.get_boon("venom_light"), "epic")` returns text that mentions the **base venom** AND the **rare+epic riders** (slow, spread) and does NOT equal "Adds move effects."; at `"common"` it mentions only the base; (b) `BoonText.name(boon)` returns the boon's `name` (readable, not the raw id); (c) **coverage gate:** every `effect.type`/rider `type` referenced anywhere in `Boons.json` has a describer template (no boon falls back to generic text).
+- [ ] **Step 2:** Register test in `run_tests.gd`; run → FAIL.
+- [ ] **Step 3: Implement** `boon_text.gd`:
+  - `static func describe(boon, tier) -> String` — walk `BoonFactory.TIER_ORDER` up to `tier`, collect the base `effect` + each tier's `riders`, and turn each into a clause via a **per-type template map** keyed by `effect.type`, reading `params` for numbers, e.g.:
+    ```gdscript
+    "venom": "applies %d venom (%.1f dps/%.0fs)" % [stacks, dps, timer]
+    "venom_slow": "venom also slows (-%d%% move)" % pct
+    "venom_spread": "venom spreads to nearby on a venomed kill"
+    "venom_heavy_detonate": "heavy detonates venom (%.0f/stack)" % dps
+    ```
+    Join clauses with " · ". If an effect/rider carries an explicit `desc` string, use it verbatim (author override). For duo/mastery boons (single `effect`), describe that effect.
+  - `static func name(boon) -> String` — return `boon.name` if present, else a humanized id (`"venom_light"` → `"Venom Light"`).
+  - **No silent generic fallback:** an unknown type returns a clearly-tagged `"[type]?"` so the coverage gate fails rather than shipping vague text.
+- [ ] **Step 4: Wire UI** — in `boon_offer_scene.gd`: `_offer_label` → `"%s · %s" % [tier.capitalize(), BoonText.name(boon)]`; `_offer_n` body → `BoonText.describe(boon, offer.tier)` (replace the `"Adds %s effects."` line). In `loadout_view.gd`: tooltips → `BoonText.describe(boon, current_tier)`.
+- [ ] **Step 5: Content** — add a readable `name` to each boon in `Boons.json` (and any `desc` overrides where the template reads awkwardly).
+- [ ] **Step 6: Verify** — `./run.sh --test` 0-failed; then **dogfood the harness**: `./run.sh --capture <ui-spec for a venom offer> /tmp/cap` and confirm the cards now show real names + effect text (not "Adds move effects"), via `assert_nonblank` + eyeball.
+- [ ] **Step 7: Commit** — `feat(boons): readable boon names + effect descriptions on offers/loadout`.
