@@ -57,7 +57,7 @@ func run_all() -> Dictionary:
         failed += 1; failures.append("create_effect_from_data should build a stat_delta effect with given id+params")
     return {"passed": passed, "failed": failed, "failures": failures}
 ```
-- [ ] **Step 2: Register the test** in the headless test runner (follow the pattern other `test_*.gd` use — add to the suite list in `WUGodot/scripts/test_runner.gd` or wherever `run_all` suites are registered; grep `test_technique_engine` to find it). Run `./run.sh --test` → FAIL (`create_effect_from_data` not defined).
+- [ ] **Step 2: Register the test** — add `"res://tests/test_boon_factory.gd"` to the `_TEST_MODULES` array in `WUGodot/tests/run_tests.gd` (the canonical suite list). Run `./run.sh --test` → FAIL (`create_effect_from_data` not defined). *(Every new `test_*.gd` in this plan must be added to that `_TEST_MODULES` array.)*
 - [ ] **Step 3: Implement** — in `technique_registry.gd`, extract the `match effect_type` block into `create_effect_from_data(effect_data: Dictionary, id: String = "") -> Variant`, and make `create_effect(id)` call it:
 ```gdscript
 static func create_effect(id: String) -> Variant:
@@ -87,27 +87,28 @@ Move the existing `match` into a `static func _new_effect_for_type(effect_type: 
 
 **Files:** Modify `WUGodot/scripts/technique_engine.gd`; Test `WUGodot/tests/test_boon_loadout.gd` (start it here)
 
-- [ ] **Step 1: Failing test** — build an effect via the factory, install it on a fresh `TechniqueEngine` with `add_effect`, assert it's active and participates in hits; then `remove_effect` and assert it's gone. (Use a `Fighter.new()` like `test_technique_engine.gd` does.)
+- [ ] **Step 1: Failing tests** — (a) build an effect via the factory, install it with `add_effect`, assert it's active and participates in hits, then `remove_effect` removes it; **(b) `engine.technique_ids()` stays legacy-only** — it must NOT contain the boon effect id; **(c) `engine.save_state()["technique_ids"]` does NOT include boon effect ids** (boons are not engine-serialized). (Use a `Fighter.new()` like `test_technique_engine.gd` does.)
 - [ ] **Step 2: Run** → FAIL (`add_effect` not defined).
-- [ ] **Step 3: Implement** in `technique_engine.gd` — refactor so `add(id)` builds then calls a shared installer, and expose instance-level methods:
+- [ ] **Step 3: Implement** in `technique_engine.gd` — add a **boon-install path that never touches `_technique_ids`** (so save/load identity stays legacy-only; boons are owned by `BoonLoadout`):
 ```gdscript
 func add_effect(effect: Variant, fighter: Variant) -> void:
-    if effect == null: return
-    _install_effect(effect, fighter)   # existing private installer
+    if effect == null or _effects.has(effect): return
+    if effect.exclusive_group != "":
+        for existing in _effects.duplicate():
+            if existing.exclusive_group == effect.exclusive_group:
+                remove_effect(existing, fighter)
+    _effects.append(effect)            # ONLY _effects — never _technique_ids
+    _sort_effects()
+    effect.on_add(fighter)
 
 func remove_effect(effect: Variant, fighter: Variant) -> void:
     if effect == null or not _effects.has(effect): return
-    if _active_stance_id == effect.id:
-        deactivate_stance(fighter)
-    if effect.once_per_run:
-        _effect_state_archive[effect.id] = effect.state()
     effect.on_remove(fighter)
     _effects.erase(effect)
-    _technique_ids.erase(effect.id)
 ```
-Note: `_install_effect` already appends `effect.id`; boon riders share a boon id family — make `_technique_ids` tolerate duplicates by switching boon-installed ids to a per-instance unique key (see Task 4 — loadout assigns `effect.id = "<boonId>#<n>"`). Keep `add(id)` behavior for legacy techniques unchanged.
+**Critical:** boon effects live in `_effects` only. `technique_ids()`, `save_state()`, and `load_state()` therefore stay legacy-only and will never try to `add(id)` a fake `"<boonId>#<n>"` id. once_per_run/stance archival stays a legacy-technique concern; boon stances are handled by `BoonLoadout`. Leave the existing `add(id)`/`_install_effect`/`save_state`/`load_state` paths unchanged.
 - [ ] **Step 4: Run** → PASS (+ existing engine tests green).
-- [ ] **Step 5: Commit** — `feat(boons): TechniqueEngine add_effect/remove_effect for boon instances`.
+- [ ] **Step 5: Commit** — `feat(boons): TechniqueEngine add_effect/remove_effect (boon effects excluded from legacy identity/save)`.
 
 ### Task 3: Schools/Boons data files + DataManager loaders
 
@@ -115,17 +116,17 @@ Note: `_install_effect` already appends `effect.id`; boon riders share a boon id
 
 - [ ] **Step 1: Failing test** — assert `DataManager.get_school("venom")` returns a dict with `signature == "venom"`, and `DataManager.get_boon("venom_light")` returns a dict with `kind == "move"`, `slot == "light"`, and a `tiers.common.effect` dict.
 - [ ] **Step 2:** Run → FAIL.
-- [ ] **Step 3: Implement** — seed minimal data + loaders:
-  - `Schools.json`: `[{"id":"venom","name":"Venom Sect","hanzi":"毒","signature":"venom","themeColor":"#7ec850","blurb":"Snowballing poison."}]` (one entry to start; full roster in Phase 7).
-  - `Boons.json`: one entry:
+- [ ] **Step 3: Implement** — seed minimal data + loaders. **Roots are dicts** (`_load_json_file` returns `{}` for a top-level array — mirror the technique loader's `{"techniques":[...]}` shape):
+  - `Schools.json`: `{"schools":[{"id":"venom","name":"Venom Sect","hanzi":"毒","signature":"venom","themeColor":"#7ec850","blurb":"Snowballing poison."}]}` (one entry to start; full roster in Phase 7).
+  - `Boons.json`:
     ```json
-    [{"id":"venom_light","school":"venom","kind":"move","slot":"light",
+    {"boons":[{"id":"venom_light","school":"venom","kind":"move","slot":"light",
       "tiers":{"common":{"effect":{"type":"venom","stacks":1}},
                "rare":{"riders":[{"type":"venom_slow"}]},
                "epic":{"riders":[{"type":"venom_spread"}]},
-               "legendary":{"riders":[{"type":"venom_heavy_detonate"}]}}}]
+               "legendary":{"riders":[{"type":"venom_heavy_detonate"}]}}}]}
     ```
-  - In `data_manager.gd`, mirror the existing technique loader: load both files in `initialize()`, store keyed-by-id, add `get_school(id)`, `get_boon(id)`, `get_all_boons()`, `get_boons_for_school(school_id)`. Add to the `reload_data()` path and the F5 reload.
+  - In `data_manager.gd`, mirror the technique loader: in `initialize()`, `root = _load_json_file("res://data/Schools/Schools.json")` then iterate `root.get("schools", [])` (same for `Boons.json` → `root.get("boons", [])`), store keyed-by-id. Add `get_school(id)`, `get_boon(id)`, `get_all_boons()`, `get_boons_for_school(school_id)`. Add to `reload_data()` / F5 reload.
 - [ ] **Step 4:** Run → PASS.
 - [ ] **Step 5: Commit** — `feat(boons): Schools/Boons data files + DataManager loaders`.
 
@@ -186,11 +187,11 @@ static func _mk(effect_data: Dictionary, boon: Dictionary, n: int) -> Variant:
 
 **Files:** Modify `WUGodot/scripts/run_state.gd` (+ scene context that carries run data); Test `test_boon_loadout.gd`
 
-- [ ] **Step 1: Failing test** — a fresh run state exposes an empty `BoonLoadout`; adding a boon survives a `serialize`→`restore` round-trip.
+- [ ] **Step 1: Failing tests** — a fresh run state exposes an empty `BoonLoadout`; `loadout.serialize()` emits per-boon `{boon_id, tier}` (+ slot/kind), NOT effect ids; after `serialize`→`restore` the effects are rebuilt **via `BoonFactory` from `{boon_id, tier}`** and are active again; and `engine.technique_ids()` remains legacy-only after restore (no fake `#n` ids).
 - [ ] **Step 2:** Run → FAIL.
-- [ ] **Step 3: Implement** — add a `BoonLoadout` to the run/scene context (replace/augment `run_techniques_acquired[]`); ensure it's created on run start and serialized with the rest of run state. Keep legacy technique arrays only if still needed during Phase 3 migration.
+- [ ] **Step 3: Implement** — add a `BoonLoadout` to the run/scene context; `serialize()` stores `{boon_id, tier}` per slot/passive/duo/mastery; `restore(engine, fighter)` rebuilds effects through `BoonFactory.build_boon_effects` + `engine.add_effect` (never the engine's `technique_ids`/`load_state`). Create it on run start; serialize it alongside (not inside) the engine's legacy save. Keep legacy technique arrays only while Phase 3 migration is in flight.
 - [ ] **Step 4:** Run → PASS.
-- [ ] **Step 5: Commit** — `feat(boons): carry BoonLoadout in run state`.
+- [ ] **Step 5: Commit** — `feat(boons): carry + persist BoonLoadout via {boon_id,tier}`.
 
 ---
 
@@ -202,13 +203,22 @@ static func _mk(effect_data: Dictionary, boon: Dictionary, n: int) -> Variant:
 
 - [ ] **Step 1: Failing test** — a stub effect overriding `on_jump`/`on_land` records calls; simulate a jump and a landing through the combat/fighter path and assert both fired. (Mirror how `test_technique_combat.gd` drives the fighter.)
 - [ ] **Step 2:** Run → FAIL (hooks not invoked).
-- [ ] **Step 3: Implement** — add to `technique_effect.gd`:
+- [ ] **Step 3: Implement** — add hooks to `technique_effect.gd`:
 ```gdscript
 func on_jump(_fighter: Variant) -> void: pass
 func on_land(_fighter: Variant) -> void: pass
-func modify_aerial_hit(_ctx: Variant) -> void: pass   # called from modify_outgoing_hit path when attacker not grounded
+func modify_aerial_hit(_ctx: Variant) -> void: pass
 ```
-In `fighter.gd`/`combat_system.gd`, at the existing jump trigger and landing-recovery transition (search `has_double_jump` and the `LANDING` state), broadcast to the engine's effects (mirror how `on_dash_end`/`on_parry_success` are dispatched). For `modify_aerial_hit`, in the hit pipeline call it when `attacker.is_grounded == false`. **Do not** add a second double-jump — baseline already grants one.
+Add **public engine dispatch methods** in `technique_engine.gd`, mirroring the existing `dispatch_outgoing_hit`/`dispatch_block`/`dispatch_post_hit` pattern (callers must NOT reach into private `_effects`):
+```gdscript
+func dispatch_jump(fighter: Variant) -> void:
+    for effect in _effects: effect.on_jump(fighter)
+func dispatch_land(fighter: Variant) -> void:
+    for effect in _effects: effect.on_land(fighter)
+func dispatch_aerial_hit(ctx: Variant) -> void:
+    for effect in _effects: effect.modify_aerial_hit(ctx)
+```
+In `fighter.gd`/`combat_system.gd`, call `technique_engine.dispatch_jump(...)` at the jump trigger (search `has_double_jump`), `dispatch_land(...)` at the landing-recovery transition (`LANDING` state), and `dispatch_aerial_hit(ctx)` in the hit pipeline when `attacker.is_grounded == false`. **Do not** add a second double-jump — baseline already grants one.
 - [ ] **Step 4:** Run → PASS.
 - [ ] **Step 5: Commit** — `feat(boons): on_jump/on_land/aerial hooks`.
 
@@ -218,7 +228,7 @@ In `fighter.gd`/`combat_system.gd`, at the existing jump trigger and landing-rec
 
 This is the **reference pattern** for status effects with riders. Each rider is its own effect TYPE registered in the factory.
 
-- [ ] **Step 1: Failing tests** — (a) `venom` effect on a hit applies a venom stack to the defender (a `venom_stacks` + `venom_timer` field on the HitContext or defender — add to `HitContext` like `bleed_timer`); (b) venom ticks damage over time via `update`/combat tick; (c) `venom_slow` rider reduces defender move_speed while venomed; (d) `venom_spread` rider, on a venomed defender's death, applies venom to nearby; (e) `venom_heavy_detonate` rider: a heavy hit consumes stacks for burst.
+- [ ] **Step 1: Failing tests** — (a) `venom` effect on a hit applies a venom stack to the defender (a `venom_stacks` + `venom_timer` field on the HitContext or defender — add to `HitContext` like `bleed_timer`); (b) venom ticks damage over time via `update`/combat tick; (c) `venom_slow` rider reduces defender move_speed while venomed; (d) `venom_spread` rider — **v1 single-enemy semantics:** combat has one defender (`combat_scene._enemy`), so "spread to nearby" is a **valid no-op that only flags intent** (test: installs + runs without error); real spread is deferred to multi-enemy encounters — do NOT expand encounter architecture here; (e) `venom_heavy_detonate` rider: a heavy hit consumes stacks for burst on the current defender.
 - [ ] **Step 2:** Run → FAIL.
 - [ ] **Step 3: Implement** — add `venom_timer`/`venom_stacks`/`venom_dps` to `TechniqueEffect.HitContext` (mirror bleed fields), apply/tick in the combat damage path (mirror bleed application/tick in `combat_system.gd`). Author `venom_effect.gd` with the base `venom` type (`modify_outgoing_hit` adds stacks) and **separate small effect classes/types** for `venom_slow`, `venom_spread`, `venom_heavy_detonate` (each a tiny `*_effect.gd` or branch in one file keyed by `params.type`). Register every new type in `_new_effect_for_type`.
 - [ ] **Step 4:** Run → PASS.
@@ -230,7 +240,7 @@ This is the **reference pattern** for status effects with riders. Each rider is 
 
 Each follows the **Task 8 pattern** (base type + per-tier rider types; status field on HitContext/fighter where needed; apply+tick in combat path; factory registration; one assertion per behavior). Per-effect specifics:
 
-- [ ] **Task 9 — Jolt** (Thunderclap): base = hit applies Jolt to target + arcs to one nearby enemy (use the scene's enemy list; in single-enemy combat, arc is a no-op but still flags Jolt). Riders: `jolt_amp` (jolted take +dmg), `jolt_nova` (heavy → AoE jolt), `jolt_dash_discharge` (dash consumes jolt for burst). Hooks: `modify_outgoing_hit`, `on_dash_end`. Commit `feat(boons): jolt effect family`.
+- [ ] **Task 9 — Jolt** (Thunderclap): base = hit applies Jolt to the current defender. **v1 is single-enemy** (`combat_scene._enemy`) — "arc to nearby" and `jolt_nova` AoE operate on the **current defender only** and are valid no-ops for "nearby"; do NOT add multi-enemy/encounter architecture in this task. Riders: `jolt_amp` (jolted take +dmg), `jolt_nova` (heavy burst on the jolted defender), `jolt_dash_discharge` (dash consumes jolt for burst). Hooks: `modify_outgoing_hit`, `on_dash_end`. Commit `feat(boons): jolt effect family`.
 - [ ] **Task 10 — Deflect** (Soft Palm): base = perfect-parry window grants a riposte (use `on_parry_success`). Riders: `deflect_riposte_dmg`, `deflect_reduce` (passive incoming-dmg reduction via `modify_block`), `deflect_redirect` (light counter). Commit `feat(boons): deflect effect family`.
 - [ ] **Task 11 — Momentum** (Windstep): base = a `momentum` meter (builds on dash/move, decays); riders: `momentum_flurry` (light gains extra hits at high momentum via `ctx.extra_hits`), `momentum_aerial` (uses `modify_aerial_hit`/`on_land` for a landing burst), `momentum_speed` (passive `stat_delta`-like). Hooks: `on_dash_end`, `on_jump`/`on_land`, `update`. Commit `feat(boons): momentum effect family`.
 - [ ] **Task 12 — Intent-mark** (Sword Intent): base = hit applies an Intent mark to target; heavy consumes marks for crit burst. Riders: `intent_reach` (passive +range), `intent_crit_vs_marked`, `intent_dash_flash` (dash applies mark). Hooks: `modify_outgoing_hit`. Reuse `bleed`-style detonation infra if helpful. Commit `feat(boons): intent-mark effect family`.
@@ -342,4 +352,5 @@ Each task: write failing tests → run FAIL → implement + register type → ru
 - **Spec coverage:** slots (Task 5/7), schools+roster (Task 3/20), 4-tier riders (Task 4/8/20), kinds move/passive/duo/mastery (Task 5/18), Insight (Task 17), steering+favor (Task 16), prefer-empty-slot (Task 14), `create_effect_from_data` boundary (Task 1), jump hooks + no-double-jump (Task 7), re-home by behavior (Task 13), engine reuse (Task 2), data model (Task 3/20), UI/tooltips (Task 15/19). Visual variance + difficulty curve correctly **excluded** (other sub-projects).
 - **No placeholders:** each code task has the actual signatures/snippets; content task (20) is gated by an automated content test, not vibes.
 - **Type consistency:** `create_effect_from_data(effect_data, id)`, `BoonFactory.build_boon_effects(boon, tier)`, `BoonLoadout.add_boon(id, tier)` / `upgrade_boon(id)`, `TechniqueEngine.add_effect/remove_effect`, boon-instance ids `"<boonId>#<n>"` — used consistently across tasks.
-- **Open risk flagged for the implementer:** Tasks 1–2 must not regress existing technique tests (the factory/engine refactor is the load-bearing change); confirm the exact dispatch sites for the new hooks (Task 7) and the bleed-style status apply/tick path (Task 8) against current `combat_system.gd` before coding.
+- **Load-bearing rule (reviewer P1):** boon effects live ONLY in the engine's `_effects`, never in `_technique_ids` — so `technique_ids()`/`save_state()`/`load_state()` stay legacy-only and the `"<boonId>#<n>"` instance ids never leak into the legacy save/identity path. Boons persist/rebuild via `BoonLoadout` `{boon_id, tier}` (Tasks 2 & 6, with explicit tests). All new effect data uses **dict-root** JSON (`{"schools":[…]}` / `{"boons":[…]}`); new hooks broadcast via public `dispatch_jump/land/aerial_hit` (Task 7), not private `_effects`; spread/arc are v1 single-enemy no-ops (Tasks 8–9); register every `test_*.gd` in `WUGodot/tests/run_tests.gd` `_TEST_MODULES`.
+- **Other risk:** Tasks 1–2 must not regress existing technique tests (the factory/engine refactor is load-bearing); confirm the exact bleed-style status apply/tick path (Task 8) and hook dispatch sites (Task 7) against current `combat_system.gd`/`fighter.gd` before coding.
