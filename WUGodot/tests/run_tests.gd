@@ -12,6 +12,7 @@ const _TEST_MODULES: Array[String] = [
 	"res://tests/test_boon_factory.gd",
 	"res://tests/test_boon_loadout.gd",
 	"res://tests/test_boon_offer.gd",
+	"res://tests/test_boon_text.gd",
 	"res://tests/test_boon_rehome.gd",
 	"res://tests/test_content_matrix.gd",
 	"res://tests/test_rng_service.gd",

@@ -2,7 +2,7 @@ class_name LoadoutView
 extends RefCounted
 
 const UiDraw = preload("res://scripts/ui/ui_draw.gd")
-const TIER_ORDER: Array[String] = ["common", "rare", "epic", "legendary"]
+const BoonTextScript = preload("res://scripts/boons/boon_text.gd")
 const SLOTS: Array[String] = ["light", "heavy", "dash", "block", "stance", "jump"]
 
 static func draw(canvas: CanvasItem, ctx: Variant, rect: Rect2, _cursor_flash: float = 0.0) -> void:
@@ -44,8 +44,8 @@ static func _draw_record_row(canvas: CanvasItem, rect: Rect2, y: float, label: S
 	var hint: String = ""
 	if not boon_id.is_empty():
 		var boon: Dictionary = DataManager.get_boon(boon_id)
-		body = _boon_name(boon)
-		hint = "%s · %s" % [tier.capitalize(), _effect_summary(boon, tier)]
+		body = BoonTextScript.name(boon)
+		hint = "%s · %s" % [tier.capitalize(), BoonTextScript.summary(boon, tier)]
 
 	if not label_text.is_empty():
 		UiDraw.text(canvas, label_text, row.position.x + 10.0, y + 2.0, GameConstants.COLOR_TEXT_HINT, 12)
@@ -55,32 +55,3 @@ static func _draw_record_row(canvas: CanvasItem, rect: Rect2, y: float, label: S
 		UiDraw.text(canvas, body, row.position.x + 10.0, y + 2.0, GameConstants.COLOR_TEXT_HEADING, 14)
 		UiDraw.text(canvas, hint, row.position.x + 10.0, y + 20.0, GameConstants.COLOR_TEXT_HINT, 11)
 	return y + 48.0
-
-static func _boon_name(boon: Dictionary) -> String:
-	var source_id: String = str(boon.get("sourceTechnique", ""))
-	if not source_id.is_empty():
-		var technique: Dictionary = DataManager.get_technique(source_id)
-		return str(technique.get("name_en", boon.get("id", "")))
-	return str(boon.get("id", ""))
-
-static func _effect_summary(boon: Dictionary, tier: String) -> String:
-	var kind: String = str(boon.get("kind", ""))
-	if kind == "duo" or kind == "mastery":
-		return str((boon.get("effect", {}) as Dictionary).get("type", "effect"))
-
-	var parts: Array[String] = []
-	var tiers: Dictionary = boon.get("tiers", {}) as Dictionary
-	for current in TIER_ORDER:
-		if not tiers.has(current):
-			continue
-		var tier_data: Dictionary = tiers[current] as Dictionary
-		if tier_data.has("effect"):
-			parts.append(str((tier_data.get("effect", {}) as Dictionary).get("type", "effect")))
-		for rider in tier_data.get("riders", []) as Array:
-			if typeof(rider) == TYPE_DICTIONARY:
-				parts.append(str((rider as Dictionary).get("type", "effect")))
-		if current == tier:
-			break
-	if parts.is_empty():
-		return "effect"
-	return ", ".join(parts)

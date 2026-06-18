@@ -3,6 +3,7 @@ extends RefCounted
 
 const SceneContext = preload("res://scripts/scene_context.gd")
 const UiDraw = preload("res://scripts/ui/ui_draw.gd")
+const BoonTextScript = preload("res://scripts/boons/boon_text.gd")
 
 var offers: Array = []
 var school_choices: Array = []
@@ -119,23 +120,13 @@ func _apply_offer_by_index(ctx: Variant, index: int) -> void:
 
 func _offer_label(offer: Dictionary) -> String:
 	var boon: Dictionary = offer.get("boon", {}) as Dictionary
-	var tier: String = str(offer.get("tier", "common")).capitalize()
-	var source_id: String = str(boon.get("sourceTechnique", ""))
-	if not source_id.is_empty():
-		var technique: Dictionary = DataManager.get_technique(source_id)
-		return "%s %s" % [tier, str(technique.get("name_en", boon.get("id", "")))]
-	return "%s %s" % [tier, str(boon.get("id", ""))]
+	return BoonTextScript.label(boon, str(offer.get("tier", "common")))
 
 func _offer_description(offer: Dictionary) -> String:
 	var boon: Dictionary = offer.get("boon", {}) as Dictionary
 	var kind: String = str(boon.get("kind", ""))
 	var slot: String = str(boon.get("slot", ""))
-	var source_id: String = str(boon.get("sourceTechnique", ""))
-	var body: String = ""
-	if not source_id.is_empty():
-		body = str(DataManager.get_technique(source_id).get("description", ""))
-	if body.is_empty():
-		body = "Adds %s effects." % kind
+	var body: String = BoonTextScript.describe(boon, str(offer.get("tier", "common")))
 	return "%s%s · %s" % [kind, " / %s" % slot if not slot.is_empty() else "", body]
 
 func _school_choice_label(choice: Dictionary) -> String:

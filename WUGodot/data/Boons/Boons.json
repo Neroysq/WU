@@ -2,6 +2,7 @@
   "boons": [
     {
       "id": "venom_light",
+      "name": "Coiling Venom",
       "school": "venom",
       "kind": "move",
       "slot": "light",
@@ -14,6 +15,7 @@
     },
     {
       "id": "venom_heavy",
+      "name": "Serpent Fang",
       "school": "venom",
       "kind": "move",
       "slot": "heavy",
@@ -26,6 +28,7 @@
     },
     {
       "id": "venom_dash",
+      "name": "Poison Step",
       "school": "venom",
       "kind": "move",
       "slot": "dash",
@@ -38,6 +41,7 @@
     },
     {
       "id": "venom_pressure",
+      "name": "Lingering Toxin",
       "school": "venom",
       "kind": "passive",
       "tiers": {
@@ -49,6 +53,7 @@
     },
     {
       "id": "venom_tolerance",
+      "name": "Bitter Medicine",
       "school": "venom",
       "kind": "passive",
       "tiers": {
@@ -60,6 +65,7 @@
     },
     {
       "id": "venom_thunder_duo",
+      "name": "Galvanic Venom",
       "school": "venom",
       "kind": "duo",
       "requires": {"schools": ["venom", "thunder"]},
@@ -67,6 +73,7 @@
     },
     {
       "id": "venom_mastery",
+      "name": "Thousand-Venom Heart",
       "school": "venom",
       "kind": "mastery",
       "requires": {"counts": {"venom": 3}},
@@ -75,6 +82,7 @@
 
     {
       "id": "thunder_light",
+      "name": "Spark Palm",
       "school": "thunder",
       "kind": "move",
       "slot": "light",
@@ -87,6 +95,7 @@
     },
     {
       "id": "thunder_heavy",
+      "name": "Rolling Thunder",
       "school": "thunder",
       "kind": "move",
       "slot": "heavy",
@@ -99,6 +108,7 @@
     },
     {
       "id": "thunder_dash",
+      "name": "Lightning Step",
       "school": "thunder",
       "kind": "move",
       "slot": "dash",
@@ -111,6 +121,7 @@
     },
     {
       "id": "thunder_charge",
+      "name": "Storm Charge",
       "school": "thunder",
       "kind": "passive",
       "tiers": {
@@ -122,6 +133,7 @@
     },
     {
       "id": "thunder_reserve",
+      "name": "Cloudbank Reserve",
       "school": "thunder",
       "kind": "passive",
       "tiers": {
@@ -133,6 +145,7 @@
     },
     {
       "id": "thunder_sword_duo",
+      "name": "Lightning Draw",
       "school": "thunder",
       "kind": "duo",
       "requires": {"schools": ["thunder", "sword"]},
@@ -140,6 +153,7 @@
     },
     {
       "id": "thunder_mastery",
+      "name": "Heaven's Thunder",
       "school": "thunder",
       "kind": "mastery",
       "requires": {"counts": {"thunder": 3}},
@@ -148,6 +162,7 @@
 
     {
       "id": "soft_iron_palm",
+      "name": "Iron Palm",
       "school": "soft",
       "kind": "move",
       "slot": "light",
@@ -161,6 +176,7 @@
     },
     {
       "id": "soft_mountain_echo",
+      "name": "Mountain Echo",
       "school": "soft",
       "kind": "move",
       "slot": "block",
@@ -174,6 +190,7 @@
     },
     {
       "id": "soft_drunken_form",
+      "name": "Drunken Form",
       "school": "soft",
       "kind": "move",
       "slot": "stance",
@@ -187,6 +204,7 @@
     },
     {
       "id": "soft_cloud_hands",
+      "name": "Cloud Hands",
       "school": "soft",
       "kind": "passive",
       "sourceTechnique": "A9",
@@ -199,6 +217,7 @@
     },
     {
       "id": "soft_returning_spring",
+      "name": "Returning Spring",
       "school": "soft",
       "kind": "passive",
       "sourceTechnique": "B2",
@@ -211,6 +230,7 @@
     },
     {
       "id": "soft_iron_duo",
+      "name": "Yielding Iron",
       "school": "soft",
       "kind": "duo",
       "requires": {"schools": ["soft", "iron"]},
@@ -218,6 +238,7 @@
     },
     {
       "id": "soft_mastery",
+      "name": "Soft Palm Mastery",
       "school": "soft",
       "kind": "mastery",
       "requires": {"counts": {"soft": 3}},
@@ -226,6 +247,7 @@
 
     {
       "id": "iron_stone_posture",
+      "name": "Stone Posture",
       "school": "iron",
       "kind": "move",
       "slot": "block",
@@ -239,6 +261,7 @@
     },
     {
       "id": "iron_tiger_stance",
+      "name": "Tiger Stance",
       "school": "iron",
       "kind": "move",
       "slot": "stance",
@@ -252,6 +275,7 @@
     },
     {
       "id": "iron_heavy_crush",
+      "name": "Mountain Crush",
       "school": "iron",
       "kind": "move",
       "slot": "heavy",
@@ -264,6 +288,7 @@
     },
     {
       "id": "iron_heart_of_bamboo",
+      "name": "Heart of Bamboo",
       "school": "iron",
       "kind": "passive",
       "sourceTechnique": "A6",
@@ -276,6 +301,7 @@
     },
     {
       "id": "iron_mountain_root",
+      "name": "Mountain Root",
       "school": "iron",
       "kind": "passive",
       "sourceTechnique": "A8",
@@ -288,6 +314,7 @@
     },
     {
       "id": "iron_inkstone_discipline",
+      "name": "Inkstone Discipline",
       "school": "iron",
       "kind": "passive",
       "sourceTechnique": "A12",
@@ -300,6 +327,7 @@
     },
     {
       "id": "iron_scar_of_the_past",
+      "name": "Scar of the Past",
       "school": "iron",
       "kind": "passive",
       "sourceTechnique": "B5",
@@ -312,6 +340,7 @@
     },
     {
       "id": "iron_phoenix_rising",
+      "name": "Phoenix Rising",
       "school": "iron",
       "kind": "passive",
       "sourceTechnique": "B6",
@@ -324,6 +353,7 @@
     },
     {
       "id": "iron_soft_duo",
+      "name": "Immovable Palm",
       "school": "iron",
       "kind": "duo",
       "requires": {"schools": ["iron", "soft"]},
@@ -331,6 +361,7 @@
     },
     {
       "id": "iron_mastery",
+      "name": "Iron Body Mastery",
       "school": "iron",
       "kind": "mastery",
       "requires": {"counts": {"iron": 3}},
@@ -339,6 +370,7 @@
 
     {
       "id": "wind_descending_leaf",
+      "name": "Descending Leaf",
       "school": "wind",
       "kind": "move",
       "slot": "dash",
@@ -352,6 +384,7 @@
     },
     {
       "id": "wind_sparrow_wing",
+      "name": "Sparrow Wing",
       "school": "wind",
       "kind": "move",
       "slot": "dash",
@@ -365,6 +398,7 @@
     },
     {
       "id": "wind_flowing_water",
+      "name": "Flowing Water",
       "school": "wind",
       "kind": "move",
       "slot": "dash",
@@ -378,6 +412,7 @@
     },
     {
       "id": "wind_light_flurry",
+      "name": "Cutting Breeze",
       "school": "wind",
       "kind": "move",
       "slot": "light",
@@ -390,6 +425,7 @@
     },
     {
       "id": "wind_jump_aerial",
+      "name": "Skyward Gale",
       "school": "wind",
       "kind": "move",
       "slot": "jump",
@@ -402,6 +438,7 @@
     },
     {
       "id": "wind_crane_step",
+      "name": "Crane Step",
       "school": "wind",
       "kind": "passive",
       "sourceTechnique": "A7",
@@ -414,6 +451,7 @@
     },
     {
       "id": "wind_sleeve_wind",
+      "name": "Sleeve Wind",
       "school": "wind",
       "kind": "passive",
       "sourceTechnique": "A11",
@@ -426,6 +464,7 @@
     },
     {
       "id": "wind_thousand_mile_gaze",
+      "name": "Thousand-Mile Gaze",
       "school": "wind",
       "kind": "passive",
       "sourceTechnique": "B4",
@@ -438,6 +477,7 @@
     },
     {
       "id": "wind_sword_duo",
+      "name": "Thousand Cuts",
       "school": "wind",
       "kind": "duo",
       "requires": {"schools": ["wind", "sword"]},
@@ -445,6 +485,7 @@
     },
     {
       "id": "wind_mastery",
+      "name": "Windstep Mastery",
       "school": "wind",
       "kind": "mastery",
       "requires": {"counts": {"wind": 3}},
@@ -453,6 +494,7 @@
 
     {
       "id": "sword_widows_kiss",
+      "name": "Widow's Kiss",
       "school": "sword",
       "kind": "move",
       "slot": "heavy",
@@ -466,6 +508,7 @@
     },
     {
       "id": "sword_twin_dragons",
+      "name": "Twin Dragons",
       "school": "sword",
       "kind": "move",
       "slot": "heavy",
@@ -479,6 +522,7 @@
     },
     {
       "id": "sword_light_mark",
+      "name": "Opening Mark",
       "school": "sword",
       "kind": "move",
       "slot": "light",
@@ -491,6 +535,7 @@
     },
     {
       "id": "sword_dash_flash",
+      "name": "Flash Step",
       "school": "sword",
       "kind": "move",
       "slot": "dash",
@@ -503,6 +548,7 @@
     },
     {
       "id": "sword_reach",
+      "name": "Long Intent",
       "school": "sword",
       "kind": "passive",
       "tiers": {
@@ -514,6 +560,7 @@
     },
     {
       "id": "sword_mark_crit",
+      "name": "Marked Precision",
       "school": "sword",
       "kind": "passive",
       "tiers": {
@@ -525,6 +572,7 @@
     },
     {
       "id": "sword_wind_duo",
+      "name": "Wind-Cut Mark",
       "school": "sword",
       "kind": "duo",
       "requires": {"schools": ["sword", "wind"]},
@@ -532,6 +580,7 @@
     },
     {
       "id": "sword_mastery",
+      "name": "Sword Intent Mastery",
       "school": "sword",
       "kind": "mastery",
       "requires": {"counts": {"sword": 3}},

@@ -388,6 +388,8 @@ func _prepare_capture_ui(spec: Dictionary) -> bool:
 	_combat_scene.deactivate()
 	var screen: String = str(spec.get("screen", spec.get("scene", "boon_offer"))).to_lower()
 	var payload: Dictionary = _dictionary_value(spec.get("payload", {}))
+	if payload.is_empty():
+		payload = _capture_forced_offer_payload(spec)
 	match screen:
 		"boon_offer", "boon":
 			if payload.is_empty():
@@ -416,6 +418,38 @@ func _prepare_capture_ui(spec: Dictionary) -> bool:
 			return false
 	queue_redraw()
 	return true
+
+func _capture_forced_offer_payload(spec: Dictionary) -> Dictionary:
+	var forced: Array = spec.get("forced_offers", []) as Array
+	if forced.is_empty():
+		return {}
+	var offers: Array[Dictionary] = []
+	var school: String = str(spec.get("school", ""))
+	for item in forced:
+		if typeof(item) != TYPE_DICTIONARY:
+			continue
+		var entry: Dictionary = item as Dictionary
+		var boon_id: String = str(entry.get("boon_id", entry.get("id", "")))
+		if boon_id.is_empty():
+			continue
+		var boon: Dictionary = DataManager.get_boon(boon_id)
+		if boon.is_empty():
+			push_warning("capture: forced offer boon not found: %s" % boon_id)
+			continue
+		if school.is_empty():
+			school = str(boon.get("school", ""))
+		offers.append({
+			"boon_id": boon_id,
+			"boon": boon.duplicate(true),
+			"tier": str(entry.get("tier", "common")),
+		})
+	if offers.is_empty():
+		return {}
+	return {
+		"scene": "boon_offer",
+		"school": school,
+		"offers": offers,
+	}
 
 func _prepare_capture_context(spec: Dictionary) -> void:
 	if spec.has("seed"):
