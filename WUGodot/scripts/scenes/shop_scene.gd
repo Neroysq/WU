@@ -25,10 +25,15 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 
 	if input.accept and selection_idx >= 0 and selection_idx < items.size():
 		var item: Dictionary = items[selection_idx]
-		var result: Dictionary = ShopGenerator.buy_item(item, ctx.player)
+		var result: Dictionary = {}
+		if str(item.get("type", "")) == "boon_upgrade":
+			result = _buy_boon_upgrade(ctx)
+		else:
+			result = ShopGenerator.buy_item(item, ctx.player)
 		ctx.notice_message = str(result.get("message", ""))
 		ctx.notice_timer = 2.0
 		if bool(result.get("success", false)):
+			ctx.run_state.insight += int(result.get("insight", 0))
 			if str(item.get("type", "")) == "technique":
 				var bought_id: String = str(item.get("technique_id", ""))
 				if not bought_id.is_empty() and not ctx.run_techniques_acquired.has(bought_id):
@@ -45,6 +50,7 @@ func draw(ctx: Variant, canvas: CanvasItem) -> void:
 	UiDraw.panel(canvas, panel)
 	UiDraw.text(canvas, "商鋪 Shop", panel.position.x + 32.0, panel.position.y + 48.0, GameConstants.COLOR_TEXT_HEADING, 28, true)
 	UiDraw.text(canvas, "Gold: %d" % ctx.player.gold, panel.end.x - 180.0, panel.position.y + 48.0, GameConstants.COLOR_TEXT_ACCENT, 24)
+	UiDraw.text(canvas, "Insight: %d" % ctx.run_state.insight, panel.end.x - 180.0, panel.position.y + 76.0, GameConstants.COLOR_TEXT_BODY, 16)
 	canvas.draw_rect(Rect2(panel.position.x + 32.0, panel.position.y + 64.0, panel.size.x - 64.0, 1.0), Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.55))
 
 	var y: float = panel.position.y + 114.0
@@ -83,3 +89,12 @@ func _typed_items(source: Array) -> Array[Dictionary]:
 	for item in source:
 		typed.append((item as Dictionary).duplicate(true))
 	return typed
+
+func _buy_boon_upgrade(ctx: Variant) -> Dictionary:
+	if ctx.run_state.insight <= 0:
+		return {"success": false, "message": "Need 1 Insight."}
+	if ctx.run_state.first_upgradeable_boon_id().is_empty():
+		return {"success": false, "message": "No eligible boon to upgrade."}
+	if ctx.run_state.upgrade_first_boon_with_insight():
+		return {"success": true, "message": "Boon upgraded."}
+	return {"success": false, "message": "Could not upgrade boon."}

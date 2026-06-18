@@ -52,6 +52,12 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("boss victory should route to victory with no gold")
 
+	if int(RunFlowScript.combat_victory_outcome(elite, 1).get("insight", 0)) == 1:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("elite victory should award Insight")
+
 	var player: Variant = EnemyFactoryScript.create_player()
 	var shop: Variant = MapNodeScript.new(5, 2, MapNodeScript.NodeType.SHOP, [])
 	var decision: Dictionary = RunFlowScript.travel_decision(shop, player)

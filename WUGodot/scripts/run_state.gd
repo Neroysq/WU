@@ -9,6 +9,7 @@ var max_tier: int = 0
 var legend_seen_this_run: bool = false
 var boon_loadout: Variant = BoonLoadoutScript.new()
 var favored_school: String = ""
+var insight: int = 0
 
 static func create_simple_three_tier() -> RunState:
 	return create_procedural_run()
@@ -167,13 +168,45 @@ func index_in_tier(target: MapNode) -> int:
 func bind_boon_loadout(engine: Variant, fighter: Variant) -> void:
 	boon_loadout.bind(engine, fighter)
 
+func upgrade_boon_with_insight(boon_id: String, cost: int = 1) -> bool:
+	if insight < cost:
+		return false
+	if not boon_loadout.can_upgrade_boon(boon_id):
+		return false
+	if not boon_loadout.upgrade_boon(boon_id):
+		return false
+	insight -= cost
+	return true
+
+func upgrade_first_boon_with_insight(cost: int = 1) -> bool:
+	var boon_id: String = first_upgradeable_boon_id()
+	if boon_id.is_empty():
+		return false
+	return upgrade_boon_with_insight(boon_id, cost)
+
+func first_upgradeable_boon_id() -> String:
+	var data: Dictionary = boon_loadout.serialize()
+	for identity in (data.get("slots", {}) as Dictionary).values():
+		var boon_id: String = str((identity as Dictionary).get("boon_id", ""))
+		if boon_loadout.can_upgrade_boon(boon_id):
+			return boon_id
+	for identity in data.get("passives", []) as Array:
+		if typeof(identity) != TYPE_DICTIONARY:
+			continue
+		var boon_id: String = str((identity as Dictionary).get("boon_id", ""))
+		if boon_loadout.can_upgrade_boon(boon_id):
+			return boon_id
+	return ""
+
 func serialize() -> Dictionary:
 	return {
 		"boon_loadout": boon_loadout.serialize(),
 		"favored_school": favored_school,
+		"insight": insight,
 	}
 
 func restore(data: Dictionary, engine: Variant = null, fighter: Variant = null) -> void:
 	favored_school = str(data.get("favored_school", ""))
+	insight = int(data.get("insight", 0))
 	boon_loadout.bind(engine, fighter)
 	boon_loadout.restore(data.get("boon_loadout", {}) as Dictionary)

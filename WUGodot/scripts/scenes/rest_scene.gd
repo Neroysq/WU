@@ -11,15 +11,18 @@ func enter(_ctx: Variant, _payload: Dictionary = {}) -> void:
 	choice_idx = 0
 
 func update(ctx: Variant, input: Variant, _delta: float) -> void:
-	choice_idx = MenuInput.step_index(choice_idx, 1, input)
+	choice_idx = MenuInput.step_index(choice_idx, 2, input)
 	if not input.accept:
 		return
 	if choice_idx == 0:
 		ctx.player.health_current = minf(ctx.player.health_current + ctx.player.health_max * 0.4, ctx.player.health_max)
 		ctx.run_state.mark_current_node_cleared()
 		ctx.goto(SceneContext.SCENE_MAP)
-	elif ctx.player.technique_engine != null and not ctx.player.technique_engine.technique_ids().is_empty():
+	elif choice_idx == 1 and ctx.player.technique_engine != null and not ctx.player.technique_engine.technique_ids().is_empty():
 		ctx.goto(SceneContext.SCENE_FORGET_TECHNIQUE)
+	elif choice_idx == 2 and ctx.run_state.upgrade_first_boon_with_insight():
+		ctx.run_state.mark_current_node_cleared()
+		ctx.goto(SceneContext.SCENE_MAP)
 	else:
 		ctx.run_state.mark_current_node_cleared()
 		ctx.goto(SceneContext.SCENE_MAP)
@@ -27,19 +30,21 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 func draw(ctx: Variant, canvas: CanvasItem) -> void:
 	UiDraw.background(canvas)
 	UiDraw.modal_backdrop(canvas)
-	var panel: Rect2 = Rect2(520.0, (float(GameConstants.VIEW_HEIGHT) - 280.0) * 0.5, float(GameConstants.VIEW_WIDTH) - 1040.0, 280.0)
+	var panel: Rect2 = Rect2(520.0, (float(GameConstants.VIEW_HEIGHT) - 350.0) * 0.5, float(GameConstants.VIEW_WIDTH) - 1040.0, 350.0)
 	UiDraw.panel(canvas, panel)
 	UiDraw.text(canvas, "歇息 Rest Site", panel.position.x + 32.0, panel.position.y + 48.0, GameConstants.COLOR_TEXT_HEADING, 28, true)
 	UiDraw.text(canvas, "HP: %d/%d" % [int(round(ctx.player.health_current)), int(round(ctx.player.health_max))], panel.position.x + 32.0, panel.position.y + 78.0, GameConstants.COLOR_TEXT_BODY, 18)
+	UiDraw.text(canvas, "Insight: %d" % ctx.run_state.insight, panel.end.x - 160.0, panel.position.y + 78.0, GameConstants.COLOR_TEXT_BODY, 18)
 
 	var can_remove: bool = ctx.player.technique_engine != null and not ctx.player.technique_engine.technique_ids().is_empty()
-	var choices: Array[String] = ["Heal (40% max HP)", "Remove a technique"]
-	var choice_hints: Array[String] = ["Recover and steady yourself before the next road.", "Forget one technique and lighten the loadout."]
+	var can_upgrade: bool = ctx.run_state.insight > 0 and not ctx.run_state.first_upgradeable_boon_id().is_empty()
+	var choices: Array[String] = ["Heal (40% max HP)", "Remove a technique", "Upgrade a boon"]
+	var choice_hints: Array[String] = ["Recover and steady yourself before the next road.", "Forget one technique and lighten the loadout.", "Spend 1 Insight on the first eligible boon."]
 	var y: float = panel.position.y + 126.0
 	for i in range(choices.size()):
 		var row: Rect2 = Rect2(panel.position.x + 20.0, y - 28.0, panel.size.x - 40.0, 64.0)
 		var selected: bool = i == choice_idx
-		var enabled: bool = i == 0 or can_remove
+		var enabled: bool = i == 0 or (i == 1 and can_remove) or (i == 2 and can_upgrade)
 		var border_color: Color = GameConstants.COLOR_PANEL_ACCENT if selected and enabled else Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.5)
 		var label_color: Color = GameConstants.COLOR_TEXT_HEADING if enabled else GameConstants.COLOR_TEXT_DISABLED
 		var hint_color: Color = GameConstants.COLOR_TEXT_HINT if enabled else GameConstants.COLOR_TEXT_DISABLED

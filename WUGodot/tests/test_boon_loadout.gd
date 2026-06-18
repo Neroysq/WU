@@ -43,6 +43,16 @@ func _seed_test_boons() -> void:
 		"requires": {"schools": ["venom", "thunder"]},
 		"effect": {"type": "stat_delta", "flat": {"health_max": 1.0}},
 	}
+	DataManager._boons["test_upgrade"] = {
+		"id": "test_upgrade",
+		"school": "venom",
+		"kind": "move",
+		"slot": "dash",
+		"tiers": {
+			"common": {"effect": {"type": "stat_delta", "flat": {"health_max": 2.0}}},
+			"rare": {"riders": [{"type": "stat_delta", "flat": {"posture_max": 3.0}}]},
+		},
+	}
 
 func run_all() -> Dictionary:
 	var passed := 0
@@ -156,5 +166,33 @@ func run_all() -> Dictionary:
 	else:
 		failed += 1
 		failures.append("run-state boon serialization should store boon ids/tiers and restore effects without fake technique ids")
+
+	run = RunStateScript.new()
+	run_engine = TechniqueEngineScript.new()
+	run_fighter = FighterScript.new()
+	run_fighter.technique_engine = run_engine
+	run.bind_boon_loadout(run_engine, run_fighter)
+	run.boon_loadout.add_boon("test_upgrade", "common")
+	if not run.upgrade_boon_with_insight("test_upgrade"):
+		passed += 1
+	else:
+		failed += 1
+		failures.append("upgrade_boon_with_insight should reject when insight is insufficient")
+
+	run.insight = 1
+	if run.upgrade_boon_with_insight("test_upgrade") and run.insight == 0 and run_engine.has_effect("test_upgrade#0") and run_engine.has_effect("test_upgrade#1"):
+		passed += 1
+	else:
+		failed += 1
+		failures.append("upgrade_boon_with_insight should spend Insight and recompile tier riders")
+
+	serialized = run.serialize()
+	restored = RunStateScript.new()
+	restored.restore(serialized)
+	if int(serialized.get("insight", -1)) == 0 and restored.insight == 0:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("run-state serialization should carry insight")
 
 	return {"passed": passed, "failed": failed, "failures": failures}

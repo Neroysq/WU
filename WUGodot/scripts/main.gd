@@ -147,6 +147,7 @@ func _on_combat_end(victory: bool) -> void:
 		var gold_gained: int = int(outcome.get("gold", 0))
 		_ctx.player.gold += gold_gained
 		_ctx.run_gold_earned += gold_gained
+		_ctx.run_state.insight += int(outcome.get("insight", 0))
 
 		if str(outcome.get("next", "")) == "combat_again":
 			_setup_combat_for_node(node)

@@ -44,6 +44,18 @@ static func generate_shop(owned_ids: Array[String], rarity_boost: bool = false) 
 		"price": 15,
 	})
 	items.append({
+		"type": "insight",
+		"label": "Insight",
+		"description": "Gain 1 Insight for boon upgrades.",
+		"price": 30,
+	})
+	items.append({
+		"type": "boon_upgrade",
+		"label": "Boon Upgrade",
+		"description": "Spend 1 Insight to upgrade the first eligible boon.",
+		"price": 0,
+	})
+	items.append({
 		"type": "forget_technique",
 		"label": "Forget Technique",
 		"description": "Remove one technique from your loadout.",
@@ -74,6 +86,9 @@ static func buy_item(item: Dictionary, fighter: Fighter) -> Dictionary:
 			fighter.gold -= price
 			fighter.posture_current = minf(fighter.posture_current + fighter.posture_max * 0.5, fighter.posture_max)
 			return {"success": true, "message": "Restored 50% posture."}
+		"insight":
+			fighter.gold -= price
+			return {"success": true, "message": "Gained 1 Insight.", "insight": 1}
 		"forget_technique":
 			fighter.gold -= price
 			return {"success": true, "message": "Choose a technique to forget.", "open_forget": true}

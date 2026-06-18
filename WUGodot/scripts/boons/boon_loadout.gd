@@ -51,6 +51,19 @@ func add_boon(boon_id: String, tier: String = "common") -> bool:
 	return true
 
 func upgrade_boon(boon_id: String) -> bool:
+	if not can_upgrade_boon(boon_id):
+		return false
+	var record: Variant = _find_record(boon_id)
+	var boon: Dictionary = record.get("boon", {}) as Dictionary
+	var tier: String = str(record.get("tier", "common"))
+	var index: int = TIER_ORDER.find(tier)
+	_remove_record(record)
+	record["tier"] = TIER_ORDER[index + 1]
+	record["effects"] = []
+	_install_record(record)
+	return true
+
+func can_upgrade_boon(boon_id: String) -> bool:
 	var record: Variant = _find_record(boon_id)
 	if record == null:
 		return false
@@ -62,11 +75,8 @@ func upgrade_boon(boon_id: String) -> bool:
 	var index: int = TIER_ORDER.find(tier)
 	if index < 0 or index >= TIER_ORDER.size() - 1:
 		return false
-	_remove_record(record)
-	record["tier"] = TIER_ORDER[index + 1]
-	record["effects"] = []
-	_install_record(record)
-	return true
+	var tiers: Dictionary = boon.get("tiers", {}) as Dictionary
+	return tiers.has(TIER_ORDER[index + 1])
 
 func is_duo_eligible(boon: Dictionary) -> bool:
 	return _requirements_met(boon.get("requires", {}) as Dictionary)

@@ -5,24 +5,27 @@ const BoonOfferScript = preload("res://scripts/boons/boon_offer.gd")
 
 static func combat_victory_outcome(node: MapNode, gold_multiplier: int) -> Dictionary:
 	var base_gold: int = 15
+	var insight_gained: int = 0
 	if node != null:
 		match node.node_type:
 			MapNode.NodeType.ELITE:
 				base_gold = 30
+				insight_gained = 1
 			MapNode.NodeType.AMBUSH:
 				base_gold = 10
 			MapNode.NodeType.BOSS:
 				base_gold = 0
+				insight_gained = 2
 	var gold_gained: int = base_gold * gold_multiplier
 
 	if node != null and node.node_type == MapNode.NodeType.AMBUSH:
 		node.ambush_remaining -= 1
 		if node.ambush_remaining > 0:
-			return {"gold": gold_gained, "next": "combat_again"}
+			return {"gold": gold_gained, "insight": insight_gained, "next": "combat_again"}
 
 	if node != null and node.node_type == MapNode.NodeType.BOSS:
-		return {"gold": gold_gained, "next": "victory"}
-	return {"gold": gold_gained, "next": "boon_offer"}
+		return {"gold": gold_gained, "insight": insight_gained, "next": "victory"}
+	return {"gold": gold_gained, "insight": insight_gained, "next": "boon_offer"}
 
 static func travel_decision(node: MapNode, player: Fighter, run_state: Variant = null) -> Dictionary:
 	match node.node_type:
