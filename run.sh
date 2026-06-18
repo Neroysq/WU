@@ -16,7 +16,7 @@
 #   ./run.sh --shot-action STATE [dir] # save every rendered frame for one combat state
 #   ./run.sh --playtest --seed N [--out file.json] # run one deterministic headless autoplay
 #   ./run.sh --playtest-batch --seeds 1..20 [--out file.json] # run a deterministic autoplay batch
-#   ./run.sh --capture spec.json --out dir_or_png # capture a JSON-described visual state
+#   ./run.sh --capture spec.json [dir_or_png] # capture a JSON-described visual state
 #   ./run.sh --install-video <run-dir> --action=<name> --frames=... [--prefix=va] # install staged video frames
 #   ./run.sh --editor     # open the Godot editor
 
@@ -122,8 +122,13 @@ case "${1:-}" in
 	        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://scripts/sim/playtest_main.gd -- "$@"
 	        ;;
 	    --capture)
-	        echo "Capturing visual state..."
-	        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://scripts/sim/visual_capture.gd -- "$@"
+	        SPEC="${2:?usage: ./run.sh --capture spec.json [out_dir_or_png]}"
+	        OUT="${3:-/tmp/wu-capture}"
+	        if [ "$OUT" = "--out" ]; then
+	            OUT="${4:?usage: ./run.sh --capture spec.json [out_dir_or_png]}"
+	        fi
+	        echo "Capturing visual state -> $OUT"
+	        exec "$GODOT" --path "$PROJECT_DIR" -- --capture "--capture-spec=$SPEC" "--shot-dir=$OUT"
 	        ;;
     --editor|-e)
         echo "Opening Godot editor..."
@@ -138,7 +143,7 @@ case "${1:-}" in
         ;;
     *)
         echo "Unknown option: $1" >&2
-	        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-video <args>|--probe-reach|--snapshot-reach <out.json>|--stage-held-keyframes <dir>|--shot-combat|--shot-action STATE|--shot-archetype=<id>|--playtest|--playtest-batch|--capture spec.json|--editor|--help]" >&2
+	        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-video <args>|--probe-reach|--snapshot-reach <out.json>|--stage-held-keyframes <dir>|--shot-combat|--shot-action STATE|--shot-archetype=<id>|--playtest|--playtest-batch|--capture spec.json [out_dir_or_png]|--editor|--help]" >&2
         exit 1
         ;;
 esac

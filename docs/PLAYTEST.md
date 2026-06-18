@@ -1,6 +1,6 @@
 # Agent Playtest Harness
 
-The playtest harness runs WU without rendering combat frames. It drives seeded runs through the real run/combat services, emits JSON telemetry, and provides a thin visual capture command for agent review workflows.
+The playtest harness runs WU combat logic headlessly for fast telemetry, and uses the normal rendered scene path for visual capture. It drives seeded runs through the real run/combat services, emits JSON telemetry, and provides PNG capture for agent review workflows.
 
 ## Commands
 
@@ -25,7 +25,8 @@ Skill sweep:
 Visual capture:
 
 ```bash
-./run.sh --capture /tmp/spec.json --out /tmp/wu-capture
+./run.sh --capture /tmp/spec.json /tmp/wu-capture
+python3 tools/assert_nonblank.py /tmp/wu-capture/matchup.png
 ```
 
 ## Policies
@@ -72,8 +73,23 @@ For the same seed and policies, the harness should produce the same run outcome 
 Capture specs are JSON dictionaries with a `kind` field:
 
 ```json
-{"kind": "matchup"}
+{"kind": "matchup", "archetype": "bandit_swordsman", "state": "01_idle"}
 ```
 
-Supported kinds are `matchup`, `ui`, and `character`. The current capture path writes PNG output for automation smoke checks; existing `--shot-combat` and `--shot-action` remain the high-fidelity combat review tools.
+Supported kinds are `matchup`, `ui`, and `character`.
 
+Useful examples:
+
+```json
+{"kind": "matchup", "archetype": "iron_bear", "node_type": "boss", "state": "04_light_active"}
+```
+
+```json
+{"kind": "ui", "screen": "boon_offer", "school": "venom"}
+```
+
+```json
+{"kind": "character", "build": [{"boon_id": "venom_light", "tier": "epic"}], "state": "01_idle"}
+```
+
+Capture runs non-headless through `main.gd`, using the same viewport readback pattern as `--shot-combat`. Run `tools/assert_nonblank.py` on outputs before trusting them in automated review.

@@ -20,6 +20,18 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("RunDriver should reproduce outcome/depth for the same seed and policies")
 
+	var snapshots: Array = transcript_a.build_snapshots
+	var snapshots_have_after_node: bool = not snapshots.is_empty()
+	for snapshot in snapshots:
+		var data: Dictionary = snapshot as Dictionary
+		if data.get("after_node", null) == null:
+			snapshots_have_after_node = false
+	if snapshots_have_after_node:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("RunDriver build snapshots should populate after_node for capture replay")
+
 	var summary: Dictionary = BatchRunner.new().run([1, 2], HeuristicPlayer.new(0.8), GreedySynergyPolicy.new())
 	if int(summary.get("runs", 0)) == 2 and summary.has("win_rate") and summary.has("death_by_node_histogram"):
 		passed += 1
@@ -28,4 +40,3 @@ func run_all() -> Dictionary:
 		failures.append("BatchRunner should aggregate run transcripts")
 
 	return {"passed": passed, "failed": failed, "failures": failures}
-

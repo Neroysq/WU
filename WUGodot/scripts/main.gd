@@ -2,10 +2,13 @@ extends Node2D
 
 const DEV_SHOT_COMBAT_FLAG: String = "--shot-combat"
 const DEV_SHOT_ACTION_FLAG: String = "--shot-action"
+const DEV_CAPTURE_FLAG: String = "--capture"
 const DEV_SHOT_DIR_PREFIX: String = "--shot-dir="
 const DEV_SHOT_ARCHETYPE_PREFIX: String = "--shot-archetype="
 const DEV_SHOT_STATE_PREFIX: String = "--shot-state="
+const DEV_CAPTURE_SPEC_PREFIX: String = "--capture-spec="
 const DEV_SHOT_DEFAULT_DIR: String = "user://shot-combat"
+const DEV_CAPTURE_DEFAULT_DIR: String = "user://capture"
 
 const _ACTION_CAPTURE := {
 	"ATTACKING_LIGHT": {"prep": "attack_light_full", "frames": 32, "loop": false},
@@ -29,6 +32,7 @@ var _input_tracker: InputTracker = InputTracker.new()
 var _dev_shot_combat_dir: String = ""
 var _dev_shot_archetype: String = ""
 var _dev_shot_action_state: String = ""
+var _dev_capture_spec_path: String = ""
 
 func _ready() -> void:
 	Engine.max_fps = GameConstants.TARGET_FPS
@@ -48,6 +52,10 @@ func _ready() -> void:
 		_dev_shot_combat_dir = _user_arg_value(DEV_SHOT_DIR_PREFIX, DEV_SHOT_DEFAULT_DIR)
 		_dev_shot_action_state = _user_arg_value(DEV_SHOT_STATE_PREFIX, "ATTACKING_LIGHT")
 		call_deferred("_run_dev_action_shots")
+	elif _has_user_arg(DEV_CAPTURE_FLAG):
+		_dev_shot_combat_dir = _user_arg_value(DEV_SHOT_DIR_PREFIX, DEV_CAPTURE_DEFAULT_DIR)
+		_dev_capture_spec_path = _user_arg_value(DEV_CAPTURE_SPEC_PREFIX, "")
+		call_deferred("_run_dev_capture")
 
 func start_new_run() -> void:
 	_controllers = _build_controllers()
@@ -301,6 +309,222 @@ func _run_dev_action_shots() -> void:
 	phase_file.close()
 	print("SHOT ACTION: wrote %d frames to %s" % [total, abs_dir])
 	get_tree().quit(0)
+
+func _run_dev_capture() -> void:
+	if _dev_capture_spec_path.is_empty():
+		push_error("capture: missing --capture-spec path")
+		get_tree().quit(1)
+		return
+
+	var spec: Dictionary = _read_capture_spec(_dev_capture_spec_path)
+	if spec.is_empty():
+		get_tree().quit(1)
+		return
+
+	var kind: String = str(spec.get("kind", "matchup")).to_lower()
+	var output_path: String = _capture_output_path(_dev_shot_combat_dir, kind)
+	var err: int = DirAccess.make_dir_recursive_absolute(output_path.get_base_dir())
+	if err != OK:
+		push_error("capture: failed to create %s (err %d)" % [output_path.get_base_dir(), err])
+		get_tree().quit(1)
+		return
+
+	var prepared: bool = false
+	match kind:
+		"matchup":
+			prepared = _prepare_capture_matchup(spec)
+		"ui":
+			prepared = _prepare_capture_ui(spec)
+		"character":
+			prepared = _prepare_capture_character(spec)
+		_:
+			push_error("capture: unknown kind %s" % kind)
+
+	if not prepared:
+		get_tree().quit(1)
+		return
+
+	queue_redraw()
+	var save_err: int = await _save_viewport_png(output_path)
+	if save_err != OK:
+		push_error("capture: failed to save %s (err %d)" % [output_path, save_err])
+		get_tree().quit(1)
+		return
+	print("CAPTURE: %s" % output_path)
+	get_tree().quit(0)
+
+func _prepare_capture_matchup(spec: Dictionary) -> bool:
+	_prepare_capture_context(spec)
+	_apply_capture_build(spec)
+	var node: MapNode = _capture_node(spec)
+	var archetype: String = _capture_archetype(spec)
+	_combat_scene.setup_combat(_ctx.player, node, false, archetype)
+	_combat_scene.on_enter()
+	_combat_scene.dev_set_capture_mode(true)
+	_combat_scene.dev_set_capture_playback(false)
+	_current_scene = SceneContext.SCENE_COMBAT
+	_ctx.current_scene = SceneContext.SCENE_COMBAT
+	_combat_scene.dev_prepare_capture_state(str(spec.get("state", "01_idle")))
+	return true
+
+func _prepare_capture_character(spec: Dictionary) -> bool:
+	_prepare_capture_context(spec)
+	_apply_capture_build(spec)
+	var node: MapNode = _capture_node(spec)
+	_combat_scene.setup_combat(_ctx.player, node, false, _capture_archetype(spec))
+	_combat_scene.on_enter()
+	_combat_scene.dev_set_capture_mode(true)
+	_combat_scene.dev_set_capture_overlays(false, false, false)
+	_combat_scene.dev_set_capture_playback(false)
+	_current_scene = SceneContext.SCENE_COMBAT
+	_ctx.current_scene = SceneContext.SCENE_COMBAT
+	_combat_scene.dev_prepare_capture_state(str(spec.get("state", "01_idle")))
+	return true
+
+func _prepare_capture_ui(spec: Dictionary) -> bool:
+	_prepare_capture_context(spec)
+	_apply_capture_build(spec)
+	_combat_scene.on_exit()
+	_combat_scene.deactivate()
+	var screen: String = str(spec.get("screen", spec.get("scene", "boon_offer"))).to_lower()
+	var payload: Dictionary = _dictionary_value(spec.get("payload", {}))
+	match screen:
+		"boon_offer", "boon":
+			if payload.is_empty():
+				var node: MapNode = MapNode.new(9101, int(spec.get("depth", 1)), MapNode.NodeType.BATTLE, [])
+				payload = RunFlow.generate_boon_offer_payload(_ctx.run_state, node, str(spec.get("school", "")))
+			_set_scene(SceneContext.SCENE_BOON_OFFER, payload)
+		"school_choice", "school":
+			if payload.is_empty():
+				var school_node: MapNode = MapNode.new(9102, int(spec.get("depth", 3)), MapNode.NodeType.MASTER, [])
+				payload = RunFlow.generate_school_choice_payload(_ctx.run_state, school_node)
+			_set_scene(SceneContext.SCENE_BOON_OFFER, payload)
+		"shop":
+			if payload.is_empty():
+				payload = {"items": ShopGenerator.generate_shop(_ctx.player.technique_engine.technique_ids())}
+			_set_scene(SceneContext.SCENE_SHOP, payload)
+		"map":
+			_set_scene(SceneContext.SCENE_MAP, payload)
+		"rest":
+			_set_scene(SceneContext.SCENE_REST, payload)
+		"reward":
+			_set_scene(SceneContext.SCENE_REWARD, payload)
+		"event":
+			_set_scene(SceneContext.SCENE_EVENT, payload)
+		_:
+			push_error("capture: unknown ui screen %s" % screen)
+			return false
+	queue_redraw()
+	return true
+
+func _prepare_capture_context(spec: Dictionary) -> void:
+	if spec.has("seed"):
+		RngService.set_run_seed(int(spec.get("seed", 0)))
+	_ctx = SceneContext.new()
+	_ctx.player = EnemyFactory.create_player()
+	_ctx.run_state = RunState.create_procedural_run()
+	_ctx.run_state.bind_boon_loadout(_ctx.player.technique_engine, _ctx.player)
+	_ctx.run_state.legend_seen_this_run = true
+	_ctx.run_start_time = Time.get_ticks_msec() / 1000.0
+	_ctx.player.gold = int(spec.get("gold", _ctx.player.gold))
+	_ctx.run_state.insight = int(spec.get("insight", _ctx.run_state.insight))
+
+func _apply_capture_build(spec: Dictionary) -> void:
+	if spec.has("seed") and spec.has("after_node"):
+		_restore_capture_snapshot(int(spec.get("seed", 0)), int(spec.get("after_node", -1)))
+	if spec.has("build"):
+		_apply_capture_build_value(spec.get("build"))
+	elif spec.has("loadout"):
+		_apply_capture_build_value(spec.get("loadout"))
+
+func _restore_capture_snapshot(seed: int, after_node: int) -> void:
+	var transcript: RunTranscript = RunDriver.new().run(seed, HeuristicPlayer.new(float(0.8)), GreedySynergyPolicy.new())
+	for snapshot in transcript.build_snapshots:
+		var data: Dictionary = snapshot as Dictionary
+		var node_id: int = int(data.get("after_node", data.get("node_id", -1)))
+		if node_id != after_node:
+			continue
+		_ctx.run_state.boon_loadout.restore(data.get("loadout", {}) as Dictionary)
+		_ctx.run_state.insight = int(data.get("insight", _ctx.run_state.insight))
+		return
+	push_warning("capture: seed %d has no build snapshot after node %d" % [seed, after_node])
+
+func _apply_capture_build_value(value: Variant) -> void:
+	match typeof(value):
+		TYPE_ARRAY:
+			for item in value as Array:
+				if typeof(item) != TYPE_DICTIONARY:
+					continue
+				var boon: Dictionary = item as Dictionary
+				_ctx.run_state.boon_loadout.add_boon(str(boon.get("boon_id", boon.get("id", ""))), str(boon.get("tier", "common")))
+		TYPE_DICTIONARY:
+			var data: Dictionary = value as Dictionary
+			if data.has("loadout") and typeof(data.get("loadout")) == TYPE_DICTIONARY:
+				data = data.get("loadout") as Dictionary
+			_ctx.run_state.boon_loadout.restore(data)
+
+func _capture_node(spec: Dictionary) -> MapNode:
+	var node_type: int = _capture_node_type(spec)
+	var tier: int = int(spec.get("tier", 6 if node_type == MapNode.NodeType.BOSS else 1))
+	return MapNode.new(int(spec.get("node_id", 9001)), tier, node_type, [])
+
+func _capture_node_type(spec: Dictionary) -> int:
+	var raw: Variant = spec.get("node_type", spec.get("nodeType", ""))
+	if typeof(raw) == TYPE_INT or typeof(raw) == TYPE_FLOAT:
+		return int(raw)
+	var text: String = str(raw).to_lower()
+	if text.is_empty() and _capture_archetype(spec) == "iron_bear":
+		return MapNode.NodeType.BOSS
+	match text:
+		"battle", "duel":
+			return MapNode.NodeType.BATTLE
+		"elite":
+			return MapNode.NodeType.ELITE
+		"ambush":
+			return MapNode.NodeType.AMBUSH
+		"master":
+			return MapNode.NodeType.MASTER
+		"event":
+			return MapNode.NodeType.EVENT
+		"shop":
+			return MapNode.NodeType.SHOP
+		"rest":
+			return MapNode.NodeType.REST
+		"boss":
+			return MapNode.NodeType.BOSS
+		_:
+			return MapNode.NodeType.BATTLE
+
+func _capture_archetype(spec: Dictionary) -> String:
+	return str(spec.get("archetype", spec.get("enemy_archetype", spec.get("enemy", ""))))
+
+func _capture_output_path(path: String, kind: String) -> String:
+	var target: String = path if not path.is_empty() else DEV_CAPTURE_DEFAULT_DIR
+	var abs_target: String = ProjectSettings.globalize_path(target) if target.begins_with("user://") or target.begins_with("res://") else target
+	if abs_target.get_extension().to_lower() == "png":
+		return abs_target
+	return "%s/%s.png" % [abs_target.trim_suffix("/"), kind]
+
+func _read_capture_spec(path: String) -> Dictionary:
+	var abs_path: String = ProjectSettings.globalize_path(path) if path.begins_with("user://") or path.begins_with("res://") else path
+	if not FileAccess.file_exists(abs_path):
+		push_error("capture: spec not found: %s" % abs_path)
+		return {}
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(abs_path))
+	if typeof(parsed) != TYPE_DICTIONARY:
+		push_error("capture: spec must be a JSON object: %s" % abs_path)
+		return {}
+	return parsed as Dictionary
+
+func _dictionary_value(value: Variant) -> Dictionary:
+	return value as Dictionary if typeof(value) == TYPE_DICTIONARY else {}
+
+func _save_viewport_png(path: String) -> int:
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await RenderingServer.frame_post_draw
+	var image: Image = get_viewport().get_texture().get_image()
+	return image.save_png(path)
 
 func _sync_input_tracker() -> void:
 	var keys: Array[int] = [

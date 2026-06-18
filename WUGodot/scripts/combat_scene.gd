@@ -55,6 +55,9 @@ var _entry_presenter_active: bool = false
 var _dev_capture_mode: bool = false
 var _dev_capture_playback: bool = false
 var _dev_capture_physics: bool = false
+var _dev_capture_show_hud: bool = true
+var _dev_capture_show_enemy: bool = true
+var _dev_capture_show_debug: bool = true
 
 var _input_tracker: InputTracker = InputTracker.new()
 var _input_buffer: Variant = InputBufferScript.new()
@@ -171,7 +174,16 @@ func deactivate() -> void:
 func dev_set_capture_mode(enabled: bool) -> void:
 	_dev_capture_mode = enabled
 	_debug_enabled = enabled
+	_dev_capture_show_hud = true
+	_dev_capture_show_enemy = true
+	_dev_capture_show_debug = true
 	_controls_legend_timer = 0.0
+
+func dev_set_capture_overlays(show_hud: bool = true, show_enemy: bool = true, show_debug: bool = true) -> void:
+	_dev_capture_show_hud = show_hud
+	_dev_capture_show_enemy = show_enemy
+	_dev_capture_show_debug = show_debug
+	_debug_enabled = show_debug
 
 func dev_set_capture_playback(enabled: bool, physics: bool = false) -> void:
 	_dev_capture_playback = enabled
@@ -613,11 +625,13 @@ func _draw() -> void:
 	var camera_offset: Vector2 = _camera.offset
 	_draw_arena(camera_offset)
 	_draw_fighter(_player, camera_offset)
-	_draw_fighter(_enemy, camera_offset)
+	if not _dev_capture_mode or _dev_capture_show_enemy:
+		_draw_fighter(_enemy, camera_offset)
 	_particle_system.draw(self, camera_offset)
 	_damage_number_system.draw(self, camera_offset)
 
-	_draw_hud()
+	if not _dev_capture_mode or _dev_capture_show_hud:
+		_draw_hud()
 	_draw_feedback()
 	_draw_boss_beat()
 	if _is_paused_on_end:
@@ -628,7 +642,7 @@ func _draw() -> void:
 		_draw_pause_indicator()
 		_draw_controls_legend(1.0)
 
-	if _debug_enabled:
+	if _debug_enabled and (not _dev_capture_mode or _dev_capture_show_debug):
 		_draw_debug_overlay()
 
 func _draw_arena(offset: Vector2) -> void:

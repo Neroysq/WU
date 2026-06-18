@@ -167,6 +167,7 @@ func _resolve_forget(player: Fighter, run_state: RunState, decision_policy: Deci
 func _snapshot_build(transcript: RunTranscript, run_state: RunState, node: MapNode) -> void:
 	transcript.build_snapshots.append({
 		"node_id": node.id,
+		"after_node": node.id,
 		"tier": node.tier,
 		"loadout": run_state.boon_loadout.serialize(),
 		"active_schools": run_state.boon_loadout.active_schools(),
