@@ -2,8 +2,10 @@ extends RefCounted
 
 const BoonLoadoutScript = preload("res://scripts/boons/boon_loadout.gd")
 const BoonOfferScript = preload("res://scripts/boons/boon_offer.gd")
+const FighterScript = preload("res://scripts/fighter.gd")
 const MapNodeScript = preload("res://scripts/map_node.gd")
 const RunFlowScript = preload("res://scripts/run_flow.gd")
+const TechniqueEngineScript = preload("res://scripts/technique_engine.gd")
 
 func _seed_offer_boons() -> void:
 	DataManager.reload_data()
@@ -67,6 +69,13 @@ func _seed_offer_boons() -> void:
 		"requires": {"schools": ["other"]},
 		"effect": {"type": "stat_delta", "flat": {"rage_max": 1.0}},
 	}
+	DataManager._boons["duo_offer_mastery"] = {
+		"id": "duo_offer_mastery",
+		"school": "duo_offer",
+		"kind": "mastery",
+		"requires": {"counts": {"duo_offer": 2}},
+		"effect": {"type": "stat_delta", "flat": {"health_max": 2.0}},
+	}
 
 func _ids(offers: Array) -> Array[String]:
 	var ids: Array[String] = []
@@ -122,11 +131,40 @@ func run_all() -> Dictionary:
 	rng.seed = 10
 	offers = BoonOfferScript.generate(loadout, "duo_offer", 0, rng)
 	ids = _ids(offers)
+	if not ids.has("duo_offer_duo"):
+		passed += 1
+	else:
+		failed += 1
+		failures.append("BoonOffer.generate should hold eligible duos until Master-depth offers")
+
+	rng.seed = 11
+	offers = BoonOfferScript.generate(loadout, "duo_offer", 3, rng)
+	ids = _ids(offers)
 	if ids.has("duo_offer_duo"):
 		passed += 1
 	else:
 		failed += 1
-		failures.append("BoonOffer.generate should include eligible duos in the offer pool")
+		failures.append("BoonOffer.generate should include eligible duos at Master-depth")
+
+	loadout.add_boon("duo_offer_move", "common")
+	loadout.add_boon("duo_offer_passive", "common")
+	rng.seed = 12
+	offers = BoonOfferScript.generate(loadout, "duo_offer", 3, rng)
+	ids = _ids(offers)
+	if ids.has("duo_offer_mastery"):
+		passed += 1
+	else:
+		failed += 1
+		failures.append("BoonOffer.generate should include eligible masteries at Master-depth")
+
+	var fighter: Variant = FighterScript.new()
+	var engine: Variant = TechniqueEngineScript.new()
+	var bound_loadout: Variant = BoonLoadoutScript.new(engine, fighter)
+	if bound_loadout.add_boon("duo_offer_mastery", "legendary") and engine.has_effect("duo_offer_mastery#0") and bound_loadout.masteries.size() == 1:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("BoonLoadout should install mastery effects as single-tier payoffs")
 
 	var shallow: Dictionary = BoonOfferScript.tier_weights(0)
 	var deep: Dictionary = BoonOfferScript.tier_weights(9)

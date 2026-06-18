@@ -9,7 +9,7 @@ static func generate(loadout: Variant, school: String, depth: int = 0, rng: Rand
 	var other_offers: Array[Dictionary] = []
 
 	for boon in DataManager.get_boons_for_school(school):
-		if not _is_offerable(loadout, boon):
+		if not _is_offerable(loadout, boon, depth):
 			continue
 		if _is_empty_slot_move(loadout, boon):
 			empty_slot_moves.append(boon)
@@ -39,7 +39,7 @@ static func tier_weights(depth: int) -> Dictionary:
 		"legendary": 10.0 * t,
 	}
 
-static func _is_offerable(loadout: Variant, boon: Dictionary) -> bool:
+static func _is_offerable(loadout: Variant, boon: Dictionary, depth: int) -> bool:
 	var boon_id: String = str(boon.get("id", ""))
 	if boon_id.is_empty() or _loadout_has_boon(loadout, boon_id):
 		return false
@@ -50,9 +50,9 @@ static func _is_offerable(loadout: Variant, boon: Dictionary) -> bool:
 		"passive":
 			return true
 		"duo":
-			return loadout != null and loadout.is_duo_eligible(boon)
+			return depth >= 3 and loadout != null and loadout.is_duo_eligible(boon)
 		"mastery":
-			return loadout != null and loadout.is_mastery_eligible(boon)
+			return depth >= 3 and loadout != null and loadout.is_mastery_eligible(boon)
 		_:
 			return false
 
