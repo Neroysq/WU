@@ -25,6 +25,10 @@ const JoltAmpEffectScript = preload("res://scripts/techniques/effects/jolt_amp_e
 const JoltDashDischargeEffectScript = preload("res://scripts/techniques/effects/jolt_dash_discharge_effect.gd")
 const JoltEffectScript = preload("res://scripts/techniques/effects/jolt_effect.gd")
 const JoltNovaEffectScript = preload("res://scripts/techniques/effects/jolt_nova_effect.gd")
+const DeflectEffectScript = preload("res://scripts/techniques/effects/deflect_effect.gd")
+const DeflectRedirectEffectScript = preload("res://scripts/techniques/effects/deflect_redirect_effect.gd")
+const DeflectReduceEffectScript = preload("res://scripts/techniques/effects/deflect_reduce_effect.gd")
+const DeflectRiposteDmgEffectScript = preload("res://scripts/techniques/effects/deflect_riposte_dmg_effect.gd")
 
 static func has_effect(id: String) -> bool:
 	var data: Dictionary = DataManager.get_technique(id)
@@ -102,5 +106,13 @@ static func _new_effect_for_type(effect_type: String) -> Variant:
 			return JoltNovaEffectScript.new()
 		"jolt_dash_discharge":
 			return JoltDashDischargeEffectScript.new()
+		"deflect":
+			return DeflectEffectScript.new()
+		"deflect_riposte_dmg":
+			return DeflectRiposteDmgEffectScript.new()
+		"deflect_reduce":
+			return DeflectReduceEffectScript.new()
+		"deflect_redirect":
+			return DeflectRedirectEffectScript.new()
 		_:
 			return null
