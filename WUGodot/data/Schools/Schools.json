@@ -1,12 +1,10 @@
 {
   "schools": [
-    {
-      "id": "venom",
-      "name": "Venom Sect",
-      "hanzi": "毒",
-      "signature": "venom",
-      "themeColor": "#7ec850",
-      "blurb": "Snowballing poison."
-    }
+    {"id": "venom", "name": "Venom Sect", "hanzi": "毒", "signature": "venom", "themeColor": "#7ec850", "blurb": "Poison stacks, slows, spreads, and detonates."},
+    {"id": "thunder", "name": "Thunderclap", "hanzi": "雷", "signature": "jolt", "themeColor": "#55c7ff", "blurb": "Jolt targets, amplify bursts, and discharge on movement."},
+    {"id": "soft", "name": "Soft Palm", "hanzi": "柔", "signature": "deflect", "themeColor": "#d7b56d", "blurb": "Counters, parries, redirects, and ripostes."},
+    {"id": "iron", "name": "Iron Body", "hanzi": "鐵", "signature": "guard", "themeColor": "#a9b0b8", "blurb": "Posture, armor, survival, and stance pressure."},
+    {"id": "wind", "name": "Windstep", "hanzi": "風", "signature": "momentum", "themeColor": "#87d7c5", "blurb": "Momentum, aerial strikes, flurries, and speed."},
+    {"id": "sword", "name": "Sword Intent", "hanzi": "劍", "signature": "intent", "themeColor": "#f0d071", "blurb": "Marks, reach, precision, and critical bursts."}
   ]
 }

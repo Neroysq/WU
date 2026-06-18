@@ -36,11 +36,15 @@ func run_all() -> Dictionary:
 		failures.append("DataManager.get_boon should load venom_light with common effect data")
 
 	var venom_boons: Array[Dictionary] = DataManager.get_boons_for_school("venom")
-	if venom_boons.size() == 1 and str(venom_boons[0].get("id", "")) == "venom_light":
+	var found_venom_light := false
+	for venom_boon in venom_boons:
+		if str(venom_boon.get("id", "")) == "venom_light":
+			found_venom_light = true
+	if found_venom_light:
 		passed += 1
 	else:
 		failed += 1
-		failures.append("DataManager.get_boons_for_school should return venom boons")
+		failures.append("DataManager.get_boons_for_school should include venom_light")
 
 	var test_boon: Dictionary = {
 		"id": "test_light",

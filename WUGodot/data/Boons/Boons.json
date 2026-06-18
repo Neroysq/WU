@@ -6,22 +6,132 @@
       "kind": "move",
       "slot": "light",
       "tiers": {
-        "common": {"effect": {"type": "venom", "stacks": 1}},
-        "rare": {"riders": [{"type": "venom_slow"}]},
+        "common": {"effect": {"type": "venom", "stacks": 1, "timer": 3.0, "dps": 1.0}},
+        "rare": {"riders": [{"type": "venom_slow", "multiplier": 0.85}]},
         "epic": {"riders": [{"type": "venom_spread"}]},
-        "legendary": {"riders": [{"type": "venom_heavy_detonate"}]}
+        "legendary": {"riders": [{"type": "venom_heavy_detonate", "damage_per_stack": 3.0}]}
       }
     },
     {
-      "id": "wind_descending_leaf",
-      "school": "wind",
+      "id": "venom_heavy",
+      "school": "venom",
       "kind": "move",
-      "slot": "dash",
-      "sourceTechnique": "A1",
+      "slot": "heavy",
       "tiers": {
-        "common": {"effect": {"type": "dash_stab", "range": 60.0, "damage": 8.0, "message": "落葉!"}}
+        "common": {"effect": {"type": "venom", "stacks": 2, "timer": 3.5, "dps": 1.0}},
+        "rare": {"riders": [{"type": "venom_slow", "multiplier": 0.82}]},
+        "epic": {"riders": [{"type": "venom_spread"}]},
+        "legendary": {"riders": [{"type": "venom_heavy_detonate", "damage_per_stack": 4.0}]}
       }
     },
+    {
+      "id": "venom_dash",
+      "school": "venom",
+      "kind": "move",
+      "slot": "dash",
+      "tiers": {
+        "common": {"effect": {"type": "venom", "stacks": 1, "timer": 2.5, "dps": 1.0}},
+        "rare": {"riders": [{"type": "venom_slow", "multiplier": 0.88}]},
+        "epic": {"riders": [{"type": "venom_spread"}]},
+        "legendary": {"riders": [{"type": "venom_heavy_detonate", "damage_per_stack": 3.5}]}
+      }
+    },
+    {
+      "id": "venom_pressure",
+      "school": "venom",
+      "kind": "passive",
+      "tiers": {
+        "common": {"effect": {"type": "venom_slow", "multiplier": 0.92}},
+        "rare": {"riders": [{"type": "venom", "stacks": 1, "timer": 2.0, "dps": 0.5}]},
+        "epic": {"riders": [{"type": "venom_spread"}]},
+        "legendary": {"riders": [{"type": "venom_heavy_detonate", "damage_per_stack": 2.0}]}
+      }
+    },
+    {
+      "id": "venom_tolerance",
+      "school": "venom",
+      "kind": "passive",
+      "tiers": {
+        "common": {"effect": {"type": "stat_delta", "flat": {"health_max": 8.0, "health_current": 8.0}}},
+        "rare": {"riders": [{"type": "venom_slow", "multiplier": 0.9}]},
+        "epic": {"riders": [{"type": "venom_spread"}]},
+        "legendary": {"riders": [{"type": "venom_heavy_detonate", "damage_per_stack": 2.5}]}
+      }
+    },
+    {
+      "id": "venom_thunder_duo",
+      "school": "venom",
+      "kind": "duo",
+      "requires": {"schools": ["venom", "thunder"]},
+      "effect": {"type": "jolt_amp", "multiplier": 1.2}
+    },
+
+    {
+      "id": "thunder_light",
+      "school": "thunder",
+      "kind": "move",
+      "slot": "light",
+      "tiers": {
+        "common": {"effect": {"type": "jolt", "timer": 2.0}},
+        "rare": {"riders": [{"type": "jolt_amp", "multiplier": 1.2}]},
+        "epic": {"riders": [{"type": "jolt_nova", "timer": 2.5}]},
+        "legendary": {"riders": [{"type": "jolt_dash_discharge", "damage": 8.0, "message": "雷!"}]}
+      }
+    },
+    {
+      "id": "thunder_heavy",
+      "school": "thunder",
+      "kind": "move",
+      "slot": "heavy",
+      "tiers": {
+        "common": {"effect": {"type": "jolt_nova", "timer": 2.5}},
+        "rare": {"riders": [{"type": "jolt_amp", "multiplier": 1.25}]},
+        "epic": {"riders": [{"type": "jolt", "timer": 3.0}]},
+        "legendary": {"riders": [{"type": "jolt_dash_discharge", "damage": 10.0, "message": "霆!"}]}
+      }
+    },
+    {
+      "id": "thunder_dash",
+      "school": "thunder",
+      "kind": "move",
+      "slot": "dash",
+      "tiers": {
+        "common": {"effect": {"type": "jolt_dash_discharge", "damage": 6.0, "message": "雷!"}},
+        "rare": {"riders": [{"type": "jolt", "timer": 2.0}]},
+        "epic": {"riders": [{"type": "jolt_amp", "multiplier": 1.2}]},
+        "legendary": {"riders": [{"type": "jolt_nova", "timer": 3.0}]}
+      }
+    },
+    {
+      "id": "thunder_charge",
+      "school": "thunder",
+      "kind": "passive",
+      "tiers": {
+        "common": {"effect": {"type": "jolt_amp", "multiplier": 1.15}},
+        "rare": {"riders": [{"type": "jolt", "timer": 2.0}]},
+        "epic": {"riders": [{"type": "jolt_nova", "timer": 2.5}]},
+        "legendary": {"riders": [{"type": "jolt_dash_discharge", "damage": 7.0, "message": "電!"}]}
+      }
+    },
+    {
+      "id": "thunder_reserve",
+      "school": "thunder",
+      "kind": "passive",
+      "tiers": {
+        "common": {"effect": {"type": "stat_delta", "flat": {"rage_max": 8.0}}},
+        "rare": {"riders": [{"type": "jolt_amp", "multiplier": 1.18}]},
+        "epic": {"riders": [{"type": "jolt", "timer": 2.5}]},
+        "legendary": {"riders": [{"type": "jolt_nova", "timer": 3.0}]}
+      }
+    },
+    {
+      "id": "thunder_sword_duo",
+      "school": "thunder",
+      "kind": "duo",
+      "requires": {"schools": ["thunder", "sword"]},
+      "effect": {"type": "intent_dash_flash", "marks": 1, "max": 3, "range": 140.0}
+    },
+
     {
       "id": "soft_iron_palm",
       "school": "soft",
@@ -29,101 +139,10 @@
       "slot": "light",
       "sourceTechnique": "A2",
       "tiers": {
-        "common": {"effect": {"type": "stagger", "chance": 0.2}}
-      }
-    },
-    {
-      "id": "sword_widows_kiss",
-      "school": "sword",
-      "kind": "move",
-      "slot": "heavy",
-      "sourceTechnique": "A3",
-      "tiers": {
-        "common": {"effect": {"type": "bleed_on_heavy", "timer": 3.0, "dps": 1.5}}
-      }
-    },
-    {
-      "id": "wind_sparrow_wing",
-      "school": "wind",
-      "kind": "move",
-      "slot": "dash",
-      "sourceTechnique": "A4",
-      "tiers": {
-        "common": {"effect": {"type": "sparrow", "window": 0.6, "multiplier": 1.30, "message": "雀翼!"}}
-      }
-    },
-    {
-      "id": "iron_stone_posture",
-      "school": "iron",
-      "kind": "move",
-      "slot": "block",
-      "sourceTechnique": "A5",
-      "tiers": {
-        "common": {"effect": {"type": "block_chip", "multiplier": 0.5}}
-      }
-    },
-    {
-      "id": "iron_heart_of_bamboo",
-      "school": "iron",
-      "kind": "passive",
-      "sourceTechnique": "A6",
-      "tiers": {
-        "common": {"effect": {"type": "stat_delta", "flat": {"posture_max": 15.0, "posture_current": 15.0}}}
-      }
-    },
-    {
-      "id": "wind_crane_step",
-      "school": "wind",
-      "kind": "passive",
-      "sourceTechnique": "A7",
-      "tiers": {
-        "common": {"effect": {"type": "stat_delta", "scaled": {"move_speed": 0.15}}}
-      }
-    },
-    {
-      "id": "iron_mountain_root",
-      "school": "iron",
-      "kind": "passive",
-      "sourceTechnique": "A8",
-      "tiers": {
-        "common": {"effect": {"type": "stat_delta", "scaled": {"posture_recovery_rate": 0.25}}}
-      }
-    },
-    {
-      "id": "soft_cloud_hands",
-      "school": "soft",
-      "kind": "passive",
-      "sourceTechnique": "A9",
-      "tiers": {
-        "common": {"effect": {"type": "stat_delta", "flat": {"parry_window": 0.03}}}
-      }
-    },
-    {
-      "id": "sword_twin_dragons",
-      "school": "sword",
-      "kind": "move",
-      "slot": "heavy",
-      "sourceTechnique": "A10",
-      "tiers": {
-        "common": {"effect": {"type": "twin_strike", "multiplier": 0.5}}
-      }
-    },
-    {
-      "id": "wind_sleeve_wind",
-      "school": "wind",
-      "kind": "passive",
-      "sourceTechnique": "A11",
-      "tiers": {
-        "common": {"effect": {"type": "stat_delta", "scaled": {"dash_speed": 0.25, "air_dash_speed": 0.25}, "dash_cooldown_floor": 0.1, "dash_cooldown_reduction": 0.15}}
-      }
-    },
-    {
-      "id": "iron_inkstone_discipline",
-      "school": "iron",
-      "kind": "passive",
-      "sourceTechnique": "A12",
-      "tiers": {
-        "common": {"effect": {"type": "stat_delta", "flat": {"health_max": 20.0, "health_current": 20.0}}}
+        "common": {"effect": {"type": "stagger", "chance": 0.2}},
+        "rare": {"riders": [{"type": "deflect", "damage": 3.0}]},
+        "epic": {"riders": [{"type": "deflect_riposte_dmg", "damage": 4.0}]},
+        "legendary": {"riders": [{"type": "deflect_redirect", "reflect": 0.2}]}
       }
     },
     {
@@ -133,53 +152,10 @@
       "slot": "block",
       "sourceTechnique": "B1",
       "tiers": {
-        "common": {"effect": {"type": "echo", "message": "山谷回響!"}}
-      }
-    },
-    {
-      "id": "soft_returning_spring",
-      "school": "soft",
-      "kind": "passive",
-      "sourceTechnique": "B2",
-      "tiers": {
-        "common": {"effect": {"type": "break_heal", "heal": 15.0, "message": "回春!"}}
-      }
-    },
-    {
-      "id": "wind_flowing_water",
-      "school": "wind",
-      "kind": "move",
-      "slot": "dash",
-      "sourceTechnique": "B3",
-      "tiers": {
-        "common": {"effect": {"type": "flowing_water", "heal": 5.0, "message": "流水!"}}
-      }
-    },
-    {
-      "id": "wind_thousand_mile_gaze",
-      "school": "wind",
-      "kind": "passive",
-      "sourceTechnique": "B4",
-      "tiers": {
-        "common": {"effect": {"type": "gaze", "duration": 3.0, "speed_multiplier": 0.5}}
-      }
-    },
-    {
-      "id": "iron_scar_of_the_past",
-      "school": "iron",
-      "kind": "passive",
-      "sourceTechnique": "B5",
-      "tiers": {
-        "common": {"effect": {"type": "low_hp_boost", "hp_threshold": 0.3, "multiplier": 1.25}}
-      }
-    },
-    {
-      "id": "iron_phoenix_rising",
-      "school": "iron",
-      "kind": "passive",
-      "sourceTechnique": "B6",
-      "tiers": {
-        "common": {"effect": {"type": "phoenix", "heal_ratio": 0.2, "invuln": 2.0, "message": "鳳凰起!"}}
+        "common": {"effect": {"type": "echo", "message": "山谷回響!"}},
+        "rare": {"riders": [{"type": "deflect", "damage": 4.0}]},
+        "epic": {"riders": [{"type": "deflect_riposte_dmg", "damage": 5.0}]},
+        "legendary": {"riders": [{"type": "deflect_redirect", "reflect": 0.25}]}
       }
     },
     {
@@ -189,7 +165,55 @@
       "slot": "stance",
       "sourceTechnique": "D1",
       "tiers": {
-        "common": {"effect": {"type": "stance_drunken", "display_name": "醉拳 DRUNKEN FORM", "dash_duration": 0.30, "dash_iframe_end": 0.26, "break_damage": 20.0}}
+        "common": {"effect": {"type": "stance_drunken", "display_name": "醉拳 DRUNKEN FORM", "dash_duration": 0.30, "dash_iframe_end": 0.26, "break_damage": 20.0}},
+        "rare": {"riders": [{"type": "deflect_reduce", "multiplier": 0.85}]},
+        "epic": {"riders": [{"type": "deflect", "damage": 5.0}]},
+        "legendary": {"riders": [{"type": "deflect_redirect", "reflect": 0.3}]}
+      }
+    },
+    {
+      "id": "soft_cloud_hands",
+      "school": "soft",
+      "kind": "passive",
+      "sourceTechnique": "A9",
+      "tiers": {
+        "common": {"effect": {"type": "stat_delta", "flat": {"parry_window": 0.03}}},
+        "rare": {"riders": [{"type": "deflect_reduce", "multiplier": 0.9}]},
+        "epic": {"riders": [{"type": "deflect", "damage": 3.0}]},
+        "legendary": {"riders": [{"type": "deflect_riposte_dmg", "damage": 5.0}]}
+      }
+    },
+    {
+      "id": "soft_returning_spring",
+      "school": "soft",
+      "kind": "passive",
+      "sourceTechnique": "B2",
+      "tiers": {
+        "common": {"effect": {"type": "break_heal", "heal": 15.0, "message": "回春!"}},
+        "rare": {"riders": [{"type": "deflect_reduce", "multiplier": 0.9}]},
+        "epic": {"riders": [{"type": "deflect", "damage": 3.0}]},
+        "legendary": {"riders": [{"type": "deflect_redirect", "reflect": 0.2}]}
+      }
+    },
+    {
+      "id": "soft_iron_duo",
+      "school": "soft",
+      "kind": "duo",
+      "requires": {"schools": ["soft", "iron"]},
+      "effect": {"type": "deflect_reduce", "multiplier": 0.75}
+    },
+
+    {
+      "id": "iron_stone_posture",
+      "school": "iron",
+      "kind": "move",
+      "slot": "block",
+      "sourceTechnique": "A5",
+      "tiers": {
+        "common": {"effect": {"type": "block_chip", "multiplier": 0.5}},
+        "rare": {"riders": [{"type": "stat_delta", "flat": {"posture_max": 10.0, "posture_current": 10.0}}]},
+        "epic": {"riders": [{"type": "deflect_reduce", "multiplier": 0.85}]},
+        "legendary": {"riders": [{"type": "low_hp_boost", "hp_threshold": 0.3, "multiplier": 1.15}]}
       }
     },
     {
@@ -199,8 +223,277 @@
       "slot": "stance",
       "sourceTechnique": "D2",
       "tiers": {
-        "common": {"effect": {"type": "stance_tiger", "display_name": "虎形 TIGER STANCE", "duration": 15.0, "reflect": 0.10}}
+        "common": {"effect": {"type": "stance_tiger", "display_name": "虎形 TIGER STANCE", "duration": 15.0, "reflect": 0.10}},
+        "rare": {"riders": [{"type": "block_chip", "multiplier": 0.8}]},
+        "epic": {"riders": [{"type": "stat_delta", "flat": {"health_max": 8.0, "health_current": 8.0}}]},
+        "legendary": {"riders": [{"type": "low_hp_boost", "hp_threshold": 0.35, "multiplier": 1.2}]}
       }
+    },
+    {
+      "id": "iron_heavy_crush",
+      "school": "iron",
+      "kind": "move",
+      "slot": "heavy",
+      "tiers": {
+        "common": {"effect": {"type": "low_hp_boost", "hp_threshold": 0.5, "multiplier": 1.1}},
+        "rare": {"riders": [{"type": "stat_delta", "flat": {"posture_max": 8.0, "posture_current": 8.0}}]},
+        "epic": {"riders": [{"type": "block_chip", "multiplier": 0.85}]},
+        "legendary": {"riders": [{"type": "deflect_reduce", "multiplier": 0.8}]}
+      }
+    },
+    {
+      "id": "iron_heart_of_bamboo",
+      "school": "iron",
+      "kind": "passive",
+      "sourceTechnique": "A6",
+      "tiers": {
+        "common": {"effect": {"type": "stat_delta", "flat": {"posture_max": 15.0, "posture_current": 15.0}}},
+        "rare": {"riders": [{"type": "block_chip", "multiplier": 0.9}]},
+        "epic": {"riders": [{"type": "deflect_reduce", "multiplier": 0.9}]},
+        "legendary": {"riders": [{"type": "low_hp_boost", "hp_threshold": 0.35, "multiplier": 1.15}]}
+      }
+    },
+    {
+      "id": "iron_mountain_root",
+      "school": "iron",
+      "kind": "passive",
+      "sourceTechnique": "A8",
+      "tiers": {
+        "common": {"effect": {"type": "stat_delta", "scaled": {"posture_recovery_rate": 0.25}}},
+        "rare": {"riders": [{"type": "stat_delta", "flat": {"posture_max": 8.0, "posture_current": 8.0}}]},
+        "epic": {"riders": [{"type": "block_chip", "multiplier": 0.85}]},
+        "legendary": {"riders": [{"type": "deflect_reduce", "multiplier": 0.82}]}
+      }
+    },
+    {
+      "id": "iron_inkstone_discipline",
+      "school": "iron",
+      "kind": "passive",
+      "sourceTechnique": "A12",
+      "tiers": {
+        "common": {"effect": {"type": "stat_delta", "flat": {"health_max": 20.0, "health_current": 20.0}}},
+        "rare": {"riders": [{"type": "stat_delta", "flat": {"posture_max": 10.0, "posture_current": 10.0}}]},
+        "epic": {"riders": [{"type": "block_chip", "multiplier": 0.8}]},
+        "legendary": {"riders": [{"type": "phoenix", "heal_ratio": 0.15, "invuln": 1.0, "message": "鐵心!"}]}
+      }
+    },
+    {
+      "id": "iron_scar_of_the_past",
+      "school": "iron",
+      "kind": "passive",
+      "sourceTechnique": "B5",
+      "tiers": {
+        "common": {"effect": {"type": "low_hp_boost", "hp_threshold": 0.3, "multiplier": 1.25}},
+        "rare": {"riders": [{"type": "stat_delta", "flat": {"health_max": 8.0, "health_current": 8.0}}]},
+        "epic": {"riders": [{"type": "block_chip", "multiplier": 0.85}]},
+        "legendary": {"riders": [{"type": "deflect_reduce", "multiplier": 0.8}]}
+      }
+    },
+    {
+      "id": "iron_phoenix_rising",
+      "school": "iron",
+      "kind": "passive",
+      "sourceTechnique": "B6",
+      "tiers": {
+        "common": {"effect": {"type": "phoenix", "heal_ratio": 0.2, "invuln": 2.0, "message": "鳳凰起!"}},
+        "rare": {"riders": [{"type": "stat_delta", "flat": {"health_max": 8.0, "health_current": 8.0}}]},
+        "epic": {"riders": [{"type": "low_hp_boost", "hp_threshold": 0.35, "multiplier": 1.15}]},
+        "legendary": {"riders": [{"type": "deflect_reduce", "multiplier": 0.78}]}
+      }
+    },
+    {
+      "id": "iron_soft_duo",
+      "school": "iron",
+      "kind": "duo",
+      "requires": {"schools": ["iron", "soft"]},
+      "effect": {"type": "stat_delta", "flat": {"posture_max": 20.0, "posture_current": 20.0}}
+    },
+
+    {
+      "id": "wind_descending_leaf",
+      "school": "wind",
+      "kind": "move",
+      "slot": "dash",
+      "sourceTechnique": "A1",
+      "tiers": {
+        "common": {"effect": {"type": "dash_stab", "range": 60.0, "damage": 8.0, "message": "落葉!"}},
+        "rare": {"riders": [{"type": "momentum", "dash_gain": 20.0, "decay": 8.0, "max": 100.0}]},
+        "epic": {"riders": [{"type": "momentum_flurry", "threshold": 50.0, "damage": 3.0, "cost": 15.0}]},
+        "legendary": {"riders": [{"type": "momentum_speed", "move_speed": 18.0}]}
+      }
+    },
+    {
+      "id": "wind_sparrow_wing",
+      "school": "wind",
+      "kind": "move",
+      "slot": "dash",
+      "sourceTechnique": "A4",
+      "tiers": {
+        "common": {"effect": {"type": "sparrow", "window": 0.6, "multiplier": 1.30, "message": "雀翼!"}},
+        "rare": {"riders": [{"type": "momentum", "dash_gain": 18.0, "decay": 8.0, "max": 100.0}]},
+        "epic": {"riders": [{"type": "momentum_flurry", "threshold": 55.0, "damage": 3.0, "cost": 15.0}]},
+        "legendary": {"riders": [{"type": "momentum_aerial", "multiplier": 1.2, "landing_gain": 10.0}]}
+      }
+    },
+    {
+      "id": "wind_flowing_water",
+      "school": "wind",
+      "kind": "move",
+      "slot": "dash",
+      "sourceTechnique": "B3",
+      "tiers": {
+        "common": {"effect": {"type": "flowing_water", "heal": 5.0, "message": "流水!"}},
+        "rare": {"riders": [{"type": "momentum", "dash_gain": 22.0, "decay": 8.0, "max": 100.0}]},
+        "epic": {"riders": [{"type": "momentum_speed", "move_speed": 15.0}]},
+        "legendary": {"riders": [{"type": "momentum_flurry", "threshold": 50.0, "damage": 4.0, "cost": 15.0}]}
+      }
+    },
+    {
+      "id": "wind_light_flurry",
+      "school": "wind",
+      "kind": "move",
+      "slot": "light",
+      "tiers": {
+        "common": {"effect": {"type": "momentum_flurry", "threshold": 55.0, "damage": 3.0, "cost": 20.0}},
+        "rare": {"riders": [{"type": "momentum", "move_gain_per_second": 10.0, "decay": 7.0, "max": 100.0}]},
+        "epic": {"riders": [{"type": "momentum_speed", "move_speed": 16.0}]},
+        "legendary": {"riders": [{"type": "momentum_aerial", "multiplier": 1.2, "landing_gain": 12.0}]}
+      }
+    },
+    {
+      "id": "wind_jump_aerial",
+      "school": "wind",
+      "kind": "move",
+      "slot": "jump",
+      "tiers": {
+        "common": {"effect": {"type": "momentum_aerial", "multiplier": 1.25, "landing_gain": 10.0}},
+        "rare": {"riders": [{"type": "momentum", "move_gain_per_second": 8.0, "decay": 7.0, "max": 100.0}]},
+        "epic": {"riders": [{"type": "momentum_flurry", "threshold": 50.0, "damage": 3.0, "cost": 15.0}]},
+        "legendary": {"riders": [{"type": "momentum_speed", "move_speed": 20.0}]}
+      }
+    },
+    {
+      "id": "wind_crane_step",
+      "school": "wind",
+      "kind": "passive",
+      "sourceTechnique": "A7",
+      "tiers": {
+        "common": {"effect": {"type": "stat_delta", "scaled": {"move_speed": 0.15}}},
+        "rare": {"riders": [{"type": "momentum_speed", "move_speed": 12.0}]},
+        "epic": {"riders": [{"type": "momentum", "move_gain_per_second": 8.0, "decay": 7.0, "max": 100.0}]},
+        "legendary": {"riders": [{"type": "momentum_aerial", "multiplier": 1.15, "landing_gain": 8.0}]}
+      }
+    },
+    {
+      "id": "wind_sleeve_wind",
+      "school": "wind",
+      "kind": "passive",
+      "sourceTechnique": "A11",
+      "tiers": {
+        "common": {"effect": {"type": "stat_delta", "scaled": {"dash_speed": 0.25, "air_dash_speed": 0.25}, "dash_cooldown_floor": 0.1, "dash_cooldown_reduction": 0.15}},
+        "rare": {"riders": [{"type": "momentum", "dash_gain": 18.0, "decay": 7.0, "max": 100.0}]},
+        "epic": {"riders": [{"type": "momentum_speed", "move_speed": 16.0}]},
+        "legendary": {"riders": [{"type": "momentum_flurry", "threshold": 45.0, "damage": 3.0, "cost": 12.0}]}
+      }
+    },
+    {
+      "id": "wind_thousand_mile_gaze",
+      "school": "wind",
+      "kind": "passive",
+      "sourceTechnique": "B4",
+      "tiers": {
+        "common": {"effect": {"type": "gaze", "duration": 3.0, "speed_multiplier": 0.5}},
+        "rare": {"riders": [{"type": "momentum_speed", "move_speed": 12.0}]},
+        "epic": {"riders": [{"type": "momentum", "move_gain_per_second": 8.0, "decay": 7.0, "max": 100.0}]},
+        "legendary": {"riders": [{"type": "momentum_aerial", "multiplier": 1.15, "landing_gain": 10.0}]}
+      }
+    },
+    {
+      "id": "wind_sword_duo",
+      "school": "wind",
+      "kind": "duo",
+      "requires": {"schools": ["wind", "sword"]},
+      "effect": {"type": "momentum_flurry", "threshold": 45.0, "damage": 5.0, "cost": 10.0}
+    },
+
+    {
+      "id": "sword_widows_kiss",
+      "school": "sword",
+      "kind": "move",
+      "slot": "heavy",
+      "sourceTechnique": "A3",
+      "tiers": {
+        "common": {"effect": {"type": "bleed_on_heavy", "timer": 3.0, "dps": 1.5}},
+        "rare": {"riders": [{"type": "intent_mark", "marks": 1, "max": 3, "burst_per_mark": 5.0}]},
+        "epic": {"riders": [{"type": "intent_crit_vs_marked", "multiplier": 1.25}]},
+        "legendary": {"riders": [{"type": "intent_reach", "range": 16.0}]}
+      }
+    },
+    {
+      "id": "sword_twin_dragons",
+      "school": "sword",
+      "kind": "move",
+      "slot": "heavy",
+      "sourceTechnique": "A10",
+      "tiers": {
+        "common": {"effect": {"type": "twin_strike", "multiplier": 0.5}},
+        "rare": {"riders": [{"type": "intent_mark", "marks": 1, "max": 3, "burst_per_mark": 5.0}]},
+        "epic": {"riders": [{"type": "intent_crit_vs_marked", "multiplier": 1.25}]},
+        "legendary": {"riders": [{"type": "intent_dash_flash", "marks": 1, "max": 3, "range": 120.0}]}
+      }
+    },
+    {
+      "id": "sword_light_mark",
+      "school": "sword",
+      "kind": "move",
+      "slot": "light",
+      "tiers": {
+        "common": {"effect": {"type": "intent_mark", "marks": 1, "max": 3, "burst_per_mark": 6.0}},
+        "rare": {"riders": [{"type": "intent_crit_vs_marked", "multiplier": 1.2}]},
+        "epic": {"riders": [{"type": "intent_reach", "range": 14.0}]},
+        "legendary": {"riders": [{"type": "intent_dash_flash", "marks": 1, "max": 3, "range": 130.0}]}
+      }
+    },
+    {
+      "id": "sword_dash_flash",
+      "school": "sword",
+      "kind": "move",
+      "slot": "dash",
+      "tiers": {
+        "common": {"effect": {"type": "intent_dash_flash", "marks": 1, "max": 3, "range": 120.0}},
+        "rare": {"riders": [{"type": "intent_mark", "marks": 1, "max": 3, "burst_per_mark": 5.0}]},
+        "epic": {"riders": [{"type": "intent_crit_vs_marked", "multiplier": 1.2}]},
+        "legendary": {"riders": [{"type": "intent_reach", "range": 18.0}]}
+      }
+    },
+    {
+      "id": "sword_reach",
+      "school": "sword",
+      "kind": "passive",
+      "tiers": {
+        "common": {"effect": {"type": "intent_reach", "range": 18.0}},
+        "rare": {"riders": [{"type": "intent_mark", "marks": 1, "max": 3, "burst_per_mark": 5.0}]},
+        "epic": {"riders": [{"type": "intent_crit_vs_marked", "multiplier": 1.2}]},
+        "legendary": {"riders": [{"type": "intent_dash_flash", "marks": 1, "max": 3, "range": 140.0}]}
+      }
+    },
+    {
+      "id": "sword_mark_crit",
+      "school": "sword",
+      "kind": "passive",
+      "tiers": {
+        "common": {"effect": {"type": "intent_crit_vs_marked", "multiplier": 1.2}},
+        "rare": {"riders": [{"type": "intent_mark", "marks": 1, "max": 3, "burst_per_mark": 5.0}]},
+        "epic": {"riders": [{"type": "intent_reach", "range": 14.0}]},
+        "legendary": {"riders": [{"type": "intent_dash_flash", "marks": 1, "max": 3, "range": 130.0}]}
+      }
+    },
+    {
+      "id": "sword_wind_duo",
+      "school": "sword",
+      "kind": "duo",
+      "requires": {"schools": ["sword", "wind"]},
+      "effect": {"type": "intent_mark", "marks": 1, "max": 4, "burst_per_mark": 7.0}
     }
   ]
 }
