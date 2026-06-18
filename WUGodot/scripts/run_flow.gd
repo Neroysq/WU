@@ -47,10 +47,10 @@ static func travel_decision(node: MapNode, player: Fighter, run_state: Variant =
 		MapNode.NodeType.REST:
 			return {"scene": "rest"}
 		MapNode.NodeType.MASTER:
-			var offer_payload: Dictionary = generate_boon_offer_payload(run_state, node)
-			if (offer_payload.get("offers", []) as Array).is_empty():
+			var choice_payload: Dictionary = generate_school_choice_payload(run_state, node)
+			if (choice_payload.get("school_choices", []) as Array).is_empty():
 				return {"scene": "map", "mark_cleared": true}
-			return offer_payload
+			return choice_payload
 	return {"scene": "map"}
 
 static func generate_boon_offer_payload(run_state: Variant, node: MapNode = null, school: String = "", rng: RandomNumberGenerator = null) -> Dictionary:
@@ -59,10 +59,15 @@ static func generate_boon_offer_payload(run_state: Variant, node: MapNode = null
 	var depth: int = node.tier if node != null else 0
 	var school_id: String = school
 	var offers: Array[Dictionary] = []
+	var explicit_school: bool = not school_id.is_empty()
+
+	if school_id.is_empty() and run_state != null and _should_consume_favor(node) and not str(run_state.favored_school).is_empty():
+		school_id = str(run_state.favored_school)
+		run_state.favored_school = ""
 
 	if not school_id.is_empty():
 		offers = BoonOfferScript.generate(loadout, school_id, depth, roll_rng)
-	else:
+	if offers.is_empty() and not explicit_school:
 		var candidates: Array[String] = _offer_school_pool()
 		while not candidates.is_empty():
 			var idx: int = roll_rng.randi_range(0, candidates.size() - 1)
@@ -79,6 +84,35 @@ static func generate_boon_offer_payload(run_state: Variant, node: MapNode = null
 		"school": school_id,
 		"offers": offers,
 	}
+
+static func generate_school_choice_payload(run_state: Variant, node: MapNode = null, rng: RandomNumberGenerator = null) -> Dictionary:
+	return {
+		"scene": "boon_offer",
+		"school_choices": generate_school_choices(run_state, node, 3, rng),
+		"offers": [],
+	}
+
+static func generate_school_choices(run_state: Variant, node: MapNode = null, count: int = 3, rng: RandomNumberGenerator = null) -> Array[Dictionary]:
+	var roll_rng: RandomNumberGenerator = _rng(rng)
+	var loadout: Variant = run_state.boon_loadout if run_state != null else null
+	var depth: int = node.tier if node != null else 0
+	var candidates: Array[String] = []
+	for school in _offer_school_pool():
+		var probe: RandomNumberGenerator = RandomNumberGenerator.new()
+		probe.seed = 1000 + depth + candidates.size()
+		if BoonOfferScript.generate(loadout, school, depth, probe).size() >= 3:
+			candidates.append(school)
+
+	var choices: Array[Dictionary] = []
+	while choices.size() < count and not candidates.is_empty():
+		var idx: int = roll_rng.randi_range(0, candidates.size() - 1)
+		var school_id: String = candidates[idx]
+		candidates.remove_at(idx)
+		choices.append({
+			"school": school_id,
+			"school_data": DataManager.get_school(school_id),
+		})
+	return choices
 
 static func apply_boon_offer_selection(run_state: Variant, offer: Dictionary) -> bool:
 	if run_state == null or run_state.boon_loadout == null:
@@ -140,6 +174,9 @@ static func _offer_school_pool() -> Array[String]:
 		if not school.is_empty() and not schools.has(school):
 			schools.append(school)
 	return schools
+
+static func _should_consume_favor(node: MapNode) -> bool:
+	return node != null and (node.node_type == MapNode.NodeType.BATTLE or node.node_type == MapNode.NodeType.AMBUSH)
 
 static func _rng(rng: RandomNumberGenerator) -> RandomNumberGenerator:
 	if rng != null:

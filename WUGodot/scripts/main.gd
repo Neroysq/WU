@@ -157,9 +157,12 @@ func _on_combat_end(victory: bool) -> void:
 			_ctx.run_end_time = Time.get_ticks_msec() / 1000.0
 			_set_scene(SceneContext.SCENE_VICTORY)
 		elif str(outcome.get("next", "")) == "boon_offer":
-			var offer_payload: Dictionary = RunFlow.generate_boon_offer_payload(_ctx.run_state, node)
+			var offer_payload: Dictionary = RunFlow.generate_school_choice_payload(_ctx.run_state, node) if node.node_type == MapNode.NodeType.ELITE else RunFlow.generate_boon_offer_payload(_ctx.run_state, node)
 			if (offer_payload.get("offers", []) as Array).is_empty():
-				_set_scene(SceneContext.SCENE_MAP)
+				if (offer_payload.get("school_choices", []) as Array).is_empty():
+					_set_scene(SceneContext.SCENE_MAP)
+				else:
+					_set_scene(SceneContext.SCENE_BOON_OFFER, offer_payload)
 			else:
 				_set_scene(SceneContext.SCENE_BOON_OFFER, offer_payload)
 		else:

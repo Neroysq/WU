@@ -88,10 +88,18 @@ func run_all() -> Dictionary:
 
 	var master: Variant = MapNodeScript.new(7, 3, MapNodeScript.NodeType.MASTER, [])
 	decision = RunFlowScript.travel_decision(master, player, run)
-	if str(decision.get("scene", "")) == "boon_offer" and (decision.get("offers", []) as Array).size() == 3:
+	if str(decision.get("scene", "")) == "boon_offer" and (decision.get("school_choices", []) as Array).size() >= 2:
 		passed += 1
 	else:
 		failed += 1
-		failures.append("master travel should produce a boon offer")
+		failures.append("master travel should produce a school-choice boon offer")
+
+	run.favored_school = "iron"
+	offer_payload = RunFlowScript.generate_boon_offer_payload(run, duel)
+	if str(offer_payload.get("school", "")) == "iron" and str(run.favored_school).is_empty():
+		passed += 1
+	else:
+		failed += 1
+		failures.append("favored_school should bias the next battle offer and then clear")
 
 	return {"passed": passed, "failed": failed, "failures": failures}

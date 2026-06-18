@@ -83,6 +83,8 @@ func _apply_outcome(outcome: Dictionary, fighter: Fighter) -> Dictionary:
 		result["combat_gold_multiplier"] = int(outcome.get("combat_gold_multiplier", 1))
 	if outcome.has("timing_test"):
 		result["timing_test"] = true
+	if outcome.has("favor_school"):
+		result["favor_school"] = str(outcome.get("favor_school", ""))
 
 	return result
 

@@ -118,6 +118,9 @@ func _resolve_choice(ctx: Variant, index: int) -> void:
 		ctx.run_techniques_acquired.append(granted)
 
 func _continue_from_result(ctx: Variant) -> void:
+	var favor_school: String = str(result.get("favor_school", ""))
+	if not favor_school.is_empty():
+		ctx.run_state.favored_school = favor_school
 	if bool(result.get("open_shop", false)):
 		var owned_ids: Array[String] = []
 		if ctx.player.technique_engine != null:

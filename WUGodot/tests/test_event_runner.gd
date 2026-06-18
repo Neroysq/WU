@@ -117,4 +117,20 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("get_event_by_id should return abandoned_scroll")
 
+	var favor_event: Dictionary = {
+		"id": "favor",
+		"title": "Favor",
+		"text": "Test.",
+		"choices": [{"label": "Choose", "outcome": "choose"}],
+		"outcomes": {"choose": {"favor_school": "iron", "message": "Iron favors you."}},
+	}
+	fighter = _make_fighter()
+	runner.load_event(favor_event)
+	result = runner.choose(0, fighter)
+	if str(result.get("favor_school", "")) == "iron":
+		passed += 1
+	else:
+		failed += 1
+		failures.append("event favor outcome should surface favor_school")
+
 	return {"passed": passed, "failed": failed, "failures": failures}

@@ -8,6 +8,7 @@ var current_node_id: int = 0
 var max_tier: int = 0
 var legend_seen_this_run: bool = false
 var boon_loadout: Variant = BoonLoadoutScript.new()
+var favored_school: String = ""
 
 static func create_simple_three_tier() -> RunState:
 	return create_procedural_run()
@@ -169,8 +170,10 @@ func bind_boon_loadout(engine: Variant, fighter: Variant) -> void:
 func serialize() -> Dictionary:
 	return {
 		"boon_loadout": boon_loadout.serialize(),
+		"favored_school": favored_school,
 	}
 
 func restore(data: Dictionary, engine: Variant = null, fighter: Variant = null) -> void:
+	favored_school = str(data.get("favored_school", ""))
 	boon_loadout.bind(engine, fighter)
 	boon_loadout.restore(data.get("boon_loadout", {}) as Dictionary)

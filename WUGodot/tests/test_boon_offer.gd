@@ -2,6 +2,8 @@ extends RefCounted
 
 const BoonLoadoutScript = preload("res://scripts/boons/boon_loadout.gd")
 const BoonOfferScript = preload("res://scripts/boons/boon_offer.gd")
+const MapNodeScript = preload("res://scripts/map_node.gd")
+const RunFlowScript = preload("res://scripts/run_flow.gd")
 
 func _seed_offer_boons() -> void:
 	DataManager.reload_data()
@@ -133,5 +135,15 @@ func run_all() -> Dictionary:
 	else:
 		failed += 1
 		failures.append("BoonOffer tier weights should skew higher with depth")
+
+	DataManager.reload_data()
+	var run: Variant = RunState.create_procedural_run(123)
+	var master: Variant = MapNodeScript.new(100, 3, MapNodeScript.NodeType.MASTER, [])
+	var choice_payload: Dictionary = RunFlowScript.generate_school_choice_payload(run, master)
+	if str(choice_payload.get("scene", "")) == "boon_offer" and (choice_payload.get("school_choices", []) as Array).size() >= 2:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("school-choice payload should provide at least 2 school options")
 
 	return {"passed": passed, "failed": failed, "failures": failures}
