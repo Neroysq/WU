@@ -14,6 +14,9 @@
 #   ./run.sh --shot-combat [dir] # save deterministic combat screenshots, then quit
 #   ./run.sh --shot-archetype=<id> [dir] # save deterministic combat + enemy archetype screenshots
 #   ./run.sh --shot-action STATE [dir] # save every rendered frame for one combat state
+#   ./run.sh --playtest --seed N [--out file.json] # run one deterministic headless autoplay
+#   ./run.sh --playtest-batch --seeds 1..20 [--out file.json] # run a deterministic autoplay batch
+#   ./run.sh --capture spec.json --out dir_or_png # capture a JSON-described visual state
 #   ./run.sh --install-video <run-dir> --action=<name> --frames=... [--prefix=va] # install staged video frames
 #   ./run.sh --editor     # open the Godot editor
 
@@ -41,9 +44,10 @@ case "${1:-}" in
         echo "Running headless tests..."
         exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tests/run_tests.gd
         ;;
-    --import|-i)
-        echo "Running headless import..."
-        exec "$GODOT" --path "$PROJECT_DIR" --headless --import
+	    --import|-i)
+	        echo "Running headless import..."
+	        "$GODOT" --path "$PROJECT_DIR" --headless --import 2> >(grep -vF 'ERROR: Condition "ret != noErr" is true. Returning: ""' >&2)
+	        exit $?
         ;;
     --reimport|-r)
         CACHE="$PROJECT_DIR/.godot/imported"
@@ -60,8 +64,9 @@ case "${1:-}" in
         # to verify a clean load.
         echo "Reimport pass 1/2 (populating cache)..."
         "$GODOT" --path "$PROJECT_DIR" --headless --import 2>/dev/null >/dev/null
-        echo "Reimport pass 2/2 (verifying clean load)..."
-        exec "$GODOT" --path "$PROJECT_DIR" --headless --import
+	        echo "Reimport pass 2/2 (verifying clean load)..."
+	        "$GODOT" --path "$PROJECT_DIR" --headless --import 2> >(grep -vF 'ERROR: Condition "ret != noErr" is true. Returning: ""' >&2)
+	        exit $?
         ;;
     --measure-anchors)
         echo "Measuring sprite anchors -> hu.manifest.json..."
@@ -106,18 +111,26 @@ case "${1:-}" in
         echo "Capturing action frames for $STATE -> $SHOT_DIR"
         exec "$GODOT" --path "$PROJECT_DIR" -- --shot-action "--shot-state=$STATE" "--shot-dir=$SHOT_DIR"
         ;;
-    --shot-archetype=*)
-        ARCHETYPE="${1#--shot-archetype=}"
-        SHOT_DIR="${2:-/tmp/wu-balance-$ARCHETYPE}"
-        echo "Capturing combat screenshots for $ARCHETYPE -> $SHOT_DIR"
-        exec "$GODOT" --path "$PROJECT_DIR" -- --shot-combat "--shot-archetype=$ARCHETYPE" "--shot-dir=$SHOT_DIR"
-        ;;
+	    --shot-archetype=*)
+	        ARCHETYPE="${1#--shot-archetype=}"
+	        SHOT_DIR="${2:-/tmp/wu-balance-$ARCHETYPE}"
+	        echo "Capturing combat screenshots for $ARCHETYPE -> $SHOT_DIR"
+	        exec "$GODOT" --path "$PROJECT_DIR" -- --shot-combat "--shot-archetype=$ARCHETYPE" "--shot-dir=$SHOT_DIR"
+	        ;;
+	    --playtest|--playtest-batch)
+	        echo "Running deterministic playtest..."
+	        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://scripts/sim/playtest_main.gd -- "$@"
+	        ;;
+	    --capture)
+	        echo "Capturing visual state..."
+	        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://scripts/sim/visual_capture.gd -- "$@"
+	        ;;
     --editor|-e)
         echo "Opening Godot editor..."
         exec "$GODOT" --path "$PROJECT_DIR" --editor
         ;;
     --help|-h)
-        sed -n '2,17p' "$0"
+	        sed -n '2,20p' "$0"
         ;;
     "")
         echo "Launching WU..."
@@ -125,7 +138,7 @@ case "${1:-}" in
         ;;
     *)
         echo "Unknown option: $1" >&2
-        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-video <args>|--probe-reach|--snapshot-reach <out.json>|--stage-held-keyframes <dir>|--shot-combat|--shot-action STATE|--shot-archetype=<id>|--editor|--help]" >&2
+	        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-video <args>|--probe-reach|--snapshot-reach <out.json>|--stage-held-keyframes <dir>|--shot-combat|--shot-action STATE|--shot-archetype=<id>|--playtest|--playtest-batch|--capture spec.json|--editor|--help]" >&2
         exit 1
         ;;
 esac

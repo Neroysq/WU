@@ -5,6 +5,7 @@ const EventRunnerScript = preload("res://scripts/event_runner.gd")
 const SceneContext = preload("res://scripts/scene_context.gd")
 const MenuInput = preload("res://scripts/ui/menu_input.gd")
 const UiDraw = preload("res://scripts/ui/ui_draw.gd")
+const RngServiceScript = preload("res://scripts/sim/rng_service.gd")
 
 var runner: Variant = null
 var event_data: Dictionary = {}
@@ -109,8 +110,7 @@ func _resolve_choice(ctx: Variant, index: int) -> void:
 			choices = _typed_choices(runner.get_choices())
 		return
 	if bool(result.get("timing_test", false)):
-		var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-		rng.randomize()
+		var rng: RandomNumberGenerator = RngServiceScript.stream("event")
 		result = runner.apply_timing_result(rng.randf() < 0.5, ctx.player)
 	showing_result = true
 	var granted: String = str(result.get("granted_technique", ""))

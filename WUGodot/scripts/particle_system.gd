@@ -7,6 +7,7 @@ var _max_particles: int = 100
 
 func _init(max_particles: int = 100) -> void:
 	_max_particles = max_particles
+	# FX-only: out of deterministic-sim scope.
 	_rng.randomize()
 
 func spawn_hit_sparks(center: Vector2, count: int, color: Color) -> void:

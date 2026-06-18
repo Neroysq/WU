@@ -1,9 +1,10 @@
 class_name ShopGenerator
 extends RefCounted
 
+const RngServiceScript = preload("res://scripts/sim/rng_service.gd")
+
 static func generate_shop(owned_ids: Array[String], rarity_boost: bool = false) -> Array[Dictionary]:
-	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-	rng.randomize()
+	var rng: RandomNumberGenerator = RngServiceScript.stream("shop")
 	var items: Array[Dictionary] = []
 	var used_ids: Array[String] = owned_ids.duplicate()
 	var all_techniques: Dictionary = DataManager.get_all_techniques()
@@ -94,3 +95,14 @@ static func buy_item(item: Dictionary, fighter: Fighter) -> Dictionary:
 			return {"success": true, "message": "Choose a technique to forget.", "open_forget": true}
 		_:
 			return {"success": false, "message": "Unknown item."}
+
+static func buy_boon_upgrade(run_state: Variant) -> Dictionary:
+	if run_state == null:
+		return {"success": false, "message": "No run state."}
+	if run_state.insight <= 0:
+		return {"success": false, "message": "Need 1 Insight."}
+	if run_state.first_upgradeable_boon_id().is_empty():
+		return {"success": false, "message": "No eligible boon to upgrade."}
+	if run_state.upgrade_first_boon_with_insight():
+		return {"success": true, "message": "Boon upgraded."}
+	return {"success": false, "message": "Could not upgrade boon."}

@@ -1,6 +1,8 @@
 class_name AiBrain
 extends RefCounted
 
+const RngServiceScript = preload("res://scripts/sim/rng_service.gd")
+
 var pattern_table: Array[String] = []
 var aggression: float = 0.5
 var block_chance: float = 0.25
@@ -12,7 +14,7 @@ var _decision_cooldown: float = 0.0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 func _init() -> void:
-	_rng.randomize()
+	_rng = RngServiceScript.stream("ai")
 
 func update_cooldowns(dt: float) -> void:
 	if _decision_cooldown > 0.0:

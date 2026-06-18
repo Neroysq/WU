@@ -9,6 +9,7 @@ var zoom: float = 1.0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 func _init() -> void:
+	# FX-only: out of deterministic-sim scope.
 	_rng.randomize()
 
 func update(dt: float) -> void:

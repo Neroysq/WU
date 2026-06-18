@@ -1,6 +1,8 @@
 class_name BoonOffer
 extends RefCounted
 
+const RngServiceScript = preload("res://scripts/sim/rng_service.gd")
+
 const TIERS: Array[String] = ["common", "rare", "epic", "legendary"]
 
 static func generate(loadout: Variant, school: String, depth: int = 0, rng: RandomNumberGenerator = null) -> Array[Dictionary]:
@@ -98,6 +100,4 @@ static func _roll_tier(depth: int, rng: RandomNumberGenerator) -> String:
 static func _rng(rng: RandomNumberGenerator) -> RandomNumberGenerator:
 	if rng != null:
 		return rng
-	var generated: RandomNumberGenerator = RandomNumberGenerator.new()
-	generated.randomize()
-	return generated
+	return RngServiceScript.stream("boon_offer")

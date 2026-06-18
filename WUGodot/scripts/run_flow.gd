@@ -2,6 +2,7 @@ class_name RunFlow
 extends RefCounted
 
 const BoonOfferScript = preload("res://scripts/boons/boon_offer.gd")
+const RngServiceScript = preload("res://scripts/sim/rng_service.gd")
 
 static func combat_victory_outcome(node: MapNode, gold_multiplier: int) -> Dictionary:
 	var base_gold: int = 15
@@ -57,7 +58,7 @@ static func travel_decision(node: MapNode, player: Fighter, run_state: Variant =
 	return {"scene": "map"}
 
 static func generate_boon_offer_payload(run_state: Variant, node: MapNode = null, school: String = "", rng: RandomNumberGenerator = null) -> Dictionary:
-	var roll_rng: RandomNumberGenerator = _rng(rng)
+	var roll_rng: RandomNumberGenerator = rng if rng != null else RngServiceScript.stream("boon_offer")
 	var loadout: Variant = run_state.boon_loadout if run_state != null else null
 	var depth: int = node.tier if node != null else 0
 	var school_id: String = school
@@ -96,7 +97,7 @@ static func generate_school_choice_payload(run_state: Variant, node: MapNode = n
 	}
 
 static func generate_school_choices(run_state: Variant, node: MapNode = null, count: int = 3, rng: RandomNumberGenerator = null) -> Array[Dictionary]:
-	var roll_rng: RandomNumberGenerator = _rng(rng)
+	var roll_rng: RandomNumberGenerator = rng if rng != null else RngServiceScript.stream("school")
 	var loadout: Variant = run_state.boon_loadout if run_state != null else null
 	var depth: int = node.tier if node != null else 0
 	var candidates: Array[String] = []
@@ -148,8 +149,7 @@ static func generate_master_rewards(owned_ids: Array[String]) -> Array:
 		if int(technique.get("rarity", 1)) >= 2:
 			rare_pool.append(technique)
 
-	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-	rng.randomize()
+	var rng: RandomNumberGenerator = RngServiceScript.stream("reward")
 	for i in range(3):
 		if rare_pool.is_empty():
 			break
@@ -184,6 +184,4 @@ static func _should_consume_favor(node: MapNode) -> bool:
 static func _rng(rng: RandomNumberGenerator) -> RandomNumberGenerator:
 	if rng != null:
 		return rng
-	var generated: RandomNumberGenerator = RandomNumberGenerator.new()
-	generated.randomize()
-	return generated
+	return RngServiceScript.stream("boon_offer")

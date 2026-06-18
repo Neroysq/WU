@@ -2,6 +2,7 @@ class_name RunState
 extends RefCounted
 
 const BoonLoadoutScript = preload("res://scripts/boons/boon_loadout.gd")
+const RngServiceScript = preload("res://scripts/sim/rng_service.gd")
 
 var nodes: Array[MapNode] = []
 var current_node_id: int = 0
@@ -20,7 +21,7 @@ static func create_procedural_run(seed_value: int = -1) -> RunState:
 	if seed_value >= 0:
 		rng.seed = seed_value
 	else:
-		rng.randomize()
+		rng = RngServiceScript.stream("map")
 
 	var next_id: int = 0
 	var tier_nodes: Array = []

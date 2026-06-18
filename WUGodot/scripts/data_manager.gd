@@ -1,6 +1,8 @@
 class_name DataManager
 extends RefCounted
 
+const RngServiceScript = preload("res://scripts/sim/rng_service.gd")
+
 static var _characters: Dictionary = {}
 static var _enemies: Dictionary = {}
 static var _visual_profiles: Dictionary = {}
@@ -130,9 +132,7 @@ static func get_event_by_id(event_id: String) -> Dictionary:
 static func get_random_event(rng: RandomNumberGenerator = null) -> Dictionary:
 	if _events.is_empty():
 		return {}
-	var roll_rng: RandomNumberGenerator = rng if rng != null else RandomNumberGenerator.new()
-	if rng == null:
-		roll_rng.randomize()
+	var roll_rng: RandomNumberGenerator = rng if rng != null else RngServiceScript.stream("event")
 	return (_events[roll_rng.randi_range(0, _events.size() - 1)] as Dictionary).duplicate(true)
 
 static func validate_attacks() -> Array[String]:

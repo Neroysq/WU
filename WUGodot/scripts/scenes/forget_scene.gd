@@ -29,8 +29,7 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 		return
 
 	if input.accept and selection_idx >= 0 and selection_idx < technique_ids.size():
-		ctx.player.technique_engine.remove(technique_ids[selection_idx], ctx.player)
-		ctx.run_state.mark_current_node_cleared()
+		ForgetService.apply(technique_ids[selection_idx], ctx.player, ctx.run_state)
 		ctx.goto(SceneContext.SCENE_MAP)
 
 func draw(ctx: Variant, canvas: CanvasItem) -> void:

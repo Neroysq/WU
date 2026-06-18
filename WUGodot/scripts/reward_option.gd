@@ -1,6 +1,8 @@
 class_name RewardOption
 extends RefCounted
 
+const RngServiceScript = preload("res://scripts/sim/rng_service.gd")
+
 var id: String = ""
 var label: String = ""
 var effect: String = ""
@@ -31,8 +33,7 @@ static func random(exclude: String = "") -> RewardOption:
 			filtered_pool.append(reward_data)
 	if filtered_pool.is_empty():
 		filtered_pool = pool
-	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-	rng.randomize()
+	var rng: RandomNumberGenerator = RngServiceScript.stream("reward")
 
 	var pick: Dictionary = filtered_pool[rng.randi_range(0, filtered_pool.size() - 1)]
 	return from_dictionary(pick)
@@ -54,8 +55,7 @@ static func random_technique(owned_ids: Array[String]) -> RewardOption:
 			pool.append(all_techniques[tech_id] as Dictionary)
 	if pool.is_empty():
 		return random()
-	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-	rng.randomize()
+	var rng: RandomNumberGenerator = RngServiceScript.stream("reward")
 	var pick: Dictionary = pool[rng.randi_range(0, pool.size() - 1)]
 	var option: RewardOption = RewardOption.new()
 	option.id = str(pick.get("id", ""))

@@ -4,6 +4,7 @@ extends RefCounted
 const TechniqueEngineScript = preload("res://scripts/technique_engine.gd")
 const AiBrainScript = preload("res://scripts/ai_brain.gd")
 const BossControllerScript = preload("res://scripts/boss_controller.gd")
+const RngServiceScript = preload("res://scripts/sim/rng_service.gd")
 
 static func create_enemy_for_node(node: MapNode) -> Fighter:
 	var archetype: String = _pick_archetype_for_node(node)
@@ -48,8 +49,7 @@ static func create_enemy_by_archetype(archetype: String) -> Fighter:
 	return enemy
 
 static func _pick_archetype_for_node(node: MapNode) -> String:
-	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-	rng.randomize()
+	var rng: RandomNumberGenerator = RngServiceScript.stream("enemy_pick")
 	match node.node_type:
 		MapNode.NodeType.BATTLE:
 			var pool: Array[String] = DataManager.get_enemy_archetypes_for_difficulty("easy")

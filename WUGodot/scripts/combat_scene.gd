@@ -8,6 +8,8 @@ const AnimationClockScript = preload("res://scripts/visual/animation_clock.gd")
 const AnimationDebugOverlayScript = preload("res://scripts/visual/animation_debug_overlay.gd")
 const FighterPresenterScript = preload("res://scripts/visual/fighter_presenter.gd")
 const PresentationCollisionScript = preload("res://scripts/visual/presentation_collision.gd")
+const CombatSetupScript = preload("res://scripts/sim/combat_setup.gd")
+const CombatStepScript = preload("res://scripts/sim/combat_step.gd")
 
 const ENABLE_AUTHORED_PLAYER_HITBOXES: bool = true
 const DEV_CAPTURE_STEP: float = 1.0 / 60.0
@@ -74,12 +76,7 @@ func _ready() -> void:
 	_enemy_visual = FighterVisual.new(_asset_catalog)
 	_background = BackgroundRendererScript.new()
 
-	_combat_system.spawn_particles.connect(_on_spawn_particles)
-	_combat_system.camera_shake.connect(_on_camera_shake)
-	_combat_system.slow_motion.connect(_trigger_slow_mo)
-	_combat_system.show_feedback.connect(_show_feedback)
-	_combat_system.damage_dealt.connect(_on_damage_dealt)
-	_combat_system.hitstop.connect(_trigger_hitstop)
+	_connect_combat_system_signals()
 
 	set_process(false)
 	visible = false
@@ -87,7 +84,11 @@ func _ready() -> void:
 func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = false, forced_archetype: String = "") -> void:
 	_player = player
 	_current_node = node
-	_enemy = EnemyFactory.create_enemy_by_archetype(forced_archetype) if not forced_archetype.is_empty() else EnemyFactory.create_enemy_for_node(node)
+	var setup: Dictionary = CombatSetupScript.prepare(player, node, forced_archetype)
+	_enemy = setup["enemy"] as Fighter
+	_combat_system = setup["combat_system"] as CombatSystem
+	_hit_geometry = setup["hit_geometry"]
+	_connect_combat_system_signals()
 	var arena_id: String = "chapter1_boss_clearing" if node.node_type == MapNode.NodeType.BOSS else "chapter1_bamboo_dusk"
 	if _background != null:
 		_background.set_arena(arena_id)
@@ -117,16 +118,6 @@ func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = f
 	_enemy_visual.configure(DataManager.get_visual_profile(_enemy.visual_profile_id), _enemy)
 	_connect_attack_visual(_player, _player_visual)
 	_connect_attack_visual(_enemy, _enemy_visual)
-
-	_player.reset_for_combat()
-	_enemy.reset_for_combat()
-	# Hu's authored hitboxes are measured from the committed per-pose manifest.
-	if _hit_geometry != null and ENABLE_AUTHORED_PLAYER_HITBOXES:
-		_hit_geometry.register_fighter(_player, "hu")
-	_player.position = Vector2(360.0, GameConstants.GROUND_Y)
-	_enemy.position = Vector2(1560.0, GameConstants.GROUND_Y)
-	_player.facing = 1
-	_enemy.facing = -1
 
 	_is_paused_on_end = false
 	_end_message = ""
@@ -413,8 +404,6 @@ func _process(delta: float) -> void:
 		queue_redraw()
 		return
 
-	_combat_system.update_facing(_player, _enemy)
-
 	var attack_key: int = int(_player.controls.get("attack", KEY_J))
 	if input_active:
 		_input_tracker.update_hold_timers([attack_key], delta)
@@ -433,23 +422,14 @@ func _process(delta: float) -> void:
 		return
 
 	var input_state: Dictionary = _build_player_input(input_active)
-	_combat_system.update_player(_player, input_state, dt, _enemy)
-	_combat_system.update_ai(_enemy, _player, dt)
+	CombatStepScript.advance(_combat_system, _player, _enemy, input_state, dt)
 
-	_combat_system.resolve_hits(_player, _enemy)
-	_combat_system.resolve_hits(_enemy, _player)
-	_combat_system.tick_effects(_player, dt)
-	_combat_system.tick_effects(_enemy, dt)
-
-	_combat_system.clamp_world_bounds(_player)
-	_combat_system.clamp_world_bounds(_enemy)
-
-	if _player.health_current <= 0.0:
+	var death_state: String = CombatStepScript.death_state(_player, _enemy)
+	if death_state == "player":
 		_is_paused_on_end = true
 		_end_message = "Defeat (Enter: continue)"
-	elif _enemy.health_current <= 0.0:
-		if _player.technique_engine != null:
-			_player.technique_engine.on_kill(_player)
+	elif death_state == "enemy":
+		CombatStepScript.fire_player_kill(_player)
 		if _current_node.node_type == MapNode.NodeType.BOSS:
 			_boss_death_triggered = true
 			_boss_death_timer = 1.0
@@ -985,6 +965,23 @@ func _connect_attack_visual(fighter: Fighter, visual: FighterVisual) -> void:
 	var callback: Callable = Callable(visual, "_on_attack_active_started")
 	if not fighter.is_connected("attack_active_started", callback):
 		fighter.connect("attack_active_started", callback)
+
+func _connect_combat_system_signals() -> void:
+	if _combat_system == null:
+		return
+	var signal_map: Array[Array] = [
+		["spawn_particles", Callable(self, "_on_spawn_particles")],
+		["camera_shake", Callable(self, "_on_camera_shake")],
+		["slow_motion", Callable(self, "_trigger_slow_mo")],
+		["show_feedback", Callable(self, "_show_feedback")],
+		["damage_dealt", Callable(self, "_on_damage_dealt")],
+		["hitstop", Callable(self, "_trigger_hitstop")],
+	]
+	for pair in signal_map:
+		var signal_name: String = str(pair[0])
+		var callback: Callable = pair[1] as Callable
+		if not _combat_system.is_connected(signal_name, callback):
+			_combat_system.connect(signal_name, callback)
 
 func _get_visual_for(fighter: Fighter) -> FighterVisual:
 	if fighter.is_ai:

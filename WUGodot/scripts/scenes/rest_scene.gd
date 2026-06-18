@@ -15,16 +15,16 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 	if not input.accept:
 		return
 	if choice_idx == 0:
-		ctx.player.health_current = minf(ctx.player.health_current + ctx.player.health_max * 0.4, ctx.player.health_max)
-		ctx.run_state.mark_current_node_cleared()
+		RestService.apply("heal", ctx.player, ctx.run_state)
 		ctx.goto(SceneContext.SCENE_MAP)
 	elif choice_idx == 1 and ctx.player.technique_engine != null and not ctx.player.technique_engine.technique_ids().is_empty():
+		RestService.apply("forget", ctx.player, ctx.run_state)
 		ctx.goto(SceneContext.SCENE_FORGET_TECHNIQUE)
-	elif choice_idx == 2 and ctx.run_state.upgrade_first_boon_with_insight():
-		ctx.run_state.mark_current_node_cleared()
+	elif choice_idx == 2:
+		RestService.apply("upgrade", ctx.player, ctx.run_state)
 		ctx.goto(SceneContext.SCENE_MAP)
 	else:
-		ctx.run_state.mark_current_node_cleared()
+		RestService.apply("unknown", ctx.player, ctx.run_state)
 		ctx.goto(SceneContext.SCENE_MAP)
 
 func draw(ctx: Variant, canvas: CanvasItem) -> void:

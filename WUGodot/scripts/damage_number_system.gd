@@ -7,6 +7,7 @@ var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 func _init(max_numbers: int = 50) -> void:
 	_max_numbers = max_numbers
+	# FX-only: out of deterministic-sim scope.
 	_rng.randomize()
 
 func spawn_damage_number(position: Vector2, damage: float, is_healing: bool = false, is_critical: bool = false) -> void:

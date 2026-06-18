@@ -3,6 +3,8 @@ extends RefCounted
 
 const TechniqueRegistryScript = preload("res://scripts/techniques/technique_registry.gd")
 const TechniqueEffectScript = preload("res://scripts/techniques/technique_effect.gd")
+const RngServiceScript = preload("res://scripts/sim/rng_service.gd")
+const ProcRecorderScript = preload("res://scripts/sim/proc_recorder.gd")
 
 var _technique_ids: Array[String] = []
 var _effects: Array = []
@@ -11,7 +13,7 @@ var _effect_state_archive: Dictionary = {}
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 func _init() -> void:
-	_rng.randomize()
+	_rng = RngServiceScript.stream("effects")
 
 func has(id: String) -> bool:
 	return _technique_ids.has(id)
@@ -122,26 +124,32 @@ func reset_combat_state(fighter: Fighter) -> void:
 func dispatch_outgoing_hit(ctx: Variant) -> void:
 	for effect in _effects:
 		effect.modify_outgoing_hit(ctx)
+		ProcRecorderScript.record_effect(str(effect.id))
 
 func dispatch_block(ctx: Variant) -> void:
 	for effect in _effects:
 		effect.modify_block(ctx)
+		ProcRecorderScript.record_effect(str(effect.id))
 
 func dispatch_post_hit(ctx: Variant) -> void:
 	for effect in _effects:
 		effect.post_hit(ctx)
+		ProcRecorderScript.record_effect(str(effect.id))
 
 func dispatch_jump(fighter: Variant) -> void:
 	for effect in _effects:
 		effect.on_jump(fighter)
+		ProcRecorderScript.record_effect(str(effect.id))
 
 func dispatch_land(fighter: Variant) -> void:
 	for effect in _effects:
 		effect.on_land(fighter)
+		ProcRecorderScript.record_effect(str(effect.id))
 
 func dispatch_aerial_hit(ctx: Variant) -> void:
 	for effect in _effects:
 		effect.modify_aerial_hit(ctx)
+		ProcRecorderScript.record_effect(str(effect.id))
 
 func dispatch_parry_success(fighter: Fighter) -> bool:
 	var handled := false
@@ -149,12 +157,14 @@ func dispatch_parry_success(fighter: Fighter) -> bool:
 		if effect.has_method("handles_parry_success") and effect.handles_parry_success():
 			handled = true
 		effect.on_parry_success(fighter)
+		ProcRecorderScript.record_effect(str(effect.id))
 	return handled
 
 func on_dash_end(fighter: Fighter = null, enemy: Fighter = null) -> Dictionary:
 	var merged: Dictionary = {}
 	for effect in _effects:
 		var result: Dictionary = effect.on_dash_end(fighter, enemy)
+		ProcRecorderScript.record_effect(str(effect.id))
 		for key in result.keys():
 			merged[key] = result[key]
 	return merged
@@ -162,26 +172,31 @@ func on_dash_end(fighter: Fighter = null, enemy: Fighter = null) -> Dictionary:
 func on_dash_through(fighter: Fighter = null) -> void:
 	for effect in _effects:
 		effect.on_dash_through(fighter)
+		ProcRecorderScript.record_effect(str(effect.id))
 
 func on_kill(fighter: Fighter) -> void:
 	for effect in _effects:
 		effect.on_kill(fighter)
+		ProcRecorderScript.record_effect(str(effect.id))
 
 func on_posture_break(fighter: Fighter) -> bool:
 	var before: float = fighter.health_current
 	for effect in _effects:
 		effect.on_posture_break_dealt(fighter)
+		ProcRecorderScript.record_effect(str(effect.id))
 	return fighter.health_current > before
 
 func check_lethal_save(fighter: Fighter) -> bool:
 	for effect in _effects:
 		if effect.try_lethal_save(fighter):
+			ProcRecorderScript.record_effect(str(effect.id))
 			return true
 	return false
 
 func roll_stagger() -> bool:
 	for effect in _effects:
 		if effect.roll_stagger(_rng):
+			ProcRecorderScript.record_effect(str(effect.id))
 			return true
 	return false
 

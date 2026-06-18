@@ -27,7 +27,7 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 		var item: Dictionary = items[selection_idx]
 		var result: Dictionary = {}
 		if str(item.get("type", "")) == "boon_upgrade":
-			result = _buy_boon_upgrade(ctx)
+			result = ShopGenerator.buy_boon_upgrade(ctx.run_state)
 		else:
 			result = ShopGenerator.buy_item(item, ctx.player)
 		ctx.notice_message = str(result.get("message", ""))
@@ -89,12 +89,3 @@ func _typed_items(source: Array) -> Array[Dictionary]:
 	for item in source:
 		typed.append((item as Dictionary).duplicate(true))
 	return typed
-
-func _buy_boon_upgrade(ctx: Variant) -> Dictionary:
-	if ctx.run_state.insight <= 0:
-		return {"success": false, "message": "Need 1 Insight."}
-	if ctx.run_state.first_upgradeable_boon_id().is_empty():
-		return {"success": false, "message": "No eligible boon to upgrade."}
-	if ctx.run_state.upgrade_first_boon_with_insight():
-		return {"success": true, "message": "Boon upgraded."}
-	return {"success": false, "message": "Could not upgrade boon."}

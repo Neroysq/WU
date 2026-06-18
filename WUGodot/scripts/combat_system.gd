@@ -4,6 +4,8 @@ extends RefCounted
 const AttackCatalogScript = preload("res://scripts/attack_catalog.gd")
 const AttackDefinitionScript = preload("res://scripts/attack_definition.gd")
 const TechniqueEffectScript = preload("res://scripts/techniques/technique_effect.gd")
+const RngServiceScript = preload("res://scripts/sim/rng_service.gd")
+const ProcRecorderScript = preload("res://scripts/sim/proc_recorder.gd")
 
 signal spawn_particles(position: Vector2, count: int, color: Color)
 signal camera_shake(amount: float)
@@ -16,7 +18,7 @@ var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var hit_geometry: Variant = null
 
 func _init() -> void:
-	_rng.randomize()
+	_rng = RngServiceScript.stream("combat")
 
 func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: Fighter = null) -> void:
 	var settings: Dictionary = DataManager.get_game_settings()
@@ -358,19 +360,23 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 		if ctx.bleed_timer > 0.0:
 			defender.bleed_timer = ctx.bleed_timer
 			defender.bleed_dps = ctx.bleed_dps
+			ProcRecorderScript.record_status("bleed")
 		if ctx.venom_stacks > 0:
 			defender.venom_stacks += ctx.venom_stacks
 			defender.venom_timer = maxf(defender.venom_timer, ctx.venom_timer)
 			defender.venom_dps = maxf(defender.venom_dps, ctx.venom_dps)
 			_apply_venom_slow(defender, ctx.venom_slow_multiplier)
+			ProcRecorderScript.record_status("venom", ctx.venom_stacks)
 		if ctx.consume_venom:
 			_clear_venom(defender)
 		if ctx.jolt_timer > 0.0:
 			defender.jolt_timer = maxf(defender.jolt_timer, ctx.jolt_timer)
+			ProcRecorderScript.record_status("jolt")
 		if ctx.consume_intent_marks:
 			defender.intent_marks = 0
 		if ctx.intent_marks > 0:
 			defender.intent_marks = mini(defender.intent_marks + ctx.intent_marks, ctx.intent_mark_cap)
+			ProcRecorderScript.record_status("intent_mark", ctx.intent_marks)
 		if defender.health_current <= 0.0 and defender.technique_engine != null:
 			if defender.technique_engine.check_lethal_save(defender):
 				emit_signal("camera_shake", 16.0)

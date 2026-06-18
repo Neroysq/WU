@@ -1,6 +1,8 @@
 class_name EventRunner
 extends RefCounted
 
+const RngServiceScript = preload("res://scripts/sim/rng_service.gd")
+
 var _event_data: Dictionary = {}
 var _resolved: bool = false
 
@@ -115,6 +117,5 @@ func _resolve_technique_grant(grant_type: String, fighter: Fighter) -> String:
 
 	if pool.is_empty():
 		return ""
-	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-	rng.randomize()
+	var rng: RandomNumberGenerator = RngServiceScript.stream("event")
 	return pool[rng.randi_range(0, pool.size() - 1)]
