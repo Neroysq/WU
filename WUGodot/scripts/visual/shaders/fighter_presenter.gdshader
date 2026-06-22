@@ -4,6 +4,8 @@ uniform float flash : hint_range(0.0, 1.0) = 0.0;
 uniform float smear : hint_range(0.0, 1.0) = 0.0;
 uniform vec2 smear_dir = vec2(1.0, 0.0);
 uniform float dissolve : hint_range(0.0, 1.0) = 1.0;
+uniform vec4 skin_tint : source_color = vec4(1.0, 1.0, 1.0, 1.0);
+uniform float skin_tint_weight : hint_range(0.0, 1.0) = 0.0;
 
 float bayer4(vec2 p) {
 	int x = int(mod(p.x, 4.0));
@@ -31,6 +33,7 @@ void fragment() {
 		}
 	}
 
+	col.rgb = mix(col.rgb, skin_tint.rgb, skin_tint_weight);
 	col.rgb = mix(col.rgb, vec3(1.0), flash);
 	COLOR = col * COLOR;
 }
