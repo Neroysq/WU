@@ -197,21 +197,18 @@ func update(fighter: Fighter, state_name: String, combat_dt: float, presentation
 	_mat_current.set_shader_parameter("smear_dir", Vector2(float(facing), 0.0))
 	_mat_current.set_shader_parameter("flash", _flash)
 	_mat_current.set_shader_parameter("dissolve", _dissolve_t)
+	_mat_current.set_shader_parameter("skin_tint_weight", 0.0)
+	_mat_previous.set_shader_parameter("skin_tint_weight", 0.0)
 	var tint_school: String = _recolor_school if not _recolor_school.is_empty() else _active_stance_school
 	if tint_school.is_empty():
-		_mat_current.set_shader_parameter("skin_tint_weight", 0.0)
-		_mat_previous.set_shader_parameter("skin_tint_weight", 0.0)
 		_sprite_current.modulate = Color.WHITE
 		_sprite_previous.modulate = Color.WHITE
 	else:
 		var skin_color: Color = Color.html(str(DataManager.get_school(tint_school).get("themeColor", "#ffffff")))
-		_mat_current.set_shader_parameter("skin_tint", skin_color)
-		_mat_current.set_shader_parameter("skin_tint_weight", SKIN_TINT_WEIGHT)
-		_mat_previous.set_shader_parameter("skin_tint", skin_color)
-		_mat_previous.set_shader_parameter("skin_tint_weight", SKIN_TINT_WEIGHT)
 		var modulated_tint: Color = Color.WHITE.lerp(skin_color, SKIN_TINT_WEIGHT)
-		_sprite_current.modulate = modulated_tint
-		_sprite_previous.modulate = modulated_tint
+		var flashed: Color = modulated_tint.lerp(Color.WHITE, _flash)
+		_sprite_current.modulate = flashed
+		_sprite_previous.modulate = flashed
 	_mat_previous.set_shader_parameter("smear", 0.0)
 	_mat_previous.set_shader_parameter("flash", 0.0)
 	_mat_previous.set_shader_parameter("dissolve", 1.0 - _dissolve_t)

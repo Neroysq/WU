@@ -81,14 +81,25 @@ func run_all() -> Dictionary:
 		failures.append("handles_state should remain true for skinnable states after skins are set")
 
 	var fighter: Fighter = EnemyFactory.create_player()
+	var venom_tint: Color = Color.WHITE.lerp(Color.html(str(DataManager.get_school("venom").get("themeColor", "#ffffff"))), 0.35)
+	presenter._flash = 0.0
 	presenter.update(fighter, "BLOCKING", 0.016, 0.016, Vector2.ZERO)
-	if presenter._sprite_current.modulate != Color.WHITE and presenter._sprite_previous.modulate == presenter._sprite_current.modulate:
+	if presenter._sprite_current.modulate.is_equal_approx(venom_tint) and presenter._sprite_previous.modulate.is_equal_approx(venom_tint) and float(presenter._mat_current.get_shader_parameter("skin_tint_weight")) == 0.0:
 		passed += 1
 	else:
 		failed += 1
-		failures.append("infused-unskinned states should apply the school tint to both presenter sprites")
+		failures.append("modulate should be the single active tint path for infused-unskinned states")
+
+	presenter._flash = 1.0
+	presenter.update(fighter, "BLOCKING", 0.016, 0.0, Vector2.ZERO)
+	if presenter._sprite_current.modulate.is_equal_approx(Color.WHITE) and presenter._sprite_previous.modulate.is_equal_approx(Color.WHITE) and float(presenter._mat_current.get_shader_parameter("skin_tint_weight")) == 0.0:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("flash should override modulate tint back to white, with shader skin tint disabled")
 
 	presenter.set_active_stance_school("")
+	presenter._flash = 0.0
 	presenter.update(fighter, "IDLE", 0.016, 0.016, Vector2.ZERO)
 	if presenter._sprite_current.modulate == Color.WHITE and presenter._sprite_previous.modulate == Color.WHITE:
 		passed += 1
