@@ -1,0 +1,47 @@
+{
+  "id": "venom_hu_attack_heavy",
+  "duration": "fromAttackDef",
+  "keyposes": [
+    { "t": 0.000, "pose": "vh_001" },
+    { "t": 0.027, "pose": "vh_004" },
+    { "t": 0.054, "pose": "vh_007" },
+    { "t": 0.080, "pose": "vh_010" },
+    { "t": 0.107, "pose": "vh_013" },
+    { "t": 0.134, "pose": "vh_016" },
+    { "t": 0.161, "pose": "vh_019" },
+    { "t": 0.187, "pose": "vh_022" },
+    { "t": 0.214, "pose": "vh_025" },
+    { "t": 0.241, "pose": "vh_028" },
+    { "t": 0.268, "pose": "vh_031" },
+    { "t": 0.294, "pose": "vh_034" },
+    { "t": 0.321, "pose": "vh_037" },
+    { "t": 0.348, "pose": "vh_040" },
+    { "t": 0.375, "pose": "vh_043" },
+    { "t": 0.401, "pose": "vh_046" },
+    { "t": 0.428, "pose": "vh_049" },
+    { "t": 0.455, "pose": "vh_052" },
+    { "t": "windup_end", "pose": "vh_058" },
+    { "t": 0.515, "pose": "vh_064" },
+    { "t": 0.560, "pose": "vh_070" },
+    { "t": 0.600, "pose": "vh_073" },
+    { "t": 0.630, "pose": "vh_076" },
+    { "t": "active_end", "pose": "vh_080" },
+    { "t": 0.700, "pose": "vh_084" },
+    { "t": 0.760, "pose": "vh_088" },
+    { "t": 0.820, "pose": "vh_091" },
+    { "t": 0.890, "pose": "vh_094" },
+    { "t": 0.950, "pose": "vh_096" },
+    { "t": 1.000, "pose": "vh_097" }
+  ],
+  "tracks": {
+    "smear": [
+      { "t": 0.47, "v": 0.25 },
+      { "t": 0.50, "v": 1.0 },
+      { "t": 0.65, "v": 0.0 }
+    ]
+  },
+  "events": [
+    { "t": "windup_end", "event": "attack_active_start" },
+    { "t": "active_end", "event": "attack_active_end" }
+  ]
+}
