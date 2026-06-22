@@ -195,4 +195,31 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("run-state serialization should carry insight")
 
+	var skin_loadout: Variant = BoonLoadoutScript.new()
+	skin_loadout.add_boon("venom_light", "common")
+	skin_loadout.add_boon("venom_dash", "common")
+	var slot_schools: Dictionary = skin_loadout.move_slot_schools()
+	if str(slot_schools.get("light", "")) == "venom" and str(slot_schools.get("dash", "")) == "venom" and not slot_schools.has("heavy"):
+		passed += 1
+	else:
+		failed += 1
+		failures.append("move_slot_schools should map only infused slots to their school")
+
+	var skin_engine: Variant = TechniqueEngineScript.new()
+	var skin_fighter: Variant = FighterScript.new()
+	var bound_loadout: Variant = BoonLoadoutScript.new(skin_engine, skin_fighter)
+	bound_loadout.add_boon("venom_light", "common")
+	var first_effect_id: String = ""
+	for record in bound_loadout._all_records():
+		for installed_effect in record.get("effects", []) as Array:
+			first_effect_id = str(installed_effect.id)
+			break
+		if not first_effect_id.is_empty():
+			break
+	if not first_effect_id.is_empty() and bound_loadout.school_for_effect_id(first_effect_id) == "venom" and bound_loadout.school_for_effect_id("nope#9") == "":
+		passed += 1
+	else:
+		failed += 1
+		failures.append("school_for_effect_id should resolve installed effect ids to their boon school")
+
 	return {"passed": passed, "failed": failed, "failures": failures}

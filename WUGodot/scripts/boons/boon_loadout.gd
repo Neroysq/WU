@@ -99,6 +99,22 @@ func school_boon_count(school_id: String) -> int:
 			count += 1
 	return count
 
+func move_slot_schools() -> Dictionary:
+	var out: Dictionary = {}
+	for slot in slots.keys():
+		var boon: Dictionary = (slots[slot] as Dictionary).get("boon", {}) as Dictionary
+		out[str(slot)] = str(boon.get("school", ""))
+	return out
+
+func school_for_effect_id(effect_id: String) -> String:
+	if effect_id.is_empty():
+		return ""
+	for record in _all_records():
+		for effect in record.get("effects", []) as Array:
+			if effect != null and str(effect.id) == effect_id:
+				return str((record.get("boon", {}) as Dictionary).get("school", ""))
+	return ""
+
 func serialize() -> Dictionary:
 	var slot_data: Dictionary = {}
 	for slot in slots.keys():
