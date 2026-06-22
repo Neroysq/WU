@@ -46,6 +46,7 @@ const _TEST_MODULES: Array[String] = [
 	"res://tests/test_anchor_measure.gd",
 	"res://tests/test_animation_clip_timeline.gd",
 	"res://tests/test_animation_graph.gd",
+	"res://tests/test_move_skin_resolver.gd",
 	"res://tests/test_presenter_offset.gd",
 	"res://tests/test_presenter_bounds.gd",
 	"res://tests/test_strike_pose_rule.gd",
