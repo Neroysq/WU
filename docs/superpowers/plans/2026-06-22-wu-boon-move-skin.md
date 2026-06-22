@@ -415,6 +415,30 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("an infused-unskinned move state should recolor with its own school over the stance tint")
 
+	# handles_state stays true for skinnable states after set_move_skins (base clip always present).
+	if presenter.handles_state("ATTACKING_LIGHT") and presenter.handles_state("DASHING"):
+		passed += 1
+	else:
+		failed += 1
+		failures.append("handles_state should remain true for skinnable states after skins are set")
+
+	# Reconfigure (next combat) must reset all skin caches so stale skins/poses don't leak.
+	var reconfigured: Variant = _configured_presenter()  # was venom-skinned above via a different instance
+	reconfigured.set_move_skins({"light": "venom"})
+	reconfigured.configure(  # simulate combat 2 starting fresh
+		"res://assets/animation_manifests/hu.manifest.json",
+		"res://assets/animation_graphs/humanoid.graph.json",
+		["res://assets/animation_clips/hu_attack_light.timeline.json", "res://assets/animation_clips/idle.timeline.json"],
+		1.625
+	)
+	# After reconfigure with no skins set, the light slot must resolve to the BASE clip, no recolor.
+	reconfigured.set_move_skins({})
+	if reconfigured.resolve_state_clip_id("ATTACKING_LIGHT") == "hu_attack_light" and reconfigured.recolor_school_for("ATTACKING_LIGHT") == "" and reconfigured.active_tint_school_for("IDLE") == "":
+		passed += 1
+	else:
+		failed += 1
+		failures.append("configure() must reset skin caches (variant_ids/slot_school_map/loaded_skin_schools/stance/recolor)")
+
 	return {"passed": passed, "failed": failed, "failures": failures}
 ```
 
@@ -502,7 +526,17 @@ func _load_skin_manifest(school: String) -> void:
 
 Note: `AnimationManifestScript` must be preloaded — confirm/add at top: `const AnimationManifestScript = preload("res://scripts/visual/animation_manifest.gd")`.
 
-- [ ] **Step 6: Implement — route clip selection through the resolver** — in `_maybe_change_state`, replace:
+- [ ] **Step 6: Implement — reset skin caches in `configure()`** — `configure()` reloads a fresh base manifest and clears `_clips` every combat (`fighter_presenter.gd:35`). The skin caches must reset there too, or combat 2 will skip merging an overlay manifest (`_loaded_skin_schools` still set) while its poses are gone from the fresh `_manifest`. In `configure()`, alongside the existing resets (`_state = ""`, `_clip = null`, …), add:
+
+```gdscript
+	_slot_school_map.clear()
+	_variant_ids.clear()
+	_loaded_skin_schools.clear()
+	_active_stance_school = ""
+	_recolor_school = ""
+```
+
+- [ ] **Step 7: Implement — route clip selection through the resolver** — in `_maybe_change_state`, replace:
 
 ```gdscript
 	_clip = _clips.get(_graph.clip_for(state_name), null) if _graph != null else null
@@ -515,7 +549,7 @@ with:
 	_recolor_school = recolor_school_for(state_name) if _graph != null else ""
 ```
 
-- [ ] **Step 7: Implement — apply the tint each frame** — in `update`, in the shader-parameter block, after the `_mat_current.set_shader_parameter("flash", _flash)` line add:
+- [ ] **Step 8: Implement — apply the tint each frame** — in `update`, in the shader-parameter block, after the `_mat_current.set_shader_parameter("flash", _flash)` line add:
 
 ```gdscript
 	var tint_school: String = _recolor_school if not _recolor_school.is_empty() else _active_stance_school
@@ -527,16 +561,16 @@ with:
 		_mat_current.set_shader_parameter("skin_tint_weight", SKIN_TINT_WEIGHT)
 ```
 
-- [ ] **Step 8: Run the test to verify it passes**
+- [ ] **Step 9: Run the test to verify it passes**
 
 Run: `./run.sh --test`
 Expected: PASS — `failed: 0` (including `test_move_skin_presenter` and the unchanged `test_presenter_bounds`/`test_presenter_offset`).
 
-- [ ] **Step 9: Commit**
+- [ ] **Step 10: Commit**
 
 ```bash
 git add WUGodot/scripts/visual/fighter_presenter.gd WUGodot/tests/test_move_skin_presenter.gd WUGodot/tests/run_tests.gd
-git commit -m "feat(visual): presenter move-skin routing + recolor/stance tint"
+git commit -m "feat(visual): presenter move-skin routing + recolor/stance tint + configure reset"
 ```
 
 ---
@@ -593,17 +627,30 @@ At the start of `setup_combat` body (right after `_player = player`), add:
 
 (Match the exact existing argument list at the call site; only add the trailing `_ctx.run_state.boon_loadout`.)
 
-- [ ] **Step 5: Find and check any other setup_combat callers**
+- [ ] **Step 5: Update the capture callers** — `_prepare_capture_matchup` and `_prepare_capture_character` in `main.gd` already call `_apply_capture_build(spec)` (which installs the spec's `build` boons onto `_ctx.run_state.boon_loadout`) **before** `setup_combat`, but they omit the loadout arg — so a `build` with `venom_light` would still render with no skins. In both functions, change:
+
+```gdscript
+	_combat_scene.setup_combat(_ctx.player, node, false, archetype)
+```
+(and the `_prepare_capture_character` variant `_combat_scene.setup_combat(_ctx.player, node, false, _capture_archetype(spec))`)
+
+to pass the loadout:
+
+```gdscript
+	_combat_scene.setup_combat(_ctx.player, node, false, archetype, _ctx.run_state.boon_loadout)
+```
+
+- [ ] **Step 6: Find and check any other setup_combat callers**
 
 Run: `grep -rn "setup_combat(" WUGodot/scripts WUGodot/tests`
-Expected: confirm every caller still compiles. Callers that lack a loadout (e.g. any dev/capture path) are safe — the param defaults to `null` (no skins). Only update a caller if it has a `run_state.boon_loadout` available and should show skins; otherwise leave it.
+Expected: confirm every caller still compiles. Callers that lack a loadout are safe — the param defaults to `null` (no skins). Only update a caller if it has a `run_state.boon_loadout` available and should show skins; otherwise leave it.
 
-- [ ] **Step 6: Verify no regressions**
+- [ ] **Step 7: Verify no regressions**
 
 Run: `./run.sh --import && ./run.sh --test`
 Expected: import clean; `failed: 0`.
 
-- [ ] **Step 7: Commit**
+- [ ] **Step 8: Commit**
 
 ```bash
 git add WUGodot/scripts/combat_scene.gd WUGodot/scripts/main.gd
@@ -612,50 +659,69 @@ git commit -m "feat(combat): wire boon loadout -> presenter move-skins + stance 
 
 ---
 
-## Task 7: Harness visual-capture check (system proof)
+## Task 7: Harness visual-capture smoke (end-to-end render proof)
 
 **Files:**
-- Modify: `WUGodot/scripts/main.gd` (capture path) — only if needed to equip a boon before capture
-- Reference: existing capture infra (`--capture`, `tools/assert_nonblank.py` per the playtest-harness work)
+- Modify: `WUGodot/scripts/combat_scene.gd` (add a capture-mode assertion print)
+- Reference: capture infra — `./run.sh --capture spec.json [out]` → `main.gd:_run_dev_capture` (reads a JSON spec via `--capture-spec`), `tools/assert_nonblank.py`
 
-Goal: prove through the **real renderer** that a Venom-equipped light attack renders non-blank and deterministically. (Visual *difference* from base becomes meaningful once Phase B real art lands; with placeholder clips the swap is already proven by Task 5's unit test.)
+**What this proves and doesn't:** the move-skin *clip swap* is already unit-proven in Task 5 (`resolve_state_clip_id("ATTACKING_LIGHT") == "venom_hu_attack_light"`). This task proves the **real renderer** runs the skinned path end-to-end: non-blank + deterministic, with an in-engine assertion that the player presenter actually selected the Venom variant during capture. With placeholder clips (exact base copies, Task 4), the PNG can look identical to base — so a **visual diff vs base is NOT asserted here**; that gate moves to Task 8 once real art lands. (The capture goes through the loadout because Task 6 Step 5 now passes the loadout into the capture callers, and `_apply_capture_build` installs the spec's `build` boons.)
 
-- [ ] **Step 1: Determine the capture entry point**
-
-Run: `grep -rn "capture\|_ACTION_CAPTURE\|assert_nonblank" WUGodot/scripts/main.gd tools/`
-Expected: identify how a single action frame is captured today (the non-headless `--capture` path through `main.gd` that was implemented for the harness).
-
-- [ ] **Step 2: Equip the Venom light boon before the light capture** — in the capture setup in `main.gd`, before the player performs the captured light attack, install the boon onto the run/loadout so the presenter skins it:
+- [ ] **Step 1: Add a capture-mode clip-swap assertion** — in `combat_scene.gd`, at the end of `dev_prepare_capture_state(state_name)`, after the player's state is set, print the resolved player clip id so the capture run self-verifies the skin path:
 
 ```gdscript
-	# capture-only: ensure the light slot is venom-infused so the move-skin path is exercised
-	if _ctx != null and _ctx.run_state != null:
-		_ctx.run_state.boon_loadout.add_boon("venom_light", "common")
+	if _player_presenter != null:
+		var resolved_id: String = _player_presenter.resolve_state_clip_id(_resolve_player_state_name())
+		print("CAPTURE CLIP: state=%s clip=%s" % [_resolve_player_state_name(), resolved_id])
 ```
 
-(Place this where the capture path builds `_ctx`/`run_state`, before `setup_combat`; gate it behind the existing capture-mode flag so normal play is unaffected.)
+- [ ] **Step 2: Write a capture spec with a Venom build** — create `/tmp/venom_light_spec.json`:
 
-- [ ] **Step 3: Capture and assert non-blank**
+```json
+{
+  "kind": "matchup",
+  "archetype": "bandit_swordsman",
+  "state": "04_light_active",
+  "build": [{"boon_id": "venom_light", "tier": "common"}]
+}
+```
 
-Run the existing capture command for the light action (match the flag used by the harness, e.g.):
-`./run.sh --capture --capture-spec=ATTACKING_LIGHT --out /tmp/venom_light.png`
-then `python3 tools/assert_nonblank.py /tmp/venom_light.png`
-Expected: capture succeeds and the asserter reports the PNG is non-blank.
+(Confirm the `build` field shape against `_apply_capture_build` in `main.gd`; adjust to its expected keys if they differ — it is the same build format the existing matchup/character captures already accept.)
+
+- [ ] **Step 3: Capture and assert non-blank + clip swap**
+
+Run: `./run.sh --capture /tmp/venom_light_spec.json /tmp/venom_light.png`
+Expected stdout includes `CAPTURE CLIP: state=ATTACKING_LIGHT clip=venom_hu_attack_light` (proves the renderer used the skin path).
+Then: `python3 tools/assert_nonblank.py /tmp/venom_light.png`
+Expected: reports the PNG is non-blank.
 
 - [ ] **Step 4: Confirm determinism**
 
-Run the same capture twice to two files and compare:
-`cmp /tmp/venom_light_a.png /tmp/venom_light_b.png`
-Expected: identical (no diff) — capture is deterministic.
+Run the capture twice to two files and compare:
+`./run.sh --capture /tmp/venom_light_spec.json /tmp/a.png && ./run.sh --capture /tmp/venom_light_spec.json /tmp/b.png && cmp /tmp/a.png /tmp/b.png`
+Expected: identical (no diff).
 
-- [ ] **Step 5: Commit**
+- [ ] **Step 5: Capture the recolor fallback (visible-tint proof)** — to prove the tint path renders visibly (since placeholder variants look like base), capture an **infused-but-unskinned** slot. Pick any non-Venom school light boon that exists in `data/Boons/Boons.json` (run `grep -n '"slot": "light"' WUGodot/data/Boons/Boons.json` and pick a non-venom one, e.g. a thunder/sword light); it has no variant clip, so the resolver flags a recolor. Spec `/tmp/recolor_spec.json`:
 
-```bash
-git add WUGodot/scripts/main.gd
-git commit -m "test(visual): capture venom-equipped light attack (non-blank, deterministic)"
+```json
+{
+  "kind": "matchup",
+  "archetype": "bandit_swordsman",
+  "state": "04_light_active",
+  "build": [{"boon_id": "<non_venom_light_boon_id>", "tier": "common"}]
+}
 ```
 
-> **✋ STOP — report capture results to the user** (PNG path + assert output) before proceeding. This is the first end-to-end visual proof; the user reviews it.
+Run: `./run.sh --capture /tmp/recolor_spec.json /tmp/recolor_light.png` then `cmp /tmp/recolor_light.png /tmp/base_light.png` (capture a no-build base light first). Expected: the recolored capture **differs** from base (tint is visible). `CAPTURE CLIP` line should show the **base** clip id (no variant), confirming this is the recolor path, not a variant swap.
+
+- [ ] **Step 6: Commit**
+
+```bash
+git add WUGodot/scripts/combat_scene.gd
+git commit -m "test(visual): capture-mode clip-swap assertion for move skins"
+```
+
+> **✋ STOP — report capture results to the user** (PNG paths, `CAPTURE CLIP` lines, assert/cmp output) before proceeding. First end-to-end visual proof; the user reviews it.
 
 ---
 
@@ -689,7 +755,9 @@ This task is the **art-generation workflow**, not autonomous coding. Each clip f
 - §4 timing via `duration:"fromAttackDef"` (no new system) → preserved; Venom attack variants keep the flag (Task 4 copy; Task 8 retains it).
 - §5 Venom slice light/heavy/dash, order → Task 4 (placeholders) + Task 8 (art).
 - §6 recolor fallback for un-arted infused slots → resolver `recolor_school` + Task 5/7.
-- §7 structure tests → Tasks 1/2/5; harness capture → Task 7; readability (flash over tint) → Task 3.
+- §7 structure tests → Tasks 1/2/5 (incl. reconfigure cache-reset + handles_state cases); harness capture (non-blank, deterministic, clip-swap assertion, recolor-tint diff) → Task 7; readability (flash over tint) → Task 3.
+- Per-combat reconfigure safety (skin caches reset in `configure()`) → Task 5 Step 6 + reconfigure test.
+- All `setup_combat` callers threaded (live + matchup + character capture) → Task 6 Steps 4–6.
 - §8 out of scope (other schools, block/stance/jump Venom, duo/mastery, enemy skins, idle/walk) → not implemented; resolver naturally falls back.
 - Player-only → enemies render via `FighterVisual`, never get `set_move_skins`; confirmed (only `_player_presenter` is skinned).
 
