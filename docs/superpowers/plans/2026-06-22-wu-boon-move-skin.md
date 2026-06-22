@@ -428,6 +428,7 @@ func run_all() -> Dictionary:
 	var reconfigured: Variant = _configured_presenter()
 	reconfigured.set_move_skins({"light": "venom"})
 	reconfigured.set_active_stance_school("thunder")
+	reconfigured._recolor_school = "venom"  # seed non-empty so the reset assertion is airtight
 	reconfigured.configure(  # simulate combat 2 starting fresh
 		"res://assets/animation_manifests/hu.manifest.json",
 		"res://assets/animation_graphs/humanoid.graph.json",
