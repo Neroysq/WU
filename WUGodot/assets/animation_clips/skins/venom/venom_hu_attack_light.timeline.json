@@ -3,35 +3,155 @@
   "duration": "fromAttackDef",
   "useFighterOffset": true,
   "keyposes": [
-    { "t": 0.00, "pose": "venom_light_windup_start" },
-    { "t": "windup_end", "pose": "venom_light_windup_peak" },
-    { "t": 0.42, "pose": "venom_light_active" },
-    { "t": "active_end", "pose": "venom_light_active_end" },
-    { "t": 0.80, "pose": "venom_light_recovery" }
+    {
+      "t": 0.0,
+      "pose": "venom_light_001"
+    },
+    {
+      "t": 0.036,
+      "pose": "venom_light_002"
+    },
+    {
+      "t": 0.072,
+      "pose": "venom_light_003"
+    },
+    {
+      "t": 0.108,
+      "pose": "venom_light_004"
+    },
+    {
+      "t": 0.144,
+      "pose": "venom_light_005"
+    },
+    {
+      "t": 0.18,
+      "pose": "venom_light_006"
+    },
+    {
+      "t": 0.216,
+      "pose": "venom_light_007"
+    },
+    {
+      "t": 0.252,
+      "pose": "venom_light_008"
+    },
+    {
+      "t": 0.288,
+      "pose": "venom_light_009"
+    },
+    {
+      "t": 0.324,
+      "pose": "venom_light_010"
+    },
+    {
+      "t": "windup_end",
+      "pose": "venom_light_011"
+    },
+    {
+      "t": 0.387,
+      "pose": "venom_light_012"
+    },
+    {
+      "t": 0.413,
+      "pose": "venom_light_013"
+    },
+    {
+      "t": 0.44,
+      "pose": "venom_light_014"
+    },
+    {
+      "t": 0.467,
+      "pose": "venom_light_015"
+    },
+    {
+      "t": 0.493,
+      "pose": "venom_light_016"
+    },
+    {
+      "t": 0.52,
+      "pose": "venom_light_017"
+    },
+    {
+      "t": 0.547,
+      "pose": "venom_light_018"
+    },
+    {
+      "t": 0.573,
+      "pose": "venom_light_019"
+    },
+    {
+      "t": "active_end",
+      "pose": "venom_light_020"
+    },
+    {
+      "t": 0.636,
+      "pose": "venom_light_021"
+    },
+    {
+      "t": 0.673,
+      "pose": "venom_light_022"
+    },
+    {
+      "t": 0.709,
+      "pose": "venom_light_023"
+    },
+    {
+      "t": 0.745,
+      "pose": "venom_light_024"
+    },
+    {
+      "t": 0.782,
+      "pose": "venom_light_025"
+    },
+    {
+      "t": 0.818,
+      "pose": "venom_light_026"
+    },
+    {
+      "t": 0.855,
+      "pose": "venom_light_027"
+    },
+    {
+      "t": 0.891,
+      "pose": "venom_light_028"
+    },
+    {
+      "t": 0.927,
+      "pose": "venom_light_029"
+    },
+    {
+      "t": 0.964,
+      "pose": "venom_light_030"
+    },
+    {
+      "t": 1.0,
+      "pose": "venom_light_031"
+    }
   ],
   "tracks": {
-    "scaleX": [
-      { "t": 0.00, "v": 0.875 },
-      { "t": 0.36, "v": 0.910 },
-      { "t": 0.42, "v": 1.023 },
-      { "t": 0.60, "v": 0.845 },
-      { "t": 0.80, "v": 0.970 }
-    ],
-    "scaleY": [
-      { "t": 0.00, "v": 0.875 },
-      { "t": 0.36, "v": 0.910 },
-      { "t": 0.42, "v": 1.023 },
-      { "t": 0.60, "v": 0.845 },
-      { "t": 0.80, "v": 0.970 }
-    ],
     "smear": [
-      { "t": 0.38, "v": 0.0 },
-      { "t": 0.46, "v": 1.0 },
-      { "t": 0.64, "v": 0.0 }
+      {
+        "t": 0.34,
+        "v": 0.0
+      },
+      {
+        "t": 0.45,
+        "v": 1.0
+      },
+      {
+        "t": 0.58,
+        "v": 0.0
+      }
     ]
   },
   "events": [
-    { "t": "windup_end", "event": "attack_active_start" },
-    { "t": "active_end", "event": "attack_active_end" }
+    {
+      "t": "windup_end",
+      "event": "attack_active_start"
+    },
+    {
+      "t": "active_end",
+      "event": "attack_active_end"
+    }
   ]
 }
