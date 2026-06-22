@@ -744,6 +744,49 @@ git commit -m "test(visual): capture-mode clip-swap assertion for move skins"
 
 ---
 
+## Task 7.5: Fix the tint path (single source, flash priority) — REQUIRED before Task 8
+
+**Why:** Task 7 added `Sprite2D.modulate` as a renderer-visible tint *in addition to* the shader `skin_tint`. The shader applies tint **under** flash (correct), but `modulate` multiplies the final color **after** the shader, so (a) a teaching flash is no longer pure white (it gets school-tinted) and (b) in normal gameplay both paths apply → **double tint** stronger than `SKIN_TINT_WEIGHT`. The spec requires flash to always win and a single, predictable tint weight. The shader (`fighter_presenter.gdshader`) and material bindings read as correct, so the "shader didn't visibly apply" report must be root-caused, not worked around.
+
+- [ ] **Step 1: Root-cause whether the shader path renders (systematic-debugging Phase 1)** — temporarily force the shader tint to an unmistakable value and capture:
+
+In `update`, in the tint branch, set `_mat_current.set_shader_parameter("skin_tint", Color(1,0,1,1))` and `skin_tint_weight` to `1.0` (full magenta), and **comment out** the `_sprite_current.modulate = …` lines. Then run a venom-light capture:
+`./run.sh --capture /tmp/venom_light_spec.json /tmp/probe.png`
+- If `/tmp/probe.png` is magenta → the shader path **works**; the earlier failure was perceptual (0.35 blue on blue Hu). Go to Step 2A.
+- If it is NOT magenta → the shader path genuinely does not reach this sprite in the rendered/capture pass. Go to Step 2B. Record which branch in the commit message.
+
+- [ ] **Step 2A: Keep shader-only; remove modulate** — revert the magenta probe. Delete all four `_sprite_*.modulate = …` tint lines added in Task 7 (keep the `configure()` reset to `Color.WHITE` for safety). The shader already preserves flash priority by construction. If the tint reads too weakly in-game, raise `SKIN_TINT_WEIGHT` (try `0.5`) rather than re-adding modulate. This is the preferred outcome.
+
+- [ ] **Step 2B: Keep modulate-only; preserve flash** — if the shader truly can't render the tint: **remove** the `_mat_current/_mat_previous.set_shader_parameter("skin_tint"/"skin_tint_weight", …)` sets (avoid the dead double-path), and make modulate fold flash in so flash still wins:
+
+```gdscript
+		var modulated_tint: Color = Color.WHITE.lerp(skin_color, SKIN_TINT_WEIGHT)
+		# flash must override the tint: as _flash -> 1, modulate -> white
+		var flashed: Color = modulated_tint.lerp(Color.WHITE, _flash)
+		_sprite_current.modulate = flashed
+		_sprite_previous.modulate = flashed
+```
+
+- [ ] **Step 3: Test — single path + flash priority** — in `test_move_skin_presenter.gd`, replace the modulate assertions with assertions that match the chosen branch:
+  - **2A:** assert the chosen tint path is the shader only — e.g. after `update` on an infused-unskinned `BLOCKING`, `presenter._sprite_current.modulate == Color.WHITE` (no modulate tint) AND `presenter._mat_current.get_shader_parameter("skin_tint_weight") > 0.0`.
+  - **2B:** drive `_flash` high before the tint computation (set `presenter._flash = 1.0` then `update(...)`) and assert `presenter._sprite_current.modulate.is_equal_approx(Color.WHITE)` (flash wins), and with `_flash = 0.0` assert modulate is the tinted color. Also assert `presenter._mat_current.get_shader_parameter("skin_tint_weight") == 0.0` (no double path).
+
+Run: `./run.sh --test`
+Expected: PASS — `failed: 0`.
+
+- [ ] **Step 4: Re-verify the captures** — rerun the Task 7 captures (venom clip-swap, determinism, thunder recolor diff) and confirm the recolor capture still differs from base (`cmp` exit 1) with the single tint path.
+
+- [ ] **Step 5: Commit**
+
+```bash
+git add WUGodot/scripts/visual/fighter_presenter.gd WUGodot/tests/test_move_skin_presenter.gd
+git commit -m "fix(visual): single tint path with flash priority (root-caused shader render)"
+```
+
+> **✋ STOP — report the Step 1 branch (2A or 2B) and the re-verified captures to the user** before starting Task 8.
+
+---
+
 ## Task 8: Venom slice art via the animation gate (content; user-gated)
 
 **Files:**
