@@ -189,7 +189,7 @@ func _setup_combat_for_node(node: MapNode) -> void:
 		_ctx.run_state.legend_seen_this_run = true
 	var wave: int = EncounterResolverScript.wave_index_for_node(_ctx.run_state, node)
 	var encounter: Dictionary = EncounterResolverScript.begin_encounter(_ctx.run_state, node, wave)
-	_combat_scene.setup_combat(_ctx.player, node, show_controls_legend, str(encounter.get("archetype", "")))
+	_combat_scene.setup_combat(_ctx.player, node, show_controls_legend, str(encounter.get("archetype", "")), _ctx.run_state.boon_loadout)
 	_combat_scene.on_enter()
 	_current_scene = SceneContext.SCENE_COMBAT
 	_ctx.current_scene = SceneContext.SCENE_COMBAT
@@ -361,7 +361,7 @@ func _prepare_capture_matchup(spec: Dictionary) -> bool:
 	_apply_capture_build(spec)
 	var node: MapNode = _capture_node(spec)
 	var archetype: String = _capture_archetype(spec)
-	_combat_scene.setup_combat(_ctx.player, node, false, archetype)
+	_combat_scene.setup_combat(_ctx.player, node, false, archetype, _ctx.run_state.boon_loadout)
 	_combat_scene.on_enter()
 	_combat_scene.dev_set_capture_mode(true)
 	_combat_scene.dev_set_capture_playback(false)
@@ -374,7 +374,7 @@ func _prepare_capture_character(spec: Dictionary) -> bool:
 	_prepare_capture_context(spec)
 	_apply_capture_build(spec)
 	var node: MapNode = _capture_node(spec)
-	_combat_scene.setup_combat(_ctx.player, node, false, _capture_archetype(spec))
+	_combat_scene.setup_combat(_ctx.player, node, false, _capture_archetype(spec), _ctx.run_state.boon_loadout)
 	_combat_scene.on_enter()
 	_combat_scene.dev_set_capture_mode(true)
 	_combat_scene.dev_set_capture_overlays(false, false, false)

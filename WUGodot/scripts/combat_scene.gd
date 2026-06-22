@@ -21,6 +21,7 @@ signal combat_end(victory: bool)
 var _player: Fighter
 var _enemy: Fighter
 var _current_node: MapNode
+var _boon_loadout: Variant = null
 
 var _combat_system: CombatSystem
 var _particle_system: ParticleSystem
@@ -84,9 +85,10 @@ func _ready() -> void:
 	set_process(false)
 	visible = false
 
-func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = false, forced_archetype: String = "") -> void:
+func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = false, forced_archetype: String = "", boon_loadout: Variant = null) -> void:
 	_player = player
 	_current_node = node
+	_boon_loadout = boon_loadout
 	var setup: Dictionary = CombatSetupScript.prepare(player, node, forced_archetype)
 	_enemy = setup["enemy"] as Fighter
 	_combat_system = setup["combat_system"] as CombatSystem
@@ -115,6 +117,10 @@ func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = f
 		],
 		float(DataManager.get_visual_profile(_player.visual_profile_id).get("scale", 1.625))
 	)
+	if _boon_loadout != null:
+		_player_presenter.set_move_skins(_boon_loadout.move_slot_schools())
+	else:
+		_player_presenter.set_move_skins({})
 	var presenter_callback: Callable = Callable(self, "_on_player_timeline_event")
 	if not _player_presenter.is_connected("timeline_event", presenter_callback):
 		_player_presenter.connect("timeline_event", presenter_callback)
@@ -580,6 +586,10 @@ func _update_player_presenter(combat_dt: float, presentation_dt: float) -> void:
 	var state_name: String = _resolve_player_state_name()
 	if _entry_presenter_active:
 		state_name = ENTRY_DRAW_STATE
+	var stance_school: String = ""
+	if _boon_loadout != null and _player.technique_engine != null and _player.technique_engine.is_stance_active():
+		stance_school = _boon_loadout.school_for_effect_id(_player.technique_engine.active_stance())
+	_player_presenter.set_active_stance_school(stance_school)
 	if _player_presenter.handles_state(state_name):
 		_player_presenter.visible = true
 		_player_presenter.update(_player, state_name, combat_dt, presentation_dt, _camera.offset)
