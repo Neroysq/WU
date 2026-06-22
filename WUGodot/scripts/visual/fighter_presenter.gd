@@ -4,8 +4,10 @@ extends Node2D
 const AnimationManifestScript = preload("res://scripts/visual/animation_manifest.gd")
 const AnimationGraphScript = preload("res://scripts/visual/animation_graph.gd")
 const TimelineScript = preload("res://scripts/visual/animation_clip_timeline.gd")
+const MoveSkinResolverScript = preload("res://scripts/visual/move_skin_resolver.gd")
 
 const FLASH_DECAY: float = 0.08
+const SKIN_TINT_WEIGHT: float = 0.35
 
 var _catalog: AssetCatalog
 var _manifest: Variant = null
@@ -26,6 +28,11 @@ var _prev_norm_t: float = 0.0
 var _dissolve_t: float = 1.0
 var _dissolve_time: float = 0.08
 var _flash: float = 0.0
+var _slot_school_map: Dictionary = {}
+var _variant_ids: Dictionary = {}
+var _loaded_skin_schools: Dictionary = {}
+var _active_stance_school: String = ""
+var _recolor_school: String = ""
 
 signal timeline_event(event_name: String)
 
@@ -47,6 +54,11 @@ func configure(manifest_path: String, graph_path: String, clip_paths: Array, ren
 	_prev_norm_t = 0.0
 	_dissolve_t = 1.0
 	_flash = 0.0
+	_slot_school_map.clear()
+	_variant_ids.clear()
+	_loaded_skin_schools.clear()
+	_active_stance_school = ""
+	_recolor_school = ""
 
 	_ensure_nodes()
 	_sprite_current.texture = null
@@ -60,6 +72,33 @@ func handles_state(state_name: String) -> bool:
 
 func current_norm_t() -> float:
 	return _norm_t
+
+func set_move_skins(slot_school_map: Dictionary) -> void:
+	_slot_school_map = slot_school_map.duplicate(true)
+	for slot in _slot_school_map.keys():
+		var school: String = str(_slot_school_map[slot])
+		if school.is_empty():
+			continue
+		_load_skin_manifest(school)
+		for state_name in MoveSkinResolverScript.STATE_SLOT.keys():
+			if str(MoveSkinResolverScript.STATE_SLOT[state_name]) != str(slot):
+				continue
+			_load_variant_clip(school, str(state_name))
+
+func set_active_stance_school(school: String) -> void:
+	_active_stance_school = school
+
+func resolve_state_clip_id(state_name: String) -> String:
+	var base_clip_id: String = _graph.clip_for(state_name) if _graph != null else "idle"
+	return str(MoveSkinResolverScript.resolve(state_name, base_clip_id, _slot_school_map, _variant_ids)["clip_id"])
+
+func recolor_school_for(state_name: String) -> String:
+	var base_clip_id: String = _graph.clip_for(state_name) if _graph != null else "idle"
+	return str(MoveSkinResolverScript.resolve(state_name, base_clip_id, _slot_school_map, _variant_ids)["recolor_school"])
+
+func active_tint_school_for(state_name: String) -> String:
+	var recolor: String = recolor_school_for(state_name)
+	return recolor if not recolor.is_empty() else _active_stance_school
 
 func get_body_rect(fighter: Fighter, camera_offset: Vector2) -> Rect2:
 	# Bounds reflect the most recent update(); combat_scene updates the
@@ -155,6 +194,16 @@ func update(fighter: Fighter, state_name: String, combat_dt: float, presentation
 	_mat_current.set_shader_parameter("smear_dir", Vector2(float(facing), 0.0))
 	_mat_current.set_shader_parameter("flash", _flash)
 	_mat_current.set_shader_parameter("dissolve", _dissolve_t)
+	var tint_school: String = _recolor_school if not _recolor_school.is_empty() else _active_stance_school
+	if tint_school.is_empty():
+		_mat_current.set_shader_parameter("skin_tint_weight", 0.0)
+		_mat_previous.set_shader_parameter("skin_tint_weight", 0.0)
+	else:
+		var skin_color: Color = Color.html(str(DataManager.get_school(tint_school).get("themeColor", "#ffffff")))
+		_mat_current.set_shader_parameter("skin_tint", skin_color)
+		_mat_current.set_shader_parameter("skin_tint_weight", SKIN_TINT_WEIGHT)
+		_mat_previous.set_shader_parameter("skin_tint", skin_color)
+		_mat_previous.set_shader_parameter("skin_tint_weight", SKIN_TINT_WEIGHT)
 	_mat_previous.set_shader_parameter("smear", 0.0)
 	_mat_previous.set_shader_parameter("flash", 0.0)
 	_mat_previous.set_shader_parameter("dissolve", 1.0 - _dissolve_t)
@@ -183,6 +232,28 @@ func _ensure_nodes() -> void:
 
 	_sprite_previous.visible = false
 
+func _load_variant_clip(school: String, state_name: String) -> void:
+	if _graph == null:
+		return
+	var base_clip_id: String = _graph.clip_for(state_name)
+	var path: String = "res://assets/animation_clips/skins/%s/%s_%s.timeline.json" % [school, school, base_clip_id]
+	if not FileAccess.file_exists(path):
+		return
+	var clip: Variant = TimelineScript.load_from_file(path)
+	_clips[clip.id] = clip
+	_variant_ids[MoveSkinResolverScript.variant_key(school, state_name)] = clip.id
+
+func _load_skin_manifest(school: String) -> void:
+	if _loaded_skin_schools.has(school) or _manifest == null:
+		return
+	_loaded_skin_schools[school] = true
+	var path: String = "res://assets/animation_manifests/skins/%s.manifest.json" % school
+	if not FileAccess.file_exists(path):
+		return
+	var overlay: Variant = AnimationManifestScript.load_from_file(path)
+	for pose_name in overlay.poses.keys():
+		_manifest.poses[str(pose_name)] = overlay.poses[pose_name]
+
 func _maybe_change_state(state_name: String) -> void:
 	if state_name == _state:
 		return
@@ -201,7 +272,8 @@ func _maybe_change_state(state_name: String) -> void:
 		_sprite_previous.visible = false
 
 	_state = state_name
-	_clip = _clips.get(_graph.clip_for(state_name), null) if _graph != null else null
+	_clip = _clips.get(resolve_state_clip_id(state_name), null) if _graph != null else null
+	_recolor_school = recolor_school_for(state_name) if _graph != null else ""
 	_clip_time = 0.0
 	_norm_t = 0.0
 	_prev_norm_t = 0.0
