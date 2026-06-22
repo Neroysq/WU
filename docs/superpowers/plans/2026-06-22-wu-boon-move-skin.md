@@ -423,21 +423,29 @@ func run_all() -> Dictionary:
 		failures.append("handles_state should remain true for skinnable states after skins are set")
 
 	# Reconfigure (next combat) must reset all skin caches so stale skins/poses don't leak.
-	var reconfigured: Variant = _configured_presenter()  # was venom-skinned above via a different instance
+	# Skin with venom + an active stance, THEN reconfigure, and assert the cache dicts are
+	# empty *directly* (calling set_move_skins({}) afterward would mask stale caches).
+	var reconfigured: Variant = _configured_presenter()
 	reconfigured.set_move_skins({"light": "venom"})
+	reconfigured.set_active_stance_school("thunder")
 	reconfigured.configure(  # simulate combat 2 starting fresh
 		"res://assets/animation_manifests/hu.manifest.json",
 		"res://assets/animation_graphs/humanoid.graph.json",
 		["res://assets/animation_clips/hu_attack_light.timeline.json", "res://assets/animation_clips/idle.timeline.json"],
 		1.625
 	)
-	# After reconfigure with no skins set, the light slot must resolve to the BASE clip, no recolor.
-	reconfigured.set_move_skins({})
-	if reconfigured.resolve_state_clip_id("ATTACKING_LIGHT") == "hu_attack_light" and reconfigured.recolor_school_for("ATTACKING_LIGHT") == "" and reconfigured.active_tint_school_for("IDLE") == "":
+	if reconfigured._variant_ids.is_empty() and reconfigured._slot_school_map.is_empty() and reconfigured._loaded_skin_schools.is_empty() and reconfigured._active_stance_school == "" and reconfigured._recolor_school == "":
 		passed += 1
 	else:
 		failed += 1
-		failures.append("configure() must reset skin caches (variant_ids/slot_school_map/loaded_skin_schools/stance/recolor)")
+		failures.append("configure() must clear skin caches (variant_ids/slot_school_map/loaded_skin_schools/stance/recolor)")
+
+	# And resolution after a clean reconfigure with no skins returns base, no recolor.
+	if reconfigured.resolve_state_clip_id("ATTACKING_LIGHT") == "hu_attack_light" and reconfigured.recolor_school_for("ATTACKING_LIGHT") == "":
+		passed += 1
+	else:
+		failed += 1
+		failures.append("after reconfigure with no skins, light should resolve to the base clip")
 
 	return {"passed": passed, "failed": failed, "failures": failures}
 ```
@@ -555,10 +563,14 @@ with:
 	var tint_school: String = _recolor_school if not _recolor_school.is_empty() else _active_stance_school
 	if tint_school.is_empty():
 		_mat_current.set_shader_parameter("skin_tint_weight", 0.0)
+		_mat_previous.set_shader_parameter("skin_tint_weight", 0.0)
 	else:
-		var theme_hex: String = str(DataManager.get_school(tint_school).get("themeColor", "#ffffff"))
-		_mat_current.set_shader_parameter("skin_tint", Color.html(theme_hex))
+		var skin_color: Color = Color.html(str(DataManager.get_school(tint_school).get("themeColor", "#ffffff")))
+		_mat_current.set_shader_parameter("skin_tint", skin_color)
 		_mat_current.set_shader_parameter("skin_tint_weight", SKIN_TINT_WEIGHT)
+		# Mirror onto the outgoing dither sprite so a held tint doesn't flash untinted mid-transition.
+		_mat_previous.set_shader_parameter("skin_tint", skin_color)
+		_mat_previous.set_shader_parameter("skin_tint_weight", SKIN_TINT_WEIGHT)
 ```
 
 - [ ] **Step 9: Run the test to verify it passes**
@@ -634,10 +646,16 @@ At the start of `setup_combat` body (right after `_player = player`), add:
 ```
 (and the `_prepare_capture_character` variant `_combat_scene.setup_combat(_ctx.player, node, false, _capture_archetype(spec))`)
 
-to pass the loadout:
+to pass the loadout. **In `_prepare_capture_matchup`** (it has a local `archetype`):
 
 ```gdscript
 	_combat_scene.setup_combat(_ctx.player, node, false, archetype, _ctx.run_state.boon_loadout)
+```
+
+**In `_prepare_capture_character`** (no `archetype` local — it inlines `_capture_archetype(spec)`):
+
+```gdscript
+	_combat_scene.setup_combat(_ctx.player, node, false, _capture_archetype(spec), _ctx.run_state.boon_loadout)
 ```
 
 - [ ] **Step 6: Find and check any other setup_combat callers**
@@ -701,14 +719,14 @@ Run the capture twice to two files and compare:
 `./run.sh --capture /tmp/venom_light_spec.json /tmp/a.png && ./run.sh --capture /tmp/venom_light_spec.json /tmp/b.png && cmp /tmp/a.png /tmp/b.png`
 Expected: identical (no diff).
 
-- [ ] **Step 5: Capture the recolor fallback (visible-tint proof)** — to prove the tint path renders visibly (since placeholder variants look like base), capture an **infused-but-unskinned** slot. Pick any non-Venom school light boon that exists in `data/Boons/Boons.json` (run `grep -n '"slot": "light"' WUGodot/data/Boons/Boons.json` and pick a non-venom one, e.g. a thunder/sword light); it has no variant clip, so the resolver flags a recolor. Spec `/tmp/recolor_spec.json`:
+- [ ] **Step 5: Capture the recolor fallback (visible-tint proof)** — to prove the tint path renders visibly (since placeholder variants look like base), capture an **infused-but-unskinned** slot using a fixed boon: **`thunder_light`** (confirmed present in `data/Boons/Boons.json`, slot `light`, school `thunder`). It has no variant clip, so the resolver flags a Thunder recolor. Spec `/tmp/recolor_spec.json`:
 
 ```json
 {
   "kind": "matchup",
   "archetype": "bandit_swordsman",
   "state": "04_light_active",
-  "build": [{"boon_id": "<non_venom_light_boon_id>", "tier": "common"}]
+  "build": [{"boon_id": "thunder_light", "tier": "common"}]
 }
 ```
 
