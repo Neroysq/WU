@@ -62,7 +62,9 @@ func configure(manifest_path: String, graph_path: String, clip_paths: Array, ren
 
 	_ensure_nodes()
 	_sprite_current.texture = null
+	_sprite_current.modulate = Color.WHITE
 	_sprite_previous.texture = null
+	_sprite_previous.modulate = Color.WHITE
 	_sprite_previous.visible = false
 
 func handles_state(state_name: String) -> bool:
@@ -143,6 +145,7 @@ func update(fighter: Fighter, state_name: String, combat_dt: float, presentation
 	_maybe_change_state(state_name)
 	if _clip == null or _manifest == null:
 		return
+	_recolor_school = recolor_school_for(state_name) if _graph != null else ""
 
 	_prev_norm_t = _norm_t
 	var attack_def: Variant = fighter._attack_state.def if fighter._attack_state != null else null
@@ -198,12 +201,17 @@ func update(fighter: Fighter, state_name: String, combat_dt: float, presentation
 	if tint_school.is_empty():
 		_mat_current.set_shader_parameter("skin_tint_weight", 0.0)
 		_mat_previous.set_shader_parameter("skin_tint_weight", 0.0)
+		_sprite_current.modulate = Color.WHITE
+		_sprite_previous.modulate = Color.WHITE
 	else:
 		var skin_color: Color = Color.html(str(DataManager.get_school(tint_school).get("themeColor", "#ffffff")))
 		_mat_current.set_shader_parameter("skin_tint", skin_color)
 		_mat_current.set_shader_parameter("skin_tint_weight", SKIN_TINT_WEIGHT)
 		_mat_previous.set_shader_parameter("skin_tint", skin_color)
 		_mat_previous.set_shader_parameter("skin_tint_weight", SKIN_TINT_WEIGHT)
+		var modulated_tint: Color = Color.WHITE.lerp(skin_color, SKIN_TINT_WEIGHT)
+		_sprite_current.modulate = modulated_tint
+		_sprite_previous.modulate = modulated_tint
 	_mat_previous.set_shader_parameter("smear", 0.0)
 	_mat_previous.set_shader_parameter("flash", 0.0)
 	_mat_previous.set_shader_parameter("dissolve", 1.0 - _dissolve_t)

@@ -302,6 +302,9 @@ func dev_prepare_capture_state(state_name: String) -> void:
 			_player.current_animation = Fighter.AnimationState.IDLE
 
 	_update_player_presenter(0.0, 0.0)
+	if _dev_capture_mode and _player_presenter != null:
+		var resolved_state: String = _resolve_player_state_name()
+		print("CAPTURE CLIP: state=%s clip=%s tint=%s visible=%s handles=%s" % [resolved_state, _player_presenter.resolve_state_clip_id(resolved_state), _player_presenter.active_tint_school_for(resolved_state), str(_player_presenter.visible), str(_player_presenter.handles_state(resolved_state))])
 	queue_redraw()
 
 func _dev_place_at_enemy_preferred_range() -> void:

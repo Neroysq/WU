@@ -24,6 +24,8 @@ func run_all() -> Dictionary:
 	var failed: int = 0
 	var failures: Array[String] = []
 
+	DataManager.initialize()
+
 	var presenter: Variant = _configured_presenter()
 	presenter.set_move_skins({"light": "venom", "block": "venom"})
 
@@ -77,6 +79,22 @@ func run_all() -> Dictionary:
 	else:
 		failed += 1
 		failures.append("handles_state should remain true for skinnable states after skins are set")
+
+	var fighter: Fighter = EnemyFactory.create_player()
+	presenter.update(fighter, "BLOCKING", 0.016, 0.016, Vector2.ZERO)
+	if presenter._sprite_current.modulate != Color.WHITE and presenter._sprite_previous.modulate == presenter._sprite_current.modulate:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("infused-unskinned states should apply the school tint to both presenter sprites")
+
+	presenter.set_active_stance_school("")
+	presenter.update(fighter, "IDLE", 0.016, 0.016, Vector2.ZERO)
+	if presenter._sprite_current.modulate == Color.WHITE and presenter._sprite_previous.modulate == Color.WHITE:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("non-skinned states should clear the presenter sprite tint")
 
 	var reconfigured: Variant = _configured_presenter()
 	reconfigured.set_move_skins({"light": "venom"})
