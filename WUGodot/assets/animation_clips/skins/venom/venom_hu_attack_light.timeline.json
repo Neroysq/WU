@@ -3,42 +3,31 @@
   "duration": "fromAttackDef",
   "useFighterOffset": true,
   "keyposes": [
-    { "t": 0.00, "pose": "vl_001" },
-    { "t": 0.04, "pose": "vl_013" },
-    { "t": 0.08, "pose": "vl_014" },
-    { "t": 0.12, "pose": "vl_015" },
-    { "t": 0.155, "pose": "vl_017" },
-    { "t": 0.19, "pose": "vl_018" },
-    { "t": 0.225, "pose": "vl_022" },
-    { "t": 0.26, "pose": "vl_026" },
-    { "t": 0.295, "pose": "vl_030" },
-    { "t": 0.325, "pose": "vl_035" },
-    { "t": 0.35, "pose": "vl_041" },
-    { "t": "windup_end", "pose": "vl_051" },
-    { "t": 0.41, "pose": "vl_055" },
-    { "t": 0.46, "pose": "vl_060" },
-    { "t": 0.51, "pose": "vl_065" },
-    { "t": 0.55, "pose": "vl_073" },
-    { "t": 0.585, "pose": "vl_079" },
-    { "t": "active_end", "pose": "vl_081" },
-    { "t": 0.64, "pose": "vl_082" },
-    { "t": 0.667, "pose": "vl_083" },
-    { "t": 0.694, "pose": "vl_084" },
-    { "t": 0.72, "pose": "vl_085" },
-    { "t": 0.747, "pose": "vl_086" },
-    { "t": 0.774, "pose": "vl_087" },
-    { "t": 0.80, "pose": "vl_088" },
-    { "t": 0.827, "pose": "vl_089" },
-    { "t": 0.854, "pose": "vl_091" },
-    { "t": 0.88, "pose": "vl_093" },
-    { "t": 0.934, "pose": "vl_095" },
-    { "t": 0.987, "pose": "vl_097" }
+    { "t": 0.00, "pose": "venom_light_windup_start" },
+    { "t": "windup_end", "pose": "venom_light_windup_peak" },
+    { "t": 0.42, "pose": "venom_light_active" },
+    { "t": "active_end", "pose": "venom_light_active_end" },
+    { "t": 0.80, "pose": "venom_light_recovery" }
   ],
   "tracks": {
+    "scaleX": [
+      { "t": 0.00, "v": 0.875 },
+      { "t": 0.36, "v": 0.910 },
+      { "t": 0.42, "v": 1.023 },
+      { "t": 0.60, "v": 0.845 },
+      { "t": 0.80, "v": 0.970 }
+    ],
+    "scaleY": [
+      { "t": 0.00, "v": 0.875 },
+      { "t": 0.36, "v": 0.910 },
+      { "t": 0.42, "v": 1.023 },
+      { "t": 0.60, "v": 0.845 },
+      { "t": 0.80, "v": 0.970 }
+    ],
     "smear": [
-      { "t": 0.36, "v": 0.0 },
-      { "t": 0.42, "v": 1.0 },
-      { "t": 0.66, "v": 0.0 }
+      { "t": 0.38, "v": 0.0 },
+      { "t": 0.46, "v": 1.0 },
+      { "t": 0.64, "v": 0.0 }
     ]
   },
   "events": [

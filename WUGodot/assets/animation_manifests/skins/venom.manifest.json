@@ -1,0 +1,110 @@
+{
+  "id": "venom",
+  "poses": {
+    "venom_light_active": {
+      "chestAnchor": [
+        198,
+        295
+      ],
+      "footAnchor": [
+        198,
+        381
+      ],
+      "hurtbox": [
+        127,
+        226,
+        143,
+        138
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_light_active.png",
+      "weaponTip": [
+        462,
+        220
+      ]
+    },
+    "venom_light_active_end": {
+      "chestAnchor": [
+        194,
+        278
+      ],
+      "footAnchor": [
+        194,
+        381
+      ],
+      "hurtbox": [
+        123,
+        226,
+        143,
+        138
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_light_active_end.png",
+      "weaponTip": [
+        498,
+        258
+      ]
+    },
+    "venom_light_recovery": {
+      "chestAnchor": [
+        258,
+        278
+      ],
+      "footAnchor": [
+        258,
+        381
+      ],
+      "hurtbox": [
+        187,
+        226,
+        143,
+        138
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_light_recovery.png",
+      "weaponTip": [
+        388,
+        260
+      ]
+    },
+    "venom_light_windup_peak": {
+      "chestAnchor": [
+        307,
+        278
+      ],
+      "footAnchor": [
+        307,
+        381
+      ],
+      "hurtbox": [
+        236,
+        226,
+        143,
+        138
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_light_windup_peak.png",
+      "weaponTip": [
+        396,
+        377
+      ]
+    },
+    "venom_light_windup_start": {
+      "chestAnchor": [
+        304,
+        278
+      ],
+      "footAnchor": [
+        304,
+        381
+      ],
+      "hurtbox": [
+        232,
+        226,
+        143,
+        138
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_light_windup_start.png",
+      "weaponTip": [
+        407,
+        257
+      ]
+    }
+  }
+}
