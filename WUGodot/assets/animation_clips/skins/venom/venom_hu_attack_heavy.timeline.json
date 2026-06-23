@@ -2,46 +2,151 @@
   "id": "venom_hu_attack_heavy",
   "duration": "fromAttackDef",
   "keyposes": [
-    { "t": 0.000, "pose": "vh_001" },
-    { "t": 0.027, "pose": "vh_004" },
-    { "t": 0.054, "pose": "vh_007" },
-    { "t": 0.080, "pose": "vh_010" },
-    { "t": 0.107, "pose": "vh_013" },
-    { "t": 0.134, "pose": "vh_016" },
-    { "t": 0.161, "pose": "vh_019" },
-    { "t": 0.187, "pose": "vh_022" },
-    { "t": 0.214, "pose": "vh_025" },
-    { "t": 0.241, "pose": "vh_028" },
-    { "t": 0.268, "pose": "vh_031" },
-    { "t": 0.294, "pose": "vh_034" },
-    { "t": 0.321, "pose": "vh_037" },
-    { "t": 0.348, "pose": "vh_040" },
-    { "t": 0.375, "pose": "vh_043" },
-    { "t": 0.401, "pose": "vh_046" },
-    { "t": 0.428, "pose": "vh_049" },
-    { "t": 0.455, "pose": "vh_052" },
-    { "t": "windup_end", "pose": "vh_058" },
-    { "t": 0.515, "pose": "vh_064" },
-    { "t": 0.560, "pose": "vh_070" },
-    { "t": 0.600, "pose": "vh_073" },
-    { "t": 0.630, "pose": "vh_076" },
-    { "t": "active_end", "pose": "vh_080" },
-    { "t": 0.700, "pose": "vh_084" },
-    { "t": 0.760, "pose": "vh_088" },
-    { "t": 0.820, "pose": "vh_091" },
-    { "t": 0.890, "pose": "vh_094" },
-    { "t": 0.950, "pose": "vh_096" },
-    { "t": 1.000, "pose": "vh_097" }
+    {
+      "t": 0.0,
+      "pose": "venom_heavy_001"
+    },
+    {
+      "t": 0.027,
+      "pose": "venom_heavy_002"
+    },
+    {
+      "t": 0.054,
+      "pose": "venom_heavy_003"
+    },
+    {
+      "t": 0.08,
+      "pose": "venom_heavy_004"
+    },
+    {
+      "t": 0.107,
+      "pose": "venom_heavy_005"
+    },
+    {
+      "t": 0.134,
+      "pose": "venom_heavy_006"
+    },
+    {
+      "t": 0.161,
+      "pose": "venom_heavy_007"
+    },
+    {
+      "t": 0.187,
+      "pose": "venom_heavy_008"
+    },
+    {
+      "t": 0.214,
+      "pose": "venom_heavy_009"
+    },
+    {
+      "t": 0.241,
+      "pose": "venom_heavy_010"
+    },
+    {
+      "t": 0.268,
+      "pose": "venom_heavy_011"
+    },
+    {
+      "t": 0.294,
+      "pose": "venom_heavy_012"
+    },
+    {
+      "t": 0.321,
+      "pose": "venom_heavy_013"
+    },
+    {
+      "t": 0.348,
+      "pose": "venom_heavy_014"
+    },
+    {
+      "t": 0.375,
+      "pose": "venom_heavy_015"
+    },
+    {
+      "t": 0.401,
+      "pose": "venom_heavy_016"
+    },
+    {
+      "t": 0.428,
+      "pose": "venom_heavy_017"
+    },
+    {
+      "t": 0.455,
+      "pose": "venom_heavy_018"
+    },
+    {
+      "t": "windup_end",
+      "pose": "venom_heavy_019"
+    },
+    {
+      "t": 0.515,
+      "pose": "venom_heavy_020"
+    },
+    {
+      "t": 0.56,
+      "pose": "venom_heavy_021"
+    },
+    {
+      "t": 0.6,
+      "pose": "venom_heavy_022"
+    },
+    {
+      "t": 0.63,
+      "pose": "venom_heavy_023"
+    },
+    {
+      "t": "active_end",
+      "pose": "venom_heavy_024"
+    },
+    {
+      "t": 0.7,
+      "pose": "venom_heavy_025"
+    },
+    {
+      "t": 0.76,
+      "pose": "venom_heavy_026"
+    },
+    {
+      "t": 0.82,
+      "pose": "venom_heavy_027"
+    },
+    {
+      "t": 0.89,
+      "pose": "venom_heavy_028"
+    },
+    {
+      "t": 0.95,
+      "pose": "venom_heavy_029"
+    },
+    {
+      "t": 1.0,
+      "pose": "venom_heavy_030"
+    }
   ],
   "tracks": {
     "smear": [
-      { "t": 0.47, "v": 0.25 },
-      { "t": 0.50, "v": 1.0 },
-      { "t": 0.65, "v": 0.0 }
+      {
+        "t": 0.47,
+        "v": 0.25
+      },
+      {
+        "t": 0.5,
+        "v": 1.0
+      },
+      {
+        "t": 0.65,
+        "v": 0.0
+      }
     ]
   },
   "events": [
-    { "t": "windup_end", "event": "attack_active_start" },
-    { "t": "active_end", "event": "attack_active_end" }
+    {
+      "t": "windup_end",
+      "event": "attack_active_start"
+    },
+    {
+      "t": "active_end",
+      "event": "attack_active_end"
+    }
   ]
 }

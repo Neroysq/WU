@@ -651,6 +651,636 @@
         343,
         214
       ]
+    },
+    "venom_heavy_001": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        343,
+        214
+      ],
+      "chestAnchor": [
+        182,
+        280
+      ],
+      "hurtbox": [
+        110,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_001.png"
+    },
+    "venom_heavy_002": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        343,
+        214
+      ],
+      "chestAnchor": [
+        182,
+        280
+      ],
+      "hurtbox": [
+        110,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_002.png"
+    },
+    "venom_heavy_003": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        342,
+        196
+      ],
+      "chestAnchor": [
+        194,
+        280
+      ],
+      "hurtbox": [
+        123,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_003.png"
+    },
+    "venom_heavy_004": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        336,
+        200
+      ],
+      "chestAnchor": [
+        210,
+        281
+      ],
+      "hurtbox": [
+        138,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_004.png"
+    },
+    "venom_heavy_005": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        315,
+        160
+      ],
+      "chestAnchor": [
+        222,
+        235
+      ],
+      "hurtbox": [
+        150,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_005.png"
+    },
+    "venom_heavy_006": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        308,
+        154
+      ],
+      "chestAnchor": [
+        220,
+        235
+      ],
+      "hurtbox": [
+        149,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_006.png"
+    },
+    "venom_heavy_007": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        275,
+        138
+      ],
+      "chestAnchor": [
+        222,
+        237
+      ],
+      "hurtbox": [
+        150,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_007.png"
+    },
+    "venom_heavy_008": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        274,
+        382
+      ],
+      "chestAnchor": [
+        225,
+        240
+      ],
+      "hurtbox": [
+        154,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_008.png"
+    },
+    "venom_heavy_009": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        276,
+        382
+      ],
+      "chestAnchor": [
+        226,
+        247
+      ],
+      "hurtbox": [
+        155,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_009.png"
+    },
+    "venom_heavy_010": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        278,
+        383
+      ],
+      "chestAnchor": [
+        228,
+        249
+      ],
+      "hurtbox": [
+        156,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_010.png"
+    },
+    "venom_heavy_011": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        279,
+        383
+      ],
+      "chestAnchor": [
+        228,
+        252
+      ],
+      "hurtbox": [
+        157,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_011.png"
+    },
+    "venom_heavy_012": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        281,
+        383
+      ],
+      "chestAnchor": [
+        227,
+        258
+      ],
+      "hurtbox": [
+        156,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_012.png"
+    },
+    "venom_heavy_013": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        283,
+        384
+      ],
+      "chestAnchor": [
+        227,
+        265
+      ],
+      "hurtbox": [
+        156,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_013.png"
+    },
+    "venom_heavy_014": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        284,
+        384
+      ],
+      "chestAnchor": [
+        228,
+        267
+      ],
+      "hurtbox": [
+        156,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_014.png"
+    },
+    "venom_heavy_015": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        285,
+        384
+      ],
+      "chestAnchor": [
+        231,
+        273
+      ],
+      "hurtbox": [
+        160,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_015.png"
+    },
+    "venom_heavy_016": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        286,
+        384
+      ],
+      "chestAnchor": [
+        231,
+        276
+      ],
+      "hurtbox": [
+        160,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_016.png"
+    },
+    "venom_heavy_017": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        286,
+        384
+      ],
+      "chestAnchor": [
+        232,
+        278
+      ],
+      "hurtbox": [
+        160,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_017.png"
+    },
+    "venom_heavy_018": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        284,
+        384
+      ],
+      "chestAnchor": [
+        226,
+        265
+      ],
+      "hurtbox": [
+        155,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_018.png"
+    },
+    "venom_heavy_019": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        340,
+        344
+      ],
+      "chestAnchor": [
+        230,
+        280
+      ],
+      "hurtbox": [
+        159,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_019.png"
+    },
+    "venom_heavy_020": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        350,
+        380
+      ],
+      "chestAnchor": [
+        231,
+        280
+      ],
+      "hurtbox": [
+        160,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_020.png"
+    },
+    "venom_heavy_021": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        347,
+        346
+      ],
+      "chestAnchor": [
+        232,
+        280
+      ],
+      "hurtbox": [
+        160,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_021.png"
+    },
+    "venom_heavy_022": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        348,
+        345
+      ],
+      "chestAnchor": [
+        232,
+        280
+      ],
+      "hurtbox": [
+        160,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_022.png"
+    },
+    "venom_heavy_023": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        349,
+        343
+      ],
+      "chestAnchor": [
+        232,
+        280
+      ],
+      "hurtbox": [
+        160,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_023.png"
+    },
+    "venom_heavy_024": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        350,
+        343
+      ],
+      "chestAnchor": [
+        222,
+        280
+      ],
+      "hurtbox": [
+        150,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_024.png"
+    },
+    "venom_heavy_025": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        352,
+        343
+      ],
+      "chestAnchor": [
+        222,
+        280
+      ],
+      "hurtbox": [
+        150,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_025.png"
+    },
+    "venom_heavy_026": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        359,
+        286
+      ],
+      "chestAnchor": [
+        236,
+        279
+      ],
+      "hurtbox": [
+        164,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_026.png"
+    },
+    "venom_heavy_027": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        349,
+        276
+      ],
+      "chestAnchor": [
+        182,
+        280
+      ],
+      "hurtbox": [
+        110,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_027.png"
+    },
+    "venom_heavy_028": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        348,
+        261
+      ],
+      "chestAnchor": [
+        182,
+        280
+      ],
+      "hurtbox": [
+        110,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_028.png"
+    },
+    "venom_heavy_029": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        343,
+        214
+      ],
+      "chestAnchor": [
+        182,
+        280
+      ],
+      "hurtbox": [
+        110,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_029.png"
+    },
+    "venom_heavy_030": {
+      "footAnchor": [
+        224,
+        382
+      ],
+      "weaponTip": [
+        343,
+        214
+      ],
+      "chestAnchor": [
+        182,
+        280
+      ],
+      "hurtbox": [
+        110,
+        205,
+        143,
+        172
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_heavy_030.png"
     }
   }
 }
