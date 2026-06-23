@@ -3,7 +3,7 @@
   "poses": {
     "venom_light_001": {
       "chestAnchor": [
-        244,
+        182,
         280
       ],
       "footAnchor": [
@@ -11,566 +11,566 @@
         382
       ],
       "hurtbox": [
-        172,
+        110,
         223,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_001.png",
       "weaponTip": [
-        348,
-        260
+        343,
+        214
       ]
     },
     "venom_light_002": {
       "chestAnchor": [
-        244,
-        280
+        180,
+        284
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        172,
-        223,
+        108,
+        227,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_002.png",
       "weaponTip": [
-        348,
-        260
+        342,
+        212
       ]
     },
     "venom_light_003": {
       "chestAnchor": [
-        240,
-        280
+        180,
+        302
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        168,
-        222,
+        108,
+        245,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_003.png",
       "weaponTip": [
-        371,
-        262
+        321,
+        244
       ]
     },
     "venom_light_004": {
       "chestAnchor": [
-        240,
-        280
+        170,
+        307
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        168,
-        222,
+        98,
+        250,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_004.png",
       "weaponTip": [
-        371,
-        262
+        315,
+        272
       ]
     },
     "venom_light_005": {
       "chestAnchor": [
-        240,
-        280
+        168,
+        308
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        168,
-        222,
+        96,
+        251,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_005.png",
       "weaponTip": [
-        372,
-        264
+        314,
+        278
       ]
     },
     "venom_light_006": {
       "chestAnchor": [
-        240,
-        280
+        168,
+        308
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        168,
-        222,
+        96,
+        251,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_006.png",
       "weaponTip": [
-        372,
-        262
+        313,
+        280
       ]
     },
     "venom_light_007": {
       "chestAnchor": [
-        240,
-        280
+        168,
+        308
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        168,
-        222,
+        96,
+        251,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_007.png",
       "weaponTip": [
-        372,
-        262
+        313,
+        280
       ]
     },
     "venom_light_008": {
       "chestAnchor": [
-        284,
-        280
+        168,
+        308
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        212,
-        221,
+        96,
+        251,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_008.png",
       "weaponTip": [
-        372,
-        262
+        315,
+        284
       ]
     },
     "venom_light_009": {
       "chestAnchor": [
-        284,
-        280
+        173,
+        308
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        212,
-        221,
+        102,
+        251,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_009.png",
       "weaponTip": [
-        372,
-        262
+        323,
+        286
       ]
     },
     "venom_light_010": {
       "chestAnchor": [
-        284,
-        280
+        224,
+        293
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        212,
-        221,
+        152,
+        236,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_010.png",
       "weaponTip": [
-        372,
-        262
+        374,
+        172
       ]
     },
     "venom_light_011": {
       "chestAnchor": [
-        241,
-        280
+        298,
+        249
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        170,
-        222,
+        226,
+        192,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_011.png",
       "weaponTip": [
-        427,
-        249
+        423,
+        188
       ]
     },
     "venom_light_012": {
       "chestAnchor": [
-        240,
-        280
+        230,
+        292
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        169,
-        223,
+        158,
+        235,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_012.png",
       "weaponTip": [
-        427,
-        248
+        361,
+        146
       ]
     },
     "venom_light_013": {
       "chestAnchor": [
-        240,
-        280
+        230,
+        292
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        168,
-        222,
+        158,
+        235,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_013.png",
       "weaponTip": [
-        426,
-        248
+        361,
+        146
       ]
     },
     "venom_light_014": {
       "chestAnchor": [
-        238,
-        280
+        230,
+        292
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        167,
-        223,
+        158,
+        235,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_014.png",
       "weaponTip": [
-        425,
-        248
+        361,
+        146
       ]
     },
     "venom_light_015": {
       "chestAnchor": [
-        320,
-        287
+        230,
+        292
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        248,
-        223,
+        158,
+        235,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_015.png",
       "weaponTip": [
-        455,
-        260
+        361,
+        146
       ]
     },
     "venom_light_016": {
       "chestAnchor": [
-        314,
-        279
+        230,
+        292
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        243,
-        220,
+        158,
+        235,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_016.png",
       "weaponTip": [
-        450,
-        230
+        361,
+        146
       ]
     },
     "venom_light_017": {
       "chestAnchor": [
-        244,
-        287
+        230,
+        292
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        173,
-        227,
+        158,
+        235,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_017.png",
       "weaponTip": [
-        443,
-        252
+        361,
+        146
       ]
     },
     "venom_light_018": {
       "chestAnchor": [
-        244,
-        287
+        230,
+        292
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        173,
-        227,
+        158,
+        235,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_018.png",
       "weaponTip": [
-        443,
-        252
+        361,
+        146
       ]
     },
     "venom_light_019": {
       "chestAnchor": [
-        244,
-        287
+        230,
+        292
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        173,
-        227,
+        158,
+        235,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_019.png",
       "weaponTip": [
-        443,
-        252
+        361,
+        146
       ]
     },
     "venom_light_020": {
       "chestAnchor": [
-        244,
-        287
+        230,
+        292
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        173,
-        227,
+        158,
+        235,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_020.png",
       "weaponTip": [
-        443,
-        252
+        361,
+        146
       ]
     },
     "venom_light_021": {
       "chestAnchor": [
-        200,
-        280
+        230,
+        292
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        128,
-        222,
+        158,
+        235,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_021.png",
       "weaponTip": [
-        350,
-        213
+        361,
+        146
       ]
     },
     "venom_light_022": {
       "chestAnchor": [
-        196,
-        280
+        230,
+        292
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        124,
-        223,
+        158,
+        235,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_022.png",
       "weaponTip": [
-        328,
-        262
+        361,
+        146
       ]
     },
     "venom_light_023": {
       "chestAnchor": [
-        196,
-        280
+        230,
+        292
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        124,
-        221,
+        158,
+        235,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_023.png",
       "weaponTip": [
-        328,
-        262
+        362,
+        148
       ]
     },
     "venom_light_024": {
       "chestAnchor": [
-        196,
-        280
+        226,
+        290
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        124,
-        221,
+        154,
+        233,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_024.png",
       "weaponTip": [
-        328,
-        262
+        365,
+        154
       ]
     },
     "venom_light_025": {
       "chestAnchor": [
-        196,
-        280
+        220,
+        288
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        124,
-        222,
+        148,
+        231,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_025.png",
       "weaponTip": [
-        329,
-        262
+        366,
+        165
       ]
     },
     "venom_light_026": {
       "chestAnchor": [
-        196,
-        280
+        211,
+        285
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        124,
-        222,
+        140,
+        228,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_026.png",
       "weaponTip": [
-        329,
-        262
+        360,
+        182
       ]
     },
     "venom_light_027": {
       "chestAnchor": [
-        196,
-        280
+        205,
+        282
       ],
       "footAnchor": [
         224,
         382
       ],
       "hurtbox": [
-        125,
-        221,
+        134,
+        225,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_027.png",
       "weaponTip": [
-        329,
-        262
+        352,
+        198
       ]
     },
     "venom_light_028": {
       "chestAnchor": [
-        196,
+        184,
         280
       ],
       "footAnchor": [
@@ -578,20 +578,20 @@
         382
       ],
       "hurtbox": [
-        125,
-        221,
+        112,
+        223,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_028.png",
       "weaponTip": [
-        329,
-        262
+        345,
+        208
       ]
     },
     "venom_light_029": {
       "chestAnchor": [
-        196,
+        182,
         280
       ],
       "footAnchor": [
@@ -599,20 +599,20 @@
         382
       ],
       "hurtbox": [
-        124,
-        221,
+        110,
+        223,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_029.png",
       "weaponTip": [
-        329,
-        262
+        343,
+        214
       ]
     },
     "venom_light_030": {
       "chestAnchor": [
-        196,
+        182,
         280
       ],
       "footAnchor": [
@@ -620,20 +620,20 @@
         382
       ],
       "hurtbox": [
-        124,
-        222,
+        110,
+        223,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_030.png",
       "weaponTip": [
-        328,
-        262
+        343,
+        214
       ]
     },
     "venom_light_031": {
       "chestAnchor": [
-        198,
+        182,
         280
       ],
       "footAnchor": [
@@ -641,15 +641,15 @@
         382
       ],
       "hurtbox": [
-        126,
+        110,
         223,
         143,
         138
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_light_031.png",
       "weaponTip": [
-        328,
-        263
+        343,
+        214
       ]
     }
   }
