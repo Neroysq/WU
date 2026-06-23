@@ -1281,6 +1281,27 @@
         172
       ],
       "path": "res://assets/sprites/characters/hu/venom/venom_heavy_030.png"
+    },
+    "venom_vp_dash": {
+      "chestAnchor": [
+        333,
+        134
+      ],
+      "footAnchor": [
+        334,
+        219
+      ],
+      "hurtbox": [
+        244,
+        65,
+        177,
+        122
+      ],
+      "weaponTip": [
+        436,
+        137
+      ],
+      "path": "res://assets/sprites/characters/hu/venom/venom_vp_dash.png"
     }
   }
 }
