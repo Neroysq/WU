@@ -25,6 +25,8 @@ A long-running non-headless Godot process = one session, working in `user://play
 - Every command and response carries `{seq, session_id, status: "ok"|"error", error?}`. Sequenced files (not a single mutable `cmd.json`/`resp.json`) avoid races and give a readable history.
 - Screenshots are written to `shots/<label>_<seq>.png`; response references their paths.
 - A `command_log.jsonl` appends every command in order (for replay/repro).
+- **Sequencing rules:** the daemon processes commands in **strict ascending `seq`** starting at 1; it ignores any `cmd_<seq>` whose `seq` is **≤ the last processed** (duplicate/stale → no-op, optionally re-emit the existing `resp_<seq>`); a gap (missing next `seq`) means "no command yet" (keep polling), not an error.
+- **Liveness:** on startup the daemon writes `ready.json {session_id, pid, status:"ready"}` (the agent waits for it before sending `cmd_1`), and updates a `heartbeat.json {last_seq, ts}` after each command, so the agent can detect a dead/hung daemon instead of polling forever. On fatal error it writes `error.json` and still responds to the current `seq`.
 
 ## 3. The advance-until-agent-needed loop
 
@@ -34,9 +36,10 @@ The session is always at one of two pause kinds, reported as `pause: {kind, ...}
 - **Combat pause** (fine) — inside a fight. The agent drives frames (`input`/`step`/`advance`). Re-pauses when the advance budget is spent **or** a trigger fires (with which trigger).
 
 **Command boundaries (hard errors, not silent no-ops):**
-- `input` / `step` / `advance` / `screenshot`(combat) / `trigger` → **error** unless `pause.kind == "combat"`.
+- `input` / `step` / `advance` / `trigger_*` → **error** unless `pause.kind == "combat"`.
 - `choose` → **error** unless `pause.kind == "decision"`.
-This stops agents from advancing a stale scene.
+- `screenshot` / `observe` / `status` → **allowed at both** pause kinds. `screenshot` uses a **scene-specific read-only projection** (combat arena, or the boon/reward/shop/map screen), since snapshots of decision screens are useful too.
+This stops agents from advancing a stale scene while keeping observation/screenshots universal.
 
 ## 4. Command set
 
@@ -50,7 +53,11 @@ This stops agents from advancing a stale scene.
 ## 5. Event instrumentation (source-level) & observation
 
 **Events are emitted at the source, never inferred.** Add a `CombatEventRecorder` handed into `CombatStep`/`CombatSystem`; the combat code emits events where they occur:
-`attack_started`, `attack_active_started`, `attack_finished`, `hit {by, target, hp_damage, posture_damage, blocked, parried, critical}`, `whiff` (active window passed with no connect), `status_applied {type, stacks}`, `boon_proc {id}`, `phase_changed {fighter, phase}`, `dash {fighter, iframes}`, `stun {fighter, duration}`, `enemy_decision {action, attack_id}`, `death {fighter}`. (This recorder also satisfies the standalone live-combat instrumentation needed for the close-range whiff investigation — `2026-06-24-light-deadzone-investigation.md`.)
+`attack_started`, `attack_active_started`, `attack_finished`, `hit {by, target, hp_damage, posture_damage, blocked, parried, critical}`, `whiff`, `status_applied {type, stacks}`, `boon_proc {id}`, `phase_changed {fighter, phase}`, `dash {fighter, iframes}`, `stun {fighter, duration}`, `enemy_decision {action, attack_id}`, `death {fighter}`.
+
+**`whiff` semantics (tight, since it feeds the dead-zone investigation):** emit **exactly one `whiff` per attack**, and only when the attack's **active window closes with zero contact**. "Contact" = any `hit` against the intended target, **including blocked or parried** (a blocked/parried swing is *not* a whiff). Never emit `whiff` per active frame. This keeps triggers/telemetry from overcounting and makes "did this swing connect at all?" unambiguous.
+
+(This recorder also satisfies the standalone live-combat instrumentation needed for the close-range whiff investigation — `2026-06-24-light-deadzone-investigation.md`.)
 
 **Observation returned at each pause:**
 - `context`: scene/pause kind; decision `options` if coarse.
@@ -73,11 +80,12 @@ The session is **seeded**; `command_log.jsonl` records every command. **Reproduc
 ## 8. Components (boundaries)
 
 - **`playtest_daemon`** — process entry (non-headless), session dir, atomic file transport, command dispatch, `command_log`. (CLI: `./run.sh --playtest-daemon --session <id> [--seed N]`.)
-- **`run_conductor`** — drives the run flow (reuses `RunDriver`/`RunFlow` services), pausing at each decision point and exposing its options; resumes on `choose`.
+- **`run_conductor`** — drives the run flow as a **stepper**, pausing at each decision and exposing its options; resumes on `choose`. It reuses **`RunFlow` public generators** (`travel_decision`, `generate_boon_offer_payload`, `generate_school_choice_payload`, `generate_technique_rewards`/`generate_master_rewards`) and a **shared public apply layer** — it must **NOT** call `RunDriver`'s private batch resolution (`_resolve_node`/`_resolve_combat_node`/`_resolve_boon_payload`/`_resolve_event`) or its internal node-clear/run-state mutation. `RunDriver` stays the batch runner.
+- **`run_apply_services`** — the apply/advance logic currently buried in `RunDriver._resolve_*` (apply a boon/reward/event/rest/shop outcome, mark node cleared, advance run state) **extracted into public, side-effect-explicit functions** (alongside the existing `RunFlow.apply_boon_offer_selection`). Both the conductor and `RunDriver` call these, so interactive and batch paths can't diverge — same pattern as the difficulty `begin_encounter` consolidation.
 - **`combat_controller`** — owns a fight: frame stepping via `CombatStep` with agent inputs, runs the `trigger_engine` each frame, collects events.
 - **`combat_event_recorder`** — source-level event sink injected into `CombatStep`/`CombatSystem`.
 - **`trigger_engine`** — evaluates event/predicate triggers per frame → pause + optional screenshot.
-- **`screenshot_service`** — renders the current model state and reads the viewport to PNG (reuses the capture readback).
+- **`screenshot_service`** — renders the **current live model** as a **read-only projection** and reads the viewport to PNG. It reuses only the **readback helper** (`_save_viewport_png` at `main.gd:558`, which is read-only) — it must **NOT** use the capture *prep* path (`_prepare_capture_matchup`/`setup_combat`/`_apply_capture_build`/`dev_prepare_capture_state`), which **resets/constructs** combat state and would perturb the deterministic transcript. Implement a presenter-only draw of the current fighters/scene (no setup, no state mutation); if a clean read-only draw isn't feasible without touching the model, render from a **cloned snapshot** instead. **Hard requirement: taking a screenshot must not change the state/event transcript.**
 
 ## 9. Out of scope (v1)
 
@@ -95,7 +103,7 @@ The session is **seeded**; `command_log.jsonl` records every command. **Reproduc
 
 1. `combat_event_recorder` + wire into `CombatStep`/`CombatSystem` (also unblocks the dead-zone live instrumentation).
 2. `combat_controller` + `trigger_engine` (headless): step/advance/triggers/event log over a real combat, unit-tested.
-3. `run_conductor`: decision pauses + `choose` over a full run (headless).
-4. `playtest_daemon` transport (atomic sequenced files, command log, boundaries) + `start/quit/status`.
-5. `screenshot_service` (non-headless render-on-demand) + screenshot triggers + the smoke test.
+3. **Extract `run_apply_services`** (public apply/clear/advance out of `RunDriver._resolve_*`; `RunDriver` refactored to call them — tests confirm batch behavior unchanged) → then `run_conductor`: decision pauses + `choose` over a full run (headless).
+4. `playtest_daemon` transport (atomic sequenced files, `seq` rules, `ready`/`heartbeat`, command log, boundaries) + `start/quit/status`.
+5. `screenshot_service` (non-headless **read-only projection**, render-on-demand) + screenshot at both pause kinds + screenshot triggers + the smoke test.
 6. Reproducibility test + docs for the command vocabulary.
