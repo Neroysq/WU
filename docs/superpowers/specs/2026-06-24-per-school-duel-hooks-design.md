@@ -37,19 +37,29 @@ Every school interacts with the **posture duel** through the existing `Technique
 
 **Retune so mobility pressures posture:**
 1. **Aerial posture** — `momentum_aerial_effect.modify_aerial_hit(ctx)`: also scale `ctx.posture_damage` (aerial strikes pressure posture, not just HP).
-2. **Flurry posture** — `momentum_flurry_effect`: the flurry extra-hits / the modified hit carry **posture damage** (a flurry bleeds posture).
-3. **Dash-through = Wind's "deflect" (the signature)** — `on_dash_through(fighter)` fires when an i-frame dash passes through an active enemy attack (`combat_system.gd:113`-area). Make it **build momentum AND apply posture damage to the enemy** — so *dodging an attack* is Wind's non-parry posture reward (the mobility analog of a parry). Surface a recorder event so triggers/telemetry see it.
+2. **Flurry posture (low-risk path)** — `momentum_flurry_effect.modify_outgoing_hit(ctx)`: add posture to the **main hit** (`ctx.posture_damage += params.posture_damage`, or a multiplier), **not** posture-bearing `extra_hits`. (Today `extra_hits` only applies HP — `combat_system.gd:460`; extending that schema with posture/stun/break/recorder handling is deferred unless a later plan explicitly does it.)
+3. **Dash-through = Wind's "deflect" (the signature)** — `on_dash_through` fires while an i-frame dash overlaps an active enemy attack in range. **Two required changes** (see "Required hook changes"):
+   - **(a) Pass the enemy.** The hook is `on_dash_through(fighter)` today (no enemy) — `combat_system.gd:127`, `technique_engine.gd:172`, `technique_effect.gd:69` — so it *cannot* damage the enemy as written. Change the signature to forward the enemy.
+   - **(b) Gate to once per dash-through.** The call fires **every frame** the dash overlaps the active attack (`combat_system.gd:123`), so naive posture would tick many times and instantly break enemies. Apply the wind posture reward **exactly once per dash-through contact** (a flag reset when the dash ends / the contact window clears). Emit one `dash_through` recorder event per contact (event count == 1 in the test).
+   So *dodging an attack* is Wind's non-parry posture reward (the mobility analog of a parry) — but only once per dodge.
 4. **Momentum → posture burst** — at a momentum threshold, a wind hit converts momentum into a **posture burst** (toward a break), instead of/alongside the HP flurry.
 
 Net: a dash-in / aerial / flurry / dash-through Wind build cracks posture → break → punish, **without parrying** — a genuine second viable duel path.
+
+### 2b. Required hook changes (engine plumbing for the dash-through deflect)
+- **`TechniqueEffect.on_dash_through(fighter)` → `on_dash_through(fighter, enemy)`** (`technique_effect.gd:69`) so an effect can damage the enemy.
+- **`TechniqueEngine.on_dash_through`** (`:172,174`) forwards the `enemy` to each effect.
+- **`CombatSystem`** (`:127`) passes the enemy AND **gates the call to once per dash-through contact** (don't fire the posture reward every frame in the invuln/active/in-range window).
+- **Update the existing implementer** `flowing_water_effect.gd:12` to the new 2-arg signature (keep its current behavior; just accept `enemy`).
+- **Add `CombatEventRecorder.record_dash_through(fighter, enemy, posture_amount)`** + a `dash_through` event so triggers/telemetry/tests can count it.
 
 **Numbers are data/params** (`params` on each effect + wind boon `data/Boons/Boons.json`), tuned like the rebalance (probe + policy), not hardcoded design.
 
 ---
 
 ## 3. Validation
-- **Scripted-policy gate (primary, quantitative):** `aggressive_dash` policy with a **wind build** (reuse the existing `--decision school --school wind` to steer boon picks) vs the same policy with `--decision greedy` (mixed build), over the same 50 seeds. The wind build must **meaningfully raise** the non-parry win rate (target: clear improvement over the 0.08 baseline, toward the parry path) — proving Wind closes the gap. (No new build-injection tooling needed; school-focused decision already concentrates wind.)
-- **Duel-ratio probe:** a Wind-equipped pressure sequence breaks posture in fewer effective hits than vanilla (mobility now pressures posture).
+- **Scripted-policy gate (primary, quantitative) — hard threshold:** `--player aggressive_dash --decision school --school wind` over **seeds 1..50** must hit **win-rate ≥ 0.18** (vs the 0.08 baseline), with **zero timeouts** and **no improvement to `facetank`** (still ~0.00). Being below/near `parry_duelist` (0.44) is fine — wind is a *second* path, not a replacement. **Prove the build actually equipped Wind:** assert from the transcript/`build_snapshots` that wind boons were taken (a school-focused run that never gets offered wind doesn't count).
+- **Duel-ratio probe — Wind mode:** the current `probe_duel_ratios.gd` always builds a **vanilla** player vs a passive enemy (`:58`), so it can't measure Wind. Add a Wind mode (`--probe-duel-ratios --wind`, or a new `--probe-wind-duel`) that **installs a fixed Wind loadout** on the player and runs aerial / flurry / dash-through sequences, asserting they deal **posture** (the vanilla probe stays the baseline).
 - **Daemon dogfood (feel):** drive a Wind mobility run — dash-through an attack, watch the enemy's posture drop, build to a break, punish. Screenshot the dash-through posture moment.
 - **No regression:** difficulty curve still accepts at 120 seeds; zero timeouts; the rebalance's per-pool attrition/skill ordering (facetank < aggressive_dash < parry) preserved or improved.
 
@@ -59,14 +69,15 @@ Net: a dash-in / aerial / flurry / dash-through Wind build cracks posture → br
 - New Wind boon *content* beyond retuning existing effects (unless a small new effect type is needed for the momentum→posture burst).
 
 ## 5. Components
-- Modify: `WUGodot/scripts/techniques/effects/momentum_aerial_effect.gd` (posture), `momentum_flurry_effect.gd` (posture), `momentum_effect.gd` / `on_dash_through` path (dash-through → momentum + posture; possibly a small new `momentum_deflect_effect.gd`).
-- Possibly new: `momentum_posture_burst` effect type in `technique_registry.gd` + wind boon data referencing it.
-- Tests: per-effect posture-interaction unit tests; a scripted-policy comparison (aggressive_dash ± wind).
-- Reuse: `HitContext.posture_damage`, `CombatEventRecorder` (a `dash_through`/posture event), the duel-ratio probe, the scripted policies.
+- **Hook plumbing (§2b):** `technique_effect.gd` (on_dash_through 2-arg), `technique_engine.gd` (forward enemy), `combat_system.gd` (pass enemy + once-per-contact gate), `flowing_water_effect.gd` (update to 2-arg, behavior unchanged), `combat_event_recorder.gd` (`record_dash_through` + event).
+- **Wind effects:** `momentum_aerial_effect.gd` (posture), `momentum_flurry_effect.gd` (posture on main hit), the dash-through deflect (in `momentum_effect.gd` or a small new `momentum_deflect_effect.gd`); possibly a `momentum_posture_burst` effect type in `technique_registry.gd` + wind boon data.
+- **Probe:** Wind mode in `WUGodot/tools/probe_duel_ratios.gd` (`--wind`) or a new `--probe-wind-duel` that installs a fixed Wind loadout.
+- **Tests:** per-effect posture-interaction units (aerial/flurry add `ctx.posture_damage`); dash-through gating test (one `dash_through` event + bounded posture per dodge); scripted-policy comparison (aggressive_dash + school=wind ≥ 0.18, facetank unchanged).
+- **Reuse:** `HitContext.posture_damage`, the scripted policies, the duel-ratio probe.
 
 ## 6. Sequencing (phases — full plan after approval)
-1. **Aerial + flurry posture** — retune the two effects to carry posture; unit tests asserting `ctx.posture_damage` rises.
-2. **Dash-through deflect** — `on_dash_through` builds momentum + applies enemy posture damage + recorder event; test.
+1. **Aerial + flurry posture** — retune the two effects to add `ctx.posture_damage` (flurry on the main hit, not extra_hits); unit tests asserting posture rises.
+2. **Dash-through deflect** — do the §2b hook plumbing (2-arg `on_dash_through` + forward enemy + `flowing_water` update + recorder), then once-per-contact dash-through → momentum + enemy posture; test asserts **exactly one** `dash_through` event + bounded posture per dodge.
 3. **Momentum→posture burst** — threshold conversion (effect + wind boon data); test.
-4. **Validation + tune** — scripted `aggressive_dash ± wind` comparison, duel-ratio probe, daemon dogfood, harness no-regression; tune params to close the gap. ✋ STOP for the user's verdict.
+4. **Validation + tune** — add the probe Wind mode; run `--player aggressive_dash --decision school --school wind` (seeds 1..50) to **≥0.18** (loadout-proven), facetank unchanged, zero timeouts; duel-ratio Wind probe; daemon dogfood; harness no-regression (difficulty accepts at 120). Tune params to hit the threshold. ✋ STOP for the user's verdict.
 5. **Record** before/after + the wind knobs; note the framework for the next school slice.
