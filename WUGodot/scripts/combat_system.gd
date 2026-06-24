@@ -227,7 +227,6 @@ func _execute_ai_action(ai: Fighter, target: Fighter, action: Dictionary, dt: fl
 					emit_signal("spawn_particles", attack_pos, 6, GameConstants.COLOR_EARTH_LIGHT)
 		"block":
 			ai.is_blocking = true
-			ai.trigger_parry_window()
 		"move":
 			var move_dir: float = float(action.get("direction", direction))
 			ai.velocity.x = lerp(ai.velocity.x, move_dir * ai.move_speed, 0.3)
@@ -257,7 +256,6 @@ func _execute_legacy_ai(ai: Fighter, target: Fighter, dt: float, direction: floa
 				ai._ai_decision_timer = 0.25
 			if target.is_hit_active() and _rng.randf() < 0.4:
 				ai.is_blocking = true
-				ai.trigger_parry_window()
 			else:
 				ai.is_blocking = false
 
