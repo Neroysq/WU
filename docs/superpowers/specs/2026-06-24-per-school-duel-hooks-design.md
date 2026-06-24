@@ -47,10 +47,11 @@ Every school interacts with the **posture duel** through the existing `Technique
 Net: a dash-in / aerial / flurry / dash-through Wind build cracks posture → break → punish, **without parrying** — a genuine second viable duel path.
 
 ### 2b. Required hook changes (engine plumbing for the dash-through deflect)
-- **`TechniqueEffect.on_dash_through(fighter)` → `on_dash_through(fighter, enemy)`** (`technique_effect.gd:69`) so an effect can damage the enemy.
-- **`TechniqueEngine.on_dash_through`** (`:172,174`) forwards the `enemy` to each effect.
-- **`CombatSystem`** (`:127`) passes the enemy AND **gates the call to once per dash-through contact** (don't fire the posture reward every frame in the invuln/active/in-range window).
-- **Update the existing implementer** `flowing_water_effect.gd:12` to the new 2-arg signature (keep its current behavior; just accept `enemy`).
+- **`TechniqueEffect.on_dash_through(fighter)` → `on_dash_through(fighter, enemy) -> Dictionary`** (`technique_effect.gd:69`). It **returns a result** `{posture_damage, momentum_gain, message}` (mirroring `on_dash_end`, `combat_system.gd:113`) — it must **NOT** call `enemy.apply_posture_damage(...)` directly.
+- **`CombatSystem` owns posture application.** It consumes the returned `posture_damage` through the **same break-aware path as hits** — compute `will_posture_break`, apply, and on a break record the stun event + posture-break feedback **and fire `attacker.technique_engine.on_posture_break(attacker)`** (as at `combat_system.gd:413-424`). A direct `apply_posture_damage` in the effect would bypass all of that. Extract a shared helper if the hit path can't be reused directly.
+- **`TechniqueEngine.on_dash_through`** (`:172,174`) forwards `enemy` and returns the merged effect result.
+- **`CombatSystem`** (`:127`) passes the enemy AND **gates to once per dash-through contact** (don't fire every frame in the invuln/active/in-range window).
+- **Update the existing implementer** `flowing_water_effect.gd:12` to the new signature (return `{}` if it applies no posture; behavior otherwise unchanged).
 - **Add `CombatEventRecorder.record_dash_through(fighter, enemy, posture_amount)`** + a `dash_through` event so triggers/telemetry/tests can count it.
 
 **Numbers are data/params** (`params` on each effect + wind boon `data/Boons/Boons.json`), tuned like the rebalance (probe + policy), not hardcoded design.
@@ -58,7 +59,7 @@ Net: a dash-in / aerial / flurry / dash-through Wind build cracks posture → br
 ---
 
 ## 3. Validation
-- **Scripted-policy gate (primary, quantitative) — hard threshold:** `--player aggressive_dash --decision school --school wind` over **seeds 1..50** must hit **win-rate ≥ 0.18** (vs the 0.08 baseline), with **zero timeouts** and **no improvement to `facetank`** (still ~0.00). Being below/near `parry_duelist` (0.44) is fine — wind is a *second* path, not a replacement. **Prove the build actually equipped Wind:** assert from the transcript/`build_snapshots` that wind boons were taken (a school-focused run that never gets offered wind doesn't count).
+- **Scripted-policy gate (primary, quantitative) — hard threshold:** `--player aggressive_dash --decision school --school wind` over **seeds 1..50**. The **headline win-rate is always over all 50 seeds** (never filter out runs that didn't get Wind — filtering changes the denominator and can inflate the number). Gate: **headline win ≥ 0.18** (vs 0.08 baseline), **zero timeouts**, **`facetank` unchanged** (~0.00); below/near `parry_duelist` (0.44) is fine (wind is a *second* path). **Separately report wind acquisition** — `% of runs with a wind boon in `build_snapshots`` and avg node it's acquired. **If acquisition is too sparse** to attribute the result to Wind, validate via a **fixed forced-Wind-loadout path** (daemon `start{build:[wind…]}` or a `--build` batch option) instead of filtering the seed set.
 - **Duel-ratio probe — Wind mode:** the current `probe_duel_ratios.gd` always builds a **vanilla** player vs a passive enemy (`:58`), so it can't measure Wind. Add a Wind mode (`--probe-duel-ratios --wind`, or a new `--probe-wind-duel`) that **installs a fixed Wind loadout** on the player and runs aerial / flurry / dash-through sequences, asserting they deal **posture** (the vanilla probe stays the baseline).
 - **Daemon dogfood (feel):** drive a Wind mobility run — dash-through an attack, watch the enemy's posture drop, build to a break, punish. Screenshot the dash-through posture moment.
 - **No regression:** difficulty curve still accepts at 120 seeds; zero timeouts; the rebalance's per-pool attrition/skill ordering (facetank < aggressive_dash < parry) preserved or improved.
@@ -77,7 +78,7 @@ Net: a dash-in / aerial / flurry / dash-through Wind build cracks posture → br
 
 ## 6. Sequencing (phases — full plan after approval)
 1. **Aerial + flurry posture** — retune the two effects to add `ctx.posture_damage` (flurry on the main hit, not extra_hits); unit tests asserting posture rises.
-2. **Dash-through deflect** — do the §2b hook plumbing (2-arg `on_dash_through` + forward enemy + `flowing_water` update + recorder), then once-per-contact dash-through → momentum + enemy posture; test asserts **exactly one** `dash_through` event + bounded posture per dodge.
+2. **Dash-through deflect** — do the §2b plumbing (`on_dash_through(fighter,enemy)->Dictionary`, engine forwards/merges, `flowing_water` returns `{}`, recorder), with **CombatSystem applying the returned posture via the break-aware path** (stun event + `on_posture_break(attacker)` on a break), **gated once per contact**. Tests: exactly one `dash_through` event + bounded posture per dodge; a dash-through that breaks posture fires the stun/posture-break callbacks.
 3. **Momentum→posture burst** — threshold conversion (effect + wind boon data); test.
-4. **Validation + tune** — add the probe Wind mode; run `--player aggressive_dash --decision school --school wind` (seeds 1..50) to **≥0.18** (loadout-proven), facetank unchanged, zero timeouts; duel-ratio Wind probe; daemon dogfood; harness no-regression (difficulty accepts at 120). Tune params to hit the threshold. ✋ STOP for the user's verdict.
+4. **Validation + tune** — add the probe Wind mode; run `--player aggressive_dash --decision school --school wind` (seeds 1..50): **headline win over all 50 ≥ 0.18**, report **wind-acquisition %** (forced-loadout path if sparse), facetank unchanged, zero timeouts; duel-ratio Wind probe; daemon dogfood; harness no-regression (difficulty accepts at 120). Tune params to hit the threshold. ✋ STOP for the user's verdict.
 5. **Record** before/after + the wind knobs; note the framework for the next school slice.
