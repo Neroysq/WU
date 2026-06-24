@@ -79,6 +79,9 @@ func record_boon_proc(boon_id: String, amount: int = 1) -> void:
 func record_dash(fighter: Fighter) -> void:
 	record("dash", {"fighter": _role(fighter), "iframes": fighter.dash_iframe_end})
 
+func record_dash_through(fighter: Fighter, _enemy: Fighter, posture_amount: float) -> void:
+	record("dash_through", {"fighter": _role(fighter), "posture_damage": posture_amount})
+
 func record_stun(fighter: Fighter, duration: float) -> void:
 	record("stun", {"fighter": _role(fighter), "duration": duration})
 

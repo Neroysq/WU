@@ -120,11 +120,21 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 			emit_signal("show_feedback", str(dash_result.get("message", "")), 0.4)
 	fighter.position += fighter.velocity * dt
 
-	if fighter.is_invulnerable and enemy != null and enemy.is_hit_active():
-		var dist: float = absf(enemy.position.x - fighter.position.x)
-		var in_attack_zone: bool = dist <= enemy.current_attack_range() + fighter.half_width
-		if in_attack_zone and fighter.technique_engine != null:
-			fighter.technique_engine.on_dash_through(fighter)
+	var in_dash_through_zone: bool = enemy != null and absf(enemy.position.x - fighter.position.x) <= enemy.current_attack_range() + fighter.half_width
+	var dash_through_contact: bool = fighter.is_invulnerable and enemy != null and enemy.is_hit_active() and in_dash_through_zone
+	if dash_through_contact and not fighter._dash_through_fired and fighter.technique_engine != null:
+		fighter._dash_through_fired = true
+		var dash_through_result: Dictionary = fighter.technique_engine.on_dash_through(fighter, enemy)
+		var dash_through_posture: float = float(dash_through_result.get("posture_damage", 0.0))
+		if dash_through_posture > 0.0:
+			apply_posture_break_aware(fighter, enemy, dash_through_posture)
+			if event_recorder != null:
+				event_recorder.record_dash_through(fighter, enemy, dash_through_posture)
+		fighter.momentum = minf(fighter.momentum + float(dash_through_result.get("momentum_gain", 0.0)), 100.0)
+		for message in dash_through_result.get("messages", []) as Array:
+			emit_signal("show_feedback", str(message), 0.4)
+	elif not dash_through_contact:
+		fighter._dash_through_fired = false
 
 	if fighter.position.y >= GameConstants.GROUND_Y:
 		if (not fighter.is_grounded) and fighter.velocity.y > 100.0:
@@ -258,6 +268,21 @@ func _execute_legacy_ai(ai: Fighter, target: Fighter, dt: float, direction: floa
 				ai.is_blocking = true
 			else:
 				ai.is_blocking = false
+
+func apply_posture_break_aware(attacker: Fighter, defender: Fighter, posture_amount: float) -> bool:
+	var will_posture_break: bool = (defender.posture_current - posture_amount) <= 0.0 and not defender.is_stunned
+	defender.apply_posture_damage(posture_amount)
+	if will_posture_break:
+		emit_signal("hitstop", 0.18)
+		emit_signal("camera_shake", 18.0)
+		emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height), 24, GameConstants.COLOR_GOLD_BRIGHT)
+		emit_signal("show_feedback", "破", 0.9)
+		if event_recorder != null:
+			event_recorder.record_stun(defender, defender.stun_duration)
+		if attacker != null and attacker.technique_engine != null:
+			if attacker.technique_engine.on_posture_break(attacker):
+				emit_signal("show_feedback", "回春!", 0.6)
+	return will_posture_break
 
 func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 	var settings: Dictionary = DataManager.get_game_settings()
@@ -410,19 +435,7 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 				emit_signal("show_feedback", "鳳凰起!", 0.8)
 				emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height * 0.5), 24, GameConstants.COLOR_IMPERIAL_GOLD)
 
-		var will_posture_break: bool = (defender.posture_current - ctx.posture_damage) <= 0.0 and not defender.is_stunned
-		defender.apply_posture_damage(ctx.posture_damage)
-
-		if will_posture_break:
-			emit_signal("hitstop", 0.18)
-			emit_signal("camera_shake", 18.0)
-			emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height), 24, GameConstants.COLOR_GOLD_BRIGHT)
-			emit_signal("show_feedback", "破", 0.9)
-			if event_recorder != null:
-				event_recorder.record_stun(defender, defender.stun_duration)
-			if attacker.technique_engine != null:
-				if attacker.technique_engine.on_posture_break(attacker):
-					emit_signal("show_feedback", "回春!", 0.6)
+		apply_posture_break_aware(attacker, defender, ctx.posture_damage)
 
 		var damage_pos: Vector2 = defender.position + Vector2(0.0, -defender.height - 20.0)
 		emit_signal("damage_dealt", damage_pos, ctx.hp_damage, is_critical)

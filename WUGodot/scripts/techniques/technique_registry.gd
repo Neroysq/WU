@@ -30,6 +30,7 @@ const DeflectRedirectEffectScript = preload("res://scripts/techniques/effects/de
 const DeflectReduceEffectScript = preload("res://scripts/techniques/effects/deflect_reduce_effect.gd")
 const DeflectRiposteDmgEffectScript = preload("res://scripts/techniques/effects/deflect_riposte_dmg_effect.gd")
 const MomentumAerialEffectScript = preload("res://scripts/techniques/effects/momentum_aerial_effect.gd")
+const MomentumDeflectEffectScript = preload("res://scripts/techniques/effects/momentum_deflect_effect.gd")
 const MomentumEffectScript = preload("res://scripts/techniques/effects/momentum_effect.gd")
 const MomentumFlurryEffectScript = preload("res://scripts/techniques/effects/momentum_flurry_effect.gd")
 const MomentumSpeedEffectScript = preload("res://scripts/techniques/effects/momentum_speed_effect.gd")
@@ -124,6 +125,8 @@ static func _new_effect_for_type(effect_type: String) -> Variant:
 			return DeflectRedirectEffectScript.new()
 		"momentum":
 			return MomentumEffectScript.new()
+		"momentum_deflect":
+			return MomentumDeflectEffectScript.new()
 		"momentum_flurry":
 			return MomentumFlurryEffectScript.new()
 		"momentum_aerial":

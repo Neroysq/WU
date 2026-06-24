@@ -169,10 +169,21 @@ func on_dash_end(fighter: Fighter = null, enemy: Fighter = null) -> Dictionary:
 			merged[key] = result[key]
 	return merged
 
-func on_dash_through(fighter: Fighter = null) -> void:
+func on_dash_through(fighter: Fighter = null, enemy: Fighter = null) -> Dictionary:
+	var merged: Dictionary = {"posture_damage": 0.0, "momentum_gain": 0.0, "messages": []}
 	for effect in _effects:
-		effect.on_dash_through(fighter)
+		var result: Variant = effect.on_dash_through(fighter, enemy)
 		ProcRecorderScript.record_effect(str(effect.id))
+		if typeof(result) != TYPE_DICTIONARY:
+			continue
+		var result_dict: Dictionary = result as Dictionary
+		merged["posture_damage"] += float(result_dict.get("posture_damage", 0.0))
+		merged["momentum_gain"] += float(result_dict.get("momentum_gain", 0.0))
+		if result_dict.has("message"):
+			(merged["messages"] as Array).append(str(result_dict["message"]))
+		for message in result_dict.get("messages", []) as Array:
+			(merged["messages"] as Array).append(str(message))
+	return merged
 
 func on_kill(fighter: Fighter) -> void:
 	for effect in _effects:

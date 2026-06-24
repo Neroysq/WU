@@ -84,9 +84,11 @@ static func describe_effect(effect_data: Dictionary) -> String:
 		"momentum":
 			return _momentum_text(effect_data)
 		"momentum_aerial":
-			return "aerial hits deal %d%% and landing gives %.0f momentum" % [int(round(float(effect_data.get("multiplier", 1.0)) * 100.0)), float(effect_data.get("landing_gain", 0.0))]
+			return "aerial hits deal %d%% (+%d%% posture) and landing gives %.0f momentum" % [int(round(float(effect_data.get("multiplier", 1.0)) * 100.0)), int(round((float(effect_data.get("posture_multiplier", 1.5)) - 1.0) * 100.0)), float(effect_data.get("landing_gain", 0.0))]
+		"momentum_deflect":
+			return "dash-through deflect deals %.0f posture (+%.0f momentum)" % [float(effect_data.get("posture", 0.0)), float(effect_data.get("momentum", 0.0))]
 		"momentum_flurry":
-			return "at %.0f momentum, spend %.0f for %.0f flurry damage" % [float(effect_data.get("threshold", 0.0)), float(effect_data.get("cost", 0.0)), float(effect_data.get("damage", 0.0))]
+			return "at %.0f momentum, spend %.0f for %.0f flurry damage (+%.0f posture)" % [float(effect_data.get("threshold", 0.0)), float(effect_data.get("cost", 0.0)), float(effect_data.get("damage", 0.0)), float(effect_data.get("posture_damage", 8.0))]
 		"momentum_speed":
 			return "adds %.0f speed from momentum" % float(effect_data.get("move_speed", 0.0))
 		"phoenix":
@@ -156,7 +158,7 @@ static func _short_effect(effect_data: Dictionary) -> String:
 			return "Deflect"
 		"block_chip", "low_hp_boost", "phoenix":
 			return "Guard"
-		"dash_stab", "flowing_water", "gaze", "momentum", "momentum_aerial", "momentum_flurry", "momentum_speed", "sparrow":
+		"dash_stab", "flowing_water", "gaze", "momentum", "momentum_aerial", "momentum_deflect", "momentum_flurry", "momentum_speed", "sparrow":
 			return "Momentum"
 		"bleed_on_heavy", "intent_mark", "intent_crit_vs_marked", "intent_dash_flash", "intent_reach", "twin_strike":
 			return "Intent"

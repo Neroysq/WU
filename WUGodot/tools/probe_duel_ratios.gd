@@ -2,6 +2,8 @@ extends SceneTree
 
 const CombatSetupScript = preload("res://scripts/sim/combat_setup.gd")
 const CombatStepScript = preload("res://scripts/sim/combat_step.gd")
+const RegistryScript = preload("res://scripts/techniques/technique_registry.gd")
+const RecorderScript = preload("res://scripts/sim/combat_event_recorder.gd")
 
 const OUT_DIR: String = "/tmp/duel_ratios"
 const DT: float = 1.0 / 60.0
@@ -21,12 +23,17 @@ func _init() -> void:
 	DataManager.initialize()
 	RngService.set_run_seed(240624)
 	DirAccess.make_dir_recursive_absolute(OUT_DIR)
+	var wind_mode: bool = OS.get_cmdline_user_args().has("--wind")
 	var report: Dictionary = {}
 	for archetype in ARCHETYPES:
 		report[archetype] = measure(archetype)
+	if wind_mode:
+		report["wind"] = measure_wind("bandit_swordsman")
 	var out_path: String = OUT_DIR.path_join("probe.json")
 	_write_json(out_path, report)
 	_print_table(report)
+	if wind_mode:
+		_print_wind(report["wind"] as Dictionary)
 	print("JSON: %s" % out_path)
 	RngService.clear_run_seed()
 	quit(0)
@@ -49,6 +56,21 @@ static func measure(archetype: String) -> Dictionary:
 		"timeout": bool(posture_path.get("timeout", false)),
 	}
 
+static func measure_wind(archetype: String = "bandit_swordsman") -> Dictionary:
+	var aerial: Dictionary = _wind_aerial_probe(archetype)
+	var flurry: Dictionary = _wind_flurry_probe(archetype)
+	var dash: Dictionary = _wind_dash_through_probe(archetype)
+	return {
+		"archetype": archetype,
+		"aerial_posture_damage": float(aerial.get("posture_damage", 0.0)),
+		"aerial_hp_damage": float(aerial.get("hp_damage", 0.0)),
+		"flurry_posture_damage": float(flurry.get("posture_damage", 0.0)),
+		"dash_through_posture_damage": float(dash.get("posture_damage", 0.0)),
+		"dash_through_events": int(dash.get("events", 0)),
+		"dash_through_momentum": float(dash.get("momentum", 0.0)),
+		"timeout": bool(aerial.get("timeout", false)) or bool(flurry.get("timeout", false)) or bool(dash.get("timeout", false)),
+	}
+
 static func _parry_posture() -> float:
 	return float(DataManager.get_game_settings().get("parryPostureDamage", 50.0))
 
@@ -64,6 +86,93 @@ static func _fresh(archetype: String) -> Dictionary:
 	enemy.ai_brain = null
 	_place_pair(player, enemy)
 	return {"player": player, "enemy": enemy, "cs": combat_system}
+
+static func _install_wind_effects(player: Fighter) -> void:
+	if player.technique_engine == null:
+		return
+	player.technique_engine.add_effect(RegistryScript.create_effect_from_data({"type": "momentum_deflect", "posture": 28.0, "momentum": 18.0}, "wind_probe#deflect"), player)
+	player.technique_engine.add_effect(RegistryScript.create_effect_from_data({"type": "momentum_aerial", "multiplier": 1.25, "landing_gain": 10.0, "posture_multiplier": 2.0}, "wind_probe#aerial"), player)
+	player.technique_engine.add_effect(RegistryScript.create_effect_from_data({"type": "momentum_flurry", "threshold": 35.0, "damage": 3.0, "cost": 15.0, "posture_damage": 12.0}, "wind_probe#flurry"), player)
+
+static func _wind_aerial_probe(archetype: String) -> Dictionary:
+	var s: Dictionary = _fresh(archetype)
+	var player: Fighter = s["player"] as Fighter
+	var enemy: Fighter = s["enemy"] as Fighter
+	var combat_system: CombatSystem = s["cs"] as CombatSystem
+	_install_wind_effects(player)
+	_place_pair(player, enemy)
+	player.is_grounded = false
+	player.position.y = GameConstants.GROUND_Y - 8.0
+	var posture_before: float = enemy.posture_current
+	var hp_before: float = enemy.health_current
+	player.start_light_attack()
+	for _f in range(MAX_FRAMES_PER_SWING):
+		_place_pair(player, enemy)
+		player.is_grounded = false
+		player.position.y = GameConstants.GROUND_Y - 8.0
+		CombatStepScript.advance(combat_system, player, enemy, {}, DT)
+		if enemy.posture_current < posture_before or enemy.health_current < hp_before:
+			return {
+				"posture_damage": posture_before - enemy.posture_current,
+				"hp_damage": hp_before - enemy.health_current,
+				"timeout": false,
+			}
+	return {"posture_damage": 0.0, "hp_damage": 0.0, "timeout": true}
+
+static func _wind_flurry_probe(archetype: String) -> Dictionary:
+	var s: Dictionary = _fresh(archetype)
+	var player: Fighter = s["player"] as Fighter
+	var enemy: Fighter = s["enemy"] as Fighter
+	var combat_system: CombatSystem = s["cs"] as CombatSystem
+	_install_wind_effects(player)
+	player.momentum = 60.0
+	_place_pair(player, enemy)
+	var posture_before: float = enemy.posture_current
+	player.start_light_attack()
+	for _f in range(MAX_FRAMES_PER_SWING):
+		_place_pair(player, enemy)
+		CombatStepScript.advance(combat_system, player, enemy, {}, DT)
+		if enemy.posture_current < posture_before:
+			return {"posture_damage": posture_before - enemy.posture_current, "timeout": false}
+	return {"posture_damage": 0.0, "timeout": true}
+
+static func _wind_dash_through_probe(archetype: String) -> Dictionary:
+	var s: Dictionary = _fresh(archetype)
+	var player: Fighter = s["player"] as Fighter
+	var enemy: Fighter = s["enemy"] as Fighter
+	var combat_system: CombatSystem = s["cs"] as CombatSystem
+	var recorder: CombatEventRecorder = RecorderScript.new()
+	combat_system.event_recorder = recorder
+	_install_wind_effects(player)
+	enemy.position = Vector2(600.0, GameConstants.GROUND_Y)
+	player.position = Vector2(590.0, GameConstants.GROUND_Y)
+	player.velocity = Vector2.ZERO
+	player.facing = 1
+	player.start_dash()
+	var guard: int = 0
+	while not player.is_invulnerable and guard < 40:
+		combat_system.update_player(player, {}, 1.0 / 240.0, enemy)
+		guard += 1
+	enemy.start_light_attack()
+	guard = 0
+	while not enemy.is_hit_active() and guard < 120:
+		enemy._attack_state.advance(1.0 / 240.0)
+		guard += 1
+	var posture_before: float = enemy.posture_current
+	for _f in range(8):
+		combat_system.update_player(player, {}, 1.0 / 240.0, enemy)
+	var count: int = 0
+	var posture_damage: float = 0.0
+	for event in recorder.events():
+		if str(event.get("type", "")) == "dash_through":
+			count += 1
+			posture_damage += float(event.get("posture_damage", 0.0))
+	return {
+		"posture_damage": posture_damage if posture_damage > 0.0 else posture_before - enemy.posture_current,
+		"events": count,
+		"momentum": player.momentum,
+		"timeout": count <= 0 or enemy.posture_current >= posture_before,
+	}
 
 static func _hits_until(archetype: String, field: String, heavy: bool, block: bool) -> Dictionary:
 	var s: Dictionary = _fresh(archetype)
@@ -212,6 +321,20 @@ func _print_table(report: Dictionary) -> void:
 			float(path.get("duration", 0.0)),
 			str(_any_timeout(m)),
 		])
+
+func _print_wind(wind: Dictionary) -> void:
+	print("")
+	print("WIND PROBE")
+	print("archetype,aerial_posture,flurry_posture,dash_through_posture,dash_through_events,dash_through_momentum,timeout")
+	print("%s,%.1f,%.1f,%.1f,%d,%.1f,%s" % [
+		str(wind.get("archetype", "")),
+		float(wind.get("aerial_posture_damage", 0.0)),
+		float(wind.get("flurry_posture_damage", 0.0)),
+		float(wind.get("dash_through_posture_damage", 0.0)),
+		int(wind.get("dash_through_events", 0)),
+		float(wind.get("dash_through_momentum", 0.0)),
+		str(wind.get("timeout", false)),
+	])
 
 func _metric_count(value: Variant) -> String:
 	if typeof(value) == TYPE_DICTIONARY:

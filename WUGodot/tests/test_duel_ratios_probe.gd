@@ -37,5 +37,16 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("posture path should report break/punish payoff data: %s" % str(posture_path))
 
+	var wind: Dictionary = Probe.measure_wind("bandit_swordsman")
+	if float(wind.get("aerial_posture_damage", 0.0)) > 0.0 \
+			and float(wind.get("flurry_posture_damage", 0.0)) > 0.0 \
+			and float(wind.get("dash_through_posture_damage", 0.0)) > 0.0 \
+			and int(wind.get("dash_through_events", 0)) == 1 \
+			and not bool(wind.get("timeout", false)):
+		passed += 1
+	else:
+		failed += 1
+		failures.append("wind probe should measure aerial/flurry/dash-through posture once: %s" % str(wind))
+
 	RngService.clear_run_seed()
 	return {"passed": passed, "failed": failed, "failures": failures}

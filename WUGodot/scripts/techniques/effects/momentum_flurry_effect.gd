@@ -5,6 +5,7 @@ func modify_outgoing_hit(ctx: Variant) -> void:
 		return
 	if ctx.attacker.momentum < float(params.get("threshold", 50.0)):
 		return
+	ctx.posture_damage += float(params.get("posture_damage", 8.0))
 	ctx.extra_hits.append({
 		"damage": float(params.get("damage", 3.0)),
 		"offset": Vector2(0.0, -ctx.defender.height * 0.5) if ctx.defender != null else Vector2.ZERO,

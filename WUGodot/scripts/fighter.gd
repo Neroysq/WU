@@ -126,6 +126,7 @@ var _venom_slow_delta: float = 0.0
 var jolt_timer: float = 0.0
 var deflect_riposte_armed: bool = false
 var momentum: float = 0.0
+var _dash_through_fired: bool = false
 var momentum_landing_burst_ready: bool = false
 var intent_marks: int = 0
 var attack_range_bonus: float = 0.0
@@ -189,6 +190,7 @@ func reset_for_combat() -> void:
 	jolt_timer = 0.0
 	deflect_riposte_armed = false
 	momentum = 0.0
+	_dash_through_fired = false
 	momentum_landing_burst_ready = false
 	intent_marks = 0
 	_phoenix_invuln_timer = 0.0

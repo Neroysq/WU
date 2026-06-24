@@ -29,6 +29,7 @@ const _TEST_MODULES: Array[String] = [
 	"res://tests/test_jolt_effect.gd",
 	"res://tests/test_deflect_effect.gd",
 	"res://tests/test_momentum_effect.gd",
+	"res://tests/test_wind_duel_hooks.gd",
 	"res://tests/test_intent_mark_effect.gd",
 	"res://tests/test_ai_brain.gd",
 	"res://tests/test_boss_controller.gd",

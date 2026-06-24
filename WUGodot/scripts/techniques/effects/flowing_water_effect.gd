@@ -9,8 +9,9 @@ func _init() -> void:
 func on_combat_start(_fighter: Variant) -> void:
 	_armed = false
 
-func on_dash_through(_fighter: Variant) -> void:
+func on_dash_through(_fighter: Variant, _enemy: Variant = null) -> Dictionary:
 	_armed = true
+	return {}
 
 func modify_outgoing_hit(ctx: Variant) -> void:
 	if not _armed:

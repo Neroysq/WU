@@ -66,8 +66,8 @@ func on_posture_break_dealt(_fighter: Variant) -> void:
 func on_dash_end(_fighter: Variant, _enemy: Variant) -> Dictionary:
 	return {}
 
-func on_dash_through(_fighter: Variant) -> void:
-	pass
+func on_dash_through(_fighter: Variant, _enemy: Variant = null) -> Dictionary:
+	return {}
 
 func on_jump(_fighter: Variant) -> void:
 	pass
