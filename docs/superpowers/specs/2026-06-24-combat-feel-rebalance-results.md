@@ -398,4 +398,103 @@ Read: both skill paths beat facetank under the same greedy build policy. Parry r
 
 ## Final
 
-Pending Task 5 / user balance verdict.
+Accepted by user after the Task 4b STOP packet. This closes the combat-feel rebalance.
+
+### Final Progression
+
+| stage | main change | heuristic win | avg depth | difficulty checker | timeouts | read |
+|---|---|---:|---:|---|---:|---|
+| baseline | measurement only | 0.48 / 50 seeds | 5.62 | accepted | 0 | low-skill aggression was inverted; boss carried most deaths |
+| code-only | enemy reactive block is block-only | 0.80 / 50 seeds | 5.76 | failed | 0 | fairness fixed, but numbers became too player-favorable |
+| candidate A | HP/offense/posture tuning | 0.48 / 50 seeds | 5.92 | failed | 0 | boss became the real gate, but non-boss pressure was too low |
+| final Task 4b | strong/elite pressure + scripted policies | 0.267 / 120 seeds | 4.71 | accepted | 0 | threat spreads weak -> strong -> elite -> boss; facetank loses |
+
+Final accepted attrition:
+
+| pool | combat win_rate | avg dmg taken | target | verdict |
+|---|---:|---:|---|---|
+| weak | 0.992 | 7.8 | ~8-12 | accepted, low edge |
+| strong | 0.837 | 25.9 | ~20-30 | accepted |
+| elite | 0.682 | 43.3 | ~30-45 | accepted |
+| boss | 0.500 | 62.6 | ~60-75 | accepted |
+
+Final accepted playstyle policy comparison:
+
+| player policy | run win_rate | avg_depth | verdict |
+|---|---:|---:|---|
+| facetank | 0.00 | 1.82 | fails as intended |
+| aggressive_dash | 0.08 | 4.08 | viable non-parry path; lags parry |
+| parry_duelist | 0.44 | 5.46 | skill path clearly rewarded |
+
+### Acceptance Checklist
+
+| criterion | result |
+|---|---|
+| facetank-DPS loses | green: `facetank` run win_rate 0.00 |
+| skill rewarded | green: `parry_duelist` 0.44 > `facetank` 0.00 |
+| non-parry path viable | green: `aggressive_dash` 0.08 > `facetank` 0.00 |
+| threat spread off boss | green: strong 25.9, elite 43.3, boss 62.6 dmg/combat |
+| elite-under-strong inversion fixed | green: elite damage/combat > strong |
+| difficulty curve holds | green: `check_difficulty_curve.py` accepted at 120 seeds |
+| tier-1 deaths below 20% | green: 0.011 |
+| boss remains highest aggregated death share | green: boss deaths 32 / 88 total |
+| zero timeouts | green: 0 |
+| posture-break remains efficient | green: break counts stay lower than HP-kill counts on every archetype |
+| parry tier-relative, not flattened | green: weak ~2, ronin/disciple 2-3, boss 4 |
+| no HP sponges | green: HP-kill light stays within the <= ~1.5x band |
+| verification suite | green: `./run.sh --import`, `./run.sh --test` -> 536/0 |
+
+### Chosen Knob Values
+
+Core settings:
+
+| setting | value |
+|---|---:|
+| `blockHealthMultiplier` | 0.2 |
+| `blockPostureMultiplier` | 1.5 |
+| `parryPostureDamage` | 60.0 |
+| `parryStunDuration` | 0.6 |
+
+Enemy knobs:
+
+| archetype | hp | posture | recovery | aggression | blockChance | preferredRange | special |
+|---|---:|---:|---:|---:|---:|---:|---|
+| bandit_swordsman | 92 | 85 | 8 | 0.58 | 0.18 | 228 | - |
+| bandit_spearman | 86 | 80 | 7 | 0.52 | 0.13 | 258 | - |
+| wandering_ronin | 145 | 100 | 10 | 0.72 | 0.24 | 222 | strong normal |
+| sect_disciple | 175 | 120 | 12 | 0.78 | 0.30 | 221 | strong normal |
+| masked_assassin | 120 | 85 | 9 | 1.00 | 0.04 | 250 | elite-only, teleport 0.20 |
+| iron_bear | 420 | 160 | 14 | 0.86 | 0.06 | 215 | boss |
+
+Tuned attack pressure:
+
+| attack | damage | posture | range | perilous/parryable |
+|---|---:|---:|---:|---|
+| `bandit_slash` | 20 | 24 | 250 | parryable |
+| `bandit_overhead` | 30 | 30 | 250 | parryable |
+| `bandit_thrust_perilous` | 30 | 20 | 250 | perilous |
+| `spear_long_thrust` | 18 | 20 | 287 | parryable |
+| `spear_wide_swing` | 24 | 28 | 280 | parryable |
+| `ronin_slash` | 16 | 26 | 244 | parryable |
+| `ronin_thrust` | 18 | 22 | 258 | parryable |
+| `ronin_sweep` | 22 | 32 | 244 | parryable |
+| `ronin_perilous_thrust` | 24 | 24 | 266 | perilous |
+| `disciple_slash` | 18 | 26 | 245 | parryable |
+| `disciple_thrust` | 20 | 24 | 253 | parryable |
+| `disciple_sweep` | 24 | 34 | 245 | parryable |
+| `disciple_counter` | 20 | 36 | 245 | parryable |
+| `disciple_jump_attack` | 18 | 28 | 260 | perilous |
+| `smoke_thrust` | 28 | 44 | 275 | parryable |
+| `flicker_slash` | 28 | 44 | 280 | parryable |
+| `assassin_backstab` | 70 | 46 | 285 | perilous |
+| `assassin_perilous_grab` | 64 | 40 | 255 | perilous |
+| `bear_swipe` | 42 | 32 | 266 | parryable |
+| `bear_overhead` | 55 | 44 | 258 | parryable |
+| `bear_stomp` | 42 | 38 | 245 | parryable |
+| `bear_roar_aoe` | 28 | 20 | 233 | perilous |
+| `mountain_breaker` | 28 | 50 | 175 | perilous |
+| `bear_crush_grab` | 0 | 0 | 273 | perilous grab |
+
+### Follow-Up
+
+Non-parry-path viability is accepted but still behind the parry path: `aggressive_dash` 0.08 vs `parry_duelist` 0.44. Treat this as a build-power gap, not a combat-number gap. Close it with the deferred per-school duel hooks and punish identity work: venom pressure, thunder stun-burst, wind mobility payoff, sword intent burst, etc. The crude-bot final win rate of 0.267 is accepted as the skill floor.
