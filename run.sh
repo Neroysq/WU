@@ -9,6 +9,7 @@
 #   ./run.sh --anchor-sanity    # validate stored Hu anchors against sprite pixels
 #   ./run.sh --scale-masters <dir>     # normalize smooth masters to a common canvas
 #   ./run.sh --probe-reach             # derive Hu authored reach and enemy range targets
+#   ./run.sh --probe-light-deadzone    # sweep point-blank Hu light geometry
 #   ./run.sh --snapshot-reach <out.json> # save machine-readable Hu reach data
 #   ./run.sh --stage-held-keyframes <dir> # stage approved held keyframes as smooth masters
 #   ./run.sh --shot-combat [dir] # save deterministic combat screenshots, then quit
@@ -85,6 +86,10 @@ case "${1:-}" in
         echo "Probing Hu authored reach..."
         exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/probe_hu_reach.gd
         ;;
+    --probe-light-deadzone)
+        echo "Probing Hu light point-blank geometry..."
+        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/probe_light_deadzone.gd
+        ;;
     --snapshot-reach)
         OUT="${2:?usage: ./run.sh --snapshot-reach <out.json>}"
         echo "Snapshotting Hu reach -> $OUT"
@@ -143,7 +148,7 @@ case "${1:-}" in
         ;;
     *)
         echo "Unknown option: $1" >&2
-	        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-video <args>|--probe-reach|--snapshot-reach <out.json>|--stage-held-keyframes <dir>|--shot-combat|--shot-action STATE|--shot-archetype=<id>|--playtest|--playtest-batch|--capture spec.json [out_dir_or_png]|--editor|--help]" >&2
+	        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-video <args>|--probe-reach|--probe-light-deadzone|--snapshot-reach <out.json>|--stage-held-keyframes <dir>|--shot-combat|--shot-action STATE|--shot-archetype=<id>|--playtest|--playtest-batch|--capture spec.json [out_dir_or_png]|--editor|--help]" >&2
         exit 1
         ;;
 esac
