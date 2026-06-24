@@ -17,6 +17,7 @@
 #   ./run.sh --shot-action STATE [dir] # save every rendered frame for one combat state
 #   ./run.sh --playtest --seed N [--out file.json] # run one deterministic headless autoplay
 #   ./run.sh --playtest-batch --seeds 1..20 [--out file.json] # run a deterministic autoplay batch
+#   ./run.sh --playtest-daemon --session ID # run an agent-clocked interactive session
 #   ./run.sh --capture spec.json [dir_or_png] # capture a JSON-described visual state
 #   ./run.sh --install-video <run-dir> --action=<name> --frames=... [--prefix=va] # install staged video frames
 #   ./run.sh --editor     # open the Godot editor
@@ -126,6 +127,11 @@ case "${1:-}" in
 	        echo "Running deterministic playtest..."
 	        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://scripts/sim/playtest_main.gd -- "$@"
 	        ;;
+	    --playtest-daemon)
+	        shift
+	        echo "Running interactive playtest daemon..."
+	        exec "$GODOT" --path "$PROJECT_DIR" --script res://scripts/sim/playtest_daemon_main.gd -- "$@"
+	        ;;
 	    --capture)
 	        SPEC="${2:?usage: ./run.sh --capture spec.json [out_dir_or_png]}"
 	        OUT="${3:-/tmp/wu-capture}"
@@ -148,7 +154,7 @@ case "${1:-}" in
         ;;
     *)
         echo "Unknown option: $1" >&2
-	        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-video <args>|--probe-reach|--probe-light-deadzone|--snapshot-reach <out.json>|--stage-held-keyframes <dir>|--shot-combat|--shot-action STATE|--shot-archetype=<id>|--playtest|--playtest-batch|--capture spec.json [out_dir_or_png]|--editor|--help]" >&2
+	        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-video <args>|--probe-reach|--probe-light-deadzone|--snapshot-reach <out.json>|--stage-held-keyframes <dir>|--shot-combat|--shot-action STATE|--shot-archetype=<id>|--playtest|--playtest-batch|--playtest-daemon --session ID|--capture spec.json [out_dir_or_png]|--editor|--help]" >&2
         exit 1
         ;;
 esac

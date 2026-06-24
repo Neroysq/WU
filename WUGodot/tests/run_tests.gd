@@ -57,6 +57,7 @@ const _TEST_MODULES: Array[String] = [
 	"res://tests/test_master_normalizer.gd",
 	"res://tests/test_master_geometry.gd",
 	"res://tests/test_heavy_capsule_pose.gd",
+	"res://tests/test_interactive_playtest_daemon.gd",
 ]
 
 var _passed: int = 0

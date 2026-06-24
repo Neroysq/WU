@@ -16,6 +16,7 @@ signal hitstop(duration: float)
 
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var hit_geometry: Variant = null
+var event_recorder: Variant = null
 
 func _init() -> void:
 	_rng = RngServiceScript.stream("combat")
@@ -54,6 +55,8 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 		elif enemy != null:
 			dash_direction = 1 if enemy.position.x > fighter.position.x else -1
 		fighter.start_dash(dash_direction)
+		if event_recorder != null:
+			event_recorder.record_dash(fighter)
 		emit_signal("spawn_particles", fighter.position, 8, GameConstants.COLOR_LIGHT_BLUE)
 		emit_signal("camera_shake", 3.0)
 
@@ -194,6 +197,9 @@ func _execute_ai_action(ai: Fighter, target: Fighter, action: Dictionary, dt: fl
 	ai.is_blocking = false
 
 	var action_type: String = str(action.get("type", "idle"))
+	var chosen_attack_id: String = str(action.get("attack_id", ""))
+	if event_recorder != null and action_type != "idle":
+		event_recorder.record_enemy_decision(action_type, chosen_attack_id)
 	match action_type:
 		"attack":
 			if ai.can_attack():
@@ -229,6 +235,8 @@ func _execute_ai_action(ai: Fighter, target: Fighter, action: Dictionary, dt: fl
 			if ai.can_dash():
 				var dash_dir: int = int(signf(float(action.get("direction", direction))))
 				ai.start_dash(dash_dir)
+				if event_recorder != null:
+					event_recorder.record_dash(ai)
 				emit_signal("spawn_particles", ai.position, 8, GameConstants.COLOR_VERMILLION_RED)
 		_:
 			ai.velocity.x = lerp(ai.velocity.x, 0.0, 0.2)
@@ -283,6 +291,8 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 			var grab_damage: float = defender.health_max * 0.25
 			defender.health_current -= grab_damage
 			defender.health_current = maxf(defender.health_current, 0.0)
+			if event_recorder != null:
+				event_recorder.record_hit(attacker, defender, grab_damage, 0.0, false, false, true)
 			defender.is_grabbed = true
 			defender._grab_timer = 0.6
 			defender.velocity = Vector2.ZERO
@@ -300,8 +310,14 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 			return
 
 		if defender.consume_parry_if_active() and not attack_is_perilous:
-			attacker.apply_posture_damage(float(settings.get("parryPostureDamage", 55.0)))
-			attacker.apply_stun(float(settings.get("parryStunDuration", 0.6)))
+			var parry_posture_damage: float = float(settings.get("parryPostureDamage", 55.0))
+			var parry_stun_duration: float = float(settings.get("parryStunDuration", 0.6))
+			if event_recorder != null:
+				event_recorder.record_hit(attacker, defender, 0.0, parry_posture_damage, false, true, false)
+			attacker.apply_posture_damage(parry_posture_damage)
+			attacker.apply_stun(parry_stun_duration)
+			if event_recorder != null:
+				event_recorder.record_stun(attacker, parry_stun_duration)
 			defender.gain_rage(15.0)
 			var armed_echo: bool = false
 			if defender.technique_engine != null:
@@ -353,6 +369,10 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 			emit_signal("show_feedback", "SLIPPED!", 0.5)
 		else:
 			emit_signal("show_feedback", "HIT", 0.3)
+		var is_critical: bool = attacker.combo_count > 2 or (attack_def != null and attack_def.is_heavy)
+		if event_recorder != null:
+			var blocked_contact: bool = defender.is_blocking and not attack_is_perilous and not attack_ignores_block
+			event_recorder.record_hit(attacker, defender, ctx.hp_damage, ctx.posture_damage, blocked_contact, false, is_critical)
 
 		if ctx.heal_attacker > 0.0:
 			attacker.health_current = minf(attacker.health_current + ctx.heal_attacker, attacker.health_max)
@@ -361,22 +381,30 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 			defender.bleed_timer = ctx.bleed_timer
 			defender.bleed_dps = ctx.bleed_dps
 			ProcRecorderScript.record_status("bleed")
+			if event_recorder != null:
+				event_recorder.record_status_applied(defender, "bleed")
 		if ctx.venom_stacks > 0:
 			defender.venom_stacks += ctx.venom_stacks
 			defender.venom_timer = maxf(defender.venom_timer, ctx.venom_timer)
 			defender.venom_dps = maxf(defender.venom_dps, ctx.venom_dps)
 			_apply_venom_slow(defender, ctx.venom_slow_multiplier)
 			ProcRecorderScript.record_status("venom", ctx.venom_stacks)
+			if event_recorder != null:
+				event_recorder.record_status_applied(defender, "venom", ctx.venom_stacks)
 		if ctx.consume_venom:
 			_clear_venom(defender)
 		if ctx.jolt_timer > 0.0:
 			defender.jolt_timer = maxf(defender.jolt_timer, ctx.jolt_timer)
 			ProcRecorderScript.record_status("jolt")
+			if event_recorder != null:
+				event_recorder.record_status_applied(defender, "jolt")
 		if ctx.consume_intent_marks:
 			defender.intent_marks = 0
 		if ctx.intent_marks > 0:
 			defender.intent_marks = mini(defender.intent_marks + ctx.intent_marks, ctx.intent_mark_cap)
 			ProcRecorderScript.record_status("intent_mark", ctx.intent_marks)
+			if event_recorder != null:
+				event_recorder.record_status_applied(defender, "intent_mark", ctx.intent_marks)
 		if defender.health_current <= 0.0 and defender.technique_engine != null:
 			if defender.technique_engine.check_lethal_save(defender):
 				emit_signal("camera_shake", 16.0)
@@ -392,12 +420,13 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 			emit_signal("camera_shake", 18.0)
 			emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height), 24, GameConstants.COLOR_GOLD_BRIGHT)
 			emit_signal("show_feedback", "破", 0.9)
+			if event_recorder != null:
+				event_recorder.record_stun(defender, defender.stun_duration)
 			if attacker.technique_engine != null:
 				if attacker.technique_engine.on_posture_break(attacker):
 					emit_signal("show_feedback", "回春!", 0.6)
 
 		var damage_pos: Vector2 = defender.position + Vector2(0.0, -defender.height - 20.0)
-		var is_critical: bool = attacker.combo_count > 2 or (attack_def != null and attack_def.is_heavy)
 		emit_signal("damage_dealt", damage_pos, ctx.hp_damage, is_critical)
 
 		var base_knockback: float = attack_def.knockback_units if attack_def != null else 300.0
