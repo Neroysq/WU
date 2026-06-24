@@ -24,24 +24,41 @@ Boons reinforce different paths (venom = attrition pressure; wind = mobility; so
 ## Levers (data/tuning unless noted)
 1. **Curb the HP race → posture is the efficient kill.** Make enemies **HP-tankier** and/or weight player attacks **toward posture over raw HP**, so chipping HP alone is too slow; you **break posture (→0.7s stun)** to land real damage. Tune the HP:posture ratio so a clean fight is won through ≥1 posture-break, not pure HP chip. **Posture-break must be reachable by attack pressure OR parry** (both deal posture damage) — see the principle above.
 2. **Punish facetank.** Raise enemy offense/pressure so standing-and-trading bleeds you out, and ensure archetypes **use existing perilous/unblockable attacks** (force a dash, no new mechanic). Target: a defending/spacing player beats a facetanker.
-3. **Fix the duel fairness (THE code change).** Enemy reactive block becomes **block-only** — remove the `trigger_parry_window()` on AI block (`combat_system.gd:229-230, 259-260`). Pressuring a blocking enemy then **chips + bleeds its posture (1.6×) toward a break** (good!) instead of coin-flip parrying the player. (Deliberate, telegraphed enemy parry can return later as an archetype ability — out of scope.)
+3. **Fix the duel fairness (THE code change).** Enemy reactive block becomes **block-only** — remove `trigger_parry_window()` from **both** AI block sites: the modern AI path (`combat_system.gd:228-230`) **and** the legacy fallback path (`combat_system.gd:258-260`). **Test:** a player attack into a blocking enemy yields **no `parried:true`** event, **no player stun**, and **enemy posture loss** (blocked-pressure bleeds the enemy 1.5×). Pressuring a blocking enemy then drives toward a break (good!) instead of coin-flip parrying the player. (Deliberate, telegraphed enemy parry can return later as an archetype ability — out of scope.)
 4. **No turtling.** Keep player block bleeding own posture (1.6×) so holding block loses to posture-break — defense is active (parry/space/dash), not passive.
-5. **Parry stays a strong tool, not the only one.** Verify ~55 parry-posture breaks an 85-posture enemy in ~2 well-timed parries → stun → punish. Don't buff parry to the point other paths are dominated.
+5. **Parry stays a strong tool, not the only one.** Current `parryPostureDamage` 50 breaks an 85-posture bandit in ~2 well-timed parries → stun → punish. Keep it strong but **don't buff parry to where offense/dash paths are dominated** (the multi-path principle).
 
 ## Validation
-- **Daemon dogfooding (primary).** Drive fights via the interactive daemon and confirm: (a) facetank now loses; (b) **parry-duel** path works (parry→break→punish, build burst lands in the stun); (c) **aggressive-dash** path also wins without parrying. The batch heuristic can't parry, so hands-on is the real feel check — across at least these two playstyles.
-- **Harness (gross checks).** Re-run the health-check batches: the **skill-sweep is no longer inverted** (win rate non-decreasing with skill; the low-skill/facetank win rate drops from ~0.72); overall win ~0.5; **difficulty curve still holds** (boss = highest death share, non-rising by ordinal, tier-1 deaths <20%); zero timeouts.
-- **Deferred companion:** teach `HeuristicPlayer` to parry (so the skill-sweep becomes a true duel-skill metric) — its own task, not this pass.
+**Correction:** the batch `HeuristicPlayer` **already reaction-parries** — on a defensive reaction it sets `block_pressed`, which opens the player parry window (`heuristic_player.gd:30` → `combat_system.gd:78-81`). So the skill-sweep is a **crude reaction-parry/block policy**, not parry-free, and the inverted sweep (more "skill" = more reaction-defense = currently *worse*) is exactly the symptom this pass fixes.
+- **Harness (quantitative gate).** Re-run the health-check batches: the **skill-sweep is no longer inverted** (win rate non-decreasing with skill; the low-skill/facetank win rate drops from ~0.72); overall win ~0.5; **difficulty curve still holds** (boss = highest death share, non-rising by ordinal, tier-1 deaths <20%); zero timeouts. Plus the **duel-ratio table** below.
+- **Daemon dogfooding (feel check).** Drive fights via the interactive daemon and confirm the *nuanced* feel the crude heuristic can't capture: (a) facetank loses; (b) a **parry-duel** run works (parry→break→punish, build burst in the stun); (c) an **aggressive-dash** run *also* wins **without parrying** (the multi-path principle).
+- **Deferred companion:** **distinct scripted playstyle policies** (a dedicated parry-duelist policy, an aggressive-dash policy) so the harness can quantitatively confirm *each* path is viable — its own task, not this pass.
+
+## Duel-ratio gate (fill before/after, per archetype — prevents HP-sponges & mandatory parry)
+Tuning is **not** "make HP bigger." Before touching numbers, capture a baseline table and re-capture after; the implementer must hit the target column. Per archetype (`bandit_swordsman`, `bandit_spearman`, `wandering_ronin`, `sect_disciple`, `masked_assassin`, `iron_bear`):
+
+| metric | meaning | target |
+|---|---|---|
+| **hits-to-HP-kill** | clean light hits to drop HP to 0 (no posture) | **goes UP** vs baseline (HP-race slower) but **not a sponge** (≈ keep ≤ ~1.5× baseline) |
+| **hits-to-posture-break (light)** | light hits (unblocked) to break posture | finite & reasonable (aggressive offense is a valid break path) |
+| **hits-to-posture-break (heavy)** | heavy hits to break posture | meaningfully fewer than light |
+| **blocked-pressure breaks?** | does sustained pressure break a *blocking* enemy's posture (1.6×)? | **yes** (pressuring a turtle works — post lever 3) |
+| **parries-to-break** | well-timed parries (~50 posture) to break | ~2 (currently 50×2 > 85) — strong, **not mandatory** |
+| **break→punish payoff** | damage landable in the 0.7s stun | a posture-break path kills **faster than** pure HP-race (so the duel is the efficient win) |
+| **avg combat duration** | seconds | within a healthy band (no marathon sponges) |
+| **timeouts** | combats hitting `max_time` | **0** |
+
+Reference current values: `hu_light` 12 HP / 22 posture, `hu_heavy` 22 HP / 42 posture; `GameSettings.json` `blockHealthMultiplier 0.2`, `blockPostureMultiplier 1.5`, `parryPostureDamage 50.0`, `parryStunDuration 0.6`; enemy HP/posture in `data/Enemies`. **Acceptance:** posture-break is the *efficient* kill on every archetype, multiple break paths exist (offense **or** parry), no HP sponge, no timeouts.
 
 ## Out of scope (follow-ups)
 - Posture-break payoff/deathblow mechanic; per-school duel hooks (build-into-posture); telegraphed enemy parry as an archetype ability; the heuristic-parry upgrade.
 
 ## Tuning knobs (where the numbers live)
-- `data/Attacks/Attacks.json` (per-attack `damage` vs `posture_damage`, perilous flags), `data/Enemies/*` (enemy HP/posture/aggression/blockChance), `GameConstants` (`POSTURE_*`, `PARRY_WINDOW`, `STUN_DURATION`, block multipliers), combat `settings` (block/parry multipliers). All retunable without code except lever 3.
+- `data/Attacks/Attacks.json` (per-attack `damage` vs `posture_damage`, perilous flags), `data/Enemies/*` (enemy HP/posture/aggression/`blockChance`), `WUGodot/data/Settings/GameSettings.json` (`blockHealthMultiplier` 0.2, `blockPostureMultiplier` 1.5, `parryPostureDamage` 50.0, `parryStunDuration` 0.6), `GameConstants` (`POSTURE_RECOVERY_RATE`, `PARRY_WINDOW`, `STUN_DURATION`). All retunable without code except lever 3.
 
 ## Sequencing (phases — full plan after approval)
-1. **Lever 3 code change** (enemy block→block-only) + a test (attacking a blocking enemy deals posture, not a parry on the player).
-2. **Baseline capture** — run the health-check batches pre-change; record current numbers as the before.
-3. **Rebalance tuning** (levers 1,2,4,5 via data) — iterate with daemon dogfooding (parry-duel + aggressive-dash runs) until the duel reads.
-4. **Harness acceptance** — skill-sweep inversion gone, facetank drops, win ~0.5, difficulty curve intact; record the chosen numbers.
-5. **Record** before/after + the validated knobs.
+0. **Baseline capture (BEFORE any change).** Run the health-check batches + fill the duel-ratio table on the **current** build. This is the "before"; it must not include the lever-3 fix.
+1. **Lever 3 code change** (remove `trigger_parry_window` at both AI block sites) + its test (blocked player attack → no `parried:true`, no player stun, enemy posture loss). Re-run the harness to record the **code-only** effect (and confirm "blocked-pressure breaks" flips to yes).
+2. **Rebalance tuning** (levers 1,2,4,5 via data) — iterate against the **duel-ratio targets** with daemon dogfooding (parry-duel + aggressive-dash runs) until the duel reads and both paths win.
+3. **Harness acceptance** — skill-sweep inversion gone, facetank win-rate drops, win ~0.5, difficulty curve intact, zero timeouts, duel-ratio targets met.
+4. **Record** baseline → code-only → final, plus the chosen knobs.
