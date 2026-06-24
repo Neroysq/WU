@@ -34,6 +34,14 @@ func run_all() -> Dictionary:
 		failures.append("HeuristicPlayer should attack when in range")
 
 	enemy._attack_state.start(AttackCatalogScript.bandit_slash())
+	enemy._attack_state.advance(0.01)
+	input = policy.next_input(player, enemy)
+	if bool(input.get("light_pressed", false)) or bool(input.get("heavy_pressed", false)):
+		passed += 1
+	else:
+		failed += 1
+		failures.append("HeuristicPlayer should not freeze through early enemy windup")
+
 	enemy._attack_state.advance(AttackCatalogScript.bandit_slash().windup_end + 0.01)
 	input = policy.next_input(player, enemy)
 	if bool(input.get("block_down", false)) or bool(input.get("dash_pressed", false)):
@@ -44,4 +52,3 @@ func run_all() -> Dictionary:
 
 	RngService.clear_run_seed()
 	return {"passed": passed, "failed": failed, "failures": failures}
-

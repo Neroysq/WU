@@ -7,7 +7,7 @@
   "moveSpeed": 200.0,
   "jumpForce": 700.0,
   "gravity": 2800.0,
-  "healthMax": 80.0,
+  "healthMax": 92.0,
   "postureMax": 85.0,
   "postureRecoveryRate": 8.0,
   "attackRange": 72.0,
@@ -20,8 +20,8 @@
     "bandit_thrust_perilous",
     "bandit_overhead"
   ],
-  "aggression": 0.5,
-  "blockChance": 0.2,
+  "aggression": 0.58,
+  "blockChance": 0.18,
   "preferredRange": 228.0,
   "retreatChance": 0.02,
   "dashChance": 0.03

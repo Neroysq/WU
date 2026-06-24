@@ -7,7 +7,7 @@
   "moveSpeed": 240.0,
   "jumpForce": 600.0,
   "gravity": 2800.0,
-  "healthMax": 280.0,
+  "healthMax": 420.0,
   "postureMax": 160.0,
   "postureRecoveryRate": 14.0,
   "attackRange": 90.0,
@@ -16,9 +16,9 @@
   "colorBody": "#CC6644",
   "colorAccent": "#884422",
   "pattern_table": ["bear_swipe", "bear_overhead", "bear_stomp", "bear_crush_grab"],
-  "aggression": 0.5,
-  "blockChance": 0.15,
+  "aggression": 0.86,
+  "blockChance": 0.06,
   "preferredRange": 215.0,
   "retreatChance": 0.01,
-  "dashChance": 0.03
+  "dashChance": 0.05
 }

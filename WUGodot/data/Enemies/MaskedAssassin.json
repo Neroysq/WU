@@ -7,7 +7,7 @@
   "moveSpeed": 420.0,
   "jumpForce": 800.0,
   "gravity": 2800.0,
-  "healthMax": 90.0,
+  "healthMax": 120.0,
   "postureMax": 85.0,
   "postureRecoveryRate": 9.0,
   "attackRange": 68.0,
@@ -16,10 +16,10 @@
   "colorBody": "#444466",
   "colorAccent": "#222244",
   "pattern_table": ["smoke_thrust", "flicker_slash", "assassin_backstab", "assassin_perilous_grab"],
-  "aggression": 0.65,
-  "blockChance": 0.2,
+  "aggression": 0.82,
+  "blockChance": 0.16,
   "preferredRange": 70.0,
   "retreatChance": 0.06,
   "dashChance": 0.18,
-  "teleport_chance": 0.06
+  "teleport_chance": 0.08
 }

@@ -16,7 +16,7 @@
   "attackMoveControlMultiplier": 2.0,
   "blockHealthMultiplier": 0.2,
   "blockPostureMultiplier": 1.5,
-  "parryPostureDamage": 50.0,
+  "parryPostureDamage": 60.0,
   "parryStunDuration": 0.6,
   
   "cameraShakeDecay": 20.0,

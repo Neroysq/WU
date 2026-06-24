@@ -2,7 +2,7 @@
   "attacks": {
     "assassin_backstab": {
       "active_end": 0.35,
-      "damage": 20.0,
+      "damage": 34.0,
       "duration": 0.55,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -17,7 +17,7 @@
     },
     "assassin_perilous_grab": {
       "active_end": 0.6,
-      "damage": 22.0,
+      "damage": 32.0,
       "duration": 0.85,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -32,7 +32,7 @@
     },
     "bandit_overhead": {
       "active_end": 0.65,
-      "damage": 14.0,
+      "damage": 21.0,
       "duration": 0.95,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -47,7 +47,7 @@
     },
     "bandit_slash": {
       "active_end": 0.6,
-      "damage": 10.0,
+      "damage": 14.0,
       "duration": 0.8,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -62,7 +62,7 @@
     },
     "bandit_thrust_perilous": {
       "active_end": 0.68,
-      "damage": 14.0,
+      "damage": 20.0,
       "duration": 0.9,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -88,11 +88,11 @@
       "knockback_units": 0.0,
       "posture_damage": 0.0,
       "range_units": 273.0,
-      "windup_end": 0.6
+      "windup_end": 0.5
     },
     "bear_overhead": {
       "active_end": 0.72,
-      "damage": 22.0,
+      "damage": 55.0,
       "duration": 1.1,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -103,11 +103,11 @@
       "knockback_units": 500.0,
       "posture_damage": 44.0,
       "range_units": 258.0,
-      "windup_end": 0.55
+      "windup_end": 0.45
     },
     "bear_roar_aoe": {
       "active_end": 0.65,
-      "damage": 8.0,
+      "damage": 28.0,
       "duration": 0.9,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -118,11 +118,11 @@
       "knockback_units": 450.0,
       "posture_damage": 20.0,
       "range_units": 233.0,
-      "windup_end": 0.45
+      "windup_end": 0.36
     },
     "bear_stomp": {
       "active_end": 0.65,
-      "damage": 14.0,
+      "damage": 42.0,
       "duration": 0.95,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -133,11 +133,11 @@
       "knockback_units": 350.0,
       "posture_damage": 38.0,
       "range_units": 245.0,
-      "windup_end": 0.5
+      "windup_end": 0.4
     },
     "bear_swipe": {
       "active_end": 0.55,
-      "damage": 16.0,
+      "damage": 42.0,
       "duration": 0.8,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -148,11 +148,11 @@
       "knockback_units": 380.0,
       "posture_damage": 32.0,
       "range_units": 266.0,
-      "windup_end": 0.4
+      "windup_end": 0.32
     },
     "disciple_counter": {
       "active_end": 0.28,
-      "damage": 15.0,
+      "damage": 24.0,
       "duration": 0.45,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -167,7 +167,7 @@
     },
     "disciple_jump_attack": {
       "active_end": 0.52,
-      "damage": 18.0,
+      "damage": 30.0,
       "duration": 0.8,
       "forward_lunge": 200.0,
       "ignores_block": false,
@@ -178,11 +178,11 @@
       "knockback_units": 440.0,
       "posture_damage": 30.0,
       "range_units": 260.0,
-      "windup_end": 0.35
+      "windup_end": 0.28
     },
     "disciple_slash": {
       "active_end": 0.34,
-      "damage": 13.0,
+      "damage": 21.0,
       "duration": 0.55,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -193,11 +193,11 @@
       "knockback_units": 300.0,
       "posture_damage": 26.0,
       "range_units": 245.0,
-      "windup_end": 0.22
+      "windup_end": 0.18
     },
     "disciple_sweep": {
       "active_end": 0.5,
-      "damage": 16.0,
+      "damage": 28.0,
       "duration": 0.75,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -208,11 +208,11 @@
       "knockback_units": 400.0,
       "posture_damage": 34.0,
       "range_units": 245.0,
-      "windup_end": 0.35
+      "windup_end": 0.28
     },
     "disciple_thrust": {
       "active_end": 0.4,
-      "damage": 14.0,
+      "damage": 23.0,
       "duration": 0.6,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -223,7 +223,7 @@
       "knockback_units": 320.0,
       "posture_damage": 24.0,
       "range_units": 253.0,
-      "windup_end": 0.28
+      "windup_end": 0.22
     },
     "drunken_heavy": {
       "active_end": 0.6,
@@ -257,7 +257,7 @@
     },
     "flicker_slash": {
       "active_end": 0.24,
-      "damage": 10.0,
+      "damage": 18.0,
       "duration": 0.4,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -317,7 +317,7 @@
     },
     "ronin_perilous_thrust": {
       "active_end": 0.65,
-      "damage": 18.0,
+      "damage": 32.0,
       "duration": 0.9,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -328,11 +328,11 @@
       "knockback_units": 360.0,
       "posture_damage": 24.0,
       "range_units": 266.0,
-      "windup_end": 0.5
+      "windup_end": 0.38
     },
     "ronin_slash": {
       "active_end": 0.42,
-      "damage": 12.0,
+      "damage": 20.0,
       "duration": 0.65,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -343,11 +343,11 @@
       "knockback_units": 300.0,
       "posture_damage": 26.0,
       "range_units": 244.0,
-      "windup_end": 0.3
+      "windup_end": 0.22
     },
     "ronin_sweep": {
       "active_end": 0.58,
-      "damage": 16.0,
+      "damage": 28.0,
       "duration": 0.85,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -358,11 +358,11 @@
       "knockback_units": 420.0,
       "posture_damage": 32.0,
       "range_units": 244.0,
-      "windup_end": 0.4
+      "windup_end": 0.3
     },
     "ronin_thrust": {
       "active_end": 0.48,
-      "damage": 14.0,
+      "damage": 23.0,
       "duration": 0.7,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -373,11 +373,11 @@
       "knockback_units": 320.0,
       "posture_damage": 22.0,
       "range_units": 258.0,
-      "windup_end": 0.35
+      "windup_end": 0.26
     },
     "smoke_thrust": {
       "active_end": 0.3,
-      "damage": 12.0,
+      "damage": 20.0,
       "duration": 0.5,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -392,7 +392,7 @@
     },
     "spear_long_thrust": {
       "active_end": 0.62,
-      "damage": 11.0,
+      "damage": 15.0,
       "duration": 0.9,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -407,7 +407,7 @@
     },
     "spear_wide_swing": {
       "active_end": 0.72,
-      "damage": 13.0,
+      "damage": 20.0,
       "duration": 1.05,
       "forward_lunge": 0.0,
       "ignores_block": false,
