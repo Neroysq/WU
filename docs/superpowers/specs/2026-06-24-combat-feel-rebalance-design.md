@@ -25,8 +25,8 @@ Boons reinforce different paths (venom = attrition pressure; wind = mobility; so
 1. **Curb the HP race → posture is the efficient kill.** Make enemies **HP-tankier** and/or weight player attacks **toward posture over raw HP**, so chipping HP alone is too slow; you **break posture (→0.7s stun)** to land real damage. Tune the HP:posture ratio so a clean fight is won through ≥1 posture-break, not pure HP chip. **Posture-break must be reachable by attack pressure OR parry** (both deal posture damage) — see the principle above.
 2. **Punish facetank.** Raise enemy offense/pressure so standing-and-trading bleeds you out, and ensure archetypes **use existing perilous/unblockable attacks** (force a dash, no new mechanic). Target: a defending/spacing player beats a facetanker.
 3. **Fix the duel fairness (THE code change).** Enemy reactive block becomes **block-only** — remove `trigger_parry_window()` from **both** AI block sites: the modern AI path (`combat_system.gd:228-230`) **and** the legacy fallback path (`combat_system.gd:258-260`). **Test:** a player attack into a blocking enemy yields **no `parried:true`** event, **no player stun**, and **enemy posture loss** (blocked-pressure bleeds the enemy 1.5×). Pressuring a blocking enemy then drives toward a break (good!) instead of coin-flip parrying the player. (Deliberate, telegraphed enemy parry can return later as an archetype ability — out of scope.)
-4. **No turtling.** Keep player block bleeding own posture (1.6×) so holding block loses to posture-break — defense is active (parry/space/dash), not passive.
-5. **Parry stays a strong tool, not the only one.** Current `parryPostureDamage` 50 breaks an 85-posture bandit in ~2 well-timed parries → stun → punish. Keep it strong but **don't buff parry to where offense/dash paths are dominated** (the multi-path principle).
+4. **No turtling.** Keep player block bleeding own posture (1.5×) so holding block loses to posture-break — defense is active (parry/space/dash), not passive.
+5. **Parry stays a strong tool, not the only one.** Current `parryPostureDamage` 50 breaks a weak enemy (~85 posture) in ~2 well-timed parries → stun → punish; **scales with the enemy's posture** (~2 weak, ~3 elite, more for the boss — see the tier-relative table). Keep it strong but **don't buff parry to where offense/dash paths are dominated** (the multi-path principle).
 
 ## Validation
 **Correction:** the batch `HeuristicPlayer` **already reaction-parries** — on a defensive reaction it sets `block_pressed`, which opens the player parry window (`heuristic_player.gd:30` → `combat_system.gd:78-81`). So the skill-sweep is a **crude reaction-parry/block policy**, not parry-free, and the inverted sweep (more "skill" = more reaction-defense = currently *worse*) is exactly the symptom this pass fixes.
@@ -42,8 +42,8 @@ Tuning is **not** "make HP bigger." Before touching numbers, capture a baseline 
 | **hits-to-HP-kill** | clean light hits to drop HP to 0 (no posture) | **goes UP** vs baseline (HP-race slower) but **not a sponge** (≈ keep ≤ ~1.5× baseline) |
 | **hits-to-posture-break (light)** | light hits (unblocked) to break posture | finite & reasonable (aggressive offense is a valid break path) |
 | **hits-to-posture-break (heavy)** | heavy hits to break posture | meaningfully fewer than light |
-| **blocked-pressure breaks?** | does sustained pressure break a *blocking* enemy's posture (1.6×)? | **yes** (pressuring a turtle works — post lever 3) |
-| **parries-to-break** | well-timed parries (~50 posture) to break | ~2 (currently 50×2 > 85) — strong, **not mandatory** |
+| **blocked-pressure breaks?** | does sustained pressure break a *blocking* enemy's posture (1.5×)? | **yes** (pressuring a turtle works — post lever 3) |
+| **parries-to-break** | well-timed parries (~50 posture) to break | **tier-relative**: weak (~80–85 posture: bandit/spearman/assassin) ~2; ronin/disciple (100/120) ~2–3; iron_bear (160 + recovery 14/s, boss) intentionally higher / phase-specific. **Don't flatten posture across the roster.** |
 | **break→punish payoff** | damage landable in the 0.7s stun | a posture-break path kills **faster than** pure HP-race (so the duel is the efficient win) |
 | **avg combat duration** | seconds | within a healthy band (no marathon sponges) |
 | **timeouts** | combats hitting `max_time` | **0** |
@@ -51,7 +51,7 @@ Tuning is **not** "make HP bigger." Before touching numbers, capture a baseline 
 Reference current values: `hu_light` 12 HP / 22 posture, `hu_heavy` 22 HP / 42 posture; `GameSettings.json` `blockHealthMultiplier 0.2`, `blockPostureMultiplier 1.5`, `parryPostureDamage 50.0`, `parryStunDuration 0.6`; enemy HP/posture in `data/Enemies`. **Acceptance:** posture-break is the *efficient* kill on every archetype, multiple break paths exist (offense **or** parry), no HP sponge, no timeouts.
 
 ## Out of scope (follow-ups)
-- Posture-break payoff/deathblow mechanic; per-school duel hooks (build-into-posture); telegraphed enemy parry as an archetype ability; the heuristic-parry upgrade.
+- Posture-break payoff/deathblow mechanic; per-school duel hooks (build-into-posture); telegraphed enemy parry as an archetype ability; **distinct scripted playstyle policies** (parry-duelist / aggressive-dash) for quantitative per-path validation.
 
 ## Tuning knobs (where the numbers live)
 - `data/Attacks/Attacks.json` (per-attack `damage` vs `posture_damage`, perilous flags), `data/Enemies/*` (enemy HP/posture/aggression/`blockChance`), `WUGodot/data/Settings/GameSettings.json` (`blockHealthMultiplier` 0.2, `blockPostureMultiplier` 1.5, `parryPostureDamage` 50.0, `parryStunDuration` 0.6), `GameConstants` (`POSTURE_RECOVERY_RATE`, `PARRY_WINDOW`, `STUN_DURATION`). All retunable without code except lever 3.
