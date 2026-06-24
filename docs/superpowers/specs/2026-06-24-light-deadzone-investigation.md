@@ -40,8 +40,19 @@ The whiff is almost certainly one of these, none of which the probe exercised:
 - **`was_hit_this_swing`** already consumed, or the attack got cancelled before its active window.
 - **Boon attack-override**: if a technique overrides light with a def whose `id` ≠ `hu_light`, `has_authored_hitbox` is false → falls to the `in_range` path (still hits close, but confirm).
 
-## Next step — live instrumentation (after narrowing)
-If the context questions don't pinpoint it: add a gated per-frame log in the live combat resolve path that, while the player light is active and an enemy is within ~1.5× range, dumps: positions/distance, facing, `is_invulnerable`, `is_blocking`, parry-active, `was_hit_this_swing`, attack `def.id`, `is_hit_active`, `query_hit`, `in_range`, `connect`. User reproduces the whiff with it on; share the log + a synced debug frame.
+## Context (user): happens with enemy "standing or attacking" (not blocking/dashing)
+Two cases to capture:
+- **Enemy attacking** → leading hypothesis: the player's light is **interrupted** (enemy hit lands first → player hitstun/stun cancels the swing before its active window) → reads as a whiff but is a lost trade, not a missed hitbox.
+- **Enemy standing** → genuine puzzle (geometry says hit) → needs the per-frame log.
+
+## Next step — live instrumentation (implementer) + user repro
+Add a gated per-frame log in the **live** combat path (toggle, e.g. a debug key or flag) that, while the player has pressed/started a light **and** an enemy is within ~1.5× range, dumps each frame until the swing ends:
+- positions/distance, facing
+- player: `current_animation`/attack state + `def.id`, `_attack_state.elapsed`, `is_hit_active`, `was_hit_this_swing`, **`is_stunned`/hitstun/cancel** (did the swing reach its active window or get interrupted?)
+- enemy: `is_invulnerable`, `is_blocking`, parry-active, its own attack state
+- hit eval: `in_range`, `query_hit`, `connect`, and whether the damage branch ran (and block/parry multipliers)
+
+User reproduces the whiff with it on; share the log + a synced debug frame. The log will show definitively whether (a) the swing never went active (interrupt), (b) it went active but `connect=false` (geometry/state), or (c) it connected but damage was nullified (block/parry/invuln).
 
 ## Note
 Do NOT change `hitbox_template.gd` — CC's exact sweep proves that edit is a no-op for this bug.
