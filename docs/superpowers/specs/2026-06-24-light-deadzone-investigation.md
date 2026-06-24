@@ -14,11 +14,20 @@ Replicated `query_hit` exactly (player authored capsule vs enemy hurtbox):
 
 **Conclusion:** the geometry predicts a hit; the whiff is a runtime factor not visible in the code (candidates: the active-window timing, the actual strike pose/anchors at the hit frame differing from `vl_051`, a vertical/height mismatch at the real positions, or the venom skin interacting with the attack state).
 
-## Evidence to capture (implementer)
-1. **Debug-overlay frame of the whiff.** With DEBUG on, the scene already draws the player attack capsule + enemy hurtbox (`combat_scene.gd:709`). Reproduce: enemy directly in front and close, player light during its **active window**, and capture the frame where it whiffs. We need to *see* whether the capsule and hurtbox overlap at that instant. Save the PNG.
-2. **Headless distance sweep probe.** Add a small probe (tool or test): place player + enemy both grounded, facing, trigger player `hu_light`, step through the **active frames**, and for D in e.g. 30..200 log `query_hit`, `segment_rect_distance`, the world capsule (`debug_capsule_world`) and the enemy hurtbox (`debug_hurtbox_world`). Output which D/frames miss. This turns the bug into reproducible numbers (and later a regression test).
+## Confirmed by CC (2026-06-24)
+- Ran a matchup capture (`state:04_light_active`, DEBUG overlay on) — **light HITS** at the only distance the capture tool can set. The capture states only pose the enemy at **preferred (medium) range** (`_dev_place_at_enemy_preferred_range`); there is **no point-blank knob**, so the user's close-whiff can't be reproduced via the existing capture path.
+- Static sweep + code review (enemy unregistered → tall fallback hurtbox; capsule reaches to overlap) all say a close, grounded, in-front enemy **should** connect. So the cause is runtime-specific and needs a **point-blank probe**.
 
-Report both back. Then we fix the actual cause — and add the sweep as a test asserting close-range light connects.
+## Probe to add (implementer) — point-blank, grounded, in front
+Add a headless probe (tool under `WUGodot/tools/` or a test). Steps:
+1. Build player + a `bandit_swordsman` enemy via the real `CombatSetup.prepare` (same `hit_geometry` registration as live), both grounded, player facing the enemy.
+2. For **center-distance D in 0, 10, 20, … 200** (start at/near overlap — this is the missing range): set the enemy at distance D directly in front, trigger player `hu_light`, and **step the attack through its full active window** (windup_end→active_end).
+3. Each frame, log: D, `attack_state.elapsed`/phase, `is_hit_active`, `combat_system` connect result (the real path), `query_hit`, `ShapeMath.segment_rect_distance`, the world capsule `debug_capsule_world` (a,b,r), and `debug_hurtbox_world(enemy)` rect.
+4. Output a table of **which (D, frame) miss**, and **save a debug-overlay PNG at the first missing distance** (so we see capsule vs hurtbox).
+- Also run one pass with the enemy **slightly elevated** (small +y) to check a vertical-band miss.
+- If the probe HITS at all D too, the bug isn't in this isolated setup → escalate to instrumenting **live** combat (log `connect`/positions each frame during a real fight) to catch the actual game-state difference.
+
+Report the table + the PNG. Then we fix the actual cause and keep the probe as a **regression test** (assert close-range light connects).
 
 ## Note
-Do NOT change `hitbox_template.gd` yet — the sweep proves that edit wouldn't fix this.
+Do NOT change `hitbox_template.gd` — CC's exact sweep proves that edit is a no-op for this bug.
