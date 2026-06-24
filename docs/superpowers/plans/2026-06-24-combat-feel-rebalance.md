@@ -42,8 +42,12 @@ The probe drives `CombatStep` with a **passive enemy** (AI disabled) and a scrip
 ```gdscript
 const ARCHETYPES := ["bandit_swordsman","bandit_spearman","wandering_ronin","sect_disciple","masked_assassin","iron_bear"]
 const DT := 1.0/60.0
-const PARRY_POSTURE := 50.0   # GameSettings.parryPostureDamage
 const RECOVER_GAP_FRAMES := 48 # ~0.8s between parries (realistic cadence)
+
+# CRITICAL: apply_posture_damage() resets posture to 40% AND stuns on break
+# (fighter.gd) — so a break is detected by is_stunned, NOT posture_current<=0.
+static func _parry_posture() -> float:
+	return float(DataManager.get_game_settings().get("parryPostureDamage", 50.0))
 
 static func _node() -> MapNode:
 	return MapNode.new(9001, 1, MapNode.NodeType.BATTLE, [])
@@ -59,40 +63,57 @@ static func _fresh(archetype: String) -> Dictionary:
 	player.facing = 1
 	return {"player": player, "enemy": enemy, "cs": cs}
 
-# land repeated attacks (optionally vs a held block); count until field hits 0
-static func _hits_until(archetype: String, field: String, heavy: bool, block: bool) -> int:
+# repeated attacks (optionally vs a held block); count to kill (hp<=0) or break (is_stunned)
+# returns {count, timeout}
+static func _hits_until(archetype: String, field: String, heavy: bool, block: bool) -> Dictionary:
 	var s := _fresh(archetype)
 	var player: Fighter = s["player"]; var enemy: Fighter = s["enemy"]; var cs: CombatSystem = s["cs"]
 	var count := 0
 	for _swing in range(300):
-		if block:
-			enemy.is_blocking = true
 		if heavy: player.start_heavy_attack() else: player.start_light_attack()
 		count += 1
 		for _f in range(70):
+			if block: enemy.is_blocking = true            # hold block every frame
 			CombatStep.advance(cs, player, enemy, {}, DT)
-			if not player._attack_state.is_active() and player._attack_cooldown <= 0.0:
-				break
-		if field == "hp" and enemy.health_current <= 0.0: return count
-		if field == "posture" and enemy.posture_current <= 0.0: return count
-	return -1
+			if field == "hp" and enemy.health_current <= 0.0: return {"count": count, "timeout": false}
+			if field == "posture" and enemy.is_stunned: return {"count": count, "timeout": false}  # break => stun
+			if not player._attack_state.is_active() and player._attack_cooldown <= 0.0: break
+	return {"count": -1, "timeout": true}
 
-# apply parry posture damage at a realistic cadence (recovery between); count to break
-static func _parries_to_break(archetype: String) -> int:
-	var s := _fresh(archetype)
-	var enemy: Fighter = s["enemy"]
-	var count := 0
+# apply parry posture damage at a realistic cadence (recovery between); count to break (is_stunned)
+static func _parries_to_break(archetype: String) -> Dictionary:
+	var s := _fresh(archetype); var enemy: Fighter = s["enemy"]
+	var pd := _parry_posture(); var count := 0
 	for _p in range(40):
-		enemy.apply_posture_damage(PARRY_POSTURE)
-		count += 1
-		if enemy.posture_current <= 0.0: return count
+		enemy.apply_posture_damage(pd); count += 1
+		if enemy.is_stunned: return {"count": count, "timeout": false}   # broke
 		for _f in range(RECOVER_GAP_FRAMES):
 			enemy.update_timers(DT)  # ticks posture recovery
-	return -1
+	return {"count": -1, "timeout": true}
+
+# break→punish payoff: heavy pressure to break, sum HP damage dealt DURING the stun, kill cost
+static func _break_then_punish(archetype: String) -> Dictionary:
+	var s := _fresh(archetype)
+	var player: Fighter = s["player"]; var enemy: Fighter = s["enemy"]; var cs: CombatSystem = s["cs"]
+	var swings := 0; var frames := 0; var dmg_in_stun := 0.0; var hits_to_break := -1
+	for _swing in range(400):
+		if heavy_first(swings): player.start_heavy_attack() else: player.start_heavy_attack()
+		swings += 1
+		for _f in range(90):
+			var hp0 := enemy.health_current
+			CombatStep.advance(cs, player, enemy, {}, DT); frames += 1
+			if enemy.is_stunned and hits_to_break < 0: hits_to_break = swings
+			if enemy.is_stunned: dmg_in_stun += maxf(0.0, hp0 - enemy.health_current)
+			if enemy.health_current <= 0.0:
+				return {"hits_to_break": hits_to_break, "dmg_in_stun": dmg_in_stun, "swings_to_kill": swings, "duration": frames*DT, "timeout": false}
+			if not player._attack_state.is_active() and player._attack_cooldown <= 0.0: break
+	return {"hits_to_break": hits_to_break, "dmg_in_stun": dmg_in_stun, "swings_to_kill": -1, "duration": frames*DT, "timeout": true}
+
+static func heavy_first(_n: int) -> bool: return true  # always heavy for the posture path
 
 static func measure(archetype: String) -> Dictionary:
-	var s := _fresh(archetype)
-	var e: Fighter = s["enemy"]
+	var s := _fresh(archetype); var e: Fighter = s["enemy"]
+	var pp := _break_then_punish(archetype)
 	return {
 		"hp_max": e.health_max, "posture_max": e.posture_max,
 		"hits_to_hp_kill_light": _hits_until(archetype, "hp", false, false),
@@ -100,9 +121,10 @@ static func measure(archetype: String) -> Dictionary:
 		"hits_to_posture_break_heavy": _hits_until(archetype, "posture", true, false),
 		"blocked_pressure_break_light": _hits_until(archetype, "posture", false, true),
 		"parries_to_break": _parries_to_break(archetype),
+		"posture_path": pp,   # {hits_to_break, dmg_in_stun, swings_to_kill, duration, timeout}
 	}
 ```
-The entry point loops `ARCHETYPES`, builds `{a: measure(a)}`, writes `/tmp/duel_ratios/probe.json`, prints a table, and `quit()`s. (Confirm `Fighter.update_timers` ticks posture recovery; from `fighter.gd` it does when not stunned.)
+The entry point loops `ARCHETYPES`, builds `{a: measure(a)}`, writes `/tmp/duel_ratios/probe.json`, prints a table (flag any `timeout:true` rows), and `quit()`s. **avg combat duration** comes from the harness batch (`summary.transcripts[].combats[].duration`) — record it alongside in Task 2; the probe's `posture_path.duration`/`timeout` cover the per-archetype break→punish payoff. (`Fighter.update_timers` ticks posture recovery when not stunned — confirmed.)
 
 - [ ] **Step 2: Add the run.sh entry** — in `run.sh`, alongside `--probe-light-deadzone`:
 
@@ -121,17 +143,19 @@ const Probe = preload("res://tools/probe_duel_ratios.gd")
 func run_all() -> Dictionary:
 	var passed := 0; var failed := 0; var failures: Array[String] = []
 	var m: Dictionary = Probe.measure("bandit_swordsman")
-	# sane, finite metrics for a weak enemy
-	if int(m["hits_to_posture_break_light"]) > 0 and int(m["hits_to_hp_kill_light"]) > 0 \
-		and int(m["parries_to_break"]) >= 1 and int(m["blocked_pressure_break_light"]) > 0:
+	# sane, finite, non-timeout metrics for a weak enemy (break detected via is_stunned)
+	if int(m["hits_to_posture_break_light"]["count"]) > 0 and not bool(m["hits_to_posture_break_light"]["timeout"]) \
+		and int(m["hits_to_hp_kill_light"]["count"]) > 0 \
+		and int(m["parries_to_break"]["count"]) >= 1 and not bool(m["parries_to_break"]["timeout"]) \
+		and int(m["blocked_pressure_break_light"]["count"]) > 0:
 		passed += 1
 	else:
-		failed += 1; failures.append("bandit metrics should be finite/positive: %s" % str(m))
-	# blocked pressure should take >= unblocked (block reduces effective posture pressure per swing? no: 1.5x posture on block) -> at least finite
-	if int(m["parries_to_break"]) <= 4:
+		failed += 1; failures.append("bandit metrics should be finite/positive/non-timeout: %s" % str(m))
+	# weak-enemy parries_to_break should be small (~2 at 50 posture vs 85)
+	if int(m["parries_to_break"]["count"]) <= 4:
 		passed += 1
 	else:
-		failed += 1; failures.append("weak-enemy parries_to_break should be small, got %d" % int(m["parries_to_break"]))
+		failed += 1; failures.append("weak-enemy parries_to_break should be small, got %d" % int(m["parries_to_break"]["count"]))
 	return {"passed": passed, "failed": failed, "failures": failures}
 ```
 Register it in `WUGodot/tests/run_tests.gd` (add `"res://tests/test_duel_ratios_probe.gd",`).
@@ -161,9 +185,9 @@ Capture the "before" on the **current** build — this must precede Lever 3 (Tas
 ```bash
 ./run.sh --playtest-batch --seeds 1..50 --player heuristic --skill 0.8 --decision greedy --out /tmp/cfr_base_greedy.json
 ./run.sh --playtest-batch --seeds 1..50 --decision greedy --skill-sweep --out /tmp/cfr_base_sweep.json
-python3 WUGodot/tools/check_difficulty_curve.py /tmp/cfr_base_greedy.json
+python3 WUGodot/tools/check_difficulty_curve.py /tmp/cfr_base_greedy.json   # observational here
 ```
-Record into the doc: overall win_rate, avg_depth, the **skill-sweep win rates** (0.5/0.65/0.8/0.95 — expect the inverted ~0.72→0.48), boss death share, timeout count.
+Record into the doc: overall win_rate, avg_depth, the **skill-sweep win rates** (0.5/0.65/0.8/0.95 — expect the inverted ~0.72→0.48), boss death share, **avg combat duration** (`transcripts[].combats[].duration`), timeout count, and the checker's output. **Baseline is observational** — a nonzero `check_difficulty_curve.py` exit is recorded as a baseline fact, **not blocking**; it only gates at final acceptance (Task 5).
 
 - [ ] **Step 3: Commit**
 
@@ -185,33 +209,72 @@ git commit -m "docs: combat rebalance baseline (pre-change) metrics"
 ```gdscript
 extends RefCounted
 const CombatSystemScript = preload("res://scripts/combat_system.gd")
-const FighterScript = preload("res://scripts/fighter.gd")
 const EnemyFactoryScript = preload("res://scripts/enemy_factory.gd")
+const CombatStepScript = preload("res://scripts/sim/combat_step.gd")
+const RecorderScript = preload("res://scripts/sim/combat_event_recorder.gd")
+const DT := 1.0/60.0
 
-func run_all() -> Dictionary:
-	var passed := 0; var failed := 0; var failures: Array[String] = []
-	var cs = CombatSystemScript.new()
+func _setup(archetype: String) -> Dictionary:
 	var player: Fighter = EnemyFactoryScript.create_player()
-	var enemy: Fighter = EnemyFactoryScript.create_enemy_by_archetype("bandit_swordsman")
-	# force the enemy to always block, and put the player mid-active-attack in range
-	enemy.ai_brain.block_chance = 1.0
+	var enemy: Fighter = EnemyFactoryScript.create_enemy_by_archetype(archetype)
 	enemy.position = Vector2(600.0, GameConstants.GROUND_Y)
 	player.position = Vector2(560.0, GameConstants.GROUND_Y)
 	player.facing = 1
-	player.start_light_attack()
-	# advance player into its ACTIVE window so the AI's block-reaction triggers
+	return {"player": player, "enemy": enemy}
+
+func run_all() -> Dictionary:
+	var passed := 0; var failed := 0; var failures: Array[String] = []
+
+	# --- Case A: modern AI block (forced) opens NO parry window ---
+	var a := _setup("bandit_swordsman"); var cs := CombatSystemScript.new()
+	a.enemy.ai_brain.block_chance = 1.0
+	a.player.start_light_attack()
 	for _f in range(20):
-		if player._attack_state.is_active(): break
-		cs.update_player(player, {}, 1.0/60.0, enemy)
-	cs.update_ai(enemy, player, 1.0/60.0)
-	# AFTER lever 3: AI block must NOT open a parry window
-	if enemy.is_blocking and not enemy.is_parrying():
+		if a.player._attack_state.is_active(): break
+		cs.update_player(a.player, {}, DT, a.enemy)
+	cs.update_ai(a.enemy, a.player, DT)
+	if a.enemy.is_blocking and not a.enemy.is_parrying():
 		passed += 1
 	else:
-		failed += 1; failures.append("enemy reactive block must not open a parry window (is_parrying=%s)" % str(enemy.is_parrying()))
+		failed += 1; failures.append("A: modern AI block must not open a parry window (is_parrying=%s)" % str(a.enemy.is_parrying()))
+
+	# --- Case B: resolving a player hit on a held-blocking enemy = block, not parry ---
+	var b := _setup("bandit_swordsman"); var cs2 := CombatSystemScript.new()
+	var rec = RecorderScript.new(); cs2.event_recorder = rec
+	b.enemy.is_ai = false
+	var posture0: float = b.enemy.posture_current
+	b.player.start_light_attack()
+	for _f in range(40):
+		b.enemy.is_blocking = true
+		CombatStepScript.advance(cs2, b.player, b.enemy, {}, DT)
+		if not b.player._attack_state.is_active() and b.player._attack_cooldown <= 0.0: break
+	var player_hit := {}
+	for e in rec.events():
+		if str(e.get("type","")) == "hit" and str(e.get("by","")) == "player": player_hit = e
+	var no_parry: bool = not player_hit.is_empty() and not bool(player_hit.get("parried", false)) and bool(player_hit.get("blocked", false))
+	if no_parry and not b.player.is_stunned and b.enemy.posture_current < posture0:
+		passed += 1
+	else:
+		failed += 1; failures.append("B: blocked player hit should be blocked (not parried), no player stun, enemy posture loss. hit=%s player_stunned=%s posture=%.1f/%.1f" % [str(player_hit), str(b.player.is_stunned), b.enemy.posture_current, posture0])
+
+	# --- Case C: legacy AI (ai_brain=null) block opens NO parry window over many frames ---
+	var c := _setup("bandit_swordsman"); var cs3 := CombatSystemScript.new()
+	c.enemy.ai_brain = null
+	var ever_parried := false; var ever_blocked := false
+	for _f in range(180):
+		if not c.player._attack_state.is_active(): c.player.start_light_attack()
+		cs3.update_player(c.player, {}, DT, c.enemy)
+		cs3.update_ai(c.enemy, c.player, DT)
+		if c.enemy.is_parrying(): ever_parried = true
+		if c.enemy.is_blocking: ever_blocked = true
+	if ever_blocked and not ever_parried:
+		passed += 1
+	else:
+		failed += 1; failures.append("C: legacy AI block ran=%s and must never parry (ever_parried=%s)" % [str(ever_blocked), str(ever_parried)])
+
 	return {"passed": passed, "failed": failed, "failures": failures}
 ```
-Register in `run_tests.gd`.
+Register in `run_tests.gd`. (`CombatEventRecorder.record_hit` carries `blocked`/`parried`; parry path also calls `record_stun(attacker)` — Case B asserts neither fires.)
 
 - [ ] **Step 2: Run → fail** — `./run.sh --test` → `test_enemy_block_no_parry` FAILS (current code calls `trigger_parry_window()` on block, so `is_parrying()` is true).
 
@@ -252,7 +315,7 @@ git commit -m "fix(combat): enemy reactive block is block-only (no auto parry wi
 Balance is judgment, not a unit test. This task is an **iterate-measure-judge loop** against the spec's duel-ratio targets, ending in a user STOP. Make **small, recorded** changes; re-measure after each.
 
 - [ ] **Step 1: Curb the HP race (lever 1).** Adjust so posture-break is the *efficient* kill: raise enemy HP and/or lower player attack `damage` (shift weight toward `posture_damage`) in `Attacks.json`/`Enemies`. Target: `hits_to_hp_kill_light` goes **up** (≤ ~1.5× baseline, no sponge) while a break→punish line kills **faster** than pure HP. Re-run `./run.sh --probe-duel-ratios`.
-- [ ] **Step 2: Punish facetank (lever 2).** Raise enemy offense (`damage`/aggression in `Enemies`) and ensure tougher archetypes use **perilous** (`is_parryable:false`) attacks. Target: standing-and-trading bleeds the player out.
+- [ ] **Step 2: Punish facetank (lever 2).** Raise enemy offense — **authored attack `damage`/`posture_damage` live in `Attacks.json`** (e.g. `bandit_slash`, `bandit_overhead`); **`Enemies/*.json` controls aggression / `blockChance` / ranges / HP / posture / pools**. Tune both, and ensure tougher archetypes use **perilous** (`is_parryable:false`) attacks. Target: standing-and-trading bleeds the player out.
 - [ ] **Step 3: Keep posture tier-relative (lever 5).** Verify `parries_to_break` stays ~2 weak / ~2–3 ronin·disciple / higher for `iron_bear` — **don't flatten posture** across the roster. Tune per-archetype `postureMax`/recovery only as needed.
 - [ ] **Step 4: Dogfood both playstyles (daemon).** Start a session (`./run.sh --playtest-daemon --session cfr-tune`) and drive: (a) a **parry-duel** fight (parry→break→punish reads, build burst lands in the stun), and (b) an **aggressive-dash** fight that wins **without parrying** (dash perilous, pressure posture). Both must be winnable. Capture a screenshot of a posture-break punish.
 - [ ] **Step 5: Re-measure harness** — re-run the Task-2 harness commands. Iterate Steps 1–4 until: skill-sweep **no longer inverted** (win non-decreasing with skill; facetank/low-skill win drops from ~0.72), overall win ~0.5, difficulty curve intact (`check_difficulty_curve.py` accepted), **zero timeouts**, and the duel-ratio targets met.
@@ -285,4 +348,4 @@ Balance is judgment, not a unit test. This task is an **iterate-measure-judge lo
 
 **Placeholder scan:** code shown for the probe + lever-3 test; Task 4 is intentionally an iterative tuning loop (balance can't be unit-tested) with concrete knobs/targets/commands + a STOP, not vague "tune it."
 
-**Type consistency:** `probe_duel_ratios.gd` metric keys (`hits_to_hp_kill_light`, `hits_to_posture_break_light/heavy`, `blocked_pressure_break_light`, `parries_to_break`) consistent across Task 1 + tests + Task 4 targets. `is_parrying()`/`is_blocking`/`trigger_parry_window()`/`apply_posture_damage()`/`update_timers()` match `fighter.gd`. Both lever-3 sites cited (`_execute_ai_action` ~228-230, `_execute_legacy_ai` ~258-260) per the spec.
+**Type consistency:** `probe_duel_ratios.gd` hit/parry metrics return `{count, timeout}` (test reads `["count"]`/`["timeout"]`); `posture_path` returns `{hits_to_break, dmg_in_stun, swings_to_kill, duration, timeout}`. Break is detected via `is_stunned` (not `posture<=0`) everywhere, matching `apply_posture_damage`'s reset-on-break. `parryPostureDamage` read from `DataManager.get_game_settings()`. `is_parrying()`/`is_blocking`/`trigger_parry_window()`/`apply_posture_damage()`/`update_timers()`/`resolve_hits()` match `combat_system.gd`/`fighter.gd`; recorder `record_hit(...,blocked,parried,...)`/`record_stun` per `combat_event_recorder.gd`. Both lever-3 sites cited (`_execute_ai_action` ~228-230, `_execute_legacy_ai` ~258-260).
