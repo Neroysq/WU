@@ -325,6 +325,58 @@ Balance is judgment, not a unit test. This task is an **iterate-measure-judge lo
 
 ---
 
+## Task 4b: Iterate — spread threat off the boss + scripted-policy skill validation ✋
+
+The first candidate concentrated all threat on the boss (dogfood/120-seed: dmg-taken/combat weak 5 · strong 13 · **elite 4** · boss 72; normals ~1.0 win). Two fixes before final acceptance.
+
+### Part A — spread the duel to non-boss fights (data)
+- [ ] **Step 1: Raise strong + elite pressure.** In `Attacks.json`, raise `damage`/`posture_damage` on the strong-pool and elite attacks (`wandering_ronin`/`sect_disciple` moves, `masked_assassin` `assassin_backstab`/`assassin_perilous_grab`); in `Enemies/*.json` raise aggression for those archetypes. **Fix the inversion: elite must out-threaten strong** (`masked_assassin` currently 4 < strong 13). Re-run `./run.sh --probe-duel-ratios` + the 120-seed batch.
+- [ ] **Step 2: Targets.** dmg-taken/combat roughly **weak ~8–12 · strong ~20–30 · elite ~30–45 · boss keep ~60–75**; non-boss fights become losable when facetanked (per-pool win drops below ~1.0) — but the **difficulty curve must still hold**: `check_difficulty_curve.py` accepts at 120 seeds (boss = highest death share, win non-rising by ordinal ±5pp, tier-1 deaths <20%), **zero timeouts**. Don't push normals to 50/50 — they should *threaten/attrit*, not gate the run.
+
+### Part B — scripted playstyle policies (code) for quantitative skill validation
+Replaces blind daemon parry-scripting with deterministic in-engine policies.
+
+- [ ] **Step 3: Add the policies.** Create `WUGodot/scripts/sim/parry_duelist_policy.gd`, `aggressive_dash_policy.gd`, `facetank_policy.gd` (all `extends PlayerPolicy`):
+
+```gdscript
+# parry_duelist_policy.gd — defend by parry, pressure posture, punish the break
+class_name ParryDuelistPolicy
+extends PlayerPolicy
+func next_input(player: Fighter, enemy: Fighter, _world: Dictionary = {}) -> Dictionary:
+	var input := PlayerPolicy.neutral_input()
+	if player == null or enemy == null: return input
+	var dist := enemy.position.x - player.position.x
+	var adist := absf(dist); var dir := signf(dist)
+	if is_zero_approx(dir): dir = float(player.facing)
+	var reach := player.current_attack_range() + enemy.half_width
+	if enemy.is_stunned:                              # posture broke -> punish
+		if adist <= reach: input["heavy_pressed"] = true
+		else: input["move"] = dir
+		return input
+	if enemy._attack_state != null and enemy._attack_state.is_active() and adist <= enemy.current_attack_range() + player.half_width + 24.0:
+		var def: Variant = enemy._attack_state.def
+		if def != null and not def.is_parryable and player.can_dash():
+			input["dash_pressed"] = true; input["move"] = -dir   # dodge perilous
+		else:
+			input["block_down"] = true; input["block_pressed"] = true  # parry window
+		return input
+	if adist > reach * 0.8: input["move"] = dir
+	elif player.can_attack(): input["light_pressed"] = true
+	return input
+```
+`aggressive_dash_policy.gd` — relentless attack, **dash only to avoid perilous, never block/parry** (drop the parry branch; on active perilous in range → dash; else approach + light/heavy). `facetank_policy.gd` — attack only, **never dash/block/parry** (the baseline that must lose).
+
+- [ ] **Step 4: Wire `--player`.** In `WUGodot/scripts/sim/playtest_main.gd` `_make_player`, add cases `"parry_duelist"`, `"aggressive_dash"`, `"facetank"` → the new policies.
+
+- [ ] **Step 5: Validate skill + multi-path.** Run each over the same 50 seeds:
+```bash
+for p in facetank aggressive_dash parry_duelist; do
+  ./run.sh --playtest-batch --seeds 1..50 --player $p --decision greedy --out /tmp/cfr_$p.json; done
+```
+Acceptance: **`parry_duelist` win-rate > `facetank`** (skill matters) AND **`aggressive_dash` also clearly beats `facetank`** (multi-path — non-parry build viable, per the spec principle). Record all three in the results doc.
+
+> **✋ STOP — present to the user:** updated attrition table (per-pool dmg/win), the three-policy win rates, and the 120-seed checker result, for the balance verdict before Task 5.
+
 ## Task 5: Acceptance + record
 
 **Files:** `docs/superpowers/specs/2026-06-24-combat-feel-rebalance-results.md`
@@ -344,7 +396,7 @@ Balance is judgment, not a unit test. This task is an **iterate-measure-judge lo
 - Duel-ratio gate (per-archetype table, no sponge/flatten) → Task 1 (probe) + Task 4 targets.
 - Validation: harness skill-sweep un-inverts + difficulty intact → Tasks 2/4/5; daemon dogfooding → Task 4 Step 4; heuristic-already-parries premise → respected (player path untouched in Task 3).
 - Phase order (baseline BEFORE lever 3) → Tasks 2 then 3. Record baseline→code-only→final → results doc across Tasks 2/3/5.
-- Out of scope (payoff/deathblow, per-school hooks, scripted policies) → not implemented.
+- Out of scope (payoff/deathblow, per-school hooks) → not implemented. **Scripted playstyle policies promoted into Task 4b** (per the balance verdict — needed to validate skill + multi-path quantitatively after blind daemon scripting proved flaky). Spreading threat to non-boss fights added as Task 4b Part A.
 
 **Placeholder scan:** code shown for the probe + lever-3 test; Task 4 is intentionally an iterative tuning loop (balance can't be unit-tested) with concrete knobs/targets/commands + a STOP, not vague "tune it."
 
