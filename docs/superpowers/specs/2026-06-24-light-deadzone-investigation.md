@@ -56,3 +56,13 @@ User reproduces the whiff with it on; share the log + a synced debug frame. The 
 
 ## Note
 Do NOT change `hitbox_template.gd` — CC's exact sweep proves that edit is a no-op for this bug.
+
+## RESOLVED (2026-06-24) — not geometry; it's enemy block→parry
+Found by **driving the new interactive playtest daemon** and reading the source-level event log. At point-blank (distance 18) a player light produced:
+`hit {by:player, hp_damage:0, parried:true, posture_damage:50}` → `stun {player, 0.6}` → `attack_finished` → enemy counter hit.
+
+**Root cause:** the enemy AI's reactive **block** opens with a **parry window** — `combat_system.gd:229-230` does `ai.is_blocking = true; ai.trigger_parry_window()` (block_chance 0.25 whenever the player attacks in range, `ai_brain.gd:37-40`). So your close light **connects but is parried** (0 HP dmg) and you get stunned. At close range you're always "in range," so it's frequent — and it's triggered by *the player attacking*, which is why it reads the same whether the enemy was standing or attacking.
+
+**Not a hitbox bug** — `hitbox_template.gd` untouched (probe already proved geometry hits at point-blank).
+
+**It's now a balance/feel decision (F1-adjacent), not a bug fix:** options if undesired — reactive AI block grants a *shorter/no* automatic parry (tighter timing only), lower `block_chance` at point-blank, or telegraph the parry. Deferred to a combat-feel pass.
