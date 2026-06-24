@@ -29,5 +29,19 @@ Add a headless probe (tool under `WUGodot/tools/` or a test). Steps:
 
 Report the table + the PNG. Then we fix the actual cause and keep the probe as a **regression test** (assert close-range light connects).
 
+## Probe result (implementer, 2026-06-24) — geometry RULED OUT
+`probe_light_deadzone.gd` (`./run.sh --probe-light-deadzone`): grounded D 0..200, elevated −20y, and signed-overlap D −80..200 — **all hit, no misses** (D=0: query_hit + resolve_connect true, 37px margin). The isolated real `CombatSetup`/`CombatSystem` path does **not** reproduce the whiff. So the cause is **live game state** the probe didn't set.
+
+## Prime suspects (live-only states)
+The whiff is almost certainly one of these, none of which the probe exercised:
+- **Enemy i-frames / invulnerable** (`combat_system.gd:260` early-returns) — e.g. just dashed or in a brief invuln.
+- **Enemy blocking** → hit lands but HP damage ×0.2 (`:340`) → *looks* like a whiff.
+- **Enemy parry** → player gets stunned, no damage (`:302`) → reads as a whiff.
+- **`was_hit_this_swing`** already consumed, or the attack got cancelled before its active window.
+- **Boon attack-override**: if a technique overrides light with a def whose `id` ≠ `hu_light`, `has_authored_hitbox` is false → falls to the `in_range` path (still hits close, but confirm).
+
+## Next step — live instrumentation (after narrowing)
+If the context questions don't pinpoint it: add a gated per-frame log in the live combat resolve path that, while the player light is active and an enemy is within ~1.5× range, dumps: positions/distance, facing, `is_invulnerable`, `is_blocking`, parry-active, `was_hit_this_swing`, attack `def.id`, `is_hit_active`, `query_hit`, `in_range`, `connect`. User reproduces the whiff with it on; share the log + a synced debug frame.
+
 ## Note
 Do NOT change `hitbox_template.gd` — CC's exact sweep proves that edit is a no-op for this bug.
