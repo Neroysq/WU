@@ -60,6 +60,12 @@ func _clone_player_policy(policy: PlayerPolicy, build: Dictionary) -> PlayerPoli
 		return HeuristicPlayer.new(policy.skill)
 	if policy is ScriptedPlayer:
 		return ScriptedPlayer.new(policy.actions)
+	if policy is ParryDuelistPolicy:
+		return ParryDuelistPolicy.new()
+	if policy is AggressiveDashPolicy:
+		return AggressiveDashPolicy.new()
+	if policy is FacetankPolicy:
+		return FacetankPolicy.new()
 	return HeuristicPlayer.new(float(build.get("skill", 0.8)))
 
 func _clone_decision_policy(policy: DecisionPolicy) -> DecisionPolicy:
@@ -70,4 +76,3 @@ func _clone_decision_policy(policy: DecisionPolicy) -> DecisionPolicy:
 	if policy is ScriptedDecisionPolicy:
 		return ScriptedDecisionPolicy.new(policy.picks)
 	return GreedySynergyPolicy.new()
-

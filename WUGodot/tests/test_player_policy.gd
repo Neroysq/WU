@@ -50,5 +50,68 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("HeuristicPlayer should defend during a close enemy attack")
 
+	var parry_policy: ParryDuelistPolicy = ParryDuelistPolicy.new()
+	enemy._attack_state.clear()
+	enemy._attack_state.start(AttackCatalogScript.bandit_slash())
+	enemy._attack_state.advance(AttackCatalogScript.bandit_slash().windup_end + 0.01)
+	input = parry_policy.next_input(player, enemy)
+	if bool(input.get("block_down", false)) and bool(input.get("block_pressed", false)):
+		passed += 1
+	else:
+		failed += 1
+		failures.append("ParryDuelistPolicy should parry close parryable attacks")
+
+	var dash_policy: AggressiveDashPolicy = AggressiveDashPolicy.new()
+	enemy._attack_state.clear()
+	enemy._attack_state.start(AttackCatalogScript.bandit_thrust_perilous())
+	enemy._attack_state.advance(AttackCatalogScript.bandit_thrust_perilous().windup_end + 0.01)
+	input = dash_policy.next_input(player, enemy)
+	if bool(input.get("dash_pressed", false)) and not bool(input.get("block_pressed", false)) and not bool(input.get("block_down", false)):
+		passed += 1
+	else:
+		failed += 1
+		failures.append("AggressiveDashPolicy should dash perilous attacks without blocking")
+
+	enemy._attack_state.clear()
+	enemy._attack_state.start(AttackCatalogScript.bandit_slash())
+	enemy._attack_state.advance(AttackCatalogScript.bandit_slash().windup_end + 0.01)
+	input = dash_policy.next_input(player, enemy)
+	if not bool(input.get("block_pressed", false)) and not bool(input.get("block_down", false)):
+		passed += 1
+	else:
+		failed += 1
+		failures.append("AggressiveDashPolicy should never block or parry active parryable threats")
+
+	enemy._attack_state.clear()
+	player.position = Vector2(600.0, GameConstants.GROUND_Y)
+	enemy.position = player.position + Vector2(320.0, 0.0)
+	input = dash_policy.next_input(player, enemy)
+	if bool(input.get("light_pressed", false)):
+		passed += 1
+	else:
+		failed += 1
+		failures.append("AggressiveDashPolicy should attack from authored light reach instead of idle range")
+
+	var facetank_policy: FacetankPolicy = FacetankPolicy.new()
+	input = facetank_policy.next_input(player, enemy)
+	if not bool(input.get("dash_pressed", false)) and not bool(input.get("block_pressed", false)) and not bool(input.get("block_down", false)):
+		passed += 1
+	else:
+		failed += 1
+		failures.append("FacetankPolicy should never dash, block, or parry")
+
+	var batch: Dictionary = BatchRunner.new().run([1], facetank_policy, GreedySynergyPolicy.new())
+	var transcripts: Array = batch.get("transcripts", []) as Array
+	var policy_name: String = ""
+	if not transcripts.is_empty():
+		var transcript: Dictionary = transcripts[0] as Dictionary
+		var policies: Dictionary = transcript.get("policies", {}) as Dictionary
+		policy_name = str(policies.get("player", ""))
+	if policy_name == "facetank_policy":
+		passed += 1
+	else:
+		failed += 1
+		failures.append("BatchRunner should preserve custom PlayerPolicy subclasses, got '%s'" % policy_name)
+
 	RngService.clear_run_seed()
 	return {"passed": passed, "failed": failed, "failures": failures}

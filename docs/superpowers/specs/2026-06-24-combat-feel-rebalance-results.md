@@ -282,6 +282,120 @@ Verified:
 
 Manual-script dogfood is inconclusive: the simple scripted command loops produced hits/stuns but did not reliably finish fights, and one aggressive ronin script lost. I did not tune combat around those scripts; the reliable decision point remains the probe + batch telemetry above.
 
+## Task 4b Iteration
+
+Captured after spreading non-boss threat and adding scripted playstyle policies.
+
+Additional code:
+
+- Added `parry_duelist`, `aggressive_dash`, and `facetank` player policies, wired through `--player`.
+- Fixed `BatchRunner` cloning so custom player policies stay custom across batch seeds.
+- `aggressive_dash` uses Hu's authored light/heavy attack ranges instead of idle `attackRange`, keeps a non-blocking spacing floor against non-weak enemies, and never sets block/parry inputs.
+
+Data changes from Candidate A:
+
+- Strong and elite attacks/archetypes were tuned to make non-boss fights real attrition checks.
+- Masked assassin is now an elite-only spike threat, fixing the elite-under-strong inversion.
+- Boss balance/ranges remain frozen from Candidate A.
+
+Commands:
+
+```bash
+./run.sh --test
+./run.sh --probe-duel-ratios
+./run.sh --playtest-batch --seeds 1..120 --player heuristic --skill 0.8 --decision greedy --out /tmp/cfr_4b_final_120.json
+python3 WUGodot/tools/check_difficulty_curve.py /tmp/cfr_4b_final_120.json
+./run.sh --playtest-batch --seeds 1..50 --player facetank --decision greedy --out /tmp/cfr_4b_facetank_final.json
+./run.sh --playtest-batch --seeds 1..50 --player aggressive_dash --decision greedy --out /tmp/cfr_4b_aggressive_final.json
+./run.sh --playtest-batch --seeds 1..50 --player parry_duelist --decision greedy --out /tmp/cfr_4b_parry_final.json
+```
+
+### Task 4b Gates
+
+| gate | result |
+|---|---:|
+| tests | 536/0 |
+| duel-ratio probe timeouts | 0 |
+| 120-seed difficulty checker | accepted |
+| 120-seed combat timeouts | 0 |
+| tier-1 death share | 0.011 |
+| boss deaths | 32 / 88 total deaths |
+
+### Task 4b Duel Ratios
+
+Unchanged from Candidate A, as intended.
+
+| archetype | hp | posture | hp-kill light | break light | break heavy | blocked break | parries break | posture-path kill | posture-path duration | timeout |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| bandit_swordsman | 92 | 85 | 8 | 4 | 3 | 3 | 2 | 6 | 3.77s | false |
+| bandit_spearman | 86 | 80 | 8 | 4 | 2 | 3 | 2 | 6 | 3.43s | false |
+| wandering_ronin | 145 | 100 | 13 | 5 | 3 | 4 | 2 | 10 | 5.83s | false |
+| sect_disciple | 175 | 120 | 15 | 6 | 3 | 4 | 3 | 13 | 7.38s | false |
+| masked_assassin | 120 | 85 | 10 | 4 | 3 | 3 | 2 | 8 | 4.80s | false |
+| iron_bear | 420 | 160 | 35 | 8 | 4 | 5 | 4 | 32 | 17.53s | false |
+
+### Task 4b Heuristic Attrition
+
+Greedy heuristic, skill 0.8, 120 seeds:
+
+| metric | value |
+|---|---:|
+| runs | 120 |
+| win_rate | 0.267 |
+| avg_depth | 4.71 |
+| timeouts | 0 |
+
+| pool | combats | combat win_rate | avg dmg taken | avg duration | timeouts |
+|---|---:|---:|---:|---:|---:|
+| weak | 120 | 0.992 | 7.8 | 7.05s | 0 |
+| strong | 251 | 0.837 | 25.9 | 9.07s | 0 |
+| elite | 44 | 0.682 | 43.3 | 7.13s | 0 |
+| boss | 64 | 0.500 | 62.6 | 14.84s | 0 |
+
+Read: strong/elite now carry real attrition while the boss remains the largest single death share. Weak damage is at the lower edge of the target band but no longer pure zero-pressure.
+
+Difficulty checker output:
+
+```text
+difficulty curve accepted
+```
+
+Normal win rate by ordinal:
+
+| ordinal | attempts | wins | win_rate |
+|---:|---:|---:|---:|
+| 0 | 120 | 119 | 0.992 |
+| 1 | 108 | 102 | 0.944 |
+| 2 | 79 | 64 | 0.810 |
+| 3 | 31 | 23 | 0.742 |
+| 4 | 22 | 15 | 0.682 |
+| 5 | 10 | 6 | 0.600 |
+| 6 | 1 | 0 | 0.000 |
+
+Death share by node:
+
+| node | deaths |
+|---|---:|
+| 8:strong | 29 |
+| 13:boss | 20 |
+| 4:strong | 12 |
+| 12:boss | 12 |
+| 4:elite | 8 |
+| 8:elite | 6 |
+| 1:weak | 1 |
+
+### Scripted Playstyle Policies
+
+Greedy decision policy, 50 seeds:
+
+| player policy | run win_rate | avg_depth | weak win/dmg | strong win/dmg | elite win/dmg | boss win/dmg | timeouts |
+|---|---:|---:|---|---|---|---|---:|
+| facetank | 0.00 | 1.82 | 0.82 / 67.4 | 0.00 / 42.9 | 0.00 / 29.8 | - | 0 |
+| aggressive_dash | 0.08 | 4.08 | 1.00 / 0.0 | 0.816 / 29.2 | 0.409 / 69.6 | 0.190 / 75.0 | 0 |
+| parry_duelist | 0.44 | 5.46 | 0.98 / 9.1 | 0.942 / 16.7 | 0.889 / 28.8 | 0.550 / 65.8 | 0 |
+
+Read: both skill paths beat facetank under the same greedy build policy. Parry remains much stronger, but aggressive dash now has real full-run wins without block/parry, satisfying the multi-path viability gate for this iteration.
+
 ## Final
 
 Pending Task 5 / user balance verdict.

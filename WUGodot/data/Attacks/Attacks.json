@@ -2,22 +2,22 @@
   "attacks": {
     "assassin_backstab": {
       "active_end": 0.35,
-      "damage": 34.0,
+      "damage": 70.0,
       "duration": 0.55,
       "forward_lunge": 0.0,
       "ignores_block": false,
       "is_grab": false,
       "is_heavy": true,
-      "is_parryable": true,
-      "is_perilous": false,
+      "is_parryable": false,
+      "is_perilous": true,
       "knockback_units": 300.0,
-      "posture_damage": 16.0,
-      "range_units": 96.0,
+      "posture_damage": 46.0,
+      "range_units": 285.0,
       "windup_end": 0.2
     },
     "assassin_perilous_grab": {
       "active_end": 0.6,
-      "damage": 32.0,
+      "damage": 64.0,
       "duration": 0.85,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -26,13 +26,13 @@
       "is_parryable": false,
       "is_perilous": true,
       "knockback_units": 200.0,
-      "posture_damage": 10.0,
-      "range_units": 90.0,
+      "posture_damage": 40.0,
+      "range_units": 255.0,
       "windup_end": 0.45
     },
     "bandit_overhead": {
       "active_end": 0.65,
-      "damage": 21.0,
+      "damage": 30.0,
       "duration": 0.95,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -47,7 +47,7 @@
     },
     "bandit_slash": {
       "active_end": 0.6,
-      "damage": 14.0,
+      "damage": 20.0,
       "duration": 0.8,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -62,7 +62,7 @@
     },
     "bandit_thrust_perilous": {
       "active_end": 0.68,
-      "damage": 20.0,
+      "damage": 30.0,
       "duration": 0.9,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -152,7 +152,7 @@
     },
     "disciple_counter": {
       "active_end": 0.28,
-      "damage": 24.0,
+      "damage": 20.0,
       "duration": 0.45,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -167,22 +167,22 @@
     },
     "disciple_jump_attack": {
       "active_end": 0.52,
-      "damage": 30.0,
+      "damage": 18.0,
       "duration": 0.8,
       "forward_lunge": 200.0,
       "ignores_block": false,
       "is_grab": false,
       "is_heavy": true,
-      "is_parryable": true,
-      "is_perilous": false,
+      "is_parryable": false,
+      "is_perilous": true,
       "knockback_units": 440.0,
-      "posture_damage": 30.0,
+      "posture_damage": 28.0,
       "range_units": 260.0,
       "windup_end": 0.28
     },
     "disciple_slash": {
       "active_end": 0.34,
-      "damage": 21.0,
+      "damage": 18.0,
       "duration": 0.55,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -197,7 +197,7 @@
     },
     "disciple_sweep": {
       "active_end": 0.5,
-      "damage": 28.0,
+      "damage": 24.0,
       "duration": 0.75,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -212,7 +212,7 @@
     },
     "disciple_thrust": {
       "active_end": 0.4,
-      "damage": 23.0,
+      "damage": 20.0,
       "duration": 0.6,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -257,7 +257,7 @@
     },
     "flicker_slash": {
       "active_end": 0.24,
-      "damage": 18.0,
+      "damage": 28.0,
       "duration": 0.4,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -266,8 +266,8 @@
       "is_parryable": true,
       "is_perilous": false,
       "knockback_units": 240.0,
-      "posture_damage": 18.0,
-      "range_units": 108.0,
+      "posture_damage": 44.0,
+      "range_units": 280.0,
       "windup_end": 0.12
     },
     "hu_heavy": {
@@ -317,7 +317,7 @@
     },
     "ronin_perilous_thrust": {
       "active_end": 0.65,
-      "damage": 32.0,
+      "damage": 24.0,
       "duration": 0.9,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -332,7 +332,7 @@
     },
     "ronin_slash": {
       "active_end": 0.42,
-      "damage": 20.0,
+      "damage": 16.0,
       "duration": 0.65,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -347,7 +347,7 @@
     },
     "ronin_sweep": {
       "active_end": 0.58,
-      "damage": 28.0,
+      "damage": 22.0,
       "duration": 0.85,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -362,7 +362,7 @@
     },
     "ronin_thrust": {
       "active_end": 0.48,
-      "damage": 23.0,
+      "damage": 18.0,
       "duration": 0.7,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -377,7 +377,7 @@
     },
     "smoke_thrust": {
       "active_end": 0.3,
-      "damage": 20.0,
+      "damage": 28.0,
       "duration": 0.5,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -386,13 +386,13 @@
       "is_parryable": true,
       "is_perilous": false,
       "knockback_units": 260.0,
-      "posture_damage": 20.0,
-      "range_units": 102.0,
+      "posture_damage": 44.0,
+      "range_units": 275.0,
       "windup_end": 0.18
     },
     "spear_long_thrust": {
       "active_end": 0.62,
-      "damage": 15.0,
+      "damage": 18.0,
       "duration": 0.9,
       "forward_lunge": 0.0,
       "ignores_block": false,
@@ -407,7 +407,7 @@
     },
     "spear_wide_swing": {
       "active_end": 0.72,
-      "damage": 20.0,
+      "damage": 24.0,
       "duration": 1.05,
       "forward_lunge": 0.0,
       "ignores_block": false,

@@ -16,7 +16,7 @@
   "colorBody": "#FFAA6E",
   "colorAccent": "#E65C00",
   "pattern_table": ["disciple_slash", "disciple_thrust", "disciple_sweep", "disciple_counter", "disciple_jump_attack"],
-  "aggression": 0.82,
+  "aggression": 0.78,
   "blockChance": 0.3,
   "preferredRange": 221.0,
   "retreatChance": 0.03,

@@ -39,6 +39,12 @@ func _make_player(args: PackedStringArray) -> PlayerPolicy:
 	match id:
 		"scripted":
 			return ScriptedPlayer.new()
+		"parry_duelist":
+			return ParryDuelistPolicy.new()
+		"aggressive_dash":
+			return AggressiveDashPolicy.new()
+		"facetank":
+			return FacetankPolicy.new()
 		_:
 			return HeuristicPlayer.new(_skill(args))
 
@@ -96,4 +102,3 @@ func _write_text(path: String, text: String) -> void:
 		return
 	file.store_string(text)
 	file.close()
-

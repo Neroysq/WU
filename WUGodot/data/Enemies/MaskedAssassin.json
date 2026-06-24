@@ -16,10 +16,10 @@
   "colorBody": "#444466",
   "colorAccent": "#222244",
   "pattern_table": ["smoke_thrust", "flicker_slash", "assassin_backstab", "assassin_perilous_grab"],
-  "aggression": 0.82,
-  "blockChance": 0.16,
-  "preferredRange": 70.0,
+  "aggression": 1.0,
+  "blockChance": 0.04,
+  "preferredRange": 250.0,
   "retreatChance": 0.06,
   "dashChance": 0.18,
-  "teleport_chance": 0.08
+  "teleport_chance": 0.2
 }
