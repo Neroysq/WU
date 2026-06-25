@@ -81,6 +81,7 @@ func draw(ctx: Variant, canvas: CanvasItem) -> void:
 	UiDraw.text(canvas, "Path Select", 144.0, 78.0, GameConstants.COLOR_TEXT_SUBHEADING, 20)
 	UiDraw.text(canvas, "Gold: %d" % ctx.player.gold, GameConstants.VIEW_WIDTH - 220.0, 78.0, GameConstants.COLOR_TEXT_ACCENT, 22)
 	UiDraw.text(canvas, "Arrows / A-D to move · Enter / J or click to travel", 74.0, 106.0, GameConstants.COLOR_TEXT_BODY, 16)
+	_draw_node_legend(canvas, 74.0, 150.0)
 
 	if not next_nodes.is_empty():
 		var selected_node: MapNode = next_nodes[selection_idx]
@@ -147,6 +148,24 @@ func _draw_map_wash(canvas: CanvasItem) -> void:
 
 func _draw_bamboo_silhouettes(canvas: CanvasItem, base_y: float, opacity: float, cursor_flash: float) -> void:
 	MenuSceneScript.new()._draw_bamboo_silhouettes(canvas, base_y, opacity, cursor_flash)
+
+func _draw_node_legend(canvas: CanvasItem, x: float, y: float) -> void:
+	var entries: Array[Dictionary] = [
+		{"type": MapNode.NodeType.BATTLE, "label": "Duel"},
+		{"type": MapNode.NodeType.ELITE, "label": "Elite"},
+		{"type": MapNode.NodeType.AMBUSH, "label": "Ambush"},
+		{"type": MapNode.NodeType.MASTER, "label": "Master"},
+		{"type": MapNode.NodeType.SHOP, "label": "Shop"},
+		{"type": MapNode.NodeType.REST, "label": "Rest"},
+		{"type": MapNode.NodeType.BOSS, "label": "Boss"},
+	]
+	var cursor_x: float = x
+	for entry in entries:
+		var color: Color = _get_node_color(int(entry["type"]))
+		canvas.draw_circle(Vector2(cursor_x + 7.0, y - 5.0), 7.0, Color(color.r, color.g, color.b, 0.28))
+		canvas.draw_circle(Vector2(cursor_x + 7.0, y - 5.0), 4.5, color)
+		UiDraw.text(canvas, str(entry["label"]), cursor_x + 20.0, y, GameConstants.COLOR_TEXT_HINT, 13)
+		cursor_x += 92.0
 
 func _get_node_color(node_type: int) -> Color:
 	match node_type:

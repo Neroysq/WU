@@ -53,7 +53,13 @@ func draw(ctx: Variant, canvas: CanvasItem) -> void:
 	UiDraw.text(canvas, "Insight: %d" % ctx.run_state.insight, panel.end.x - 180.0, panel.position.y + 76.0, GameConstants.COLOR_TEXT_BODY, 16)
 	canvas.draw_rect(Rect2(panel.position.x + 32.0, panel.position.y + 64.0, panel.size.x - 64.0, 1.0), Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.55))
 
-	var y: float = panel.position.y + 114.0
+	var footer_y: float = panel.end.y - 28.0
+	var notice_y: float = panel.end.y - 58.0
+	var list_top: float = panel.position.y + 104.0
+	var list_bottom: float = panel.end.y - 88.0
+	var row_step: float = minf(68.0, (list_bottom - list_top) / maxf(1.0, float(items.size())))
+	var row_height: float = maxf(54.0, row_step - 8.0)
+	var y: float = list_top + 24.0
 	for i in range(items.size()):
 		var item: Dictionary = items[i]
 		var label: String = str(item.get("label", "???"))
@@ -61,7 +67,7 @@ func draw(ctx: Variant, canvas: CanvasItem) -> void:
 		var desc: String = str(item.get("description", ""))
 		var can_afford: bool = ctx.player.gold >= price
 		var selected: bool = i == selection_idx
-		var row: Rect2 = Rect2(panel.position.x + 24.0, y - 28.0, panel.size.x - 48.0, 70.0)
+		var row: Rect2 = Rect2(panel.position.x + 24.0, y - 24.0, panel.size.x - 48.0, row_height)
 		var text_color: Color = GameConstants.COLOR_TEXT_HEADING if selected else GameConstants.COLOR_TEXT_BODY
 		var price_color: Color = GameConstants.COLOR_TEXT_ACCENT if can_afford else Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.8)
 		canvas.draw_rect(row, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.76), true)
@@ -70,19 +76,20 @@ func draw(ctx: Variant, canvas: CanvasItem) -> void:
 			text_color = GameConstants.COLOR_TEXT_DISABLED
 		if selected:
 			UiDraw.menu_cursor(canvas, Vector2(panel.position.x + 16.0, y - 2.0), ctx.cursor_flash)
-		UiDraw.text(canvas, label, panel.position.x + 52.0, y + 2.0, text_color, 19)
+		UiDraw.text(canvas, label, panel.position.x + 52.0, y + 1.0, text_color, 18)
 		if not can_afford:
-			var chip_rect: Rect2 = Rect2(row.end.x - 214.0, y - 18.0, 92.0, 24.0)
+			var chip_rect: Rect2 = Rect2(row.end.x - 214.0, y - 17.0, 92.0, 23.0)
 			canvas.draw_rect(chip_rect, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.16), true)
 			canvas.draw_rect(chip_rect, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.75), false, 1.0)
-			UiDraw.text(canvas, "Need Gold", chip_rect.position.x + 10.0, chip_rect.position.y + 17.0, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.95), 13)
-		UiDraw.text(canvas, "%dg" % price, row.end.x - 88.0, y + 2.0, price_color, 20)
-		UiDraw.text(canvas, desc, panel.position.x + 52.0, y + 28.0, GameConstants.COLOR_TEXT_HINT if can_afford else GameConstants.COLOR_TEXT_DISABLED, 14)
-		y += 82.0
+			UiDraw.text(canvas, "Need Gold", chip_rect.position.x + 10.0, chip_rect.position.y + 16.0, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.95), 13)
+		UiDraw.text(canvas, "%dg" % price, row.end.x - 88.0, y + 1.0, price_color, 19)
+		UiDraw.text(canvas, desc, panel.position.x + 52.0, y + 24.0, GameConstants.COLOR_TEXT_HINT if can_afford else GameConstants.COLOR_TEXT_DISABLED, 13)
+		y += row_step
 
 	if ctx.notice_timer > 0.0:
-		UiDraw.text(canvas, ctx.notice_message, panel.position.x + 32.0, panel.end.y - 58.0, GameConstants.COLOR_TEXT_ACCENT, 17)
-	UiDraw.text(canvas, "W/S to browse, Enter to buy, Q or Esc to leave", panel.position.x + 32.0, panel.end.y - 28.0, GameConstants.COLOR_TEXT_HINT, 15)
+		UiDraw.text(canvas, ctx.notice_message, panel.position.x + 32.0, notice_y, GameConstants.COLOR_TEXT_ACCENT, 17)
+	canvas.draw_rect(Rect2(panel.position.x + 32.0, footer_y - 24.0, panel.size.x - 64.0, 1.0), Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.45), true)
+	UiDraw.text(canvas, "W/S to browse, Enter to buy, Q or Esc to leave", panel.position.x + 32.0, footer_y, GameConstants.COLOR_TEXT_HINT, 15)
 
 func _typed_items(source: Array) -> Array[Dictionary]:
 	var typed: Array[Dictionary] = []

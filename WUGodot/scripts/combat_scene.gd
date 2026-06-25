@@ -10,6 +10,7 @@ const FighterPresenterScript = preload("res://scripts/visual/fighter_presenter.g
 const PresentationCollisionScript = preload("res://scripts/visual/presentation_collision.gd")
 const CombatSetupScript = preload("res://scripts/sim/combat_setup.gd")
 const CombatStepScript = preload("res://scripts/sim/combat_step.gd")
+const EncounterResolverScript = preload("res://scripts/encounter_resolver.gd")
 
 const ENABLE_AUTHORED_PLAYER_HITBOXES: bool = true
 const DEV_CAPTURE_STEP: float = 1.0 / 60.0
@@ -43,6 +44,7 @@ var _slow_mo_factor: float = 1.0
 var _feedback_message: String = ""
 var _feedback_timer: float = 0.0
 var _feedback_frame: int = -1
+var _break_feedback_timer: float = 0.0
 var _is_paused: bool = false
 var _debug_enabled: bool = false
 var _heavy_committed_attack: bool = false
@@ -134,6 +136,7 @@ func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = f
 	_feedback_message = ""
 	_feedback_timer = 0.0
 	_feedback_frame = -1
+	_break_feedback_timer = 0.0
 	_time_scale = 1.0
 	_hitstop_timer = 0.0
 	_slow_mo_timer = 0.0
@@ -372,6 +375,8 @@ func _process(delta: float) -> void:
 
 	if _feedback_timer > 0.0:
 		_feedback_timer -= delta
+	if _break_feedback_timer > 0.0:
+		_break_feedback_timer -= delta
 	if _boss_beat_timer > 0.0:
 		_boss_beat_timer -= delta
 	if _controls_legend_timer > 0.0:
@@ -646,6 +651,7 @@ func _draw() -> void:
 	if not _dev_capture_mode or _dev_capture_show_hud:
 		_draw_hud()
 	_draw_feedback()
+	_draw_break_feedback()
 	_draw_boss_beat()
 	if _is_paused_on_end:
 		_draw_end_message()
@@ -765,8 +771,8 @@ func _draw_hud() -> void:
 	_draw_panel(left_panel)
 	_draw_panel(right_panel)
 
-	_draw_bars(_player, 34, 36, false)
-	_draw_bars(_enemy, GameConstants.VIEW_WIDTH / 2 + 34, 36, true)
+	_draw_bars(_player, 34, 36, false, true)
+	_draw_bars(_enemy, GameConstants.VIEW_WIDTH / 2 + 34, 36, true, false)
 	var enemy_name: String = _enemy.name
 	if not _enemy.archetype_id.is_empty():
 		var enemy_data: Dictionary = DataManager.get_enemy(_enemy.archetype_id)
@@ -779,17 +785,20 @@ func _draw_hud() -> void:
 		var phase_text: String = "Phase %d" % _enemy.boss_controller.current_phase
 		var phase_color: Color = GameConstants.COLOR_TEXT_ACCENT if _enemy.boss_controller.current_phase == 2 else GameConstants.COLOR_TEXT_SUBHEADING
 		_draw_text(phase_text, GameConstants.VIEW_WIDTH - 120, 30, phase_color, 14)
+	elif _current_node != null and _current_node.node_type == MapNode.NodeType.AMBUSH:
+		_draw_ambush_progress(GameConstants.VIEW_WIDTH - 190.0, 30.0)
 
 	var show_controls_legend: bool = _controls_legend_timer > 0.0 or _is_paused or _is_paused_on_end
 	if show_controls_legend:
 		var legend_alpha: float = 1.0 if _is_paused or _is_paused_on_end else clampf(_controls_legend_timer, 0.0, 1.0)
 		_draw_controls_legend(legend_alpha)
+	var active_schools: Array[String] = _active_boon_schools()
 	if _player != null and _player.technique_engine != null:
 		var tech_ids: Array[String] = _player.technique_engine.technique_ids()
-		if not tech_ids.is_empty():
+		if not tech_ids.is_empty() or not active_schools.is_empty():
 			var show_full_loadout: bool = _is_paused or _is_paused_on_end or _debug_enabled
 			if show_full_loadout:
-				var tech_panel_height: float = 56.0 + float(tech_ids.size()) * 18.0
+				var tech_panel_height: float = 72.0 + float(tech_ids.size()) * 18.0 + (30.0 if not active_schools.is_empty() else 0.0)
 				var tech_panel: Rect2 = Rect2(24.0, float(GameConstants.VIEW_HEIGHT) - tech_panel_height - 28.0, 360.0, tech_panel_height)
 				_draw_panel(tech_panel)
 				var tech_y: float = tech_panel.position.y + 28.0
@@ -805,11 +814,16 @@ func _draw_hud() -> void:
 						tech_color = GameConstants.COLOR_SKY_BLUE
 					_draw_text(display, tech_panel.position.x + 18.0, tech_y, tech_color, 13)
 					tech_y += 16.0
+				if not active_schools.is_empty():
+					_draw_school_chips(active_schools, tech_panel.position.x + 18.0, tech_panel.end.y - 24.0)
 			else:
-				var compact_panel: Rect2 = Rect2(24.0, float(GameConstants.VIEW_HEIGHT) - 84.0, 280.0, 56.0)
+				var compact_panel: Rect2 = Rect2(24.0, float(GameConstants.VIEW_HEIGHT) - 92.0, 320.0, 64.0)
 				_draw_panel(compact_panel)
 				_draw_text("技藝 %d" % tech_ids.size(), compact_panel.position.x + 16.0, compact_panel.position.y + 24.0, GameConstants.COLOR_TEXT_SUBHEADING, 15, true)
-				_draw_text("Pause to inspect full loadout", compact_panel.position.x + 16.0, compact_panel.position.y + 44.0, GameConstants.COLOR_TEXT_HINT, 13)
+				if active_schools.is_empty():
+					_draw_text("Pause to inspect full loadout", compact_panel.position.x + 16.0, compact_panel.position.y + 46.0, GameConstants.COLOR_TEXT_HINT, 13)
+				else:
+					_draw_school_chips(active_schools, compact_panel.position.x + 16.0, compact_panel.position.y + 44.0)
 
 			if _player.technique_engine.is_stance_active():
 				var stance_label: String = _player.technique_engine.active_stance_display_name()
@@ -827,29 +841,39 @@ func _draw_controls_legend(alpha: float) -> void:
 	draw_rect(Rect2(controls_panel.position.x + 2.0, controls_panel.position.y, controls_panel.size.x - 4.0, 1.0), accent, true)
 	_draw_text("A/D move  W jump  J tap/hold  K block/parry  Space dash  L stance  P pause  R restart", controls_panel.position.x + 18.0, controls_panel.position.y + 28.0, text_color, 15)
 
-func _draw_bars(fighter: Fighter, x: int, y: int, mirror: bool) -> void:
+func _draw_bars(fighter: Fighter, x: int, y: int, mirror: bool, show_rage: bool) -> void:
 	var width: int = GameConstants.VIEW_WIDTH / 2 - 76
-	var bar_h: int = 16
-	var gap: int = 8
+	var gap: int = 7
 
-	_draw_single_bar(fighter.health_current, fighter.health_max, x, y, width, bar_h, GameConstants.COLOR_HEALTH, mirror)
-	_draw_single_bar(fighter.posture_current, fighter.posture_max, x, y + (bar_h + gap), width, bar_h, GameConstants.COLOR_POSTURE, mirror)
-	_draw_single_bar(fighter.rage_current, fighter.rage_max, x, y + (bar_h + gap) * 2, width, bar_h, GameConstants.COLOR_RAGE, mirror)
+	_draw_single_bar(fighter.health_current, fighter.health_max, x, y, width, 15, GameConstants.COLOR_HEALTH, mirror, "命 HP", false)
+	_draw_single_bar(fighter.posture_current, fighter.posture_max, x, y + 15 + gap, width, 20, GameConstants.COLOR_POSTURE, mirror, "構 PST", true)
+	if show_rage:
+		_draw_single_bar(fighter.rage_current, fighter.rage_max, x, y + 15 + gap + 20 + gap, width, 14, GameConstants.COLOR_RAGE, mirror, "氣 RAGE", false)
 
-func _draw_single_bar(current: float, max_value: float, x: int, y: int, width: int, bar_h: int, color: Color, mirror: bool) -> void:
+func _draw_single_bar(current: float, max_value: float, x: int, y: int, width: int, bar_h: int, color: Color, mirror: bool, label: String, emphasized: bool) -> void:
 	var pct: float = clampf(current / maxf(max_value, 0.001), 0.0, 1.0)
 	var back: Rect2 = Rect2(x, y, width, bar_h)
 	_draw_bar_frame(back)
+	if emphasized:
+		draw_rect(back.grow(2.0), Color(color.r, color.g, color.b, 0.10), true)
 	var fill: Rect2 = Rect2(x, y, width * pct, bar_h)
 	draw_rect(fill, color, true)
+	if emphasized:
+		var ticks: int = 10
+		for i in range(1, ticks):
+			var tick_x: float = float(x) + float(width) * float(i) / float(ticks)
+			draw_line(Vector2(tick_x, float(y) + 2.0), Vector2(tick_x, float(y + bar_h) - 2.0), Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.42), 1.0)
 
 	var value_text: String = "%d/%d" % [int(round(current)), int(round(max_value))]
-	var text_x: int = x + 4
+	var label_x: float = float(x + 6)
+	var value_x: float = float(x + width - _measure_text(value_text, 14) - 6)
 	if mirror:
-		var text_width: int = _measure_text(value_text, 14)
-		text_x = x + width - text_width - 4
-	_draw_text(value_text, text_x + 1, y + 13, Color(0, 0, 0, 0.7), 14)
-	_draw_text(value_text, text_x, y + 12, GameConstants.COLOR_TEXT_HEADING, 14)
+		label_x = float(x + width - _measure_text(label, 13, true) - 6)
+		value_x = float(x + 6)
+	_draw_text(label, label_x + 1.0, float(y) + float(bar_h) - 3.0, Color(0, 0, 0, 0.72), 13, true)
+	_draw_text(label, label_x, float(y) + float(bar_h) - 4.0, GameConstants.COLOR_TEXT_HEADING if emphasized else GameConstants.COLOR_TEXT_BODY, 13, true)
+	_draw_text(value_text, value_x + 1.0, float(y) + float(bar_h) - 3.0, Color(0, 0, 0, 0.72), 14)
+	_draw_text(value_text, value_x, float(y) + float(bar_h) - 4.0, GameConstants.COLOR_TEXT_HEADING, 14)
 
 func _draw_feedback() -> void:
 	if _feedback_timer <= 0.0:
@@ -857,6 +881,18 @@ func _draw_feedback() -> void:
 	var alpha: float = clampf(_feedback_timer, 0.0, 1.0)
 	var text_width: float = _measure_text(_feedback_message, 22)
 	_draw_text(_feedback_message, GameConstants.VIEW_WIDTH * 0.5 - text_width * 0.5, 200.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, alpha), 22)
+
+func _draw_break_feedback() -> void:
+	if _break_feedback_timer <= 0.0:
+		return
+	var alpha: float = clampf(_break_feedback_timer / 0.85, 0.0, 1.0)
+	var pulse: float = 0.5 + 0.5 * sin((0.85 - _break_feedback_timer) * 18.0)
+	var rect: Rect2 = Rect2(GameConstants.VIEW_WIDTH * 0.5 - 170.0, 132.0, 340.0, 84.0)
+	draw_rect(rect, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.58 * alpha), true)
+	draw_rect(rect, Color(GameConstants.COLOR_POSTURE.r, GameConstants.COLOR_POSTURE.g, GameConstants.COLOR_POSTURE.b, 0.85 * alpha), false, 2.0 + pulse)
+	var kanji_size: int = int(48.0 + pulse * 8.0)
+	_draw_text("破", rect.position.x + rect.size.x * 0.5 - _measure_text("破", kanji_size, true) * 0.5, rect.position.y + 50.0, Color(GameConstants.COLOR_TEXT_HEADING.r, GameConstants.COLOR_TEXT_HEADING.g, GameConstants.COLOR_TEXT_HEADING.b, alpha), kanji_size, true)
+	_draw_text("Posture Broken", rect.position.x + rect.size.x * 0.5 - _measure_text("Posture Broken", 16) * 0.5, rect.position.y + 72.0, Color(GameConstants.COLOR_POSTURE.r, GameConstants.COLOR_POSTURE.g, GameConstants.COLOR_POSTURE.b, alpha), 16)
 
 func _draw_boss_beat() -> void:
 	if _boss_beat_timer <= 0.0 or _boss_beat_message.is_empty():
@@ -974,6 +1010,8 @@ func _trigger_hitstop(duration: float) -> void:
 	_hitstop_timer = maxf(_hitstop_timer, duration)
 
 func _show_feedback(message: String, duration: float) -> void:
+	if message == "破":
+		_break_feedback_timer = maxf(_break_feedback_timer, maxf(duration, 0.85))
 	var frame: int = Engine.get_process_frames()
 	if _feedback_frame == frame and not _feedback_message.is_empty():
 		if _feedback_message.find(message) == -1:
@@ -987,6 +1025,36 @@ func _show_feedback(message: String, duration: float) -> void:
 func _show_boss_beat(message: String, duration: float) -> void:
 	_boss_beat_message = message
 	_boss_beat_timer = duration
+
+func _draw_ambush_progress(x: float, y: float) -> void:
+	if _current_node == null:
+		return
+	var length: int = EncounterResolverScript.ambush_length(DataManager.get_difficulty_curve(1), _current_node.tier)
+	var current_wave: int = clampi(length - _current_node.ambush_remaining + 1, 1, length)
+	_draw_text("Ambush %d/%d" % [current_wave, length], x, y, GameConstants.COLOR_VERMILLION_RED, 14)
+
+func _active_boon_schools() -> Array[String]:
+	if _boon_loadout == null or not _boon_loadout.has_method("active_schools"):
+		return []
+	return _boon_loadout.active_schools()
+
+func _draw_school_chips(schools: Array[String], x: float, y: float) -> void:
+	var chip_x: float = x
+	for school_id in schools.slice(0, mini(schools.size(), 5)):
+		var school_data: Dictionary = DataManager.get_school(school_id)
+		var hanzi: String = str(school_data.get("hanzi", school_id.substr(0, 1).to_upper()))
+		var color: Color = _school_color_from_data(school_data)
+		var rect: Rect2 = Rect2(chip_x, y - 17.0, 30.0, 22.0)
+		draw_rect(rect, Color(color.r, color.g, color.b, 0.22), true)
+		draw_rect(rect, Color(color.r, color.g, color.b, 0.82), false, 1.0)
+		_draw_text(hanzi, rect.position.x + 7.0, rect.position.y + 16.0, GameConstants.COLOR_TEXT_HEADING, 13, true)
+		chip_x += 36.0
+
+func _school_color_from_data(school_data: Dictionary) -> Color:
+	var text: String = str(school_data.get("themeColor", ""))
+	if text.length() == 7 and text.begins_with("#"):
+		return Color.html(text)
+	return GameConstants.COLOR_PANEL_ACCENT
 
 func _connect_attack_visual(fighter: Fighter, visual: FighterVisual) -> void:
 	var callback: Callable = Callable(visual, "_on_attack_active_started")
