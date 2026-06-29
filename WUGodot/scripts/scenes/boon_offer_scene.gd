@@ -143,17 +143,21 @@ func _school_choice_description(choice: Dictionary) -> String:
 
 func _get_offer_panel_rect() -> Rect2:
 	var width: float = minf(1320.0, float(GameConstants.VIEW_WIDTH) - 180.0)
-	var height: float = 430.0
-	return Rect2((float(GameConstants.VIEW_WIDTH) - width) * 0.5, (float(GameConstants.VIEW_HEIGHT) - height) * 0.5 - 38.0, width, height)
+	if offers.size() > 0:
+		var offer_height: float = 580.0
+		return Rect2((float(GameConstants.VIEW_WIDTH) - width) * 0.5, (float(GameConstants.VIEW_HEIGHT) - offer_height) * 0.5, width, offer_height)
+	var school_height: float = 430.0
+	return Rect2((float(GameConstants.VIEW_WIDTH) - width) * 0.5, (float(GameConstants.VIEW_HEIGHT) - school_height) * 0.5 - 38.0, width, school_height)
 
 func _get_offer_box_rect(index: int) -> Rect2:
 	var panel: Rect2 = _get_offer_panel_rect()
 	var count: int = maxi(maxi(offers.size(), school_choices.size()), 1)
 	var gap: float = 20.0
+	var has_offers: bool = offers.size() > 0
 	var box_width: float = (panel.size.x - gap * float(count + 1)) / float(count)
-	var box_height: float = 224.0 if offers.size() > 0 else 150.0
+	var box_height: float = 360.0 if has_offers else 150.0
 	var x: float = panel.position.x + gap + float(index) * (box_width + gap)
-	var y: float = panel.position.y + 138.0
+	var y: float = panel.position.y + (150.0 if has_offers else 138.0)
 	return Rect2(x, y, box_width, box_height)
 
 func _get_hovered_offer_index(mouse_pos: Vector2) -> int:
@@ -190,9 +194,9 @@ func _draw_offer_card(canvas: CanvasItem, rect: Rect2, offer: Dictionary, select
 	var kind_slot: String = _offer_kind_slot(boon)
 	if not kind_slot.is_empty():
 		UiDraw.text(canvas, kind_slot, card.end.x - UiDraw.measure_text(kind_slot, 13) - 18.0, card.position.y + 38.0, Color(school_accent.r, school_accent.g, school_accent.b, 0.95), 13)
-	UiDraw.text_block(canvas, BoonTextScript.name(boon), card.position.x + 18.0, card.position.y + 78.0, card.size.x - 36.0, 24.0, GameConstants.COLOR_TEXT_HEADING, 22, true)
-	var body_y: float = card.position.y + 116.0
-	UiDraw.text_block(canvas, BoonTextScript.describe(boon, tier), card.position.x + 18.0, body_y, card.size.x - 36.0, 19.0, GameConstants.COLOR_TEXT_BODY, 14)
+	UiDraw.text_block(canvas, BoonTextScript.name(boon), card.position.x + 18.0, card.position.y + 100.0, card.size.x - 36.0, 28.0, GameConstants.COLOR_TEXT_HEADING, 24, true)
+	var body_y: float = card.position.y + 150.0
+	UiDraw.text_block(canvas, BoonTextScript.describe(boon, tier), card.position.x + 18.0, body_y, card.size.x - 36.0, 22.0, GameConstants.COLOR_TEXT_BODY, 14)
 	if selected:
 		UiDraw.menu_cursor(canvas, Vector2(card.position.x - 16.0, card.position.y + 42.0), cursor_flash)
 
