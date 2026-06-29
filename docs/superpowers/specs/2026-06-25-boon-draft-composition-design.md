@@ -31,16 +31,16 @@ Numbers are starting points; tune in-engine so (a) margins read symmetric, (b) t
 ## 3. Testing / verification
 `./run.sh --capture` takes a **spec-file path** (`run.sh:22,142`), not inline JSON. Write a temp spec then capture. Random `boon_offer` captures generate *normal* offers (`main.gd:417`) and may not surface the long case, so use **`forced_offers`** (`main.gd:447`) to pin both extremes — descriptions are **cumulative across tiers** (`boon_text.gd:20,131`), so a high tier stacks all lower riders.
 
-- **Long case (3-line epic) + short case (1-line common)** in one capture — `wind_descending_leaf` at `epic` stacks dash_stab + momentum_deflect + momentum + momentum_flurry (`Boons.json:379`); pair it with a 1-line common:
+- **Long case (3-line epic) + short case (1-line common)** in one capture — `wind_descending_leaf` at `epic` stacks dash_stab + momentum_deflect + momentum + momentum_flurry (`Boons.json:379`); pair it with a genuinely short common, `wind_crane_step` common = a single `stat_delta` rendering as "+15% move speed" (`Boons.json:446`). (Don't use `wind_descending_leaf` common as the short case — its common already carries a `momentum_deflect` rider, so it's two clauses, not one line.)
   ```bash
   cat > /tmp/wu-boon-spec.json <<'JSON'
   {"kind":"ui","screen":"boon_offer","school":"wind",
    "forced_offers":[{"boon_id":"wind_descending_leaf","tier":"epic"},
-                    {"boon_id":"wind_descending_leaf","tier":"common"}]}
+                    {"boon_id":"wind_crane_step","tier":"common"}]}
   JSON
   ./run.sh --capture /tmp/wu-boon-spec.json /tmp/wu-boon.png
   ```
-  Inspect `/tmp/wu-boon.png`: panel ~54% height, centered with symmetric margins; the epic's full cumulative description fits without crowding the card edge; the common doesn't look hollow. `python3 WUGodot/tools/assert_nonblank.py /tmp/wu-boon.png` passes.
+  Inspect `/tmp/wu-boon.png`: panel ~54% height, centered with symmetric margins; the epic's full cumulative description fits without crowding the card edge; the short common doesn't look hollow. `python3 tools/assert_nonblank.py /tmp/wu-boon.png` passes.
 - **School-choice unchanged** — capture `{"kind":"ui","screen":"school_choice"}` (via its own temp spec file) and confirm it looks exactly as before (panel + boxes untouched).
 - **No regression:** `./run.sh --import` + `./run.sh --test` stay green (draw-only; no test asserts pixel rects — confirm nothing else references the old `430`/`224`/`138` constants).
 
