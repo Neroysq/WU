@@ -6,7 +6,7 @@
 
 **Goal:** Make the boon-offer screen read as an intentional centered modal that uses the frame, not a 430px band floating in a 1080 frame.
 
-**Scope:** Pure layout in `scripts/scenes/boon_offer_scene.gd`. No new info, no behavior change, no new data. **Moderate scale-up** (chosen over full-frame to avoid cavernous 1-line commons).
+**Scope:** Layout-only in `scripts/scenes/boon_offer_scene.gd` — no new info, no logic/data change. **Moderate scale-up** (chosen over full-frame to avoid cavernous 1-line commons). One intended side effect: `_get_offer_box_rect()` also drives hover/click hit-testing (`:159`, `_get_hovered_offer_index`), so the larger card grows the clickable target — desirable (bigger target), draw-rect and hit-rect stay one and the same. **Only the offer-draft path scales; the school-choice path is left unchanged** (see §2).
 
 ---
 
@@ -16,8 +16,8 @@ Frame is 1920×1080. `_get_offer_panel_rect()` (`boon_offer_scene.gd:144-147`) m
 ## 2. Target composition (moderate)
 A centered modal at ~54% of the frame height with symmetric margins; taller cards so descriptions breathe.
 
-- **`_get_offer_panel_rect()`** — height `430 → 580`; vertical position centered cleanly: `(VIEW_HEIGHT - height) * 0.5` (drop the `- 38.0` nudge). Result: panel y≈250..830, ~250px symmetric top/bottom margins. Width unchanged (`min(1320, VIEW_WIDTH - 180)`).
-- **`_get_offer_box_rect()`** — card top offset `panel.y + 138 → panel.y + 150`; offer `box_height 224 → 360`; school-choice `box_height 150 → 220` (proportional bump so the school-pick path stays consistent — it reuses this rect). `gap`/`box_width`/x-layout unchanged.
+- **`_get_offer_panel_rect()`** — make height **conditional on the path** (the method already reads `offers`/`school_choices`): for the **offer** path, height `430 → 580`, centered cleanly `(VIEW_HEIGHT - height) * 0.5` (drop the `- 38.0` nudge) → panel y≈250..830, ~250px symmetric margins. For the **school-choice** path, keep the current `430` + `- 38.0` (unchanged). Width unchanged (`min(1320, VIEW_WIDTH - 180)`).
+- **`_get_offer_box_rect()`** — **only the offer branch scales**: card top offset `panel.y + 138 → panel.y + 150`; offer `box_height 224 → 360`. **Leave the school-choice `box_height` at `150`** — school choices render through `UiDraw.reward_option`, whose label/body are fixed at `y+36`/`y+66` (`ui_draw.gd:40-41`); a taller box would go top-heavy. `gap`/`box_width`/x-layout unchanged. (If the school-choice path is ever restyled, redistribute `reward_option` first — out of scope here.)
 - **`_draw_offer_card()`** — redistribute content into the taller card so it reads balanced (not top-loaded with a void below):
   - Keep the 6px school-accent top strip and the rarity border.
   - Rarity chip stays at `card.y + 18`; kind/slot stays top-right.
@@ -29,9 +29,20 @@ A centered modal at ~54% of the frame height with symmetric margins; taller card
 Numbers are starting points; tune in-engine so (a) margins read symmetric, (b) the longest real description (3-line epic) fits without overflow, (c) a 1-line common doesn't look hollow.
 
 ## 3. Testing / verification
-- **Visual (primary):** `./run.sh --capture {"kind":"ui","screen":"boon_offer"}` → inspect the PNG; the panel should fill ~54% height, centered with symmetric margins, cards taller with the description not crowding the card edge. `tools/assert_nonblank.py` passes.
-- Also capture **school_choice** (`{"screen":"school_choice"}`) to confirm the school-pick path still lays out correctly with the bumped box height.
-- **No regression:** `./run.sh --import` + `./run.sh --test` stay green (this is draw-only; no test asserts pixel rects, but confirm nothing references the old constants).
+`./run.sh --capture` takes a **spec-file path** (`run.sh:22,142`), not inline JSON. Write a temp spec then capture. Random `boon_offer` captures generate *normal* offers (`main.gd:417`) and may not surface the long case, so use **`forced_offers`** (`main.gd:447`) to pin both extremes — descriptions are **cumulative across tiers** (`boon_text.gd:20,131`), so a high tier stacks all lower riders.
+
+- **Long case (3-line epic) + short case (1-line common)** in one capture — `wind_descending_leaf` at `epic` stacks dash_stab + momentum_deflect + momentum + momentum_flurry (`Boons.json:379`); pair it with a 1-line common:
+  ```bash
+  cat > /tmp/wu-boon-spec.json <<'JSON'
+  {"kind":"ui","screen":"boon_offer","school":"wind",
+   "forced_offers":[{"boon_id":"wind_descending_leaf","tier":"epic"},
+                    {"boon_id":"wind_descending_leaf","tier":"common"}]}
+  JSON
+  ./run.sh --capture /tmp/wu-boon-spec.json /tmp/wu-boon.png
+  ```
+  Inspect `/tmp/wu-boon.png`: panel ~54% height, centered with symmetric margins; the epic's full cumulative description fits without crowding the card edge; the common doesn't look hollow. `python3 WUGodot/tools/assert_nonblank.py /tmp/wu-boon.png` passes.
+- **School-choice unchanged** — capture `{"kind":"ui","screen":"school_choice"}` (via its own temp spec file) and confirm it looks exactly as before (panel + boxes untouched).
+- **No regression:** `./run.sh --import` + `./run.sh --test` stay green (draw-only; no test asserts pixel rects — confirm nothing else references the old `430`/`224`/`138` constants).
 
 ## 4. Out of scope
 - Loadout context ("which slot / what it replaces") — considered, deferred; this is composition only.
@@ -39,6 +50,6 @@ Numbers are starting points; tune in-engine so (a) margins read symmetric, (b) t
 - Any change to offer generation, selection, or data.
 
 ## 5. Sequencing
-1. Adjust `_get_offer_panel_rect` + `_get_offer_box_rect` (panel/card sizing + recenter).
+1. Adjust `_get_offer_panel_rect` + `_get_offer_box_rect` — **offer path only** (conditional height; school-choice branch untouched), recenter.
 2. Redistribute `_draw_offer_card` internals for the taller card.
-3. Capture boon_offer + school_choice, eyeball proportions, tune; confirm import/test green.
+3. Capture via **forced_offers spec files** (long epic + short common, §3) + a school_choice capture; eyeball proportions against the three tuning constraints; confirm import/test green.
