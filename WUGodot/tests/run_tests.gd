@@ -5,6 +5,7 @@ const _TEST_MODULES: Array[String] = [
 	"res://tests/test_attack_state.gd",
 	"res://tests/test_attack_data.gd",
 	"res://tests/test_input_buffer.gd",
+	"res://tests/test_settings_manager.gd",
 	"res://tests/test_technique.gd",
 	"res://tests/test_technique_engine.gd",
 	"res://tests/test_technique_combat.gd",

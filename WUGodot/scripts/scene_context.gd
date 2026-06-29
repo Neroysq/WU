@@ -12,6 +12,7 @@ const SCENE_FORGET_TECHNIQUE: int = 7
 const SCENE_VICTORY: int = 8
 const SCENE_GAME_OVER: int = 9
 const SCENE_BOON_OFFER: int = 10
+const SCENE_SETTINGS: int = 11
 
 var current_scene: int = SCENE_MAIN_MENU
 var run_state: RunState

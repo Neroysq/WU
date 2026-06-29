@@ -4,6 +4,7 @@ extends RefCounted
 const AttackCatalogScript = preload("res://scripts/attack_catalog.gd")
 const AttackDefinitionScript = preload("res://scripts/attack_definition.gd")
 const AttackStateScript = preload("res://scripts/attack_state.gd")
+const SettingsManagerScript = preload("res://scripts/settings_manager.gd")
 
 signal attack_active_started
 
@@ -136,7 +137,7 @@ var _grab_timer: float = 0.0
 var combo_window: float = 0.0
 var combo_count: int = 0
 
-var controls: Dictionary = {
+const DEFAULT_CONTROLS: Dictionary = {
 	"left": KEY_A,
 	"right": KEY_D,
 	"attack": KEY_J,
@@ -145,6 +146,8 @@ var controls: Dictionary = {
 	"jump": KEY_W,
 	"stance": KEY_L,
 }
+
+var controls: Dictionary = DEFAULT_CONTROLS.duplicate(true)
 
 var _attack_cooldown: float = 0.0
 var _dash_timer: float = 0.0
@@ -446,15 +449,7 @@ func on_stance_input() -> bool:
 	return technique_engine.activate_stance(self)
 
 static func player_controls() -> Dictionary:
-	return {
-		"left": KEY_A,
-		"right": KEY_D,
-		"attack": KEY_J,
-		"block": KEY_K,
-		"dash": KEY_SPACE,
-		"jump": KEY_W,
-		"stance": KEY_L,
-	}
+	return SettingsManagerScript.keybinds()
 
 static func none_controls() -> Dictionary:
 	return {

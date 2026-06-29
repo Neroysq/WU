@@ -1,13 +1,24 @@
 class_name MenuScene
 extends RefCounted
 
+const SceneContext = preload("res://scripts/scene_context.gd")
+const MenuInput = preload("res://scripts/ui/menu_input.gd")
 const UiDraw = preload("res://scripts/ui/ui_draw.gd")
 
+var selection_idx: int = 0
+
 func enter(_ctx: Variant, _payload: Dictionary = {}) -> void:
-	pass
+	selection_idx = 0
 
 func update(ctx: Variant, input: Variant, _delta: float) -> void:
+	selection_idx = MenuInput.step_index(selection_idx, 1, input)
+	var hovered_idx: int = _hovered_option(input.mouse_pos)
+	if hovered_idx >= 0:
+		selection_idx = hovered_idx
 	if input.accept or input.mouse_clicked:
+		if selection_idx == 1:
+			ctx.goto(SceneContext.SCENE_SETTINGS)
+			return
 		ctx.request_new_run()
 
 func draw(ctx: Variant, canvas: CanvasItem) -> void:
@@ -25,9 +36,29 @@ func draw(ctx: Variant, canvas: CanvasItem) -> void:
 	UiDraw.centered_text(canvas, "A Sekiro-paced wuxia duel roguelike", center_x, title_y + 184.0, GameConstants.COLOR_TEXT_HINT, 17)
 
 	var prompt_pulse: float = 0.775 + 0.225 * sin(ctx.cursor_flash * 4.0)
-	UiDraw.centered_text(canvas, "Press Enter to begin", center_x, float(GameConstants.VIEW_HEIGHT) * 0.82, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, prompt_pulse), 24)
+	_draw_menu_option(canvas, "Begin", 0, center_x, float(GameConstants.VIEW_HEIGHT) * 0.78, ctx.cursor_flash, prompt_pulse)
+	_draw_menu_option(canvas, "Settings", 1, center_x, float(GameConstants.VIEW_HEIGHT) * 0.84, ctx.cursor_flash, prompt_pulse)
 	UiDraw.centered_text(canvas, "第一章 江湖", center_x, float(GameConstants.VIEW_HEIGHT) - 78.0, GameConstants.COLOR_TEXT_BODY, 18, true)
 	UiDraw.centered_text(canvas, "Bamboo roads, wandering blades, and a debt still unpaid", center_x, float(GameConstants.VIEW_HEIGHT) - 48.0, GameConstants.COLOR_TEXT_HINT, 15)
+
+func _draw_menu_option(canvas: CanvasItem, label: String, idx: int, center_x: float, y: float, cursor_flash: float, prompt_pulse: float) -> void:
+	var selected: bool = idx == selection_idx
+	var color: Color = Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, prompt_pulse) if selected else GameConstants.COLOR_TEXT_BODY
+	UiDraw.centered_text(canvas, label, center_x, y, color, 24)
+	if selected:
+		UiDraw.menu_cursor(canvas, Vector2(center_x - 88.0, y - 8.0), cursor_flash)
+
+func _hovered_option(mouse_pos: Vector2) -> int:
+	if mouse_pos == Vector2.INF:
+		return -1
+	var center_x: float = float(GameConstants.VIEW_WIDTH) * 0.5
+	var begin_rect: Rect2 = Rect2(center_x - 120.0, float(GameConstants.VIEW_HEIGHT) * 0.78 - 28.0, 240.0, 42.0)
+	var settings_rect: Rect2 = Rect2(center_x - 120.0, float(GameConstants.VIEW_HEIGHT) * 0.84 - 28.0, 240.0, 42.0)
+	if begin_rect.has_point(mouse_pos):
+		return 0
+	if settings_rect.has_point(mouse_pos):
+		return 1
+	return -1
 
 func _draw_scene_frame(canvas: CanvasItem, margin: float) -> void:
 	var cm: float = 12.0

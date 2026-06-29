@@ -11,6 +11,8 @@ const PresentationCollisionScript = preload("res://scripts/visual/presentation_c
 const CombatSetupScript = preload("res://scripts/sim/combat_setup.gd")
 const CombatStepScript = preload("res://scripts/sim/combat_step.gd")
 const EncounterResolverScript = preload("res://scripts/encounter_resolver.gd")
+const SettingsManagerScript = preload("res://scripts/settings_manager.gd")
+const SettingsViewScript = preload("res://scripts/scenes/settings_view.gd")
 
 const ENABLE_AUTHORED_PLAYER_HITBOXES: bool = true
 const DEV_CAPTURE_STEP: float = 1.0 / 60.0
@@ -53,6 +55,8 @@ var _boss_death_triggered: bool = false
 var _boss_beat_message: String = ""
 var _boss_beat_timer: float = 0.0
 var _controls_legend_timer: float = 0.0
+var _pause_cursor_flash: float = 0.0
+var _settings_open: bool = false
 var _entry_timer: float = 0.0
 var _entry_presenter_active: bool = false
 var _dev_capture_mode: bool = false
@@ -65,6 +69,7 @@ var _dev_capture_show_debug: bool = true
 var _input_tracker: InputTracker = InputTracker.new()
 var _input_buffer: Variant = InputBufferScript.new()
 var _debug_overlay: Variant = CombatDebugOverlayScript.new()
+var _settings_view: Variant = SettingsViewScript.new()
 
 func _ready() -> void:
 	_combat_system = CombatSystem.new()
@@ -147,6 +152,9 @@ func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = f
 	_boss_beat_message = ""
 	_boss_beat_timer = 0.0
 	_controls_legend_timer = 6.0 if show_controls_legend else 0.0
+	_pause_cursor_flash = 0.0
+	_settings_open = false
+	_settings_view.enter()
 	_entry_timer = 0.0
 	_entry_presenter_active = false
 
@@ -179,6 +187,9 @@ func on_exit() -> void:
 func deactivate() -> void:
 	set_process(false)
 	visible = false
+
+func blocks_global_hotkeys() -> bool:
+	return _settings_open
 
 func dev_set_capture_mode(enabled: bool) -> void:
 	_dev_capture_mode = enabled
@@ -348,6 +359,7 @@ func _dev_pick_enemy_capture_attack() -> Variant:
 func _process(delta: float) -> void:
 	if _player == null or _enemy == null:
 		return
+	_pause_cursor_flash += delta
 
 	if _dev_capture_mode:
 		var presenter_dt: float = 0.0
@@ -367,11 +379,13 @@ func _process(delta: float) -> void:
 		queue_redraw()
 		return
 
-	if _input_tracker.pressed_key(KEY_QUOTELEFT):
+	if not _settings_open and _input_tracker.pressed_key(KEY_QUOTELEFT):
 		_debug_enabled = not _debug_enabled
 
-	if _input_tracker.pressed_key(KEY_P):
+	if not _settings_open and _input_tracker.pressed_key(KEY_P):
 		_is_paused = not _is_paused
+		if not _is_paused:
+			_settings_open = false
 
 	if _feedback_timer > 0.0:
 		_feedback_timer -= delta
@@ -383,6 +397,22 @@ func _process(delta: float) -> void:
 		_controls_legend_timer = maxf(0.0, _controls_legend_timer - delta)
 
 	if _is_paused and not _is_paused_on_end:
+		var pause_input: MenuInput = MenuInput.from_tracker(_input_tracker, get_viewport())
+		if _settings_open:
+			var settings_result: Dictionary = _settings_view.update(pause_input, delta)
+			if _settings_view.consume_changed():
+				_apply_settings_to_player()
+			if bool(settings_result.get("exit", false)):
+				_settings_open = false
+			_sync_input_tracker()
+			queue_redraw()
+			return
+		if _input_tracker.pressed_key(KEY_O):
+			_settings_open = true
+			_settings_view.enter()
+			_sync_input_tracker()
+			queue_redraw()
+			return
 		_sync_input_tracker()
 		queue_redraw()
 		return
@@ -432,7 +462,7 @@ func _process(delta: float) -> void:
 
 	var attack_key: int = int(_player.controls.get("attack", KEY_J))
 	if input_active:
-		_input_tracker.update_hold_timers([attack_key], delta)
+		_input_tracker.update_physical_hold_timers([attack_key], delta)
 		_input_buffer.advance(delta)
 
 	if not input_active:
@@ -491,19 +521,19 @@ func _build_player_input(input_active: bool = true) -> Dictionary:
 	var block_key: int = int(_player.controls.get("block", KEY_K))
 	var stance_key: int = int(_player.controls.get("stance", KEY_NONE))
 
-	if _input_tracker.pressed_key(jump_key):
+	if _input_tracker.pressed_physical_key(jump_key):
 		_input_buffer.record("jump")
-	if _input_tracker.pressed_key(dash_key):
+	if _input_tracker.pressed_physical_key(dash_key):
 		_input_buffer.record("dash")
-	if _input_tracker.pressed_key(block_key):
+	if _input_tracker.pressed_physical_key(block_key):
 		_input_buffer.record("parry")
-	if stance_key != KEY_NONE and _input_tracker.pressed_key(stance_key):
+	if stance_key != KEY_NONE and _input_tracker.pressed_physical_key(stance_key):
 		_input_buffer.record("stance")
 
-	var attack_press_edge: bool = _input_tracker.pressed_key(attack_key)
-	var attack_release_edge: bool = _input_tracker.released_key(attack_key)
-	var attack_held: bool = Input.is_key_pressed(attack_key)
-	var attack_hold: float = _input_tracker.hold_duration(attack_key)
+	var attack_press_edge: bool = _input_tracker.pressed_physical_key(attack_key)
+	var attack_release_edge: bool = _input_tracker.released_physical_key(attack_key)
+	var attack_held: bool = _input_tracker.is_physical_held(attack_key)
+	var attack_hold: float = _input_tracker.physical_hold_duration(attack_key)
 
 	if attack_press_edge:
 		_heavy_committed_attack = false
@@ -525,8 +555,8 @@ func _build_player_input(input_active: bool = true) -> Dictionary:
 	var heavy_pressed: bool = _input_buffer.consume("heavy") if can_act_now else false
 	var stance_pressed: bool = _input_buffer.consume("stance")
 
-	var left_down: bool = Input.is_key_pressed(left_key)
-	var right_down: bool = Input.is_key_pressed(right_key)
+	var left_down: bool = _input_tracker.is_physical_held(left_key)
+	var right_down: bool = _input_tracker.is_physical_held(right_key)
 	var move: float = 0.0
 	if left_down:
 		move -= 1.0
@@ -540,7 +570,7 @@ func _build_player_input(input_active: bool = true) -> Dictionary:
 		"light_pressed": light_pressed,
 		"heavy_pressed": heavy_pressed,
 		"block_pressed": parry_pressed,
-		"block_down": Input.is_key_pressed(block_key),
+		"block_down": _input_tracker.is_physical_held(block_key),
 		"stance_pressed": stance_pressed,
 		"attack_holding": attack_held,
 		"attack_hold_duration": attack_hold,
@@ -583,7 +613,7 @@ func _entry_cancel_requested() -> bool:
 		return false
 	for action_name in ["left", "right", "jump", "dash", "attack", "block", "stance"]:
 		var key: int = int(_player.controls.get(str(action_name), KEY_NONE))
-		if key != KEY_NONE and Input.is_key_pressed(key):
+		if key != KEY_NONE and Input.is_physical_key_pressed(key):
 			return true
 	return false
 
@@ -659,10 +689,26 @@ func _draw() -> void:
 
 	if _is_paused:
 		_draw_pause_indicator()
-		_draw_controls_legend(1.0)
+		if _settings_open:
+			_settings_view.draw(self, SettingsViewScript.default_rect(), _pause_cursor_flash)
+		else:
+			_draw_controls_legend(1.0)
 
-	if _debug_enabled and (not _dev_capture_mode or _dev_capture_show_debug):
+	if _debug_enabled and not _settings_open and (not _dev_capture_mode or _dev_capture_show_debug):
 		_draw_debug_overlay()
+
+func _unhandled_input(event: InputEvent) -> void:
+	if not _settings_open or not _settings_view.is_capturing():
+		return
+	if event is InputEventKey:
+		var key_event: InputEventKey = event as InputEventKey
+		if key_event.pressed and not key_event.echo:
+			_settings_view.feed_key_event(key_event)
+			if _settings_view.consume_changed():
+				_apply_settings_to_player()
+			get_viewport().set_input_as_handled()
+			_sync_input_tracker()
+			queue_redraw()
 
 func _draw_arena(offset: Vector2) -> void:
 	if _background != null:
@@ -788,7 +834,7 @@ func _draw_hud() -> void:
 	elif _current_node != null and _current_node.node_type == MapNode.NodeType.AMBUSH:
 		_draw_ambush_progress(GameConstants.VIEW_WIDTH - 190.0, 30.0)
 
-	var show_controls_legend: bool = _controls_legend_timer > 0.0 or _is_paused or _is_paused_on_end
+	var show_controls_legend: bool = _controls_legend_timer > 0.0 or (_is_paused and not _settings_open) or _is_paused_on_end
 	if show_controls_legend:
 		var legend_alpha: float = 1.0 if _is_paused or _is_paused_on_end else clampf(_controls_legend_timer, 0.0, 1.0)
 		_draw_controls_legend(legend_alpha)
@@ -831,7 +877,7 @@ func _draw_hud() -> void:
 				_draw_text("STANCE: %s" % stance_label, 36.0, 104.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, pulse), 16)
 
 func _draw_controls_legend(alpha: float) -> void:
-	var controls_panel: Rect2 = Rect2(520.0, float(GameConstants.VIEW_HEIGHT) - 70.0, 880.0, 44.0)
+	var controls_panel: Rect2 = Rect2(410.0, float(GameConstants.VIEW_HEIGHT) - 70.0, 1100.0, 44.0)
 	var panel_bg: Color = Color(GameConstants.COLOR_PANEL_BG.r, GameConstants.COLOR_PANEL_BG.g, GameConstants.COLOR_PANEL_BG.b, 0.88 * alpha)
 	var panel_border: Color = Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, alpha)
 	var accent: Color = Color(GameConstants.COLOR_PANEL_ACCENT.r, GameConstants.COLOR_PANEL_ACCENT.g, GameConstants.COLOR_PANEL_ACCENT.b, 0.75 * alpha)
@@ -839,7 +885,19 @@ func _draw_controls_legend(alpha: float) -> void:
 	draw_rect(controls_panel, panel_bg, true)
 	draw_rect(controls_panel, panel_border, false, 2.0)
 	draw_rect(Rect2(controls_panel.position.x + 2.0, controls_panel.position.y, controls_panel.size.x - 4.0, 1.0), accent, true)
-	_draw_text("A/D move  W jump  J tap/hold  K block/parry  Space dash  L stance  P pause  R restart", controls_panel.position.x + 18.0, controls_panel.position.y + 28.0, text_color, 15)
+	_draw_text(_controls_legend_text(), controls_panel.position.x + 18.0, controls_panel.position.y + 28.0, text_color, 15)
+
+func _controls_legend_text() -> String:
+	var controls: Dictionary = _player.controls if _player != null else SettingsManagerScript.keybinds()
+	return "%s/%s move  %s jump  %s tap/hold  %s block/parry  %s dash  %s stance  P pause  R restart" % [
+		SettingsManagerScript.key_label(int(controls.get("left", KEY_A))),
+		SettingsManagerScript.key_label(int(controls.get("right", KEY_D))),
+		SettingsManagerScript.key_label(int(controls.get("jump", KEY_W))),
+		SettingsManagerScript.key_label(int(controls.get("attack", KEY_J))),
+		SettingsManagerScript.key_label(int(controls.get("block", KEY_K))),
+		SettingsManagerScript.key_label(int(controls.get("dash", KEY_SPACE))),
+		SettingsManagerScript.key_label(int(controls.get("stance", KEY_L))),
+	]
 
 func _draw_bars(fighter: Fighter, x: int, y: int, mirror: bool, show_rage: bool) -> void:
 	var width: int = GameConstants.VIEW_WIDTH / 2 - 76
@@ -951,7 +1009,7 @@ func _draw_bar_frame(rect: Rect2) -> void:
 func _draw_pause_indicator() -> void:
 	draw_rect(Rect2(0, 0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), Color(0, 0, 0, 0.4), true)
 	_draw_text("PAUSED", GameConstants.VIEW_WIDTH * 0.5 - 55.0, GameConstants.VIEW_HEIGHT * 0.5 - 30.0, GameConstants.COLOR_TEXT_HEADING, 28)
-	_draw_text("Press P to resume | ` for debug | R to restart", GameConstants.VIEW_WIDTH * 0.5 - 185.0, GameConstants.VIEW_HEIGHT * 0.5 + 10.0, GameConstants.COLOR_TEXT_BODY, 14)
+	_draw_text("Press P to resume | O settings | ` for debug | R to restart", GameConstants.VIEW_WIDTH * 0.5 - 245.0, GameConstants.VIEW_HEIGHT * 0.5 + 10.0, GameConstants.COLOR_TEXT_BODY, 14)
 
 func _draw_debug_overlay() -> void:
 	_debug_overlay.draw(self, _player, _enemy, _input_buffer)
@@ -979,13 +1037,25 @@ func _font_for_size(size: int, display: bool = false) -> Font:
 	return ThemeDB.fallback_font
 
 func _sync_input_tracker() -> void:
-	var keys: Array[int] = [KEY_QUOTELEFT, KEY_P, KEY_ENTER, KEY_J]
+	var keys: Array[int] = [
+		KEY_QUOTELEFT, KEY_P, KEY_O, KEY_ESCAPE, KEY_Q, KEY_F5, KEY_R,
+		KEY_A, KEY_D, KEY_W, KEY_S, KEY_LEFT, KEY_RIGHT, KEY_UP, KEY_DOWN,
+		KEY_ENTER, KEY_KP_ENTER, KEY_J, KEY_SPACE,
+	]
+	var physical_keys: Array[int] = []
 	if _player != null:
 		for control_name in _player.controls.keys():
 			var key: int = int(_player.controls[control_name])
-			if key != KEY_NONE and not keys.has(key):
-				keys.append(key)
+			if key != KEY_NONE and not physical_keys.has(key):
+				physical_keys.append(key)
 	_input_tracker.sync_keys(keys)
+	_input_tracker.sync_physical_keys(physical_keys)
+
+func _apply_settings_to_player() -> void:
+	if _player == null:
+		return
+	_player.controls = SettingsManagerScript.keybinds()
+	_sync_input_tracker()
 
 func _on_spawn_particles(position: Vector2, count: int, color: Color) -> void:
 	_particle_system.spawn_hit_sparks(position, count, color)

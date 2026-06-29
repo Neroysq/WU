@@ -10,6 +10,8 @@ const DEV_CAPTURE_SPEC_PREFIX: String = "--capture-spec="
 const DEV_SHOT_DEFAULT_DIR: String = "user://shot-combat"
 const DEV_CAPTURE_DEFAULT_DIR: String = "user://capture"
 const EncounterResolverScript = preload("res://scripts/encounter_resolver.gd")
+const SettingsManagerScript = preload("res://scripts/settings_manager.gd")
+const SettingsSceneScript = preload("res://scripts/scenes/settings_scene.gd")
 
 const _ACTION_CAPTURE := {
 	"ATTACKING_LIGHT": {"prep": "attack_light_full", "frames": 32, "loop": false},
@@ -39,6 +41,7 @@ func _ready() -> void:
 	Engine.max_fps = GameConstants.TARGET_FPS
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	DataManager.initialize()
+	SettingsManagerScript.load()
 	_controllers = _build_controllers()
 	_combat_scene.combat_end.connect(_on_combat_end)
 	_combat_scene.deactivate()
@@ -84,10 +87,11 @@ func _process(delta: float) -> void:
 		return
 
 	var input: MenuInput = MenuInput.from_tracker(_input_tracker, get_viewport())
-	if input.reload_data:
+	var global_hotkeys_blocked: bool = _current_scene == SceneContext.SCENE_COMBAT and _combat_scene.blocks_global_hotkeys()
+	if input.reload_data and not global_hotkeys_blocked:
 		DataManager.reload_data()
 
-	if input.restart and (_current_scene == SceneContext.SCENE_MAP or _current_scene == SceneContext.SCENE_COMBAT):
+	if input.restart and not global_hotkeys_blocked and (_current_scene == SceneContext.SCENE_MAP or _current_scene == SceneContext.SCENE_COMBAT):
 		start_new_run()
 		_sync_input_tracker()
 		queue_redraw()
@@ -109,6 +113,21 @@ func _draw() -> void:
 	if controller != null:
 		controller.draw(_ctx, self)
 
+func _unhandled_input(event: InputEvent) -> void:
+	if _current_scene != SceneContext.SCENE_SETTINGS:
+		return
+	var controller: Variant = _controllers.get(_current_scene, null)
+	if controller == null or not controller.has_method("is_capturing") or not bool(controller.is_capturing()):
+		return
+	if event is InputEventKey:
+		var key_event: InputEventKey = event as InputEventKey
+		if key_event.pressed and not key_event.echo:
+			controller.feed_key_event(key_event)
+			controller.consume_changed()
+			get_viewport().set_input_as_handled()
+			_sync_input_tracker()
+			queue_redraw()
+
 func _build_controllers() -> Dictionary:
 	return {
 		SceneContext.SCENE_MAIN_MENU: MenuScene.new(),
@@ -121,6 +140,7 @@ func _build_controllers() -> Dictionary:
 		SceneContext.SCENE_FORGET_TECHNIQUE: ForgetScene.new(),
 		SceneContext.SCENE_VICTORY: EndingScene.new(),
 		SceneContext.SCENE_GAME_OVER: EndingScene.new(),
+		SceneContext.SCENE_SETTINGS: SettingsSceneScript.new(),
 	}
 
 func _apply_ctx_transitions() -> void:
@@ -416,6 +436,8 @@ func _prepare_capture_ui(spec: Dictionary) -> bool:
 			_set_scene(SceneContext.SCENE_REWARD, payload)
 		"event":
 			_set_scene(SceneContext.SCENE_EVENT, payload)
+		"settings":
+			_set_scene(SceneContext.SCENE_SETTINGS, payload)
 		_:
 			push_error("capture: unknown ui screen %s" % screen)
 			return false

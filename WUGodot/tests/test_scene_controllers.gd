@@ -3,6 +3,7 @@ extends RefCounted
 const SceneContextScript = preload("res://scripts/scene_context.gd")
 const MenuInputScript = preload("res://scripts/ui/menu_input.gd")
 const MenuSceneScript = preload("res://scripts/scenes/menu_scene.gd")
+const SettingsSceneScript = preload("res://scripts/scenes/settings_scene.gd")
 const ShopSceneScript = preload("res://scripts/scenes/shop_scene.gd")
 const RestSceneScript = preload("res://scripts/scenes/rest_scene.gd")
 const EndingSceneScript = preload("res://scripts/scenes/ending_scene.gd")
@@ -86,5 +87,30 @@ func run_all() -> Dictionary:
 	else:
 		failed += 1
 		failures.append("main menu mouse click should request a new run")
+
+	menu.enter(ctx)
+	input = MenuInputScript.new()
+	input.down = true
+	menu.update(ctx, input, 0.016)
+	input = MenuInputScript.new()
+	input.accept = true
+	menu.update(ctx, input, 0.016)
+	if ctx.next_scene == SceneContextScript.SCENE_SETTINGS:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("main menu Settings option should route to settings scene")
+
+	var settings_scene: Variant = SettingsSceneScript.new()
+	ctx = _make_context()
+	settings_scene.enter(ctx)
+	input = MenuInputScript.new()
+	input.local_cancel = true
+	settings_scene.update(ctx, input, 0.016)
+	if ctx.next_scene == SceneContextScript.SCENE_MAIN_MENU:
+		passed += 1
+	else:
+		failed += 1
+		failures.append("settings scene cancel should return to main menu")
 
 	return {"passed": passed, "failed": failed, "failures": failures}
