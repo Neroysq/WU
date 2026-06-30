@@ -2,6 +2,7 @@ class_name CombatScene
 extends Node2D
 
 const CombatDebugOverlayScript = preload("res://scripts/combat_debug_overlay.gd")
+const BoonTextScript = preload("res://scripts/boons/boon_text.gd")
 const InputBufferScript = preload("res://scripts/input_buffer.gd")
 const BackgroundRendererScript = preload("res://scripts/visual/background_renderer.gd")
 const AnimationClockScript = preload("res://scripts/visual/animation_clock.gd")
@@ -18,6 +19,7 @@ const ENABLE_AUTHORED_PLAYER_HITBOXES: bool = true
 const DEV_CAPTURE_STEP: float = 1.0 / 60.0
 const ENTRY_DRAW_STATE: String = "COMBAT_ENTRY"
 const ENTRY_DRAW_DURATION: float = 1.6
+const LOADOUT_SLOT_ORDER: Array[String] = ["light", "heavy", "dash", "block", "stance", "jump"]
 
 signal combat_end(victory: bool)
 
@@ -841,8 +843,9 @@ func _draw_hud() -> void:
 	var active_schools: Array[String] = _active_boon_schools()
 	if _player != null and _player.technique_engine != null:
 		var tech_ids: Array[String] = _player.technique_engine.technique_ids()
+		var slot_entries: Array[Dictionary] = _equipped_slot_boon_entries()
 		if not tech_ids.is_empty() or not active_schools.is_empty():
-			var show_full_loadout: bool = _is_paused or _is_paused_on_end or _debug_enabled
+			var show_full_loadout: bool = _is_paused or _is_paused_on_end or (_debug_enabled and not _dev_capture_mode)
 			if show_full_loadout:
 				var tech_panel_height: float = 72.0 + float(tech_ids.size()) * 18.0 + (30.0 if not active_schools.is_empty() else 0.0)
 				var tech_panel: Rect2 = Rect2(24.0, float(GameConstants.VIEW_HEIGHT) - tech_panel_height - 28.0, 360.0, tech_panel_height)
@@ -863,13 +866,7 @@ func _draw_hud() -> void:
 				if not active_schools.is_empty():
 					_draw_school_chips(active_schools, tech_panel.position.x + 18.0, tech_panel.end.y - 24.0)
 			else:
-				var compact_panel: Rect2 = Rect2(24.0, float(GameConstants.VIEW_HEIGHT) - 92.0, 320.0, 64.0)
-				_draw_panel(compact_panel)
-				_draw_text("技藝 %d" % tech_ids.size(), compact_panel.position.x + 16.0, compact_panel.position.y + 24.0, GameConstants.COLOR_TEXT_SUBHEADING, 15, true)
-				if active_schools.is_empty():
-					_draw_text("Pause to inspect full loadout", compact_panel.position.x + 16.0, compact_panel.position.y + 46.0, GameConstants.COLOR_TEXT_HINT, 13)
-				else:
-					_draw_school_chips(active_schools, compact_panel.position.x + 16.0, compact_panel.position.y + 44.0)
+				_draw_compact_loadout_panel(tech_ids.size(), slot_entries, active_schools)
 
 			if _player.technique_engine.is_stance_active():
 				var stance_label: String = _player.technique_engine.active_stance_display_name()
@@ -1107,6 +1104,92 @@ func _active_boon_schools() -> Array[String]:
 	if _boon_loadout == null or not _boon_loadout.has_method("active_schools"):
 		return []
 	return _boon_loadout.active_schools()
+
+func _equipped_slot_boon_entries() -> Array[Dictionary]:
+	var entries: Array[Dictionary] = []
+	if _boon_loadout == null or not _boon_loadout.has_method("serialize"):
+		return entries
+	var data: Dictionary = _boon_loadout.serialize()
+	var slots: Dictionary = data.get("slots", {}) as Dictionary
+	for slot in LOADOUT_SLOT_ORDER:
+		if not slots.has(slot) or typeof(slots[slot]) != TYPE_DICTIONARY:
+			continue
+		var identity: Dictionary = slots[slot] as Dictionary
+		var boon_id: String = str(identity.get("boon_id", ""))
+		if boon_id.is_empty():
+			continue
+		var boon: Dictionary = DataManager.get_boon(boon_id)
+		if boon.is_empty():
+			continue
+		var school_id: String = str(boon.get("school", ""))
+		var school_data: Dictionary = DataManager.get_school(school_id)
+		entries.append({
+			"slot": slot,
+			"name": BoonTextScript.name(boon),
+			"tier": str(identity.get("tier", "common")),
+			"school": school_id,
+			"hanzi": str(school_data.get("hanzi", school_id.substr(0, 1).to_upper())),
+			"color": _school_color_from_data(school_data),
+		})
+	return entries
+
+func _draw_compact_loadout_panel(tech_count: int, slot_entries: Array[Dictionary], active_schools: Array[String]) -> void:
+	var has_slot_entries: bool = not slot_entries.is_empty()
+	var panel_height: float = 102.0 if has_slot_entries else 64.0
+	var panel_width: float = 390.0 if has_slot_entries else 320.0
+	var compact_panel: Rect2 = Rect2(24.0, float(GameConstants.VIEW_HEIGHT) - panel_height - 28.0, panel_width, panel_height)
+	_draw_panel(compact_panel)
+	var visible_count: int = slot_entries.size() if has_slot_entries else tech_count
+	_draw_text("技藝 %d" % visible_count, compact_panel.position.x + 16.0, compact_panel.position.y + 24.0, GameConstants.COLOR_TEXT_SUBHEADING, 15, true)
+	if has_slot_entries:
+		var item_width: float = 172.0
+		var start_y: float = compact_panel.position.y + 48.0
+		for i in range(slot_entries.size()):
+			var entry: Dictionary = slot_entries[i] as Dictionary
+			var col: int = i % 2
+			var row: int = int(i / 2)
+			var x: float = compact_panel.position.x + 16.0 + float(col) * 178.0
+			var y: float = start_y + float(row) * 18.0
+			var color_value: Variant = entry.get("color", GameConstants.COLOR_PANEL_ACCENT)
+			var color: Color = color_value if typeof(color_value) == TYPE_COLOR else GameConstants.COLOR_PANEL_ACCENT
+			draw_circle(Vector2(x + 4.0, y - 5.0), 4.0, Color(color.r, color.g, color.b, 0.84))
+			_draw_text(str(entry.get("hanzi", "")), x + 12.0, y, Color(color.r, color.g, color.b, 0.95), 12, true)
+			var label: String = "%s %s" % [_slot_label(str(entry.get("slot", ""))), str(entry.get("name", ""))]
+			_draw_text(_fit_text(label, item_width - 40.0, 12), x + 34.0, y, GameConstants.COLOR_TEXT_BODY, 12)
+		return
+	if active_schools.is_empty():
+		_draw_text("Pause to inspect full loadout", compact_panel.position.x + 16.0, compact_panel.position.y + 46.0, GameConstants.COLOR_TEXT_HINT, 13)
+	else:
+		_draw_school_chips(active_schools, compact_panel.position.x + 16.0, compact_panel.position.y + 44.0)
+
+func _slot_label(slot: String) -> String:
+	match slot:
+		"light":
+			return "L"
+		"heavy":
+			return "H"
+		"dash":
+			return "D"
+		"block":
+			return "B"
+		"stance":
+			return "S"
+		"jump":
+			return "J"
+		_:
+			return slot.substr(0, 1).to_upper()
+
+func _fit_text(text: String, max_width: float, size: int, display: bool = false) -> String:
+	if float(_measure_text(text, size, display)) <= max_width:
+		return text
+	var suffix: String = "..."
+	var available: float = max_width - float(_measure_text(suffix, size, display))
+	if available <= 0.0:
+		return suffix
+	var trimmed: String = text
+	while trimmed.length() > 1 and float(_measure_text(trimmed, size, display)) > available:
+		trimmed = trimmed.substr(0, trimmed.length() - 1)
+	return "%s%s" % [trimmed.strip_edges(), suffix]
 
 func _draw_school_chips(schools: Array[String], x: float, y: float) -> void:
 	var chip_x: float = x

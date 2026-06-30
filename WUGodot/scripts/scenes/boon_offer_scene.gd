@@ -144,7 +144,7 @@ func _school_choice_description(choice: Dictionary) -> String:
 func _get_offer_panel_rect() -> Rect2:
 	var width: float = minf(1320.0, float(GameConstants.VIEW_WIDTH) - 180.0)
 	if offers.size() > 0:
-		var offer_height: float = 580.0
+		var offer_height: float = 530.0
 		return Rect2((float(GameConstants.VIEW_WIDTH) - width) * 0.5, (float(GameConstants.VIEW_HEIGHT) - offer_height) * 0.5, width, offer_height)
 	var school_height: float = 430.0
 	return Rect2((float(GameConstants.VIEW_WIDTH) - width) * 0.5, (float(GameConstants.VIEW_HEIGHT) - school_height) * 0.5 - 38.0, width, school_height)
@@ -155,7 +155,7 @@ func _get_offer_box_rect(index: int) -> Rect2:
 	var gap: float = 20.0
 	var has_offers: bool = offers.size() > 0
 	var box_width: float = (panel.size.x - gap * float(count + 1)) / float(count)
-	var box_height: float = 360.0 if has_offers else 150.0
+	var box_height: float = 310.0 if has_offers else 150.0
 	var x: float = panel.position.x + gap + float(index) * (box_width + gap)
 	var y: float = panel.position.y + (150.0 if has_offers else 138.0)
 	return Rect2(x, y, box_width, box_height)

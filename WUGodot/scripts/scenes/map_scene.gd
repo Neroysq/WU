@@ -66,7 +66,7 @@ func draw(ctx: Variant, canvas: CanvasItem) -> void:
 			node_color = node_color.darkened(0.55)
 		canvas.draw_circle(pos, 22.0, Color(node_color.r, node_color.g, node_color.b, 0.14))
 		canvas.draw_circle(pos, 12.0, node_color)
-		canvas.draw_circle(pos, 5.0, Color(GameConstants.COLOR_SCROLL_WHITE.r, GameConstants.COLOR_SCROLL_WHITE.g, GameConstants.COLOR_SCROLL_WHITE.b, 0.5))
+		_draw_node_glyph(canvas, pos, _get_node_glyph(node.node_type), 15)
 		if next_nodes.has(node):
 			var idx: int = next_nodes.find(node)
 			if idx == selection_idx:
@@ -155,6 +155,7 @@ func _draw_node_legend(canvas: CanvasItem, x: float, y: float) -> void:
 		{"type": MapNode.NodeType.ELITE, "label": "Elite"},
 		{"type": MapNode.NodeType.AMBUSH, "label": "Ambush"},
 		{"type": MapNode.NodeType.MASTER, "label": "Master"},
+		{"type": MapNode.NodeType.EVENT, "label": "Event"},
 		{"type": MapNode.NodeType.SHOP, "label": "Shop"},
 		{"type": MapNode.NodeType.REST, "label": "Rest"},
 		{"type": MapNode.NodeType.BOSS, "label": "Boss"},
@@ -164,8 +165,16 @@ func _draw_node_legend(canvas: CanvasItem, x: float, y: float) -> void:
 		var color: Color = _get_node_color(int(entry["type"]))
 		canvas.draw_circle(Vector2(cursor_x + 7.0, y - 5.0), 7.0, Color(color.r, color.g, color.b, 0.28))
 		canvas.draw_circle(Vector2(cursor_x + 7.0, y - 5.0), 4.5, color)
+		_draw_node_glyph(canvas, Vector2(cursor_x + 7.0, y - 5.0), _get_node_glyph(int(entry["type"])), 11)
 		UiDraw.text(canvas, str(entry["label"]), cursor_x + 20.0, y, GameConstants.COLOR_TEXT_HINT, 13)
 		cursor_x += 92.0
+
+func _draw_node_glyph(canvas: CanvasItem, pos: Vector2, glyph: String, size: int) -> void:
+	var width: float = float(UiDraw.measure_text(glyph, size, true))
+	var x: float = pos.x - width * 0.5
+	var y: float = pos.y + float(size) * 0.36
+	UiDraw.text(canvas, glyph, x + 1.0, y + 1.0, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.58), size, true)
+	UiDraw.text(canvas, glyph, x, y, GameConstants.COLOR_SCROLL_WHITE, size, true)
 
 func _get_node_color(node_type: int) -> Color:
 	match node_type:
@@ -178,15 +187,36 @@ func _get_node_color(node_type: int) -> Color:
 		MapNode.NodeType.MASTER:
 			return GameConstants.COLOR_PURPLE_MID
 		MapNode.NodeType.EVENT:
-			return GameConstants.COLOR_LIGHT_BLUE
+			return GameConstants.COLOR_SKY_BLUE
 		MapNode.NodeType.SHOP:
 			return GameConstants.COLOR_GOLD_BRIGHT
 		MapNode.NodeType.REST:
 			return GameConstants.COLOR_JADE_GREEN
 		MapNode.NodeType.BOSS:
-			return GameConstants.COLOR_CRIMSON
+			return GameConstants.COLOR_RED_DARK
 		_:
 			return GameConstants.COLOR_PAPER
+
+func _get_node_glyph(node_type: int) -> String:
+	match node_type:
+		MapNode.NodeType.BATTLE:
+			return "斗"
+		MapNode.NodeType.ELITE:
+			return "精"
+		MapNode.NodeType.AMBUSH:
+			return "伏"
+		MapNode.NodeType.MASTER:
+			return "師"
+		MapNode.NodeType.EVENT:
+			return "事"
+		MapNode.NodeType.SHOP:
+			return "商"
+		MapNode.NodeType.REST:
+			return "息"
+		MapNode.NodeType.BOSS:
+			return "王"
+		_:
+			return "?"
 
 func _get_node_type_label(node_type: int) -> String:
 	match node_type:

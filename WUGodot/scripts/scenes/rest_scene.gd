@@ -59,6 +59,5 @@ func draw(ctx: Variant, canvas: CanvasItem) -> void:
 			canvas.draw_rect(chip_rect, Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.18), true)
 			canvas.draw_rect(chip_rect, Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.65), false, 1.0)
 			UiDraw.text(canvas, "Locked", chip_rect.position.x + 10.0, chip_rect.position.y + 17.0, GameConstants.COLOR_TEXT_HINT, 13)
-			canvas.draw_line(Vector2(panel.position.x + 48.0, y - 6.0), Vector2(panel.position.x + 232.0, y - 6.0), Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.75), 1.0)
 		y += 74.0
 	UiDraw.text(canvas, "W/S to choose, Enter to confirm", panel.position.x + 32.0, panel.end.y - 28.0, GameConstants.COLOR_TEXT_HINT, 15)
