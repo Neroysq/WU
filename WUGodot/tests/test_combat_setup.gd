@@ -42,11 +42,12 @@ func run_all() -> Dictionary:
 	enemy = setup.get("enemy") as Fighter
 	var expected_pressure: float = float((curve.get("pressure_by_pool_class", {}) as Dictionary).get("strong", 1.0))
 	var expected_block: float = float((curve.get("block_chance_by_pool_class", {}) as Dictionary).get("strong", 0.0))
-	if enemy != null and enemy.ai_brain != null and is_equal_approx(enemy.incoming_pressure_mult, expected_pressure) and is_equal_approx(enemy.ai_brain.block_chance, expected_block):
+	var expected_aggression: float = float((curve.get("aggression_by_pool_class", {}) as Dictionary).get("strong", 0.0))
+	if enemy != null and enemy.ai_brain != null and is_equal_approx(enemy.incoming_pressure_mult, expected_pressure) and is_equal_approx(enemy.ai_brain.block_chance, expected_block) and is_equal_approx(enemy.ai_brain.aggression, expected_aggression):
 		passed += 1
 	else:
 		failed += 1
-		failures.append("CombatSetup should apply pool-class pressure/blockChance modifiers")
+		failures.append("CombatSetup should apply pool-class pressure/blockChance/aggression modifiers")
 
 	setup = CombatSetup.prepare(EnemyFactory.create_player(), node, "sect_disciple")
 	enemy = setup.get("enemy") as Fighter

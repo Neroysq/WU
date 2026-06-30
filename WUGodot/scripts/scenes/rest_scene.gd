@@ -38,7 +38,7 @@ func draw(ctx: Variant, canvas: CanvasItem) -> void:
 
 	var can_remove: bool = ctx.player.technique_engine != null and not ctx.player.technique_engine.technique_ids().is_empty()
 	var can_upgrade: bool = ctx.run_state.insight > 0 and not ctx.run_state.first_upgradeable_boon_id().is_empty()
-	var choices: Array[String] = ["Heal (40% max HP)", "Remove a technique", "Upgrade a boon"]
+	var choices: Array[String] = ["Heal (30% max HP)", "Remove a technique", "Upgrade a boon"]
 	var choice_hints: Array[String] = ["Recover and steady yourself before the next road.", "Forget one technique and lighten the loadout.", "Spend 1 Insight on the first eligible boon."]
 	var y: float = panel.position.y + 126.0
 	for i in range(choices.size()):

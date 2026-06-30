@@ -551,6 +551,11 @@ static func _default_difficulty_curve(chapter: int = 1) -> Dictionary:
 			"strong": 0.12,
 			"elite": 0.25,
 		},
+		"aggression_by_pool_class": {
+			"strong": 0.75,
+			"elite": 0.90,
+			"boss": 0.86,
+		},
 		"ambush": {
 			"length_by_tier": {"1": 3, "4": 3},
 			"escalate": true,

@@ -9,7 +9,7 @@ func run_all() -> Dictionary:
 
 	DataManager._difficulty_curves.clear()
 	var curve: Dictionary = DataManager.get_difficulty_curve(1)
-	if not curve.is_empty() and (curve.get("weak_pool", []) as Array).has("bandit_swordsman") and not (curve.get("strong_pool", []) as Array).has("masked_assassin") and (curve.get("elite_pool", []) as Array).has("masked_assassin") and str(curve.get("boss", "")) == "iron_bear" and int(curve.get("weak_count", 0)) == 2 and not (curve.get("archetype_rank", {}) as Dictionary).is_empty() and not (curve.get("pressure_by_pool_class", {}) as Dictionary).is_empty() and not (curve.get("block_chance_by_pool_class", {}) as Dictionary).is_empty():
+	if not curve.is_empty() and (curve.get("weak_pool", []) as Array).has("bandit_swordsman") and not (curve.get("strong_pool", []) as Array).has("masked_assassin") and (curve.get("elite_pool", []) as Array).has("masked_assassin") and str(curve.get("boss", "")) == "iron_bear" and int(curve.get("weak_count", 0)) == 2 and not (curve.get("archetype_rank", {}) as Dictionary).is_empty() and not (curve.get("pressure_by_pool_class", {}) as Dictionary).is_empty() and not (curve.get("block_chance_by_pool_class", {}) as Dictionary).is_empty() and not (curve.get("aggression_by_pool_class", {}) as Dictionary).is_empty():
 		passed += 1
 	else:
 		failed += 1

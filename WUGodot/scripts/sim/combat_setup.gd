@@ -43,3 +43,6 @@ static func _apply_encounter_modifiers(enemy: Fighter, encounter_context: Dictio
 	var block_by_pool: Dictionary = curve.get("block_chance_by_pool_class", {}) as Dictionary
 	if enemy.ai_brain != null and block_by_pool.has(pool_class):
 		enemy.ai_brain.block_chance = clampf(float(block_by_pool[pool_class]), 0.0, 1.0)
+	var aggression_by_pool: Dictionary = curve.get("aggression_by_pool_class", {}) as Dictionary
+	if enemy.ai_brain != null and aggression_by_pool.has(pool_class):
+		enemy.ai_brain.aggression = clampf(float(aggression_by_pool[pool_class]), 0.0, 1.0)

@@ -36,11 +36,11 @@ func run_all() -> Dictionary:
 	input.accept = true
 	rest.enter(ctx)
 	rest.update(ctx, input, 0.016)
-	if absf(ctx.player.health_current - 90.0) < 0.01 and ctx.next_scene == SceneContextScript.SCENE_MAP and ctx.run_state.get_current_node().cleared:
+	if absf(ctx.player.health_current - 80.0) < 0.01 and ctx.next_scene == SceneContextScript.SCENE_MAP and ctx.run_state.get_current_node().cleared:
 		passed += 1
 	else:
 		failed += 1
-		failures.append("rest heal should restore 40% max HP and return to map")
+		failures.append("rest heal should restore 30% max HP and return to map")
 
 	ctx = _make_context(MapNodeScript.NodeType.SHOP)
 	var shop: Variant = ShopSceneScript.new()
