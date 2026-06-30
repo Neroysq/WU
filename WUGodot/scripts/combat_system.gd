@@ -13,6 +13,7 @@ signal slow_motion(factor: float, duration: float)
 signal show_feedback(message: String, duration: float)
 signal damage_dealt(position: Vector2, damage: float, is_critical: bool)
 signal hitstop(duration: float)
+signal sfx(id: String)
 
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var hit_geometry: Variant = null
@@ -44,6 +45,7 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 
 	if bool(input_state.get("jump_pressed", false)) and fighter.can_jump():
 		fighter.start_jump()
+		emit_signal("sfx", "jump")
 		if fighter.technique_engine != null:
 			fighter.technique_engine.dispatch_jump(fighter)
 		emit_signal("spawn_particles", fighter.position + Vector2(0, 5), 12, GameConstants.COLOR_LIGHT_BLUE)
@@ -55,6 +57,7 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 		elif enemy != null:
 			dash_direction = 1 if enemy.position.x > fighter.position.x else -1
 		fighter.start_dash(dash_direction)
+		emit_signal("sfx", "dash")
 		if event_recorder != null:
 			event_recorder.record_dash(fighter)
 		emit_signal("spawn_particles", fighter.position, 8, GameConstants.COLOR_LIGHT_BLUE)
@@ -63,11 +66,13 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 	var attack_pos: Vector2 = Vector2(fighter.position.x + float(fighter.facing) * fighter.half_width, fighter.position.y - fighter.height * 0.4)
 	if bool(input_state.get("heavy_pressed", false)) and fighter.can_attack():
 		fighter.start_heavy_attack()
+		emit_signal("sfx", "swing")
 		emit_signal("spawn_particles", attack_pos, 16, GameConstants.COLOR_EARTH_LIGHT)
 		emit_signal("camera_shake", 4.5)
 		emit_signal("show_feedback", "HEAVY", 0.4)
 	elif bool(input_state.get("light_pressed", false)) and fighter.can_attack():
 		fighter.start_light_attack()
+		emit_signal("sfx", "swing")
 		var particle_count: int = 6 + fighter.combo_count * 2
 		var attack_color: Color = GameConstants.COLOR_IMPERIAL_GOLD if fighter.combo_count > 2 else GameConstants.COLOR_GOLD_BRIGHT
 		emit_signal("spawn_particles", attack_pos, particle_count, attack_color)
@@ -139,6 +144,7 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 	if fighter.position.y >= GameConstants.GROUND_Y:
 		if (not fighter.is_grounded) and fighter.velocity.y > 100.0:
 			fighter.land()
+			emit_signal("sfx", "land")
 			if fighter.technique_engine != null:
 				fighter.technique_engine.dispatch_land(fighter)
 			emit_signal("spawn_particles", Vector2(fighter.position.x, GameConstants.GROUND_Y + 5.0), 8, GameConstants.COLOR_INK_MID)
@@ -231,10 +237,14 @@ func _execute_ai_action(ai: Fighter, target: Fighter, action: Dictionary, dt: fl
 					if ai.boss_controller != null and ai.boss_controller.current_phase == 2:
 						var recovery: float = atk_def.duration - atk_def.active_end
 						atk_def.duration = atk_def.active_end + recovery * 0.8
+					var was_attacking: bool = ai._attack_state.is_active()
 					ai._start_attack_with(atk_def)
-					ai._ai_decision_timer = 0.2
-					var attack_pos: Vector2 = ai.position + Vector2(float(ai.facing) * ai.half_width, -ai.height * 0.4)
-					emit_signal("spawn_particles", attack_pos, 6, GameConstants.COLOR_EARTH_LIGHT)
+					if not was_attacking and ai._attack_state.is_active():
+						emit_signal("sfx", "enemy_telegraph")
+						emit_signal("sfx", "swing")
+						ai._ai_decision_timer = 0.2
+						var attack_pos: Vector2 = ai.position + Vector2(float(ai.facing) * ai.half_width, -ai.height * 0.4)
+						emit_signal("spawn_particles", attack_pos, 6, GameConstants.COLOR_EARTH_LIGHT)
 		"block":
 			ai.is_blocking = true
 		"move":
@@ -262,8 +272,12 @@ func _execute_legacy_ai(ai: Fighter, target: Fighter, dt: float, direction: floa
 			ai.velocity.x = lerp(ai.velocity.x, 0.0, 0.3)
 			if ai.can_attack() and ai._ai_decision_timer <= 0.0 and _rng.randf() < 0.25 * aggression_multiplier:
 				var next_attack: Variant = AttackCatalogScript.bandit_thrust_perilous() if _rng.randf() < 0.30 else AttackCatalogScript.bandit_slash()
+				var was_attacking: bool = ai._attack_state.is_active()
 				ai._start_attack_with(next_attack)
-				ai._ai_decision_timer = 0.25
+				if not was_attacking and ai._attack_state.is_active():
+					emit_signal("sfx", "enemy_telegraph")
+					emit_signal("sfx", "swing")
+					ai._ai_decision_timer = 0.25
 			if target.is_hit_active() and _rng.randf() < 0.4:
 				ai.is_blocking = true
 			else:
@@ -273,6 +287,7 @@ func apply_posture_break_aware(attacker: Fighter, defender: Fighter, posture_amo
 	var will_posture_break: bool = (defender.posture_current - posture_amount) <= 0.0 and not defender.is_stunned
 	defender.apply_posture_damage(posture_amount)
 	if will_posture_break:
+		emit_signal("sfx", "posture_break")
 		emit_signal("hitstop", 0.18)
 		emit_signal("camera_shake", 18.0)
 		emit_signal("spawn_particles", defender.position + Vector2(0.0, -defender.height), 24, GameConstants.COLOR_GOLD_BRIGHT)
@@ -335,6 +350,7 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 		if defender.consume_parry_if_active() and not attack_is_perilous:
 			var parry_posture_damage: float = float(settings.get("parryPostureDamage", 55.0))
 			var parry_stun_duration: float = float(settings.get("parryStunDuration", 0.6))
+			emit_signal("sfx", "parry")
 			if event_recorder != null:
 				event_recorder.record_hit(attacker, defender, 0.0, parry_posture_damage, false, true, false)
 			attacker.apply_posture_damage(parry_posture_damage)
@@ -375,7 +391,8 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 		for message in ctx.messages:
 			emit_signal("show_feedback", message, 0.5)
 
-		if defender.is_blocking and not attack_is_perilous and not attack_ignores_block:
+		var blocked_contact: bool = defender.is_blocking and not attack_is_perilous and not attack_ignores_block
+		if blocked_contact:
 			ctx.hp_damage *= float(settings.get("blockHealthMultiplier", 0.2))
 			if defender.technique_engine != null:
 				defender.technique_engine.dispatch_block(ctx)
@@ -385,6 +402,7 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 				attacker.health_current = maxf(attacker.health_current, 0.0)
 				emit_signal("damage_dealt", attacker.position + Vector2(0.0, -attacker.height - 20.0), ctx.reflect_to_attacker, false)
 			defender.gain_rage(6.0)
+			emit_signal("sfx", "block")
 			emit_signal("show_feedback", "BLOCKED", 0.5)
 		elif defender.is_blocking and attack_is_perilous:
 			emit_signal("show_feedback", "UNBLOCKABLE!", 0.6)
@@ -392,18 +410,21 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 			emit_signal("show_feedback", "SLIPPED!", 0.5)
 		else:
 			emit_signal("show_feedback", "HIT", 0.3)
+		if not blocked_contact:
+			emit_signal("sfx", "hit_heavy" if (attack_def != null and attack_def.is_heavy) else "hit_light")
 		if attacker.is_ai:
 			var pressure_mult: float = maxf(0.0, attacker.incoming_pressure_mult)
 			ctx.hp_damage *= pressure_mult
 			ctx.posture_damage *= pressure_mult
 		var is_critical: bool = attacker.combo_count > 2 or (attack_def != null and attack_def.is_heavy)
 		if event_recorder != null:
-			var blocked_contact: bool = defender.is_blocking and not attack_is_perilous and not attack_ignores_block
 			event_recorder.record_hit(attacker, defender, ctx.hp_damage, ctx.posture_damage, blocked_contact, false, is_critical)
 
 		if ctx.heal_attacker > 0.0:
 			attacker.health_current = minf(attacker.health_current + ctx.heal_attacker, attacker.health_max)
 		defender.health_current -= ctx.hp_damage
+		if ctx.hp_damage > 0.0 and not blocked_contact:
+			emit_signal("sfx", "hurt")
 		if ctx.bleed_timer > 0.0:
 			defender.bleed_timer = ctx.bleed_timer
 			defender.bleed_dps = ctx.bleed_dps

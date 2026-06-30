@@ -19,11 +19,13 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 	selection_idx = MenuInput.step_index(selection_idx, max_idx, input)
 
 	if input.local_cancel:
+		MenuInput.play_ui_confirm()
 		ctx.run_state.mark_current_node_cleared()
 		ctx.goto(SceneContext.SCENE_MAP)
 		return
 
 	if input.accept and selection_idx >= 0 and selection_idx < items.size():
+		MenuInput.play_ui_confirm()
 		var item: Dictionary = items[selection_idx]
 		var result: Dictionary = {}
 		if str(item.get("type", "")) == "boon_upgrade":

@@ -40,9 +40,11 @@ func update(input: Variant, delta: float) -> Dictionary:
 		selection_idx = hovered_idx
 
 	if input.local_cancel:
+		MenuInput.play_ui_confirm()
 		return {"exit": true}
 
 	if input.accept or (input.mouse_clicked and hovered_idx >= 0):
+		MenuInput.play_ui_confirm()
 		_activate_row(rows[selection_idx])
 
 	return {"exit": false}

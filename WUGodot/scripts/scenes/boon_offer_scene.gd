@@ -2,6 +2,7 @@ class_name BoonOfferScene
 extends RefCounted
 
 const SceneContext = preload("res://scripts/scene_context.gd")
+const MenuInput = preload("res://scripts/ui/menu_input.gd")
 const UiDraw = preload("res://scripts/ui/ui_draw.gd")
 const BoonTextScript = preload("res://scripts/boons/boon_text.gd")
 
@@ -31,10 +32,13 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 		return
 
 	var max_idx: int = offers.size() - 1
+	var before_idx: int = selection_idx
 	if input.left:
 		selection_idx = maxi(0, selection_idx - 1)
 	if input.right:
 		selection_idx = mini(max_idx, selection_idx + 1)
+	if selection_idx != before_idx:
+		MenuInput.play_ui_move()
 	if input.number >= 1 and input.number <= offers.size():
 		_apply_offer_by_index(ctx, input.number - 1)
 		return
@@ -80,10 +84,13 @@ func draw(ctx: Variant, canvas: CanvasItem) -> void:
 
 func _update_school_choice(ctx: Variant, input: Variant) -> void:
 	var max_idx: int = school_choices.size() - 1
+	var before_idx: int = selection_idx
 	if input.left:
 		selection_idx = maxi(0, selection_idx - 1)
 	if input.right:
 		selection_idx = mini(max_idx, selection_idx + 1)
+	if selection_idx != before_idx:
+		MenuInput.play_ui_move()
 	if input.number >= 1 and input.number <= school_choices.size():
 		_select_school(ctx, input.number - 1)
 		return
@@ -100,6 +107,7 @@ func _update_school_choice(ctx: Variant, input: Variant) -> void:
 func _select_school(ctx: Variant, index: int) -> void:
 	if index < 0 or index >= school_choices.size():
 		return
+	MenuInput.play_ui_confirm()
 	var choice: Dictionary = school_choices[index] as Dictionary
 	school = str(choice.get("school", ""))
 	var current_node: MapNode = ctx.run_state.get_current_node() if ctx.run_state != null else null
@@ -113,6 +121,7 @@ func _apply_offer_by_index(ctx: Variant, index: int) -> void:
 		return
 	if not RunFlow.apply_boon_offer_selection(ctx.run_state, offers[index] as Dictionary):
 		return
+	MenuInput.play_ui_confirm()
 	ctx.run_state.mark_current_node_cleared()
 	offers.clear()
 	selection_idx = 0

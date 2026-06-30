@@ -33,6 +33,7 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 
 	if showing_result:
 		if input.accept:
+			MenuInput.play_ui_confirm()
 			_continue_from_result(ctx)
 		return
 
@@ -109,6 +110,7 @@ func _resolve_choice(ctx: Variant, index: int) -> void:
 			runner.load_event(event_data)
 			choices = _typed_choices(runner.get_choices())
 		return
+	MenuInput.play_ui_confirm()
 	if bool(result.get("timing_test", false)):
 		var rng: RandomNumberGenerator = RngServiceScript.stream("event")
 		result = runner.apply_timing_result(rng.randf() < 0.5, ctx.player)

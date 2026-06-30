@@ -16,6 +16,7 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 	if hovered_idx >= 0:
 		selection_idx = hovered_idx
 	if input.accept or input.mouse_clicked:
+		MenuInput.play_ui_confirm()
 		if selection_idx == 1:
 			ctx.goto(SceneContext.SCENE_SETTINGS)
 			return

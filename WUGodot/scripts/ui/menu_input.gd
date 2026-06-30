@@ -34,8 +34,25 @@ static func from_tracker(t: InputTracker, viewport: Viewport) -> Variant:
 	return m
 
 static func step_index(idx: int, max_idx: int, input: Variant) -> int:
+	var before: int = idx
 	if input.up:
 		idx = maxi(0, idx - 1)
 	if input.down:
 		idx = mini(max_idx, idx + 1)
+	if idx != before:
+		play_ui_move()
 	return idx
+
+static func play_ui_move() -> void:
+	_play_ui_sfx("ui_move")
+
+static func play_ui_confirm() -> void:
+	_play_ui_sfx("ui_confirm")
+
+static func _play_ui_sfx(id: String) -> void:
+	var loop: MainLoop = Engine.get_main_loop()
+	if not (loop is SceneTree):
+		return
+	var manager: Node = (loop as SceneTree).root.get_node_or_null("AudioManager")
+	if manager != null and manager.has_method("play"):
+		manager.play(id)

@@ -14,6 +14,7 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 	choice_idx = MenuInput.step_index(choice_idx, 2, input)
 	if not input.accept:
 		return
+	MenuInput.play_ui_confirm()
 	if choice_idx == 0:
 		RestService.apply("heal", ctx.player, ctx.run_state)
 		ctx.goto(SceneContext.SCENE_MAP)

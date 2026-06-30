@@ -2,6 +2,7 @@ class_name EndingScene
 extends RefCounted
 
 const SceneContext = preload("res://scripts/scene_context.gd")
+const MenuInput = preload("res://scripts/ui/menu_input.gd")
 const UiDraw = preload("res://scripts/ui/ui_draw.gd")
 
 func enter(_ctx: Variant, _payload: Dictionary = {}) -> void:
@@ -9,6 +10,7 @@ func enter(_ctx: Variant, _payload: Dictionary = {}) -> void:
 
 func update(ctx: Variant, input: Variant, _delta: float) -> void:
 	if input.accept or input.mouse_clicked:
+		MenuInput.play_ui_confirm()
 		ctx.goto(SceneContext.SCENE_MAIN_MENU)
 
 func draw(ctx: Variant, canvas: CanvasItem) -> void:

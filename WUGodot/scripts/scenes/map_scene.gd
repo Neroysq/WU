@@ -2,6 +2,7 @@ class_name MapScene
 extends RefCounted
 
 const SceneContext = preload("res://scripts/scene_context.gd")
+const MenuInput = preload("res://scripts/ui/menu_input.gd")
 const UiDraw = preload("res://scripts/ui/ui_draw.gd")
 const MenuSceneScript = preload("res://scripts/scenes/menu_scene.gd")
 const LoadoutViewScript = preload("res://scripts/scenes/loadout_view.gd")
@@ -19,16 +20,20 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 		return
 
 	selection_idx = clampi(selection_idx, 0, next_nodes.size() - 1)
+	var before_idx: int = selection_idx
 	if input.left:
 		selection_idx = maxi(0, selection_idx - 1)
 	if input.right:
 		selection_idx = mini(next_nodes.size() - 1, selection_idx + 1)
+	if selection_idx != before_idx:
+		MenuInput.play_ui_move()
 
 	var hovered_idx: int = _get_hovered_map_index(ctx, input.mouse_pos, next_nodes)
 	if hovered_idx >= 0:
 		selection_idx = hovered_idx
 
 	if input.accept or (hovered_idx >= 0 and input.mouse_clicked):
+		MenuInput.play_ui_confirm()
 		var chosen: MapNode = next_nodes[selection_idx]
 		ctx.run_state.advance_to(chosen.id)
 		selection_idx = 0

@@ -2,6 +2,7 @@ class_name RewardScene
 extends RefCounted
 
 const SceneContext = preload("res://scripts/scene_context.gd")
+const MenuInput = preload("res://scripts/ui/menu_input.gd")
 const UiDraw = preload("res://scripts/ui/ui_draw.gd")
 
 var rewards: Array = []
@@ -21,10 +22,13 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 		rewards = RunFlow.generate_technique_rewards(3, _owned_ids(ctx.player))
 
 	var max_idx: int = rewards.size() - 1
+	var before_idx: int = selection_idx
 	if input.left:
 		selection_idx = maxi(0, selection_idx - 1)
 	if input.right:
 		selection_idx = mini(max_idx, selection_idx + 1)
+	if selection_idx != before_idx:
+		MenuInput.play_ui_move()
 	if input.number >= 1 and input.number <= rewards.size():
 		_apply_reward_by_index(ctx, input.number - 1)
 		return
@@ -71,6 +75,7 @@ func draw(ctx: Variant, canvas: CanvasItem) -> void:
 func _apply_reward_by_index(ctx: Variant, index: int) -> void:
 	if index < 0 or index >= rewards.size():
 		return
+	MenuInput.play_ui_confirm()
 	var selected: RewardOption = rewards[index]
 	selected.apply(ctx.player)
 	if selected.technique_id != "" and not ctx.run_techniques_acquired.has(selected.technique_id):

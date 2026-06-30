@@ -1224,12 +1224,18 @@ func _connect_combat_system_signals() -> void:
 		["show_feedback", Callable(self, "_show_feedback")],
 		["damage_dealt", Callable(self, "_on_damage_dealt")],
 		["hitstop", Callable(self, "_trigger_hitstop")],
+		["sfx", Callable(self, "_on_sfx")],
 	]
 	for pair in signal_map:
 		var signal_name: String = str(pair[0])
 		var callback: Callable = pair[1] as Callable
 		if not _combat_system.is_connected(signal_name, callback):
 			_combat_system.connect(signal_name, callback)
+
+func _on_sfx(id: String) -> void:
+	var manager: Node = get_tree().root.get_node_or_null("AudioManager")
+	if manager != null and manager.has_method("play"):
+		manager.play(id)
 
 func _get_visual_for(fighter: Fighter) -> FighterVisual:
 	if fighter.is_ai:

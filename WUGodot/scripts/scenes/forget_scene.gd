@@ -24,11 +24,13 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 
 	selection_idx = MenuInput.step_index(selection_idx, technique_ids.size() - 1, input)
 	if input.local_cancel:
+		MenuInput.play_ui_confirm()
 		ctx.run_state.mark_current_node_cleared()
 		ctx.goto(SceneContext.SCENE_MAP)
 		return
 
 	if input.accept and selection_idx >= 0 and selection_idx < technique_ids.size():
+		MenuInput.play_ui_confirm()
 		ForgetService.apply(technique_ids[selection_idx], ctx.player, ctx.run_state)
 		ctx.goto(SceneContext.SCENE_MAP)
 

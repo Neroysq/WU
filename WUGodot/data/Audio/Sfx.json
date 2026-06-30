@@ -1,0 +1,17 @@
+{
+  "sfx": {
+    "parry": {"path": "res://assets/audio/parry.ogg", "pitch_var": 0.015},
+    "posture_break": {"path": "res://assets/audio/posture_break.ogg", "pitch_var": 0.01},
+    "hit_light": {"path": "res://assets/audio/hit_light.ogg", "pitch_var": 0.04},
+    "hit_heavy": {"path": "res://assets/audio/hit_heavy.ogg", "pitch_var": 0.03},
+    "block": {"path": "res://assets/audio/block.ogg", "pitch_var": 0.03},
+    "swing": {"path": "res://assets/audio/swing.ogg", "pitch_var": 0.05},
+    "enemy_telegraph": {"path": "res://assets/audio/enemy_telegraph.ogg", "pitch_var": 0.02},
+    "dash": {"path": "res://assets/audio/dash.ogg", "pitch_var": 0.04},
+    "jump": {"path": "res://assets/audio/jump.ogg", "pitch_var": 0.04},
+    "land": {"path": "res://assets/audio/land.ogg", "pitch_var": 0.03},
+    "hurt": {"path": "res://assets/audio/hurt.ogg", "pitch_var": 0.04},
+    "ui_move": {"path": "res://assets/audio/ui_move.ogg", "pitch_var": 0.02},
+    "ui_confirm": {"path": "res://assets/audio/ui_confirm.ogg", "pitch_var": 0.02}
+  }
+}
