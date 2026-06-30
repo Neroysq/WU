@@ -1,7 +1,8 @@
 # Settings / Menu Input Bugfixes
 
 **Date:** 2026-06-30
-**Status:** directive (surgical fixes) — from a hands-on playtest of `b2d467b`
+**Status:** SUPERSEDED by `2026-06-30-ingame-pause-menu-design.md` — Bug 1 is now resolved by *removing* the Esc-quit entirely (Esc opens an in-game menu; Quit lives inside it), and Bug 2 (J→Enter) is folded into that spec. Kept for the diagnosis record only; implement from the pause-menu spec.
+**Original status:** directive (surgical fixes) — from a hands-on playtest of `b2d467b`
 **Scope:** two input fixes + one flagged related hazard. No new systems.
 
 ## Bug 1 — Esc in settings quits the whole game (input bleed)
