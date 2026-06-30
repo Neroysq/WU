@@ -209,7 +209,7 @@ func _setup_combat_for_node(node: MapNode) -> void:
 		_ctx.run_state.legend_seen_this_run = true
 	var wave: int = EncounterResolverScript.wave_index_for_node(_ctx.run_state, node)
 	var encounter: Dictionary = EncounterResolverScript.begin_encounter(_ctx.run_state, node, wave)
-	_combat_scene.setup_combat(_ctx.player, node, show_controls_legend, str(encounter.get("archetype", "")), _ctx.run_state.boon_loadout)
+	_combat_scene.setup_combat(_ctx.player, node, show_controls_legend, str(encounter.get("archetype", "")), _ctx.run_state.boon_loadout, encounter)
 	_combat_scene.on_enter()
 	_current_scene = SceneContext.SCENE_COMBAT
 	_ctx.current_scene = SceneContext.SCENE_COMBAT

@@ -19,8 +19,8 @@
   "attackRange": 72.0,
   
   "dashDuration": 0.22,
-  "dashCooldown": 0.80,
-  "parryWindow": 0.15,
+  "dashCooldown": 0.45,
+  "parryWindow": 0.12,
   "stunDuration": 0.7,
   "comboWindow": 0.5,
   

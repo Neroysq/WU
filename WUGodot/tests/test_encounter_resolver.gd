@@ -9,11 +9,11 @@ func run_all() -> Dictionary:
 
 	DataManager._difficulty_curves.clear()
 	var curve: Dictionary = DataManager.get_difficulty_curve(1)
-	if not curve.is_empty() and (curve.get("weak_pool", []) as Array).has("bandit_swordsman") and not (curve.get("strong_pool", []) as Array).has("masked_assassin") and (curve.get("elite_pool", []) as Array).has("masked_assassin") and str(curve.get("boss", "")) == "iron_bear" and int(curve.get("weak_count", 0)) == 1 and not (curve.get("archetype_rank", {}) as Dictionary).is_empty():
+	if not curve.is_empty() and (curve.get("weak_pool", []) as Array).has("bandit_swordsman") and not (curve.get("strong_pool", []) as Array).has("masked_assassin") and (curve.get("elite_pool", []) as Array).has("masked_assassin") and str(curve.get("boss", "")) == "iron_bear" and int(curve.get("weak_count", 0)) == 2 and not (curve.get("archetype_rank", {}) as Dictionary).is_empty() and not (curve.get("pressure_by_pool_class", {}) as Dictionary).is_empty() and not (curve.get("block_chance_by_pool_class", {}) as Dictionary).is_empty():
 		passed += 1
 	else:
 		failed += 1
-		failures.append("DataManager.get_difficulty_curve should cold-load chapter 1 pools/ranks")
+		failures.append("DataManager.get_difficulty_curve should cold-load chapter 1 pools/ranks/modifiers")
 
 	var cold_run: RunState = RunState.create_procedural_run(91)
 	if cold_run.nodes.size() > 0:
@@ -28,11 +28,11 @@ func run_all() -> Dictionary:
 	RngService.set_run_seed(100)
 	var first: Dictionary = EncounterResolverScript.begin_encounter(run, node, 0)
 	var second: Dictionary = EncounterResolverScript.begin_encounter(run, node, 0)
-	if str(first.get("pool_class", "")) == "weak" and int(first.get("normal_combat_ordinal", -1)) == 0 and run.normal_combats_started == 2 and str(second.get("pool_class", "")) == "strong" and int(second.get("normal_combat_ordinal", -1)) == 1:
+	if str(first.get("pool_class", "")) == "weak" and int(first.get("normal_combat_ordinal", -1)) == 0 and run.normal_combats_started == 2 and str(second.get("pool_class", "")) == "weak" and int(second.get("normal_combat_ordinal", -1)) == 1:
 		passed += 1
 	else:
 		failed += 1
-		failures.append("begin_encounter should select on pre-increment ordinal and mutate once")
+		failures.append("begin_encounter should select on pre-increment ordinal and honor weak_count")
 
 	var elite: MapNode = MapNode.new(11, 4, MapNode.NodeType.ELITE, [])
 	var before_elite: int = run.normal_combats_started
@@ -44,7 +44,7 @@ func run_all() -> Dictionary:
 		failures.append("elite encounters should not advance normal_combats_started")
 
 	run = RunState.new()
-	run.normal_combats_started = 1
+	run.normal_combats_started = int(curve.get("weak_count", 2))
 	run.last_archetype_by_pool = {"elite": "sect_disciple", "strong": "wandering_ronin"}
 	RngService.set_run_seed(7)
 	var scoped: Dictionary = EncounterResolverScript.begin_encounter(run, node, 0)
@@ -77,7 +77,7 @@ func run_all() -> Dictionary:
 
 	var strong_has_assassin: bool = false
 	run = RunState.new()
-	run.normal_combats_started = 1
+	run.normal_combats_started = int(curve.get("weak_count", 2))
 	for seed in range(20):
 		RngService.set_run_seed(500 + seed)
 		var strong_result: Dictionary = EncounterResolverScript.begin_encounter(run, node, 0)

@@ -163,4 +163,25 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("A1 dash-end stab should deal 8 (got %.1f)" % (hp0 - p[1].health_current))
 
+	p = _pair([], [])
+	p[0].is_ai = true
+	p[0].incoming_pressure_mult = 0.5
+	hp0 = p[1].health_current
+	_strike(cs, p[0], p[1], AttackCatalogScript.hu_light())
+	if is_equal_approx(hp0 - p[1].health_current, 6.0):
+		passed += 1
+	else:
+		failed += 1
+		failures.append("enemy pressure multiplier should scale outgoing damage (got %.1f)" % (hp0 - p[1].health_current))
+
+	p = _pair([], [])
+	p[0].incoming_pressure_mult = 0.5
+	hp0 = p[1].health_current
+	_strike(cs, p[0], p[1], AttackCatalogScript.hu_light())
+	if is_equal_approx(hp0 - p[1].health_current, 12.0):
+		passed += 1
+	else:
+		failed += 1
+		failures.append("player damage should ignore incoming_pressure_mult (got %.1f)" % (hp0 - p[1].health_current))
+
 	return {"passed": passed, "failed": failed, "failures": failures}

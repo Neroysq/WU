@@ -21,7 +21,7 @@ func start(player_fighter: Fighter, combat_node: MapNode, forced_archetype: Stri
 	player = player_fighter if player_fighter != null else EnemyFactory.create_player()
 	node = combat_node
 	encounter = encounter_data.duplicate(true)
-	var setup: Dictionary = CombatSetup.prepare(player, node, forced_archetype)
+	var setup: Dictionary = CombatSetup.prepare(player, node, forced_archetype, encounter)
 	enemy = setup["enemy"] as Fighter
 	combat_system = setup["combat_system"] as CombatSystem
 	recorder = load("res://scripts/sim/combat_event_recorder.gd").new()

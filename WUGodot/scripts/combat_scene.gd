@@ -92,11 +92,11 @@ func _ready() -> void:
 	set_process(false)
 	visible = false
 
-func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = false, forced_archetype: String = "", boon_loadout: Variant = null) -> void:
+func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = false, forced_archetype: String = "", boon_loadout: Variant = null, encounter_context: Dictionary = {}) -> void:
 	_player = player
 	_current_node = node
 	_boon_loadout = boon_loadout
-	var setup: Dictionary = CombatSetupScript.prepare(player, node, forced_archetype)
+	var setup: Dictionary = CombatSetupScript.prepare(player, node, forced_archetype, encounter_context)
 	_enemy = setup["enemy"] as Fighter
 	_combat_system = setup["combat_system"] as CombatSystem
 	_hit_geometry = setup["hit_geometry"]

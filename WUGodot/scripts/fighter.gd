@@ -96,6 +96,7 @@ var rage_current: float:
 var attack_range: float = GameConstants.DEFAULT_ATTACK_RANGE
 var attack_damage: float = GameConstants.DEFAULT_ATTACK_DAMAGE
 var attack_posture_damage: float = GameConstants.DEFAULT_POSTURE_DAMAGE
+var incoming_pressure_mult: float = 1.0
 var _attack_state: Variant = AttackStateScript.new()
 var technique_engine: Variant = null
 var ai_brain: Variant = null
@@ -170,6 +171,7 @@ func reset_for_combat() -> void:
 	is_blocking = false
 	is_stunned = false
 	was_hit_this_swing = false
+	incoming_pressure_mult = 1.0
 	combo_window = 0.0
 	combo_count = 0
 	_attack_state.clear()

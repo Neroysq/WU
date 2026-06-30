@@ -476,7 +476,7 @@ static func _default_character_data() -> Dictionary:
 		"attackActiveStart": 0.10,
 		"attackActiveEnd": 0.18,
 		"dashDuration": 0.16,
-		"dashCooldown": 0.60,
+		"dashCooldown": 0.45,
 		"parryWindow": 0.12,
 		"stunDuration": 0.7,
 		"comboWindow": 0.5,
@@ -530,7 +530,7 @@ static func _default_difficulty_curve(chapter: int = 1) -> Dictionary:
 		"strong_pool": ["wandering_ronin", "sect_disciple"],
 		"elite_pool": ["sect_disciple", "masked_assassin"],
 		"boss": "iron_bear",
-		"weak_count": 1,
+		"weak_count": 2,
 		"no_immediate_repeat": true,
 		"archetype_rank": {
 			"bandit_spearman": 1,
@@ -540,14 +540,25 @@ static func _default_difficulty_curve(chapter: int = 1) -> Dictionary:
 			"masked_assassin": 4,
 			"iron_bear": 9,
 		},
+		"pressure_by_pool_class": {
+			"weak": 0.80,
+			"strong": 0.98,
+			"elite": 1.18,
+			"boss": 0.90,
+		},
+		"block_chance_by_pool_class": {
+			"weak": 0.0,
+			"strong": 0.12,
+			"elite": 0.25,
+		},
 		"ambush": {
-			"length_by_tier": {"1": 3, "4": 4},
+			"length_by_tier": {"1": 3, "4": 3},
 			"escalate": true,
 		},
 		"node_type_weights_by_tier": {
 			"1": {"BATTLE": 100},
-			"2": {"BATTLE": 70, "ELITE": 15, "AMBUSH": 15, "SHOP": 0},
-			"4": {"BATTLE": 45, "ELITE": 30, "AMBUSH": 25},
+			"2": {"BATTLE": 100, "ELITE": 0, "AMBUSH": 0, "SHOP": 0},
+			"4": {"BATTLE": 35, "ELITE": 25, "AMBUSH": 40},
 		},
 	}
 
@@ -568,7 +579,7 @@ static func _default_game_settings() -> Dictionary:
 		"attackMoveControlMultiplier": 2.0,
 		"blockHealthMultiplier": 0.2,
 		"blockPostureMultiplier": 1.6,
-		"parryPostureDamage": 55.0,
+		"parryPostureDamage": 40.0,
 		"parryStunDuration": 0.6,
 		"cameraShakeDecay": 20.0,
 		"timeScaleRecovery": 0.08,

@@ -33,7 +33,7 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("tier 4 node weights should allow elite/ambush")
 
-	if EncounterResolverScript.ambush_length(curve, 1) == 3 and EncounterResolverScript.ambush_length(curve, 2) == 3 and EncounterResolverScript.ambush_length(curve, 4) == 4:
+	if EncounterResolverScript.ambush_length(curve, 1) == 3 and EncounterResolverScript.ambush_length(curve, 2) == 3 and EncounterResolverScript.ambush_length(curve, 4) == 3:
 		passed += 1
 	else:
 		failed += 1
@@ -43,7 +43,7 @@ func run_all() -> Dictionary:
 	ambush.ambush_remaining = 0
 	var player: Fighter = EnemyFactory.create_player()
 	RunFlow.travel_decision(ambush, player, RunState.new())
-	if ambush.ambush_remaining == 4:
+	if ambush.ambush_remaining == 3:
 		passed += 1
 	else:
 		failed += 1
@@ -99,8 +99,10 @@ func _drive_crafted_sequence() -> Dictionary:
 		return {"ok": false, "message": "first normal combat should be weak ordinal 0"}
 	if str(c1.get("pool_class", "")) != "elite" or int(c1.get("normal_combat_ordinal", -1)) != 1:
 		return {"ok": false, "message": "elite should not consume a normal ordinal"}
-	if str(c2.get("pool_class", "")) != "strong" or int(c2.get("normal_combat_ordinal", -1)) != 1:
-		return {"ok": false, "message": "second normal combat should be strong ordinal 1"}
+	if str(c2.get("pool_class", "")) != "weak" or int(c2.get("normal_combat_ordinal", -1)) != 1:
+		return {"ok": false, "message": "second normal combat should be weak ordinal 1"}
+	if str(c3.get("pool_class", "")) != "strong" or int(c3.get("normal_combat_ordinal", -1)) != 2:
+		return {"ok": false, "message": "third normal combat should be strong ordinal 2"}
 	if int(c3.get("ambush_wave", -1)) != 0 or int(c4.get("ambush_wave", -1)) != 1 or int(c5.get("ambush_wave", -1)) != 2:
 		return {"ok": false, "message": "ambush waves should be recorded as 0,1,2"}
 	if run.normal_combats_started != 5:

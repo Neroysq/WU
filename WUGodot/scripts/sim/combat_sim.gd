@@ -8,7 +8,7 @@ func simulate(player: Fighter, node: MapNode, policy: PlayerPolicy, max_time: fl
 		player = EnemyFactory.create_player()
 	if policy == null:
 		policy = HeuristicPlayer.new()
-	var setup: Dictionary = CombatSetup.prepare(player, node, forced_archetype)
+	var setup: Dictionary = CombatSetup.prepare(player, node, forced_archetype, encounter)
 	var enemy: Fighter = setup["enemy"] as Fighter
 	var combat_system: CombatSystem = setup["combat_system"] as CombatSystem
 

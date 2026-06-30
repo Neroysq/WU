@@ -392,6 +392,10 @@ func resolve_hits(attacker: Fighter, defender: Fighter) -> void:
 			emit_signal("show_feedback", "SLIPPED!", 0.5)
 		else:
 			emit_signal("show_feedback", "HIT", 0.3)
+		if attacker.is_ai:
+			var pressure_mult: float = maxf(0.0, attacker.incoming_pressure_mult)
+			ctx.hp_damage *= pressure_mult
+			ctx.posture_damage *= pressure_mult
 		var is_critical: bool = attacker.combo_count > 2 or (attack_def != null and attack_def.is_heavy)
 		if event_recorder != null:
 			var blocked_contact: bool = defender.is_blocking and not attack_is_perilous and not attack_ignores_block
