@@ -39,3 +39,28 @@ Pre-boss normal win **0.946** ❌ (target 0.65–0.75; went the wrong way from 0
 - pre-boss win 0.65–0.75 (the real proof the ramp landed) · deaths back-half · checker accepts (monotonic, boss-highest, tier1<20%)
 
 **Tension:** pulling parry down via strong/boss also pulls dash down — the end state is a balance point, expect 2–3 iterations on those two numbers. Implementer reports the sweep back for verdict.
+
+## Pressure-only retune FAILED to converge (reported 2026-06-30, not committed)
+Implementer swept boss pressure with strong 1.10 / elite 1.20:
+
+| boss | parry | dash | greedy | pre-boss | checker |
+|---|---|---|---|---|---|
+| 1.20 | 0.48 | 0.16 | 0.34 | 0.941 | pass |
+| 1.05 | 0.50 | 0.20 | 0.41 | 0.941 | pass |
+| 1.00 | 0.52 | 0.22 | 0.42 | 0.941 | pass |
+| 0.90 | 0.60 | 0.30 | 0.50 | 0.941 | pass |
+
+No candidate hits the bands. **Two diagnosed root causes (per-hit damage is the wrong lever for both):**
+1. **Pre-boss stuck ~0.94 at every pressure value.** HP carries between fights (`combat_setup.prepare`→`reset_for_combat` doesn't restore HP; only rest heals 40%), but a *competent policy barely gets hit*, so per-hit damage can't lower its fight win rate. Damage you can parry/dodge isn't a threat to someone parrying/dodging.
+2. **Parry vs dash are opposed at the boss.** The dasher's boss answer (dodge) is structurally weaker than the parrier's (parry), so a boss hard enough to hold parry ≤0.45 craters dash below 0.30. Every row above is parry-high/dash-ok or parry-ok/dash-dead.
+
+## Phase 2/3 v2 directive — TEMPO + MARGIN levers (user decision 2026-06-30)
+Open the "pressure-only / keep everything" constraint. New lever set:
+- **Enemy aggression/tempo ramp (primary pre-boss lever):** ramp enemy `aggression` (attack frequency) — and/or shorten their post-attack vulnerability — by `pool_class` via the same runtime-override plumbing as `block_chance_by_pool_class` (e.g. an `aggression_by_pool_class` map). More frequent/safer offense = fewer free openings = chip the player can't fully dodge → lowers fight win rate where damage couldn't. Weak pool stays honest (protect the fixed dasher early game).
+- **Modest player-margin cut:** small reduction to the player's buffer so carryover attrition bites — e.g. rest heal 40%→~30%, or a slight `healthMax`/`postureMax` trim. Keep it small so it doesn't crater dash.
+- **Keep `pressure_by_pool_class`** for attrition with a gentle rising shape (weak ~0.80–0.85, strong ~1.05–1.10, elite ~1.20, boss ~1.05–1.15) — aggression now does the pre-boss work, so pressure needn't be extreme.
+- **Keep** the prior global player changes (dashCooldown 0.45, parryWindow 0.12, parryPostureDamage 40).
+
+**Relaxed targets (this pass):** parry **~0.45–0.50** · aggressive_dash **~0.27–0.32** · facetank ~0.00 · pre-boss **~0.65–0.78** · zero timeouts · deaths back-half · checker accepts. (Closing the dash/boss gap further is deferred to a dedicated **dasher boss-answer** slice — more Wind/mobility tooling vs the boss.)
+
+**Tuning order:** aggression/tempo + margin first (pull pre-boss + overall down), then pressure for the rising shape, then boss within the relaxed band. Watch the **dash floor ~0.27** — aggression/margin also hit dash; if it sinks, ease aggression on strong/elite before touching the player. Implementer reports the sweep back for verdict.
