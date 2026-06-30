@@ -64,3 +64,19 @@ Open the "pressure-only / keep everything" constraint. New lever set:
 **Relaxed targets (this pass):** parry **~0.45–0.50** · aggressive_dash **~0.27–0.32** · facetank ~0.00 · pre-boss **~0.65–0.78** · zero timeouts · deaths back-half · checker accepts. (Closing the dash/boss gap further is deferred to a dedicated **dasher boss-answer** slice — more Wind/mobility tooling vs the boss.)
 
 **Tuning order:** aggression/tempo + margin first (pull pre-boss + overall down), then pressure for the rising shape, then boss within the relaxed band. Watch the **dash floor ~0.27** — aggression/margin also hit dash; if it sinks, ease aggression on strong/elite before touching the player. Implementer reports the sweep back for verdict.
+
+## Tempo + margin pass FAILED to converge — `4298248` (Tune combat tempo and rest margin)
+Added `aggression_by_pool_class` (applied at spawn via `CombatSetup._apply_encounter_modifiers`), values strong 0.75 / elite 0.90 / boss 0.86; rest heal 40%→30% (UI + tests updated). 556 tests pass; checker accepts.
+
+**Verified final sweep (reviewer re-ran on `4298248`):** parry **0.60**, dash **0.30** (0 node-1/2 deaths), facetank **0.00**, zero timeouts; pre-boss **0.961**, boss-conditional 0.62. Deaths back-half (dash node4/boss, parry boss 16/20, facetank node2).
+
+**Why tempo failed (the key finding):** aggression *feeds* the parrier — more enemy attacks = more parry openings = more posture breaks. So tempo lowers dash and *helps* parry. Same root cause as damage pressure: **in a duel, a skilled player converts enemy volume (damage OR attacks) into wins.** Three tuning passes (pressure, aggression, margin) all failed to lower the skilled ceiling.
+
+## FINAL — ACCEPT & REFRAME (user decision 2026-06-30) — thread CLOSED
+Per systematic-debugging (3 failed passes → question fundamentals): stop tuning numbers. **Accepted state = `4298248`.**
+- **What landed (the real goal):** non-parry is viable — dash 0.125→0.30, the node-2 wall is gone; facetank 0.00; zero timeouts; checker accepts; the boss is the death point (climax). **Done.**
+- **Reframe:** a dominant skilled parrier (~0.60) is the **duel fantasy working** ("duel-skill is the win path"), not a bug. The ramp is reframed as **attrition into the boss** (rest 30% + carryover + per-pool pressure), not a fight-win-rate curve.
+- **Dropped as system-fighting:** the "pre-boss 0.65–0.75 / parry 0.45–0.50" targets — unreachable by enemy numbers because the duel converts volume into skilled wins.
+- **Deferred ceiling-lowering levers (only things that work — pressure skill CAN'T convert):** (1) **perilous/unparryable shift** — later pools use more perilous attacks (must dodge, no parry reward); (2) **unreadable pressure** — enemy feints/mixups/varied timing/multi-threat ambush (new AI); (3) **dasher boss-answer** Wind slice (to close the dash/boss gap). Pick these up only if lowering the skilled ceiling becomes a priority.
+
+**Net:** difficulty v2 delivered non-parry viability + a back-loaded death curve + the tempo/margin/pressure infrastructure (`pressure_by_pool_class`, `block_chance_by_pool_class`, `aggression_by_pool_class`, `incoming_pressure_mult`). The skilled ceiling stays high by design.
