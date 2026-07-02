@@ -45,7 +45,7 @@ python3 tools/assert_nonblank.py /tmp/fr_reward.png && python3 tools/assert_nonb
 - **While held** (`input_state.block_down`, grounded): force `target_speed = 0.0` each frame so input can't re-accelerate — but do **NOT** re-zero `velocity.x` every frame: `resolve_hits` applies **block knockback** to the defender's velocity, and a per-frame zero would erase it, turning guard into an immovable wall (kills blocked-hit pushback and corner spacing). With target 0, knockback applies and the existing lerp bleeds it off naturally.
 - Gate on the **input fields**, not `fighter.is_blocking` — `is_blocking` is assigned at `:84`, *after* the movement code (~`:35-40`) runs, so it lags a frame.
 - **Do NOT add BLOCKING to the `can_move` exclusion list** — excluded states skip the lerp entirely, freezing residual velocity (glide).
-- Suppress the IDLE→WALKING transition (`:41-43`) while `block_down` (guard pose holds; no walk anim while rooted).
+- Suppress the IDLE→WALKING transition (`:41-43`) under the **same root condition — `block_down or fighter.is_parrying()`** (guard pose holds; a tap-release parry window must not flicker into WALKING while still rooted).
 - Airborne: unchanged (no rooting mid-air; air block behaves as today).
 - **Parry needs its own root condition** — `block_pressed` is one frame, but `_parry_timer` stays active for the full parry window (`fighter.gd:414-418`): after a tap-release, `block_down` is false while `fighter.is_parrying()` is still true, so movement would resume *during the active parry*. The held-root condition is therefore **`block_down or fighter.is_parrying()`** (after the press-edge plant) — rooted through the whole window, matching the decision "no movement while blocking or parrying."
 - Enemy side: out of scope (AI movement is its own path; rooting enemies shifts balance). Note for the enemy-animation pass.
@@ -54,7 +54,7 @@ python3 tools/assert_nonblank.py /tmp/fr_reward.png && python3 tools/assert_nonb
 **Tests (unit, grounded):**
 - Guard held + move input across N frames (no hits): **horizontal position delta == 0** and `velocity.x == 0` from the press frame onward (not "decays to ~0" — the plant is instant).
 - Pressing guard while moving: `velocity.x` is 0 on the press frame.
-- **Tap-release during the parry window:** press+release guard, then hold move while `fighter.is_parrying()` is still true → position delta stays 0 until the window expires, then movement resumes.
+- **Tap-release during the parry window:** press+release guard, then hold move while `fighter.is_parrying()` is still true → position delta stays 0 **and the animation never enters WALKING** until the window expires, then movement (and WALKING) resumes.
 - A **blocked hit while guarding still displaces** the defender (knockback preserved, then bleeds off) — guard is rooted vs input, not vs impacts.
 - Animation stays BLOCKING (never WALKING) while held; a parry still succeeds while rooted; airborne behavior unchanged. `./run.sh --test` green.
 **Verify:** manual feel (guard plants you instantly; release moves instantly; blocked hits still nudge you); policy sweep within bands.
