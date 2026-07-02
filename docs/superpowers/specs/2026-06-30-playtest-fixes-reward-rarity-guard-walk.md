@@ -16,13 +16,18 @@
 ## Fix 2 — Moving while guarding slides a static block pose
 **Repro:** hold block + move — the character glides across the ground frozen in the guard pose.
 **Facts:** `combat_system.gd:84` allows full-speed movement while `is_blocking` (no penalty exists); `BLOCKING` is a held pose (no block-walk clip exists).
-**Decision context:** the *real* fix is a block-walk animation — **parked behind the creative revamp** per the funness pivot (`2026-06-30-funness-direction.md`); don't author placeholder clips now.
-**Stopgap (recommended, minimal):**
-- **Slow guard movement** to ~45% move speed while `is_blocking` (new `blockMoveMultiplier: 0.45` in `GameSettings.json`, applied where `update_player` computes ground movement). Genre-standard guard-walk feel; the slow, deliberate slide reads intentional rather than broken, and it's a data knob.
-- Optional: reuse the existing footstep dust particles at reduced rate while guard-moving so the feet aren't dead.
-- **Log the block-walk clip** in the animation-pass backlog (revamp track) — this stopgap does not close that item.
-- Balance note: slower guard movement is a (small) nerf to turtling mobility — facetank is already 0.00 and parry reads unaffected (parry is a tap, not a held walk), but re-run the 3-policy sweep (30 seeds each) to confirm no band moves.
-**Verify:** manual feel (guard-walk reads deliberate); policy sweep parry/dash/facetank within current bands; `./run.sh --test` green.
+**Decision (user, 2026-06-30): guarding ROOTS you — no movement while blocking/parrying.** (The block-walk animation is parked behind the creative revamp; rather than a sliding stopgap, guarding plants your feet — also a classic stand-your-ground guard feel.)
+**Implementation (player, `combat_system.update_player`):**
+- Gate on the **input**, not `fighter.is_blocking` — `is_blocking` is assigned at `:84`, *after* the movement code (~`:35-40`) runs, so using it would lag a frame. Read `var guard_held: bool = bool(input_state.get("block_down", false))` at the top.
+- **Do NOT add BLOCKING to the `can_move` exclusion list** — excluded states skip the lerp entirely, which would freeze residual `velocity.x` and glide. Instead, when `guard_held and fighter.is_grounded`, force `target_speed = 0.0` so the existing `lerp(velocity.x, target_speed, ground_move_control)` brakes to a stop.
+- Suppress the IDLE→WALKING transition (`:41-43`) while `guard_held` (the guard pose holds; no walk anim while rooted).
+- Airborne: unchanged (no rooting mid-air; air block behaves as today).
+- Parry is a tap of the same key (`block_pressed` opens the window) — the root naturally covers the parry moment via `block_down` on those frames; no separate parry handling.
+- Enemy side: out of scope (AI movement is its own path; enemies' brief reactive blocks are a lesser visual and rooting them shifts balance). Note it for the enemy-animation pass.
+- **Log the block-walk clip** in the animation-pass backlog (revamp track) — rooting supersedes the need short-term, but a guard-walk may return post-revamp as a design choice.
+- Balance note: rooting removes guard-mobility entirely — a bigger change than the slow-walk. The scripted policies (esp. `parry_duelist`, which holds block) may shift. **Re-run the 3-policy sweep (50 seeds each)**: parry should stay ~0.55-0.62, dash ~0.30, facetank 0.00; flag if parry drops >0.05.
+**Tests:** unit — with `block_down` held + move input (grounded): `velocity.x` decays to ~0 and never accelerates; animation stays BLOCKING (never WALKING); a parry still succeeds while rooted; airborne behavior unchanged. `./run.sh --test` green.
+**Verify:** manual feel (guard plants you; release moves instantly); policy sweep within bands.
 
 ## Out of scope
 - Block-walk animation (revamp/animation track).
