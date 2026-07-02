@@ -20,21 +20,21 @@
 ```bash
 cat > /tmp/fr_reward.json <<'JSON'
 {"kind":"ui","screen":"reward","payload":{"rewards":[
-  {"id":"cloud_hands","label":"Cloud Hands","effect":"technique","technique_id":"cloud_hands","rarity":1},
-  {"id":"scar_of_past","label":"Scar of the Past","effect":"technique","technique_id":"scar_of_past","rarity":2},
-  {"id":"phoenix_rise","label":"Phoenix Rise","effect":"technique","technique_id":"phoenix_rise","rarity":3}]}}
+  {"id":"A1","label":"Descending Leaf","effect":"technique","technique_id":"A1","rarity":1},
+  {"id":"A9","label":"Cloud Hands","effect":"technique","technique_id":"A9","rarity":2},
+  {"id":"B6","label":"Phoenix Rising","effect":"technique","technique_id":"B6","rarity":3}]}}
 JSON
 ./run.sh --capture /tmp/fr_reward.json /tmp/fr_reward.png
 cat > /tmp/fr_shop.json <<'JSON'
 {"kind":"ui","screen":"shop","payload":{"items":[
-  {"type":"technique","technique_id":"cloud_hands","label":"Cloud Hands","description":"r1","price":20,"rarity":1},
-  {"type":"technique","technique_id":"scar_of_past","label":"Scar of the Past","description":"r2","price":35,"rarity":2},
-  {"type":"technique","technique_id":"phoenix_rise","label":"Phoenix Rise","description":"r3","price":50,"rarity":3}]}}
+  {"type":"technique","technique_id":"A1","label":"Descending Leaf","description":"rarity 1","price":20,"rarity":1},
+  {"type":"technique","technique_id":"A9","label":"Cloud Hands","description":"rarity 2","price":35,"rarity":2},
+  {"type":"technique","technique_id":"B6","label":"Phoenix Rising","description":"rarity 3","price":50,"rarity":3}]}}
 JSON
 ./run.sh --capture /tmp/fr_shop.json /tmp/fr_shop.png
 python3 tools/assert_nonblank.py /tmp/fr_reward.png && python3 tools/assert_nonblank.py /tmp/fr_shop.png
 ```
-(Use real technique ids from `TechniquePool.json` with rarities 1/2/3 — the ids above are placeholders; pick actual ones when implementing.) Chips/tints must visibly differ across the three rows in both captures.
+(Real ids from `TechniquePool.json`: A1 Descending Leaf r1 · A9 Cloud Hands r2 · B6 Phoenix Rising r3; prices match `20+(r-1)*15`.) Chips/tints must visibly differ across the three rows in both captures.
 
 ## Fix 2 — Moving while guarding slides a static block pose
 **Repro:** hold block + move — the character glides across the ground frozen in the guard pose.
@@ -47,13 +47,14 @@ python3 tools/assert_nonblank.py /tmp/fr_reward.png && python3 tools/assert_nonb
 - **Do NOT add BLOCKING to the `can_move` exclusion list** — excluded states skip the lerp entirely, freezing residual velocity (glide).
 - Suppress the IDLE→WALKING transition (`:41-43`) while `block_down` (guard pose holds; no walk anim while rooted).
 - Airborne: unchanged (no rooting mid-air; air block behaves as today).
-- Parry is a tap of the same key — the press-edge plant covers the parry moment; no separate handling.
+- **Parry needs its own root condition** — `block_pressed` is one frame, but `_parry_timer` stays active for the full parry window (`fighter.gd:414-418`): after a tap-release, `block_down` is false while `fighter.is_parrying()` is still true, so movement would resume *during the active parry*. The held-root condition is therefore **`block_down or fighter.is_parrying()`** (after the press-edge plant) — rooted through the whole window, matching the decision "no movement while blocking or parrying."
 - Enemy side: out of scope (AI movement is its own path; rooting enemies shifts balance). Note for the enemy-animation pass.
 - **Log the block-walk clip** in the animation-pass backlog (revamp track) — a guard-walk may return post-revamp as a design choice.
 - Balance note: rooting removes guard-mobility entirely. The scripted policies (esp. `parry_duelist`, which holds block) may shift. **Re-run the 3-policy sweep (50 seeds each)**: parry ~0.55–0.62, dash ~0.30, facetank 0.00; flag if parry drops >0.05.
 **Tests (unit, grounded):**
 - Guard held + move input across N frames (no hits): **horizontal position delta == 0** and `velocity.x == 0` from the press frame onward (not "decays to ~0" — the plant is instant).
 - Pressing guard while moving: `velocity.x` is 0 on the press frame.
+- **Tap-release during the parry window:** press+release guard, then hold move while `fighter.is_parrying()` is still true → position delta stays 0 until the window expires, then movement resumes.
 - A **blocked hit while guarding still displaces** the defender (knockback preserved, then bleeds off) — guard is rooted vs input, not vs impacts.
 - Animation stays BLOCKING (never WALKING) while held; a parry still succeeds while rooted; airborne behavior unchanged. `./run.sh --test` green.
 **Verify:** manual feel (guard plants you instantly; release moves instantly; blocked hits still nudge you); policy sweep within bands.
