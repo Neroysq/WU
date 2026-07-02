@@ -10,7 +10,7 @@ var selection_idx: int = 0
 
 func enter(_ctx: Variant, payload: Dictionary = {}) -> void:
 	selection_idx = 0
-	rewards = payload.get("rewards", [])
+	rewards = _typed_rewards(payload.get("rewards", []))
 
 func update(ctx: Variant, input: Variant, _delta: float) -> void:
 	if rewards.is_empty():
@@ -65,12 +65,15 @@ func draw(ctx: Variant, canvas: CanvasItem) -> void:
 		var box: Rect2 = _get_reward_box_rect(i)
 		var reward_label: String = "..."
 		var reward_desc: String = ""
+		var reward_rarity: int = 0
 		if i < rewards.size():
-			reward_label = rewards[i].label
-			if rewards[i].technique_id != "":
-				var tech_data: Dictionary = DataManager.get_technique(rewards[i].technique_id)
+			var reward: RewardOption = rewards[i] as RewardOption
+			reward_label = reward.label
+			if reward.technique_id != "":
+				reward_rarity = reward.rarity
+				var tech_data: Dictionary = DataManager.get_technique(reward.technique_id)
 				reward_desc = str(tech_data.get("description", ""))
-		UiDraw.reward_option(canvas, box, reward_label, reward_desc, selection_idx == i, ctx.cursor_flash, reward_accent)
+		UiDraw.reward_option(canvas, box, reward_label, reward_desc, selection_idx == i, ctx.cursor_flash, reward_accent, reward_rarity)
 
 func _apply_reward_by_index(ctx: Variant, index: int) -> void:
 	if index < 0 or index >= rewards.size():
@@ -112,3 +115,14 @@ func _owned_ids(player: Fighter) -> Array[String]:
 	if player != null and player.technique_engine != null:
 		return player.technique_engine.technique_ids()
 	return []
+
+func _typed_rewards(source: Variant) -> Array:
+	var typed: Array = []
+	if typeof(source) != TYPE_ARRAY:
+		return typed
+	for item in source as Array:
+		if item is RewardOption:
+			typed.append(item)
+		elif typeof(item) == TYPE_DICTIONARY:
+			typed.append(RewardOption.from_dictionary(item as Dictionary))
+	return typed

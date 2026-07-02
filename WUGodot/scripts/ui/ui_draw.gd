@@ -29,19 +29,44 @@ static func panel(canvas: CanvasItem, rect: Rect2) -> void:
 	canvas.draw_rect(Rect2(rect.end.x - cm + 1.0, rect.end.y, cm, 1.0), cc)
 	canvas.draw_rect(Rect2(rect.end.x, rect.end.y - cm + 1.0, 1.0, cm), cc)
 
-static func reward_option(canvas: CanvasItem, rect: Rect2, label: String, description: String, selected: bool, cursor_flash: float, accent: Color = GameConstants.COLOR_PANEL_ACCENT) -> void:
+static func reward_option(canvas: CanvasItem, rect: Rect2, label: String, description: String, selected: bool, cursor_flash: float, accent: Color = GameConstants.COLOR_PANEL_ACCENT, rarity: int = 0) -> void:
 	if selected:
 		rect.position.y -= 10.0
-	var border: Color = accent if selected else Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.3)
+	var has_rarity: bool = rarity > 0
+	var option_accent: Color = rarity_color(rarity) if has_rarity else accent
+	var border: Color = option_accent if selected or has_rarity else Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.3)
 	if selected:
-		canvas.draw_rect(rect.grow(8.0), Color(accent.r, accent.g, accent.b, 0.10), true)
+		canvas.draw_rect(rect.grow(8.0), Color(option_accent.r, option_accent.g, option_accent.b, 0.10), true)
 	canvas.draw_rect(rect, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.88), true)
-	canvas.draw_rect(rect, border, false, 2.0)
+	canvas.draw_rect(rect, border, false, 2.0 if selected or has_rarity else 1.0)
+	if has_rarity:
+		var chip: Rect2 = Rect2(rect.end.x - 94.0, rect.position.y + 14.0, 76.0, 24.0)
+		canvas.draw_rect(chip, Color(option_accent.r, option_accent.g, option_accent.b, 0.20), true)
+		canvas.draw_rect(chip, Color(option_accent.r, option_accent.g, option_accent.b, 0.84), false, 1.0)
+		text(canvas, rarity_label(rarity), chip.position.x + 9.0, chip.position.y + 17.0, GameConstants.COLOR_TEXT_HEADING, 12)
 	text(canvas, label, rect.position.x + 18.0, rect.position.y + 36.0, GameConstants.COLOR_TEXT_HEADING, 20)
 	if description != "":
 		text_block(canvas, description, rect.position.x + 18.0, rect.position.y + 66.0, rect.size.x - 36.0, 18.0, GameConstants.COLOR_TEXT_BODY, 14)
 	if selected:
 		menu_cursor(canvas, Vector2(rect.position.x - 16.0, rect.position.y + 36.0), cursor_flash)
+
+static func rarity_color(rarity: int) -> Color:
+	match rarity:
+		2:
+			return GameConstants.COLOR_SKY_BLUE
+		3:
+			return GameConstants.COLOR_PURPLE_LIGHT
+		_:
+			return GameConstants.COLOR_LIGHT_BLUE
+
+static func rarity_label(rarity: int) -> String:
+	match rarity:
+		2:
+			return "Rare"
+		3:
+			return "Epic"
+		_:
+			return "Common"
 
 static func menu_cursor(canvas: CanvasItem, position: Vector2, cursor_flash: float) -> void:
 	var pulse: float = 0.5 + 0.5 * sin(cursor_flash * 8.0)

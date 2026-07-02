@@ -8,6 +8,7 @@ var label: String = ""
 var effect: String = ""
 var amount: float = 0.0
 var technique_id: String = ""
+var rarity: int = 1
 
 func apply(fighter: Fighter) -> void:
 	if effect == "technique":
@@ -45,6 +46,7 @@ static func from_dictionary(data: Dictionary) -> RewardOption:
 	option.effect = str(data.get("effect", ""))
 	option.amount = float(data.get("amount", 0.0))
 	option.technique_id = str(data.get("technique_id", ""))
+	option.rarity = int(data.get("rarity", 1))
 	return option
 
 static func random_technique(owned_ids: Array[String]) -> RewardOption:
@@ -62,4 +64,5 @@ static func random_technique(owned_ids: Array[String]) -> RewardOption:
 	option.label = "%s (%s)" % [str(pick.get("name_en", "")), str(pick.get("name_cn", ""))]
 	option.effect = "technique"
 	option.technique_id = option.id
+	option.rarity = int(pick.get("rarity", 1))
 	return option

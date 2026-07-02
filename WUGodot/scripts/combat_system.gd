@@ -26,12 +26,19 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 	var settings: Dictionary = DataManager.get_game_settings()
 	var move: float = float(input_state.get("move", 0.0))
 	var is_trying_to_move: bool = absf(move) > 0.01
+	var block_down: bool = bool(input_state.get("block_down", false))
+	var block_pressed: bool = bool(input_state.get("block_pressed", false))
+	var guard_rooted: bool = fighter.is_grounded and (block_down or block_pressed or fighter.is_parrying())
+	if fighter.is_grounded and block_pressed:
+		fighter.velocity.x = 0.0
 
 	var ground_move_control: float = float(settings.get("groundMoveControl", 0.25))
 	var air_move_control: float = float(settings.get("airMoveControl", 0.12))
 	var attack_move_control_multiplier: float = float(settings.get("attackMoveControlMultiplier", 2.0))
 	var move_control: float = ground_move_control if fighter.is_grounded else air_move_control
 	var target_speed: float = move * fighter.move_speed if is_trying_to_move else 0.0
+	if guard_rooted:
+		target_speed = 0.0
 
 	var can_move: bool = fighter.current_animation != Fighter.AnimationState.DASHING and fighter.current_animation != Fighter.AnimationState.ATTACKING_LIGHT and fighter.current_animation != Fighter.AnimationState.ATTACKING_HEAVY and fighter.current_animation != Fighter.AnimationState.STUNNED and not fighter.is_grabbed
 	if can_move:
@@ -39,7 +46,7 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 	elif fighter.current_animation == Fighter.AnimationState.ATTACKING_LIGHT or fighter.current_animation == Fighter.AnimationState.ATTACKING_HEAVY:
 		fighter.velocity.x = lerp(fighter.velocity.x, 0.0, move_control * attack_move_control_multiplier)
 
-	if fighter.is_grounded and is_trying_to_move and fighter.current_animation == Fighter.AnimationState.IDLE and not fighter.is_grabbed:
+	if fighter.is_grounded and is_trying_to_move and fighter.current_animation == Fighter.AnimationState.IDLE and not fighter.is_grabbed and not guard_rooted:
 		fighter.current_animation = Fighter.AnimationState.WALKING
 		fighter.animation_timer = 0.0
 
@@ -81,8 +88,8 @@ func update_player(fighter: Fighter, input_state: Dictionary, dt: float, enemy: 
 			emit_signal("show_feedback", "COMBO x%d!" % fighter.combo_count, 0.5)
 
 	var was_blocking: bool = fighter.is_blocking
-	fighter.is_blocking = bool(input_state.get("block_down", false))
-	if bool(input_state.get("block_pressed", false)):
+	fighter.is_blocking = block_down
+	if block_pressed:
 		fighter.trigger_parry_window()
 		fighter.current_animation = Fighter.AnimationState.BLOCKING
 		fighter.animation_timer = 0.0

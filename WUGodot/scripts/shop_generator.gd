@@ -29,6 +29,7 @@ static func generate_shop(owned_ids: Array[String], rarity_boost: bool = false) 
 			"label": "%s (%s)" % [str(pick.get("name_en", "")), str(pick.get("name_cn", ""))],
 			"description": str(pick.get("description", "")),
 			"price": price,
+			"rarity": rarity,
 		})
 		used_ids.append(str(pick.get("id", "")))
 

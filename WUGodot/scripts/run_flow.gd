@@ -163,6 +163,7 @@ static func generate_master_rewards(owned_ids: Array[String]) -> Array:
 		option.label = "%s (%s)" % [str(pick.get("name_en", "")), str(pick.get("name_cn", ""))]
 		option.effect = "technique"
 		option.technique_id = option.id
+		option.rarity = int(pick.get("rarity", 1))
 		rewards.append(option)
 	return rewards
 
