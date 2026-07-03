@@ -6,7 +6,7 @@
 
 **Architecture:** `art/canon/` extends the existing `art/keyframes/` provenance system (`canon.manifest.json`, same schema + `generator`). Proof tooling in `tools/art/`. Generation via the proven aiexp pipeline (`AIEXP=/Users/animula/GitReps/AIexp/.venv/bin/aiexp`, `--palettes vinik24 --size 256`) and pixelforge (invocation recorded in Task 3).
 
-**Spec:** `docs/superpowers/specs/2026-07-03-art-style-bible-design.md`
+**Spec:** `docs/superpowers/specs/2026-07-03-art-style-bible-design.md` · **Token source (post-review): `docs/ART_DESIGN_DOC.md` v2.1** — the 2026-07-03 cross-model design review pinned the executable tokens there (§3a palette law + VINIK24 table + band registers + school VINIK-nearest colors · §3b craft constants · §3c timing · §5b ink readability law · §8a threat-color law · §8b contrast/CVD floor · the Nine table). Briefs and gates below cite v2.1; canon reconciles `[PROV]` values at Task 11.
 
 ---
 
@@ -14,14 +14,14 @@
 
 **Files:** Create `docs/art/STYLE_BIBLE.md`.
 
-- [ ] **Step 1:** Transcribe spec §1–5 into the token doc with these sections: The Three Laws · Character Tokens (6-heads baseline; silhouette test per school: Bear low-rooted wide / Crane one vertical line / Ox charging mass / Swallow mid-circle step / Snake coiled low / Eagle reaching seize; burst-grammar allowlist: limb smears, 2–3× anticipation squash, comic face swaps, white impact frames — action beats ONLY) · Ink-Stain Grammar (stages 清/touched/marked/claimed; stains grow from hands/forearms/eyes; overlay-not-baked for pool_class touched-ness; school-tinted immortal ink; wrongness drawn IN the ink) · Scene Tokens (4 band skies of one mountain; band palette registers: foothill=warm, mid=neutral, high=cold, gate=ink-extremes; ink-wash clouds) · Icon Tokens (silhouette-first, 2–3 tones, 24px-legible, one family) · Generators (aiexp commands verbatim from the 256px spec; pixelforge section filled by Task 3) · Canon Index (filled as sheets land).
+- [ ] **Step 1 (post-review shape — the tokens now LIVE in `docs/ART_DESIGN_DOC.md` v2.1; do not duplicate them):** `STYLE_BIBLE.md` is the **generation-facing extract**: per-asset-class **prompt fragments + negative fragments** (from v2.1 §9), the checklists a brief must satisfy (silhouette test · §5b ink limits · §8a reserved colors · §3b craft constants), the Generators section (aiexp commands verbatim from the 256px spec; pixelforge filled by Task 3), and the Canon Index. Every token it mentions CITES the v2.1 section rather than restating values — one source of truth.
 - [ ] **Step 2:** Note atop the doc: *"Tokens describe the approved canon. When canon and tokens disagree, canon wins and tokens get fixed (Task 11)."* Commit `docs(art): style bible token doc (draft)`.
 
 ## Task 2: Proof tooling
 
 **Files:** Create `tools/art/vinik24.json`, `tools/art/palette_audit.py`, `tools/art/make_proofs.py`.
 
-- [ ] **Step 1:** Extract the 24 VINIK24 hexes into `tools/art/vinik24.json` from the aiexp palette data (`grep -ri vinik /Users/animula/GitReps/AIexp --include=*.json --include=*.py -l` and read the palette definition; fallback: download from lospec.com/palette-list/vinik24). Do NOT hand-type from memory.
+- [ ] **Step 1:** Copy the 24 VINIK24 hexes into `tools/art/vinik24.json` from the pipeline's source of truth — **`/Users/animula/GitReps/AIexp/tools/pixelforge-palettes/src/pixelforge/palettes/data/vinik24.json`** (located during the design review; matches ART_DESIGN_DOC §3a). Do NOT hand-type from memory.
 - [ ] **Step 2 (environment, explicit):** these tools need real image ops (quantize/slice/scale) — use the **AIexp venv interpreter**, which has PIL: `PYART=/Users/animula/GitReps/AIexp/.venv/bin/python` (verify `"$PYART" -c "import PIL"`; if it ever lacks PIL, create `python3 -m venv .venv-art && .venv-art/bin/pip install pillow` at repo root and use that). All `tools/art/*.py` invocations in this plan run under `$PYART`. (This repo itself has no venv — do not write bare `pip install`.)
 - [ ] **Step 3:** `palette_audit.py <img...>` — counts pixels not in vinik24.json (alpha 0 exempt); prints per-file off-palette count; exit 1 if any nonzero.
 - [ ] **Step 4:** `make_proofs.py <sheet.png> --out <dir> [--kind char|icon|scene]` — the **exact runtime-scaling contract** (the viewer route made concrete; no engine changes in this plan):
@@ -35,7 +35,7 @@
 
 **Files:** Modify `docs/art/STYLE_BIBLE.md` (Generators section); Create `art/canon/canon.manifest.json` (empty skeleton).
 
-- [ ] **Step 1:** With the user, record pixelforge's exact invocation (CLI/UI, model, params) into the Generators section — inputs it accepts (reference image? prompt? palette?), output format/size.
+- [ ] **Step 1:** **Pixelforge is the user's own tooling inside AIexp: `/Users/animula/GitReps/AIexp/tools/pixelforge-*`** (`pixelforge-palettes`, `pixelforge-sprite`, found during the design review). Read those packages (README/CLI entry points/tests) and record the exact invocation (command, model, params, accepted inputs — reference image? prompt? palette?), output format/size into the Generators section; confirm anything ambiguous with the user.
 - [ ] **Step 2:** Define the **normalization recipe** so bake-off candidates compare like-for-like: scale to target canvas → quantize to vinik24.json → background removal → `palette_audit.py` must pass. Record as commands in the doc.
 - [ ] **Step 3:** Create `art/canon/canon.manifest.json` skeleton: `{"sheets": {}}`, entries per approved sheet using the keyframes schema + `generator`: `{file, prompt, backend, generator, seed, approved, notes}`. Commit.
 
@@ -43,7 +43,7 @@
 
 **Files:** Create `art/canon/icons/` candidates + proofs; Modify `canon.manifest.json`, `WUGodot/assets/icons/schools/*.png` (on approval).
 
-- [ ] **Step 1 (brief — same for BOTH generators):** *"Set of six pixel-art animal pictogram icons, one visual family: bear head, ox head, standing crane, swallow in flight, coiled snake, eagle head. Silhouette-first, 2–3 tones from the VINIK24 palette, dark background transparent, strong readable shapes, consistent stroke weight and framing, wuxia seal-mark feel. 24×24 target legibility."* Generate ≥2 candidate rows per generator (aiexp: `pixel-art run --prompt-text ... --palettes vinik24 --size 64 --kind sprite --remove-bg`, downscale; pixelforge: per Task 3 recipe).
+- [ ] **Step 1 (brief — same for BOTH generators):** *"Set of six pixel-art animal pictogram icons, one visual family: bear head, ox head, standing crane, swallow in flight, coiled snake, eagle head. Silhouette-first, 2–3 tones from the VINIK24 palette, dark background transparent, strong readable shapes, consistent stroke weight and framing (1–2px stroke, 2px safe padding — ART_DESIGN_DOC §7 [PROV]), wuxia seal-mark feel. 24×24 target legibility."* Generate ≥2 candidate rows per generator (aiexp: `pixel-art run --prompt-text ... --palettes vinik24 --size 64 --kind sprite --remove-bg`, downscale; pixelforge: per Task 3 recipe).
 - [ ] **Step 2:** Normalize all candidates (Task 3 recipe); run `palette_audit.py`; `make_proofs.py --icon` → 24px rows; assemble `review.html`.
 - [ ] **Step 3:** ✋ **STOP — user picks the winning row AND the winning generator** (this decides the small-asset default). Record both in the manifest (`generator` field; note the loser's provenance in `notes`).
 - [ ] **Step 4 (provisional-icon replacement — explicit slice map, no guessing):** slice the approved row into six individual PNGs and install by this **fixed animal→id mapping** (display animals to data ids, from the identity spec):
@@ -55,7 +55,7 @@
   | 4 | Swallow | `WUGodot/assets/icons/schools/wind.png` |
   | 5 | Snake | `WUGodot/assets/icons/schools/venom.png` |
   | 6 | Eagle | `WUGodot/assets/icons/schools/sword.png` |
-  Slice at equal-width cells from the row; output each icon at the **same pixel dimensions as the file it replaces** (inspect the current PNGs at implement time) so `Schools.json` paths and the renderer keep working unchanged. If the repo carries a combined icon source sheet (e.g. a `school_icons_sheet.png` from slice 1), regenerate/replace it from the same canon row so source and installed files can't drift. Then `./run.sh --import`, re-run slice-1 icon captures (school-choice ×2, boon-offer, matchup-with-build, map-with-build) + `./run.sh --test` (`test_school_icons` green). Commit `feat(art): canon school icons replace provisional set`.
+  Slice at equal-width cells from the row; output each icon at the **same pixel dimensions as the file it replaces** (inspect the current PNGs at implement time) so `Schools.json` paths and the renderer keep working unchanged. If the repo carries a combined icon source sheet (e.g. a `school_icons_sheet.png` from slice 1), regenerate/replace it from the same canon row so source and installed files can't drift. - [ ] **Step 5 (review task T1 — same surfaces, same captures):** migrate `Schools.json` `themeColor` values to the **VINIK24-nearest assignments in ART_DESIGN_DOC §3a** (Snake 竹 #4e8339 · Ox 天 #a1d2e0 · Crane 亮金 #f8c83c · Bear 霧 #96b2c5 · Swallow 湖 #255674 · Eagle 金 #ee9c24) — all six current values are off-palette. Then `./run.sh --import`, re-run slice-1 icon captures (school-choice ×2, boon-offer, matchup-with-build, map-with-build) + `./run.sh --test` (`test_school_icons` green) — one recapture covers both the icons and the new accents. Commit `feat(art): canon school icons + on-palette school colors`.
 
 ## Task 5: Hu turnaround ✋
 
@@ -66,12 +66,12 @@
 ## Task 6: Hu corruption strip (4 stages) ✋
 
 - [ ] **Step 1 (brief):** *"Same character 4 times, left to right: (1) clean; (2) black ink stain at collar and sword hand, knuckles darkening; (3) ink veins up forearms and neck, eyes darkened, stain slightly offset from body; (4) half-swallowed — torso and sword arm mostly ink, and the stain's edge forms faint WRONG shapes: an extra finger silhouette, a hint of a grin where no mouth is. Body stays intact — the ink lies. Pixel art 256px, VINIK24, ink pure black with cold blue-purple edge tones."* Base = the approved Task-5 Hu (image-to-image so stages stay on-model).
-- [ ] **Step 2:** Proofs incl. runtime.png at gameplay size (stage differences MUST read at gameplay size — that's the whole diegetic-corruption UX). ✋ user picks → canon + manifest. Commit.
+- [ ] **Step 2:** Proofs incl. runtime.png at gameplay size (stage differences MUST read at gameplay size) **+ the §5b checks against ART_DESIGN_DOC: clean zones respected (weapon hand/blade/face/feet ink-free), coverage caps ≈10/25/45% per stage [PROV], wrong-shape motifs ≥8 source px** — annotate the review.html with these checks. ✋ user picks → canon + manifest. Commit.
 
 ## Task 7: Xiong Tie ✋
 
 - [ ] **Step 1 (brief):** *"Massive Chinese martial-arts master, bear-like bulk breaking normal proportion (fills the frame), iron-grey robes, exposed forearms like tree trunks, low rooted stance radiating immovability; iron-dark ink fully integrated into his silhouette's shadows — the corruption is part of him, calm and total. Dignified, not monstrous. 256px pixel art, VINIK24."* Shotgun 3.
-- [ ] **Step 2:** Proofs (silhouette must read Bear-school low-rooted; runtime.png vs current in-game iron_bear for scale). ✋ user picks → canon + manifest. Commit.
+- [ ] **Step 2:** Proofs (silhouette must read Bear-school low-rooted; runtime.png vs current in-game iron_bear for scale; **hitbox-trust check per ART_DESIGN_DOC §4: active limb / weapon path / feet readable despite the bulk**). ✋ user picks → canon + manifest. Commit.
 
 ## Task 8: Dropout Blade (mook register) ✋
 
@@ -86,16 +86,16 @@
 
 ## Task 10: Scene strip — four skies of one mountain ✋
 
-- [ ] **Step 1 (brief, one image, four vertical panels or four files):* the SAME mountain from the same vantage:* (1) foothill — warm dawn, generous sky, the peak distant and lovely; (2) mid — paler, higher, the peak slightly too tall; (3) high — cold thin light, black ink pooling in the valleys, ridge geometry beginning to disagree; (4) gate — near-black, the summit fills the frame, wrong. Wide parallax-layer format (e.g. 960×320 per panel), painted pixel-art style, VINIK24 band registers (warm/neutral/cold/ink)."* Shotgun 2–3 sets.
+- [ ] **Step 1 (brief, one image, four vertical panels or four files):* the SAME mountain from the same vantage:* (1) foothill — warm dawn, generous sky, the peak distant and lovely; (2) mid — paler, higher, the peak slightly too tall; (3) high — cold thin light, black ink pooling in the valleys, ridge geometry beginning to disagree; (4) gate — near-black, the summit fills the frame, wrong. Wide parallax-layer format (e.g. 960×320 per panel), painted pixel-art style, **band member colors per ART_DESIGN_DOC §3a** (foothill 橙焰金亮金竹松紙雪 · mid 紙霧石靄淵土 · high 淵湖靄霧紫暗紫亮紫石 · gate 墨夜瘀血石淵 + accent 緋 door-crimson)."* Shotgun 2–3 sets.
 - [ ] **Step 2:** Proofs: palette audit per panel + `make_proofs.py --kind scene` (the exact viewer contract from Task 2 — no engine staging in this plan; in-engine backdrop install is a later production slice). ✋ user picks → canon + manifest. Commit.
 
 ## Task 11: Token reconciliation + record ✋
 
 - [ ] **Step 1:** Re-read STYLE_BIBLE.md against the six approved sheets; fix every token that disagrees with canon (canon wins). Fill the Canon Index section.
-- [ ] **Step 2:** Run the full acceptance: `palette_audit.py` on all canon files (0 off-palette), silhouette gate = the Task-9 stance sheet's silhouette.png (six schools tellable apart — user confirms), 24px icon row, runtime proofs reviewed. `./run.sh --test` green (icons replaced in Task 4).
+- [ ] **Step 2:** Run the full acceptance: `palette_audit.py` on all canon files (0 off-palette), silhouette gate = the Task-9 stance sheet's silhouette.png (six schools tellable apart — user confirms), 24px icon row, runtime proofs reviewed, **plus the §8b floor: character-vs-band contrast (≥2 VINIK value steps; check the char sheets against the Task-10 gate panel) and a CVD-simulation pass over school + rarity + §8a threat colors, result recorded in the canon manifest notes**. `./run.sh --test` green (icons replaced in Task 4).
 - [ ] **Step 3:** ✋ **STOP — present the assembled canon (one review page) for the final bible sign-off.** Then commit `docs(art): style bible + canon complete` and hand off to the first production slice.
 
 ## Self-Review
 - **Spec coverage:** §6A doc (T1) · proofs incl. exact runtime-scaling contract (T2, gates in every sheet task + T11) · pixelforge discovery/normalization/provenance (T3, T4) · canon sheets in cheapest-risk order (T4–T10; the six-school stance sheet T9 added as the silhouette gate's source — a seventh sheet extending the spec's six, in its spirit: the §2 hard rule needs a testable asset) · provisional-icon replacement w/ explicit slice map (T4 Step 4) · canon-extends-keyframes schema (T3) · acceptance = sheets+proofs+tokens (T11). Out of scope respected (no production beyond sheets; icons are the one allowed install per the spec's provisional-icon rule).
 - **Placeholder scan:** every brief is real copy; pixelforge specifics are an explicit discovery task with defined outputs (not a TBD); VINIK24 hexes deliberately extracted, not hand-typed.
-- **Consistency:** manifest schema fields match `art/keyframes/README.md` + `generator`; proof names (`silhouette/runtime/24px`) consistent across T2 and sheet tasks; briefs use the T1 tokens.
+- **Consistency:** manifest schema fields match `art/keyframes/README.md` + `generator`; proof names (`silhouette/runtime/24px`) consistent across T2 and sheet tasks; briefs cite ART_DESIGN_DOC v2.1 tokens (single source; STYLE_BIBLE extracts, never restates). Review task T1 (themeColor migration) folded into Task 4 Step 5; review task T2 (threat-color VFX wiring) is NOT canon production and stays in the backlog tasks file.
