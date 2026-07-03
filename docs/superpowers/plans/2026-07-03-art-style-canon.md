@@ -15,7 +15,7 @@
 **Files:** Create `docs/art/STYLE_BIBLE.md`.
 
 - [ ] **Step 1:** Transcribe spec §1–5 into the token doc with these sections: The Three Laws · Character Tokens (6-heads baseline; silhouette test per school: Bear low-rooted wide / Crane one vertical line / Ox charging mass / Swallow mid-circle step / Snake coiled low / Eagle reaching seize; burst-grammar allowlist: limb smears, 2–3× anticipation squash, comic face swaps, white impact frames — action beats ONLY) · Ink-Stain Grammar (stages 清/touched/marked/claimed; stains grow from hands/forearms/eyes; overlay-not-baked for pool_class touched-ness; school-tinted immortal ink; wrongness drawn IN the ink) · Scene Tokens (4 band skies of one mountain; band palette registers: foothill=warm, mid=neutral, high=cold, gate=ink-extremes; ink-wash clouds) · Icon Tokens (silhouette-first, 2–3 tones, 24px-legible, one family) · Generators (aiexp commands verbatim from the 256px spec; pixelforge section filled by Task 3) · Canon Index (filled as sheets land).
-- [ ] **Step 2:** Note atop the doc: *"Tokens describe the approved canon. When canon and tokens disagree, canon wins and tokens get fixed (Task 10)."* Commit `docs(art): style bible token doc (draft)`.
+- [ ] **Step 2:** Note atop the doc: *"Tokens describe the approved canon. When canon and tokens disagree, canon wins and tokens get fixed (Task 11)."* Commit `docs(art): style bible token doc (draft)`.
 
 ## Task 2: Proof tooling
 
@@ -29,7 +29,7 @@
   - `icon`: `24px.png` = each icon nearest-neighbor-scaled to 24×24, rendered in a row on the game's panel color.
   - `scene`: `runtime.png` = panel scaled to fit the 1920-wide arena backdrop proportion.
   - Always emits `review.html` (candidates + proofs side by side, following `tools/build_keyframe_review.py`'s pattern) for each ✋ gate.
-- [ ] **Step 4:** Commit `feat(tools): art canon proof tooling`.
+- [ ] **Step 5:** Commit `feat(tools): art canon proof tooling`.
 
 ## Task 3: Pixelforge tooling discovery
 
