@@ -86,7 +86,8 @@
   - `drunken_master` → **The Drunk Below the Gate**: a shabby drunk who smells of wine and bamboo, refuses to teach, laughs at the Nine — "the only master on this mountain who never asks for tuition." (熊貓 tease; never named.)
   - `bandit_camp` → **Dropout Camp**: bandits are failed disciples; their forms are recognizably bad copies of the styles.
   - `abandoned_scroll` → **A Founder-Era Scroll**: forms older than any school; reading them too long makes the eyes ache (door foreshadow).
-- [ ] **Step 2:** `./run.sh --test` green; one event capture nonblank. Commit `feat(identity): events as mountain story beats`.
+- [ ] **Step 2 (gate — a bare nonblank capture can pass without showing any rewrite):** the event capture must use a **forced real payload** — `{"kind":"ui","screen":"event","payload":{"event_data":<the rewritten shrine_offering object>}}` (EventScene loads `{}` when no `event_data` is supplied, `event_scene.gd:18`) — and the capture must visibly show the rewritten title/body copy. Because `outcomes.*.message` only renders after a choice resolves (`event_scene.gd:70`), verify messages with a **data-level test**: extend an existing test (or add asserts) checking each of the six events' title + at least one outcome `message` contains its new copy (exact-substring), plus a manual interaction pass at the Task-10 review.
+- [ ] **Step 3:** `./run.sh --test` green. Commit `feat(identity): events as mountain story beats`.
 
 ## Task 7: Xiong Tie boss beats (renderer + strings)
 
