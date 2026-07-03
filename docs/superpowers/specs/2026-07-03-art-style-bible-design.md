@@ -31,7 +31,7 @@
 ## 3. Ink-stain corruption grammar
 
 - Stains **grow from where kung fu enters the body**: hands, forearms, eyes.
-- **Enemy touched-ness follows pool_class** (enemy wrongness = what they are; environment wrongness = where you are, per the identity spec): weak = none; strong = trace drips; elite = inky auras, stains in the *clothes' shadows*; boss/immortal = fully integrated.
+- **Enemy touched-ness follows pool_class — as a RUNTIME overlay, not baked sprites.** `sect_disciple` appears in both `strong_pool` and `elite_pool` (`DifficultyCurve.json:6`), so one baked sprite cannot express two touched-ness states. Contract: touched-ness is a **presentation-layer ink overlay/aura selected at spawn from the encounter's `pool_class`** (the same spawn-time modifier path that already sets `blockChance`/pressure) — weak = none; strong = trace drips; elite = inky aura, stains in the clothes' shadows; boss/immortal = fully integrated (theirs MAY be baked, since immortals are unique). Ink-as-overlay is also simply true to the language — the stain sits on top. Baked per-archetype variants are a deliberate later escalation, not this bible's requirement.
 - **Each immortal's ink tints toward their school's themeColor** (Xiong Tie iron-dark; She Shi green-black; etc.) — corruption carries school identity.
 - **Maximum corruption is drawn IN the ink, not the body:** wrong shapes inside stains — extra fingers, misplaced grins, an eye in a sleeve-shadow. Comic register survives because the flesh stays cartoon-clean; the wrongness is always one layer removed.
 
@@ -53,7 +53,7 @@
 
 ## 6. Deliverables & process
 
-**A. The bible doc** (`docs/art/STYLE_BIBLE.md` once canon exists): the rules above as tokens — proportion numbers, silhouette tests, burst-grammar allowlist, ink-stain stage definitions, per-band palette tables, icon rules — plus **prompt fragments** for each asset class. Written **generator-agnostic**: every generation request = reference image(s) from the canon + tokens + a fragment; works for pixelforge or aiexp/GPT-Image-2 → pixelize.
+**A. The bible doc** (`docs/art/STYLE_BIBLE.md`): the rules above as tokens — proportion numbers, silhouette tests, burst-grammar allowlist, ink-stain stage definitions, per-band palette tables, icon rules — plus **prompt fragments** for each asset class. Written **generator-agnostic**: every generation request = reference image(s) from the canon + tokens + a fragment; works for pixelforge or aiexp/GPT-Image-2 → pixelize.
 
 **B. The approved reference canon** (the real bible — images beat prose for generators): **six sheets**, each produced shotgun-style (N candidates → **user picks → winner becomes canon**, Gate-1 discipline; per project memory, keyframe/pose approval and scale checks precede any install):
 1. **Hu turnaround** — idle/walk key poses (the density/build baseline made canonical).
@@ -61,11 +61,18 @@
 3. **Xiong Tie** — the first immortal; sets the immortal register (scale-break permission, iron-dark ink).
 4. **One weak-pool enemy** (Dropout Blade) — sets the mook register (readable, comic, un-touched).
 5. **Scene strip** — the four band skies of the one mountain.
-6. **Icon row** — six school pictograms; **run the same brief through pixelforge AND the aiexp pipeline; winner by user's eye** (the bake-off that decides the default generator for small assets).
+6. **Icon row** — six school pictograms; **the pixelforge bake-off**. Because pixelforge is untried here, the bake-off starts with a **tooling-discovery step**: record the exact pixelforge invocation (CLI/UI, params), then **normalize both generators' outputs before judging** — same canvas size, quantized to VINIK24, background removed — so the pick compares style, not tooling artifacts. Same brief through pixelforge AND the aiexp pipeline; **winner by user's eye** decides the default generator for small assets. Every candidate (both generators) carries provenance fields.
 
-Canon lives in-repo: `docs/art/canon/` (approved sheets + a one-line provenance note each). Every future asset plan MUST cite which canon sheet it matches.
+**Canon location — extends the EXISTING provenance system, no second canonical home:** approved sheets live in **`art/canon/`** (sibling of `art/keyframes/`, the current approved-art store) with a **`canon.manifest.json` using the same field schema** as `keyframes.manifest.json` (`file`/`prompt`/`backend`/`seed`/`approved`/`notes` — plus `generator` for the bake-off). `docs/art/STYLE_BIBLE.md` is the token doc and *references* canon files; `art/keyframes/` remains the per-action keyframe store, and future keyframes must match canon. Rejected candidates are never recorded as approved (per the existing README rule). Every future asset plan MUST cite which canon sheet it matches.
 
-**C. Acceptance:** the bible is DONE when all six sheets are user-approved and the doc's tokens match what was approved (tokens are *descriptions of the canon*, not aspirations).
+**Provisional-icon rule:** slice 1 already shipped `WUGodot/assets/icons/schools/*.png` (provisionally accepted). When the canon icon row is approved, it **replaces those files and re-runs slice 1's icon captures + `test_school_icons`** — unless the user explicitly canonizes the provisional set. There is never a state with two competing icon sets.
+
+**C. Acceptance — approved sheets + passing derived proofs + reconciled tokens.** Pretty sheets that fail runtime readability fail the bible. Required proofs, attached to the canon:
+- **Silhouette proof:** pure-black silhouette strip of each school stance **at gameplay size** — the six must be tellable apart (the §2 hard rule, actually tested).
+- **Icon proof:** the icon row rendered **at 24px** — legible, family-consistent.
+- **Palette proof:** an automated pixel audit that every canon sheet uses **VINIK24 colors only** (script counts off-palette pixels; 0 required after pixelize).
+- **Runtime proof:** character sheets (Hu, stages, Xiong Tie, mook) and the scene strip captured **in-engine at runtime scale** (`--capture` matchup/UI with the sheet art staged, or the pilot-viewer route used for the 256px decision) — judged at the size players actually see, per the project's own judge-art-in-game rule.
+The bible is DONE when all six sheets are user-approved, all four proofs pass, and the doc's tokens match what was approved (tokens are *descriptions of the canon*, not aspirations).
 
 ## 7. Out of scope
 
@@ -77,6 +84,7 @@ Canon lives in-repo: `docs/art/canon/` (approved sheets + a one-line provenance 
 ## 8. Sequencing (phases — full plan after approval)
 
 1. **Bible doc draft** — write the token doc from this spec (fast; it's §1–5 formalized).
-2. **Canon production, cheapest-risk first:** icon row (the pixelforge bake-off — smallest assets, tests the new tool) → Hu turnaround → corruption strip → Xiong Tie → Dropout Blade → scene strip. Each sheet: shotgun N candidates → ✋ user picks → canon.
-3. **Token reconciliation** — adjust doc tokens to match the approved canon exactly.
-4. **Record** — canon index + provenance; hand off to the first production slice (icons install).
+2. **Pixelforge tooling discovery** — record the exact invocation, output format, and the normalization recipe (size/VINIK24-quantize/bg-removal) so bake-off candidates compare like-for-like.
+3. **Canon production, cheapest-risk first:** icon row (the bake-off — smallest assets, tests the new tool) → Hu turnaround → corruption strip → Xiong Tie → Dropout Blade → scene strip. Each sheet: shotgun N candidates → derived proofs generated → ✋ user picks → canon (manifest entry with provenance).
+4. **Token reconciliation** — adjust doc tokens to match the approved canon exactly; run the palette/silhouette/24px/runtime proofs as the acceptance gate.
+5. **Record** — canon index + provenance; replace the provisional school icons (re-run slice-1 icon captures/tests); hand off to the first production slice.
