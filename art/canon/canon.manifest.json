@@ -102,6 +102,15 @@
       "approved": null,
       "candidates": [],
       "notes": "Four altitude bands of the same mountain composition."
+    },
+    "icons": {
+      "file": "art/canon/icons/school_icons.png",
+      "prompt": "six pixel-art animal pictogram icons brief (canon plan Task 4); swallow cell regenerated: 'swallow in flight, exactly two wings, forked tail, dark navy back, white belly' (aiexp run 2026-07-03T14-40-51)",
+      "backend": "aiexp",
+      "generator": "aiexp (crowned small-asset default at this gate)",
+      "seed": null,
+      "approved": "2026-07-03",
+      "notes": "winner=aiexp_cand_2 w/ swallow cell fix (original had 3 wings, user finding); runner-up=pixelforge_cand_3 (best row discipline, all-black swallow failed dark panels); original cand_2 24px proof was invalid (grid sliced as row) -> make_proofs.py --grid added"
     }
   }
 }

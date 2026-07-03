@@ -1,10 +1,58 @@
 {
   "schools": [
-    {"id": "venom", "name": "Snake", "hanzi": "蛇", "signature": "venom", "themeColor": "#7ec850", "icon": "res://assets/icons/schools/venom.png", "blurb": "Patience and venom — the bite is only the beginning. The art of 蛇噬 She Shi."},
-    {"id": "thunder", "name": "Ox", "hanzi": "牛", "signature": "jolt", "themeColor": "#55c7ff", "icon": "res://assets/icons/schools/thunder.png", "blurb": "One step, one thunderclap — fights end in a single collision. The art of 牛雷 Niu Lei."},
-    {"id": "soft", "name": "Crane", "hanzi": "鶴", "signature": "deflect", "themeColor": "#d7b56d", "icon": "res://assets/icons/schools/soft.png", "blurb": "The centerline is sacred: receive, redirect, answer. The art of 鶴柔 He Rou."},
-    {"id": "iron", "name": "Bear", "hanzi": "熊", "signature": "guard", "themeColor": "#a9b0b8", "icon": "res://assets/icons/schools/iron.png", "blurb": "Rooted stances, an iron hide — the mountain does not move. The art of 熊鐵 Xiong Tie, first of the Nine."},
-    {"id": "wind", "name": "Swallow", "hanzi": "燕", "signature": "momentum", "themeColor": "#87d7c5", "icon": "res://assets/icons/schools/wind.png", "blurb": "Walk the circle; never be where the blade lands. The art of 燕影 Yan Ying."},
-    {"id": "sword", "name": "Eagle", "hanzi": "鷹", "signature": "intent", "themeColor": "#f0d071", "icon": "res://assets/icons/schools/sword.png", "blurb": "See the opening before it opens: seize, mark, finish. The art of 鷹目 Ying Mu."}
+    {
+      "id": "venom",
+      "name": "Snake",
+      "hanzi": "蛇",
+      "signature": "venom",
+      "themeColor": "#4e8339",
+      "icon": "res://assets/icons/schools/venom.png",
+      "blurb": "Patience and venom — the bite is only the beginning. The art of 蛇噬 She Shi."
+    },
+    {
+      "id": "thunder",
+      "name": "Ox",
+      "hanzi": "牛",
+      "signature": "jolt",
+      "themeColor": "#a1d2e0",
+      "icon": "res://assets/icons/schools/thunder.png",
+      "blurb": "One step, one thunderclap — fights end in a single collision. The art of 牛雷 Niu Lei."
+    },
+    {
+      "id": "soft",
+      "name": "Crane",
+      "hanzi": "鶴",
+      "signature": "deflect",
+      "themeColor": "#f8c83c",
+      "icon": "res://assets/icons/schools/soft.png",
+      "blurb": "The centerline is sacred: receive, redirect, answer. The art of 鶴柔 He Rou."
+    },
+    {
+      "id": "iron",
+      "name": "Bear",
+      "hanzi": "熊",
+      "signature": "guard",
+      "themeColor": "#96b2c5",
+      "icon": "res://assets/icons/schools/iron.png",
+      "blurb": "Rooted stances, an iron hide — the mountain does not move. The art of 熊鐵 Xiong Tie, first of the Nine."
+    },
+    {
+      "id": "wind",
+      "name": "Swallow",
+      "hanzi": "燕",
+      "signature": "momentum",
+      "themeColor": "#255674",
+      "icon": "res://assets/icons/schools/wind.png",
+      "blurb": "Walk the circle; never be where the blade lands. The art of 燕影 Yan Ying."
+    },
+    {
+      "id": "sword",
+      "name": "Eagle",
+      "hanzi": "鷹",
+      "signature": "intent",
+      "themeColor": "#ee9c24",
+      "icon": "res://assets/icons/schools/sword.png",
+      "blurb": "See the opening before it opens: seize, mark, finish. The art of 鷹目 Ying Mu."
+    }
   ]
 }

@@ -100,21 +100,44 @@ def make_char_proof(source: Path, out_dir: Path, scale: float) -> None:
     )
 
 
-def make_icon_proof(source: Path, out_dir: Path, cells: int) -> None:
-    src = Image.open(source).convert("RGBA")
-    if cells <= 0:
-        raise ValueError("--cells must be positive")
-    cell_width = src.width // cells
-    if cell_width <= 0:
-        raise ValueError(f"{source}: width {src.width} too small for {cells} cells")
+def parse_grid(grid: str) -> tuple[int, int]:
+    try:
+        cols_s, rows_s = grid.lower().split("x", 1)
+        cols, rows = int(cols_s), int(rows_s)
+    except ValueError as exc:
+        raise ValueError(f"--grid must look like 6x1 or 3x2, got {grid!r}") from exc
+    if cols <= 0 or rows <= 0:
+        raise ValueError("--grid dimensions must be positive")
+    return cols, rows
 
+
+def make_icon_proof(source: Path, out_dir: Path, grid: str) -> None:
+    src = Image.open(source).convert("RGBA")
+    cols, rows = parse_grid(grid)
+    cell_w = src.width // cols
+    cell_h = src.height // rows
+    if cell_w <= 0 or cell_h <= 0:
+        raise ValueError(f"{source}: {src.size} too small for grid {grid}")
+
+    cells: list[Image.Image] = []
+    for row in range(rows):
+        for col in range(cols):
+            left = col * cell_w
+            top = row * cell_h
+            right = src.width if col == cols - 1 else (col + 1) * cell_w
+            bottom = src.height if row == rows - 1 else (row + 1) * cell_h
+            cell = src.crop((left, top, right, bottom))
+            bbox = cell.getbbox()
+            if bbox:
+                cell = cell.crop(bbox)
+            cells.append(cell)
+
+    count = len(cells)
     pad = 8
     gap = 8
-    out = Image.new("RGBA", (cells * 24 + (cells + 1) * gap, 24 + pad * 2), PANEL_BG)
-    for index in range(cells):
-        left = index * cell_width
-        right = src.width if index == cells - 1 else (index + 1) * cell_width
-        icon = resize_nearest(src.crop((left, 0, right, src.height)), (24, 24))
+    out = Image.new("RGBA", (count * 24 + (count + 1) * gap, 24 + pad * 2), PANEL_BG)
+    for index, cell in enumerate(cells):
+        icon = resize_nearest(cell, (24, 24))
         out.alpha_composite(icon, (gap + index * (24 + gap), pad))
 
     out_path = out_dir / "24px.png"
@@ -122,8 +145,8 @@ def make_icon_proof(source: Path, out_dir: Path, cells: int) -> None:
     write_review(
         out_dir,
         f"{source.name} icon proof",
-        [(source.resolve(), "source row"), (out_path, "24px row on panel background")],
-        "Each equal-width source cell is nearest-neighbor scaled to 24x24.",
+        [(source.resolve(), "source sheet"), (out_path, "24px row on panel background")],
+        f"Grid {grid} cells (transparent borders trimmed) nearest-neighbor scaled to 24x24.",
     )
 
 
@@ -150,7 +173,7 @@ def main() -> int:
     parser.add_argument("--kind", choices=("char", "icon", "scene"), required=True)
     parser.add_argument("--profile", help="Visual profile id for --kind char")
     parser.add_argument("--scale", type=float, help="Explicit scale override for --kind char")
-    parser.add_argument("--cells", type=int, default=6, help="Equal cells for --kind icon")
+    parser.add_argument("--grid", default="6x1", help="Icon sheet grid as COLSxROWS (e.g. 6x1, 3x2) for --kind icon")
     parser.add_argument("--scene-width", type=int, default=1920)
     args = parser.parse_args()
 
@@ -164,7 +187,7 @@ def main() -> int:
         scale = args.scale if args.scale is not None else profile_scale(args.profile)
         make_char_proof(source, out_dir, scale)
     elif args.kind == "icon":
-        make_icon_proof(source, out_dir, args.cells)
+        make_icon_proof(source, out_dir, args.grid)
     else:
         make_scene_proof(source, out_dir, args.scene_width)
 
