@@ -1,260 +1,89 @@
-# WU (武) - Art Design Document
-*Version 1.0 - Ancient China Wuxia-themed 2D Action Roguelike*
+# WU (武) — Art Design Document
+*Version 2.0 — 九仙山 · 「山高墨濁」 ("the mountain is high, the ink is turbid")*
 
-## Core Visual Identity
-
-### Diorama Presentation Style
-WU will adopt the distinctive **3D diorama stage** presentation, where combat takes place on floating platform stages with painted backgrounds visible through a contextual Chinese-inspired frame. This creates a unique theatrical quality perfect for the dramatic duels of Wuxia fiction.
-
-**Current Implementation:** Basic geometric combat on simple platforms
-**Planned Evolution:** Full diorama presentation with atmospheric backgrounds
-
-**Key Elements:**
-- **Stage Platform**: Textured stone/wood platforms with visible depth and edges
-- **Window Frame**: Chinese-inspired decorative elements that vary by battle context (traditional lattice, temple arches, natural formations, mystical portals)
-- **Background Paintings**: Scenic Chinese landscapes visible through the frame
-- **Theatrical Lighting**: Dramatic rim lighting emphasizing the stage-like nature
-
-## Visual Style Guidelines
-
-### 1. **Visual Progression Plan**
-**Current State:** Simple geometric shapes and bright colors for rapid prototyping
-**Target State:** Detailed pixel art with VINIK24 palette
-
-**Pixel Art Specifications (Target):**
-- **Resolution**: Mid-to-high resolution pixel art
-- **Character Size**: ~32-48 pixels tall for standard human characters
-- **Animation Framerate**: 12-15 FPS for smooth martial arts movements
-- **Color Depth**: VINIK24 palette exclusively (24 colors maximum)
-
-### 2. **Color Palette**
-
-#### Primary Palette - "VINIK24"
-Adopting the VINIK24 palette (https://lospec.com/palette-list/vinik24) for its soft, contemplative tones that enhance the Wuxia atmosphere and provide connected color ramps essential for pixel art consistency.
-
-**Key Palette Applications:**
-- **Deep tones**: UI frames, character silhouettes
-- **Mid tones**: Character details, environmental elements
-- **Light tones**: Highlights, qi effects, atmospheric elements
-- **Accent colors**: Special attacks, status effects, interactive elements
-
-### 3. **Stage/Platform Design**
-
-Each combat arena is a carefully crafted diorama with:
-
-**Platform Materials:**
-- Worn stone tiles with Chinese patterns
-- Wooden temple floors with visible grain
-- Bamboo platforms with rope bindings
-- Jade stone for mystical areas
-- Cracked earth for demon realms
-
-**Platform Details:**
-- Visible thickness (8-12 pixels) showing material layers
-- Edge wear and damage
-- Small environmental details (grass tufts, cracks, moss)
-- Subtle parallax between platform and background
-
-### 4. **Background Art ("Window Paintings")**
-
-Backgrounds are painted sceneries visible through the window frame:
-
-**Artistic Style:**
-- Traditional Chinese landscape painting (山水画) aesthetic
-- Multiple depth layers for parallax
-- Soft, painterly pixel art with dithering
-- Atmospheric perspective with fading distant elements
-
-**Scene Types:**
-- Misty mountain ranges with pagodas
-- Dense bamboo forests with light rays
-- Ancient temples in clouds
-- Moonlit lakes with willow trees
-- Volcanic demon lands with floating rocks
-
-### 5. **Character Design Philosophy**
-
-#### Player Characters
-**Current:** Simple geometric shapes (rectangles) with basic color coding
-**Planned:**
-- **Silhouette First**: Clear, readable shapes even in pure black
-- **Flowing Fabrics**: Robes and sashes with secondary animation
-- **Weapon Integration**: Weapons as extension of character design
-- **Stance Variety**: Each character has unique idle stance
-- **Color Scheme**: All character elements using VINIK24 palette
-
-#### Design Elements
-- Traditional Chinese clothing (Hanfu, martial robes)
-- Hair ornaments and topknots
-- Flowing ribbons and sashes
-- Distinctive weapon types (dao, jian, staff, fan)
-
-#### Enemy Design Tiers
-1. **Common Bandits**: Simple clothing, basic weapons
-2. **Martial Artists**: Sect uniforms, refined stances
-3. **Elite Guards**: Ornate armor, intimidating masks
-4. **Demons/Spirits**: Ethereal effects, non-human proportions
-5. **Bosses**: Larger sprites, dramatic clothing, unique weapons
-
-### 6. **Animation Principles**
-
-#### Combat Animations
-- **Anticipation**: 2-3 frame wind-up for attacks
-- **Impact Freeze**: 1-2 frame pause on hit
-- **Follow-through**: Weapon trails and fabric movement
-- **Recovery**: Return to idle with secondary motion
-
-#### Key Animations per Character
-1. Idle (breathing, fabric sway)
-2. Walk/Run cycle
-3. Light Attack combo (3 hits)
-4. Heavy Attack
-5. Block/Parry pose
-6. Dash (with afterimage)
-7. Hit reaction
-8. Stun/Posture break
-9. Death sequence
-10. Special move(s)
-
-### 7. **Visual Effects (VFX)**
-
-#### Particle Systems
-- **Cherry blossoms**: Falling petals for atmosphere
-- **Qi sparks**: Energy particles for hits
-- **Dust clouds**: Movement and landing effects
-- **Slash trails**: Weapon swing arcs
-- **Spirit flames**: Mystical fire effects
-
-#### Combat Effects
-- **Parry Flash**: Bright circular burst with Chinese pattern
-- **Posture Break**: Shattering effect with kanji (破)
-- **Rage Activation**: Aura with floating Chinese symbols
-- **Execution**: Dramatic ink splash effect
-
-### 8. **UI/HUD Design**
-
-#### Frame Design
-- **Window Frame**: Contextual Chinese elements (temple archways, bamboo borders, mystical portals)
-- **Corner Decorations**: Dragon or phoenix motifs
-- **Border Pattern**: Cloud scrolls (云纹) or geometric patterns
-
-#### Health/Resource Bars
-**Current:** Simple colored bars (red health, yellow stamina, purple resource)
-**Planned:** 
-- **Container Style**: Bamboo segments or jade inlay
-- **Fill Effects**: Liquid ink for health, flowing energy for qi
-- **Typography**: Mix of pixel Chinese characters and numbers
-- **Colors**: All bars using VINIK24 palette tones
-
-#### Combat UI Elements
-- **Attack Indicators**: Red Chinese seals (印章) for danger
-- **Combo Counter**: Calligraphy brush strokes
-- **Status Effects**: Floating Chinese characters
-
-### 9. **Environmental Storytelling**
-
-#### Stage Props
-- Broken weapons stuck in ground
-- Prayer flags and banners
-- Stone lanterns
-- Fallen leaves accumulation
-- Training dummies
-- Incense braziers with smoke
-
-#### Interactive Elements
-- **Destructibles**: Vases, barrels, bamboo
-- **Hazards**: Spike traps, fire braziers
-- **Atmospheric**: Birds that fly away, fireflies
-
-### 10. **Lighting and Atmosphere**
-
-#### Time of Day Variations
-- **Dawn**: Soft orange light, long shadows
-- **Noon**: Bright, minimal shadows
-- **Dusk**: Golden hour, dramatic orange/purple
-- **Night**: Blue moonlight, lantern pools
-
-#### Weather Effects
-- **Rain**: Visible droplets, puddle reflections
-- **Snow**: Accumulation on platforms
-- **Mist**: Fog layers for depth
-- **Wind**: Particle effects, fabric movement
-
-## Technical Specifications
-
-### Development Phases
-**Phase 1 (Current):** Geometric prototyping with placeholder colors
-**Phase 2 (Next):** VINIK24 palette integration
-**Phase 3 (Final):** Full pixel art assets
-
-### Sprite Sheets (Target)
-- **Character Sprites**: 512x512 per character
-- **Effect Sprites**: 256x256 per effect type
-- **Environment Tiles**: 32x32 or 16x16 base tiles
-- **Background Layers**: 1280x720 minimum, 3-5 layers
-- **Palette Constraint**: All assets limited to VINIK24's 24 colors
-
-### Performance Considerations
-- Maximum 100 particles on screen
-- 3-5 background parallax layers
-- Sprite batching for similar elements
-- LOD system for distant elements
-
-## Art Production Pipeline
-
-### 1. Concept Phase
-- Rough sketches establishing silhouette
-- Color mood boards
-- Animation planning
-
-### 2. Pixel Art Creation
-- Base sprite creation
-- Animation frames
-- Color variations for different tiers
-
-### 3. Implementation
-- Sprite sheet assembly
-- Animation timing setup
-- VFX integration
-- Lighting passes
-
-### 4. Polish
-- Edge cleanup
-- Color balance
-- Animation smoothing
-- Performance optimization
-
-## Consistency Checklist
-
-Before finalizing any art asset, verify:
-- [ ] Matches established color palette
-- [ ] Maintains consistent pixel density
-- [ ] Readable at gameplay distance
-- [ ] Follows animation principles
-- [ ] Fits within technical constraints
-- [ ] Supports gameplay clarity
-- [ ] Enhances Wuxia atmosphere
-
-## Reference Mood Board
-
-### Visual Inspiration Sources
-- **Artis Impact**: Diorama presentation, pixel art style
-- **Chinese Ink Paintings**: Background art style
-- **Wuxia Films**: Character poses, combat choreography
-- **Dead Cells**: Animation fluidity, VFX impact
-- **Blasphemous**: Environmental atmosphere
-- **Traditional Chinese Architecture**: Structural details
-
-## Art Source Archives
-
-- Hu smooth-master archive: `/Users/animula/WU-art-masters/wu-smooth-hu-run2`. This is the source for the corrected master-scale pipeline; do not rely on `/tmp/wu-smooth-hu-run2` surviving a reboot.
-
-## Updates and Revisions
-
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0 | [Current] | Initial design document |
+> v2 consolidates the approved creative identity (`docs/superpowers/specs/2026-07-03-creative-identity-revamp-design.md`), the art style bible (`.../2026-07-03-art-style-bible-design.md`), and the locked technical decisions (256px: `.../2026-04-29-wu-256px-resolution-spec.md`). It supersedes v1.0 everywhere they disagree. The **approved reference canon** (`art/canon/`, in production) outranks this doc: tokens describe the canon, not aspirations.
 
 ---
 
-*This document serves as the definitive guide for all art production in WU. All artists and developers should reference this document to maintain visual consistency throughout development.*
+## 1. What the art must say
+
+WU is a **bright, wild, comic kung-fu pilgrimage that curdles into cosmic horror as you climb**. Every visual choice serves that one arc:
+
+- The **foothills** must look like the poster of the rumor — warm, generous, a mountain worth worshipping.
+- The **summit** must look like the truth — near-black, wrong, a door pretending to be a peak.
+- Between them, the change must be **gradual enough to feel like weather and unmistakable in hindsight**.
+
+The player character's own body is the second canvas: **corruption shows on Hu before anywhere else** (diegetic 濁 — there is no meter).
+
+## 2. The three laws (from the style bible)
+
+1. **Lean wuxia heroic.** Mostly-real ~6-head proportions, elegant blade silhouettes, stances that visibly echo each school's real root art (洪拳 rooting, 詠春 centerline, 八卦 circling, 八極 charge, 蛇形 coil, 鷹爪 seize) — never named in-game.
+2. **Bursts go cartoon.** Exaggeration is an **event, not a state**: smears, 2–3× anticipation squash, comic face swaps, white impact frames — on action beats only (attack actives, posture breaks, deflects, boss beats). Idle/walk/neutral stay grounded so the world reads real between explosions.
+3. **Ink invades.** Corruption is literal black ink: it stains, bleeds, pools, and at the extreme forms *wrong shapes*. The horror arrives through the medium itself. The flesh stays cartoon-clean; **the ink lies**.
+
+## 3. Presentation & technical constants (locked)
+
+- **Diorama stage:** combat on platform stages with painted backgrounds; theatrical framing per arena context. (v1's core concept, retained.)
+- **Character canvas:** **256×256 native**, runtime scale ~1.7–1.9× — density matches the chosen reference look; on-screen size unchanged from the 64px era.
+- **Palette: VINIK24 exclusively.** Machine-audited: canon assets must pass a zero-off-palette check (`tools/art/palette_audit.py`).
+- **Pipeline:** generation (aiexp / GPT-Image-2; pixelforge under trial) → pixelize/normalize → canonical slots with **measured anchors** + manifests; foot-anchored rendering; capsule collision matched to visible art. Judgments are made **in-game at runtime scale**, never on zoomed stills.
+- **Animation:** presenter graph/timeline JSON; attack/move motion via Seedance video → frame harvest (slow-mo full-clip prompting; idle-pinned ends for attacks); GPT-Image-2 keyframes serve Gate-1 pose approval and pins.
+
+## 4. Character language
+
+### Hu — the starstruck pilgrim
+Young, light-framed, expressive earnest face; plain pilgrim blues, no school markings — nobody's disciple. His personality lives in **reaction frames** (the comic register) and his tragedy in the **four corruption stages** — same base sprite, escalating ink overlay, all readable at gameplay size:
+1. **清 Clean** — baseline.
+2. **Touched** — stain at collar + sword hand, knuckles darkening.
+3. **Marked** — ink veins up forearms/neck, eyes darkened, the stain subtly out of sync with his motion.
+4. **Claimed** — half-swallowed; the stain's edge forms faint wrong shapes (extra finger-silhouettes, a grin where no mouth is).
+
+### The Nine (immortals)
+**Power = permission to distort.** Immortals may break scale and anatomy (Xiong Tie's bulk fills the frame). Each immortal's ink is **tinted toward their school's themeColor** and fully integrated — calm, total, dignified: they are not monsters, they are *finished*. Fight styles must echo their root arts so the player's own boons visually rhyme with the boss who taught them.
+
+### Schools & the silhouette law
+Every school's practitioner must be identifiable in **pure black silhouette by stance alone**: Bear low-rooted wide · Ox charging mass · Crane one vertical line · Swallow mid-circle step · Snake coiled low · Eagle reaching seize. The stance canon sheet (`art/canon/schools/stances.png`) is the test asset; any character sheet failing the silhouette test fails review.
+
+### Enemies (the mountain's population)
+Mooks are **comic and readable** (Dropout Blade: ill-fitting hand-me-downs, cocky grin, recognizably *bad* form — failed students, not soldiers). **Touched-ness follows encounter pool_class as a runtime ink overlay** (weak none → strong trace drips → elite inky auras; selected at spawn like the other encounter modifiers — never baked per archetype, since archetypes appear in multiple pools). Uniques (immortals) may bake their ink.
+
+## 5. Corruption grammar (濁)
+
+- Stains **grow from where kung fu enters**: hands, forearms, eyes.
+- Wrongness is **always one layer removed** — drawn *in* the ink (shapes inside stains, an eye in a sleeve-shadow), never as body horror on the flesh. This is how comedy and cosmic horror coexist.
+- Escalation order across a run mirrors the climb: environment (band palettes) → enemies (overlays by pool) → the player (stages) → the boss (integrated) → the door.
+
+## 6. Scene grammar (hybrid: painted far, procedural near)
+
+- **Painted far layers:** four skies of the **same mountain**, one per depth band —
+  **foothill** warm dawn, peak distant and lovely · **mid** paler, the peak slightly *too tall* · **high** cold thin light, ink pooling in valleys, ridgelines starting to disagree · **gate** near-black, the summit fills the frame, wrong.
+- **Procedural mid/near** (bamboo, platforms) restyled to bible tokens; platform materials per v1 (stone/wood/bamboo; cracked earth reserved for touched arenas).
+- **Ink-wash clouds:** procedural overlay thickening with altitude; at high/gate the clouds are the same 濁 language as the characters.
+- **Band palette registers** (named VINIK24 subsets): foothill = warm golds/greens/earth · mid = neutrals · high = cold blues/purples · gate = ink extremes + one hot accent. Environment wrongness keys on **altitude (node tier)**; enemy wrongness keys on **pool_class** — the mountain is wrong because of where you are, the enemies because of what they are.
+
+## 7. Icons & UI
+
+- **School marks are animal pictogram icons** (not hanzi — two-character animals like 熊貓 broke the pattern): silhouette-first, 2–3 VINIK24 tones, **legible at 24px**, one visual family (stroke weight, framing, abstraction level) across schools and future outsiders. Hanzi text fallback when an icon is missing.
+- HUD/UI stays ink-and-paper: dark panels, gold accent, bilingual labels (命 HP / 構 PST pattern), rarity chips (common/rare/epic/legendary colors), band-tinted backgrounds on meta screens.
+- UI wrongness at high bands is permitted but subtle (the corruption slice owns overt UI distortion).
+
+## 8. VFX & feel
+
+- Existing channels (hitstop, shake, slow-mo, particles, damage numbers) tuned **to the audio hero sounds** (deflect clang, break thud) — one impact, not three effects.
+- Burst-grammar visuals (smears, impact flashes) are timeline-JSON data on the presenter rig — cheap, art-agnostic where possible.
+- Ink VFX vocabulary: drips, blot-bursts on posture break (破), stain-spread on corruption gain, ink-wash trails on touched enemies' attacks.
+
+## 9. Production law
+
+- **Canon over prose:** every asset run cites its canon sheet (`art/canon/`, manifest with `file/prompt/backend/generator/seed/approved/notes`). Rejected candidates never enter canon.
+- **Gates:** shotgun candidates → derived proofs (silhouette @ gameplay size · 24px icon row · palette audit · runtime-scale render) → **user picks** (Gate-1 discipline; scale/size re-checked in-game before install, per project memory).
+- **Generator policy:** aiexp pipeline is the incumbent; **pixelforge** is on trial via the icon bake-off — winner by user's eye becomes the small-asset default. All briefs are generator-agnostic (reference image + tokens + fragment).
+- **Sequencing reality:** identity content pass SHIPPED (slice 1); canon production is the current slice; real animation waits for canon; corruption *mechanics* (stages actually appearing in play) are their own slice.
+
+## 10. Known debts & deferred
+
+- Enemy sprites are pre-canon placeholders until the canon-consuming production slices land (art is placeholder by declared intent).
+- Back-dash reuses the forward-dash clip (queued for the animation pass).
+- Map upside-down fix (climb reads bottom→top) — directive with the implementer.
+- Cloud/mist overlay: designed here, implemented in a later atmosphere slice.
+- Overt geometric wrongness (non-Euclidean window paintings) reserved for high-band scene assets, not yet produced.
