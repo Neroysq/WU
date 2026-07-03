@@ -22,8 +22,13 @@
 **Files:** Create `tools/art/vinik24.json`, `tools/art/palette_audit.py`, `tools/art/make_proofs.py`.
 
 - [ ] **Step 1:** Extract the 24 VINIK24 hexes into `tools/art/vinik24.json` from the aiexp palette data (`grep -ri vinik /Users/animula/GitReps/AIexp --include=*.json --include=*.py -l` and read the palette definition; fallback: download from lospec.com/palette-list/vinik24). Do NOT hand-type from memory.
-- [ ] **Step 2:** `palette_audit.py <img...>` — counts pixels not in vinik24.json (alpha 0 exempt); prints per-file off-palette count; exit 1 if any nonzero. (PIL; `pip install pillow` into the venv if absent.)
-- [ ] **Step 3:** `make_proofs.py <sheet.png> --out <dir> [--gameplay-height 360] [--icon]` — emits: `silhouette.png` (alpha-threshold → pure black, scaled to gameplay height), `runtime.png` (sheet scaled to on-screen size, nearest-neighbor — the display-size viewer route from the 256px decision), and with `--icon` a `24px.png` row render. Follow `tools/build_keyframe_review.py`'s HTML-sheet pattern to also emit a `review.html` (candidates + proofs side by side) for each ✋ gate.
+- [ ] **Step 2 (environment, explicit):** these tools need real image ops (quantize/slice/scale) — use the **AIexp venv interpreter**, which has PIL: `PYART=/Users/animula/GitReps/AIexp/.venv/bin/python` (verify `"$PYART" -c "import PIL"`; if it ever lacks PIL, create `python3 -m venv .venv-art && .venv-art/bin/pip install pillow` at repo root and use that). All `tools/art/*.py` invocations in this plan run under `$PYART`. (This repo itself has no venv — do not write bare `pip install`.)
+- [ ] **Step 3:** `palette_audit.py <img...>` — counts pixels not in vinik24.json (alpha 0 exempt); prints per-file off-palette count; exit 1 if any nonzero.
+- [ ] **Step 4:** `make_proofs.py <sheet.png> --out <dir> [--kind char|icon|scene]` — the **exact runtime-scaling contract** (the viewer route made concrete; no engine changes in this plan):
+  - `char`: `runtime.png` = nearest-neighbor ×1.8 (the 256px spec's runtime scale midpoint — on-screen character ≈ what combat shows); `silhouette.png` = alpha-threshold → pure black at the same scale.
+  - `icon`: `24px.png` = each icon nearest-neighbor-scaled to 24×24, rendered in a row on the game's panel color.
+  - `scene`: `runtime.png` = panel scaled to fit the 1920-wide arena backdrop proportion.
+  - Always emits `review.html` (candidates + proofs side by side, following `tools/build_keyframe_review.py`'s pattern) for each ✋ gate.
 - [ ] **Step 4:** Commit `feat(tools): art canon proof tooling`.
 
 ## Task 3: Pixelforge tooling discovery
@@ -41,7 +46,16 @@
 - [ ] **Step 1 (brief — same for BOTH generators):** *"Set of six pixel-art animal pictogram icons, one visual family: bear head, ox head, standing crane, swallow in flight, coiled snake, eagle head. Silhouette-first, 2–3 tones from the VINIK24 palette, dark background transparent, strong readable shapes, consistent stroke weight and framing, wuxia seal-mark feel. 24×24 target legibility."* Generate ≥2 candidate rows per generator (aiexp: `pixel-art run --prompt-text ... --palettes vinik24 --size 64 --kind sprite --remove-bg`, downscale; pixelforge: per Task 3 recipe).
 - [ ] **Step 2:** Normalize all candidates (Task 3 recipe); run `palette_audit.py`; `make_proofs.py --icon` → 24px rows; assemble `review.html`.
 - [ ] **Step 3:** ✋ **STOP — user picks the winning row AND the winning generator** (this decides the small-asset default). Record both in the manifest (`generator` field; note the loser's provenance in `notes`).
-- [ ] **Step 4 (provisional-icon replacement):** copy the approved row over `WUGodot/assets/icons/schools/*.png`, `./run.sh --import`, re-run slice-1 icon captures (school-choice ×2, boon-offer, matchup-with-build, map-with-build) + `./run.sh --test` (`test_school_icons` green). Commit `feat(art): canon school icons replace provisional set`.
+- [ ] **Step 4 (provisional-icon replacement — explicit slice map, no guessing):** slice the approved row into six individual PNGs and install by this **fixed animal→id mapping** (display animals to data ids, from the identity spec):
+  | row position | animal | installs as |
+  |---|---|---|
+  | 1 | Bear | `WUGodot/assets/icons/schools/iron.png` |
+  | 2 | Ox | `WUGodot/assets/icons/schools/thunder.png` |
+  | 3 | Crane | `WUGodot/assets/icons/schools/soft.png` |
+  | 4 | Swallow | `WUGodot/assets/icons/schools/wind.png` |
+  | 5 | Snake | `WUGodot/assets/icons/schools/venom.png` |
+  | 6 | Eagle | `WUGodot/assets/icons/schools/sword.png` |
+  Slice at equal-width cells from the row; output each icon at the **same pixel dimensions as the file it replaces** (inspect the current PNGs at implement time) so `Schools.json` paths and the renderer keep working unchanged. If the repo carries a combined icon source sheet (e.g. a `school_icons_sheet.png` from slice 1), regenerate/replace it from the same canon row so source and installed files can't drift. Then `./run.sh --import`, re-run slice-1 icon captures (school-choice ×2, boon-offer, matchup-with-build, map-with-build) + `./run.sh --test` (`test_school_icons` green). Commit `feat(art): canon school icons replace provisional set`.
 
 ## Task 5: Hu turnaround ✋
 
@@ -64,18 +78,24 @@
 - [ ] **Step 1 (brief):** *"Scruffy failed kung-fu student turned bandit: ill-fitting hand-me-down training clothes, cocky grin, sloppy imitation of a proper sword stance (recognizably bad form), comic readable face. NO ink/corruption. 256px pixel art, VINIK24."* Shotgun 3.
 - [ ] **Step 2:** Proofs; runtime.png beside current bandit_swordsman. ✋ user picks → canon + manifest. Commit.
 
-## Task 9: Scene strip — four skies of one mountain ✋
+## Task 9: Six-school stance sheet ✋ (the silhouette gate's source asset)
+
+- [ ] **Step 1 (brief):** *"Six martial artists in one row, same body scale, each frozen in their school's signature stance, designed to be tellable apart in PURE BLACK SILHOUETTE: (1) Bear — low rooted wide horse stance, massive base; (2) Ox — mid-charge, shoulder leading, mass driving forward; (3) Crane — one vertical line, single-leg, arms folded like wings on the centerline; (4) Swallow — mid circle-step, body curved in turning flight; (5) Snake — coiled low, spine curved, one arm striking like a head; (6) Eagle — tall reach, clawed hand seizing downward. Generic disciples (not the immortals), simple dark clothes, 256px pixel art, VINIK24."* Shotgun 2–3 sheets.
+- [ ] **Step 2:** Proofs: `make_proofs.py --kind char` — the **silhouette.png of this sheet at gameplay size IS the bible's §2 hard-rule test**: six stances tellable apart in pure black. Include it prominently in review.html.
+- [ ] **Step 3:** ✋ user picks (judging silhouettes first, detail second) → `art/canon/schools/stances.png` + manifest. This sheet is the stance canon for every future school practitioner/enemy. Commit.
+
+## Task 10: Scene strip — four skies of one mountain ✋
 
 - [ ] **Step 1 (brief, one image, four vertical panels or four files):* the SAME mountain from the same vantage:* (1) foothill — warm dawn, generous sky, the peak distant and lovely; (2) mid — paler, higher, the peak slightly too tall; (3) high — cold thin light, black ink pooling in the valleys, ridge geometry beginning to disagree; (4) gate — near-black, the summit fills the frame, wrong. Wide parallax-layer format (e.g. 960×320 per panel), painted pixel-art style, VINIK24 band registers (warm/neutral/cold/ink)."* Shotgun 2–3 sets.
-- [ ] **Step 2:** Proofs (palette audit per panel; runtime.png behind a staged combat capture if cheap, else the viewer). ✋ user picks → canon + manifest. Commit.
+- [ ] **Step 2:** Proofs: palette audit per panel + `make_proofs.py --kind scene` (the exact viewer contract from Task 2 — no engine staging in this plan; in-engine backdrop install is a later production slice). ✋ user picks → canon + manifest. Commit.
 
-## Task 10: Token reconciliation + record ✋
+## Task 11: Token reconciliation + record ✋
 
 - [ ] **Step 1:** Re-read STYLE_BIBLE.md against the six approved sheets; fix every token that disagrees with canon (canon wins). Fill the Canon Index section.
-- [ ] **Step 2:** Run the full acceptance: `palette_audit.py` on all canon files (0 off-palette), silhouette strip check (six schools tellable apart — user confirms), 24px icon row, runtime proofs reviewed. `./run.sh --test` green (icons replaced in Task 4).
+- [ ] **Step 2:** Run the full acceptance: `palette_audit.py` on all canon files (0 off-palette), silhouette gate = the Task-9 stance sheet's silhouette.png (six schools tellable apart — user confirms), 24px icon row, runtime proofs reviewed. `./run.sh --test` green (icons replaced in Task 4).
 - [ ] **Step 3:** ✋ **STOP — present the assembled canon (one review page) for the final bible sign-off.** Then commit `docs(art): style bible + canon complete` and hand off to the first production slice.
 
 ## Self-Review
-- **Spec coverage:** §6A doc (T1) · proofs (T2, gates in every sheet task + T10) · pixelforge discovery/normalization/provenance (T3, T4) · six sheets in the spec's cheapest-risk order (T4–T9) · provisional-icon replacement (T4 Step 4) · canon-extends-keyframes schema (T3) · acceptance = sheets+proofs+tokens (T10). Out of scope respected (no production beyond sheets; icons are the one allowed install per the spec's provisional-icon rule).
+- **Spec coverage:** §6A doc (T1) · proofs incl. exact runtime-scaling contract (T2, gates in every sheet task + T11) · pixelforge discovery/normalization/provenance (T3, T4) · canon sheets in cheapest-risk order (T4–T10; the six-school stance sheet T9 added as the silhouette gate's source — a seventh sheet extending the spec's six, in its spirit: the §2 hard rule needs a testable asset) · provisional-icon replacement w/ explicit slice map (T4 Step 4) · canon-extends-keyframes schema (T3) · acceptance = sheets+proofs+tokens (T11). Out of scope respected (no production beyond sheets; icons are the one allowed install per the spec's provisional-icon rule).
 - **Placeholder scan:** every brief is real copy; pixelforge specifics are an explicit discovery task with defined outputs (not a TBD); VINIK24 hexes deliberately extracted, not hand-typed.
 - **Consistency:** manifest schema fields match `art/keyframes/README.md` + `generator`; proof names (`silhouette/runtime/24px`) consistent across T2 and sheet tasks; briefs use the T1 tokens.
