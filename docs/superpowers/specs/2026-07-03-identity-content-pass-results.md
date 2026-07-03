@@ -50,3 +50,10 @@ The current implementation therefore shows no gameplay drift versus the exact pr
 ## User Review
 
 The pass is ready for visual review from the capture set. The main subjective calls are the six school icons and the strength of the depth-band wash.
+
+## User eyeball verdicts (2026-07-03, via review board)
+1. **Map must be UPSIDE-DOWN — we are climbing.** Current layout puts tier 0 at the top and the boss at the bottom, which reads as a descent. **Fix directive (display-only, one function):** in `map_scene.gd:_get_map_node_position` (`:137-139`), invert the vertical axis — `y = top + (tiers - 1 - node.tier) * tier_height` — so the start/foothills sit at the BOTTOM and the gate/summit at the TOP. All callers (edges, nodes, hover/click at `:59-69`, `:132`) route through this function, so hit-testing follows automatically. Check the next-node picker highlight still reads well; re-capture `map_foothill`/`map_high` + assert_nonblank. (Bonus: the bamboo silhouettes at the screen bottom now correctly read as the foothills.)
+2. **Depth-band wash: ACCEPTED as-is.** There IS a visible difference. Queued enhancement (later atmosphere pass, art track): **cloud/mist effects that thicken with altitude**.
+3. **School icons: provisionally accepted; revamp queued.** Proper pictograms come later — likely produced with **pixelforge** — and BEFORE that, the project needs a **consistent art style design** (the art-track opener).
+
+**Slice 1 status: ACCEPTED** with the map-inversion fix as the one follow-up change.
