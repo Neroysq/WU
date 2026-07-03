@@ -1,0 +1,24 @@
+{
+  "prompt_id": "exactly-six-kung-fu-animal-school-mark-p",
+  "prompt_text": "exactly six kung-fu animal school mark pictograms arranged left-to-right in one single horizontal row across the center of the canvas: bear head, ox head, standing crane, swallow in flight, coiled snake, eagle head. No boxes, no grid, no dividers, no extra animals, no labels. Each pictogram is a compact bold silhouette seal mark with 1-2 pixel dark ink outline and 2 pixel padding, readable at 24px, using only VINIK24 colors. Background must be perfectly flat solid #FF00FF chroma key and must not appear inside the icons. Order must be Bear Ox Crane Swallow Snake Eagle.",
+  "generator_model": "google/gemini-3.1-flash-image-preview",
+  "generator_params": {
+    "style_preset": "sprite-v1-chroma"
+  },
+  "converter_name": "palette-quantize-v2",
+  "converter_params": {
+    "palettes": [
+      "vinik24"
+    ],
+    "sizes": [
+      256
+    ],
+    "primary_palette": "vinik24",
+    "primary_size": 256,
+    "preserve_alpha": true,
+    "alpha_bleed_strategy": "edge-pad",
+    "alpha_erode_px": 1
+  },
+  "reviewer_model": "google/gemini-3.1-pro-preview",
+  "remove_bg_chroma_hex": "#FF00FF"
+}

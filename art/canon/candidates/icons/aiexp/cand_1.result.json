@@ -1,0 +1,450 @@
+{
+  "spec": {
+    "prompt_id": "six-compact-animal-kung-fu-school-pictog",
+    "prompt_text": "six compact animal kung-fu school pictograms in one horizontal sprite sheet, equal-width cells, transparent background, VINIK24 pixel art, 24px legibility, bold silhouettes, 1-2px dark ink stroke, 2px safe padding, Bear Ox Crane Swallow Snake Eagle in that order. no anti-alias blur, no off-palette colors, no painterly gradients, no unreadable micro-detail, no text labels, no fake UI",
+    "generator_model": "google/gemini-3.1-flash-image-preview",
+    "generator_params": {
+      "style_preset": "sprite-v1-chroma"
+    },
+    "converter_name": "palette-quantize-v2",
+    "converter_params": {
+      "palettes": [
+        "vinik24"
+      ],
+      "sizes": [
+        256
+      ],
+      "primary_palette": "vinik24",
+      "primary_size": 256,
+      "preserve_alpha": true,
+      "alpha_bleed_strategy": "edge-pad",
+      "alpha_erode_px": 1
+    },
+    "reviewer_model": "google/gemini-3.1-pro-preview",
+    "remove_bg_chroma_hex": "#FF00FF"
+  },
+  "run_dir": "/Users/animula/GitReps/AIexp/experiments/pixel-art-from-image-gen/src/pixel_art_exp/runs/2026-07-03T13-53-19__six-compact-animal-kung-fu-school-pictog__vinik24__0f1d1075",
+  "artifacts": {
+    "generate": {
+      "stage": "generate",
+      "inputs_hash": "7a7bbd5f04b0b9284f0e4ddb7373495f0a25e6cea84fbeb94b9efa93d060b2a8",
+      "created_at": "2026-07-03T13:53:28",
+      "files": {
+        "source_image": "source.png"
+      },
+      "metadata": {
+        "request_id": "gen-1783058000-hSWPCtFgbbdtzz0umlv9",
+        "model": "google/gemini-3.1-flash-image-preview-20260226",
+        "latency_ms": 8745,
+        "usage": {
+          "prompt_tokens": 251,
+          "completion_tokens": 1596,
+          "total_tokens": 1847,
+          "cost": 0.0687535,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0687535,
+            "upstream_inference_prompt_cost": 0.0001255,
+            "upstream_inference_completions_cost": 0.068628
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 1120,
+            "audio_tokens": 0
+          }
+        },
+        "cost_usd": 0.0687535,
+        "raw_request": {
+          "model": "google/gemini-3.1-flash-image-preview",
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Style: bold flat 2D character sprite designed to remain readable at very low resolutions (32-64 pixels). Use large areas of solid color with clear boundaries - no gradients, no photorealistic shading, no fine textures. Strong recognizable silhouette against a solid magenta #FF00FF background. The background must be one uniform color fill - no gradient, no shading, no shadow cast on the background, no texture. Only the background pixels use this color; the subject should not contain this color. Thick dark outlines defining the form. Limited distinctive color palette. Center the full-body subject, front-facing or 3/4 view, filling most of the frame. Square aspect ratio. No text, no logos, no watermarks.\n\nSubject: six compact animal kung-fu school pictograms in one horizontal sprite sheet, equal-width cells, transparent background, VINIK24 pixel art, 24px legibility, bold silhouettes, 1-2px dark ink stroke, 2px safe padding, Bear Ox Crane Swallow Snake Eagle in that order. no anti-alias blur, no off-palette colors, no painterly gradients, no unreadable micro-detail, no text labels, no fake UI\n"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "remove-bg": {
+      "stage": "remove-bg",
+      "inputs_hash": "9c5b201110d4ac26af402ff287f7a1370fc59a8e65aa1d44d7caedc58e44e00b",
+      "created_at": "2026-07-03T13:53:28",
+      "files": {
+        "transparent_image": "source_transparent.png",
+        "metadata": "metadata.json"
+      },
+      "metadata": {
+        "strategy": "no-removal",
+        "chroma_hex": "#FF00FF",
+        "chroma_ratio": 0.659489631652832,
+        "flood_fill_ratio": 0.0,
+        "chroma_tolerance": 80,
+        "chroma_ratio_threshold": 0.03
+      }
+    },
+    "convert": {
+      "stage": "convert",
+      "inputs_hash": "4da11eff818f65ed463626faebe057aa8187332f1358a5758f26b445d37cd7ca",
+      "created_at": "2026-07-03T13:53:28",
+      "files": {
+        "pixel_image": "pixel.png",
+        "pixel_display": "pixel_display.png",
+        "pixel_vinik24_256": "pixel_vinik24_256.png"
+      },
+      "metadata": {
+        "algorithm": "nearest+nearest+deaa",
+        "primary_palette": "vinik24",
+        "primary_size": 256,
+        "palettes_rendered": [
+          "vinik24"
+        ],
+        "sizes_rendered": [
+          256
+        ],
+        "variants": [
+          {
+            "palette": "vinik24",
+            "size": 256,
+            "file": "pixel_vinik24_256.png",
+            "width": 256,
+            "height": 256,
+            "palette_used": [
+              [
+                15,
+                15,
+                27
+              ],
+              [
+                86,
+                90,
+                117
+              ],
+              [
+                198,
+                183,
+                190
+              ],
+              [
+                250,
+                246,
+                246
+              ],
+              [
+                244,
+                158,
+                76
+              ],
+              [
+                171,
+                82,
+                54
+              ],
+              [
+                191,
+                38,
+                82
+              ],
+              [
+                116,
+                35,
+                60
+              ],
+              [
+                59,
+                23,
+                37
+              ],
+              [
+                115,
+                23,
+                45
+              ],
+              [
+                180,
+                32,
+                42
+              ],
+              [
+                223,
+                113,
+                38
+              ],
+              [
+                238,
+                156,
+                36
+              ],
+              [
+                248,
+                200,
+                60
+              ],
+              [
+                78,
+                131,
+                57
+              ],
+              [
+                44,
+                74,
+                46
+              ],
+              [
+                32,
+                57,
+                79
+              ],
+              [
+                37,
+                86,
+                116
+              ],
+              [
+                87,
+                115,
+                153
+              ],
+              [
+                150,
+                178,
+                197
+              ],
+              [
+                161,
+                210,
+                224
+              ],
+              [
+                107,
+                62,
+                117
+              ],
+              [
+                144,
+                94,
+                169
+              ],
+              [
+                168,
+                132,
+                243
+              ]
+            ],
+            "unique_colors": 23,
+            "aspect_ratio": 1.0
+          }
+        ],
+        "size": 256,
+        "width": 256,
+        "height": 256,
+        "palette_used": [
+          [
+            15,
+            15,
+            27
+          ],
+          [
+            86,
+            90,
+            117
+          ],
+          [
+            198,
+            183,
+            190
+          ],
+          [
+            250,
+            246,
+            246
+          ],
+          [
+            244,
+            158,
+            76
+          ],
+          [
+            171,
+            82,
+            54
+          ],
+          [
+            191,
+            38,
+            82
+          ],
+          [
+            116,
+            35,
+            60
+          ],
+          [
+            59,
+            23,
+            37
+          ],
+          [
+            115,
+            23,
+            45
+          ],
+          [
+            180,
+            32,
+            42
+          ],
+          [
+            223,
+            113,
+            38
+          ],
+          [
+            238,
+            156,
+            36
+          ],
+          [
+            248,
+            200,
+            60
+          ],
+          [
+            78,
+            131,
+            57
+          ],
+          [
+            44,
+            74,
+            46
+          ],
+          [
+            32,
+            57,
+            79
+          ],
+          [
+            37,
+            86,
+            116
+          ],
+          [
+            87,
+            115,
+            153
+          ],
+          [
+            150,
+            178,
+            197
+          ],
+          [
+            161,
+            210,
+            224
+          ],
+          [
+            107,
+            62,
+            117
+          ],
+          [
+            144,
+            94,
+            169
+          ],
+          [
+            168,
+            132,
+            243
+          ]
+        ],
+        "unique_colors": 23,
+        "aspect_ratio": 1.0
+      }
+    },
+    "review-faithfulness": {
+      "stage": "review-faithfulness",
+      "inputs_hash": "c2358ecd2a560a5ee33123814cf5061e5865df2c5aad1bafd48b8b7c56d82a60",
+      "created_at": "2026-07-03T13:53:38",
+      "files": {
+        "score": "score.json"
+      },
+      "metadata": {}
+    },
+    "review-craft": {
+      "stage": "review-craft",
+      "inputs_hash": "fcb4a18ee0cb126c5bddce4ebb6d0b73841d581a71db0040a5a92d94c63ebf17",
+      "created_at": "2026-07-03T13:53:39",
+      "files": {
+        "score": "score.json"
+      },
+      "metadata": {
+        "variants": [
+          {
+            "palette": "vinik24",
+            "size": 256,
+            "score": {
+              "palette_adherence": false,
+              "unique_color_count": 24,
+              "silhouette_readable": true,
+              "contrast_score": 0.9058196544647217,
+              "grid_alignment_ok": true
+            }
+          }
+        ]
+      }
+    }
+  },
+  "faithfulness": {
+    "score": 0.4,
+    "rationale": "The image successfully generates the requested animals (Bear, Ox, Crane, Swallow, Snake, Eagle) in a pixel-art style with dark outlines. However, it fails on several critical layout and formatting instructions. It does not present them in 'one horizontal sprite sheet', but rather a multi-row grid. The background is a solid purple color rather than transparent, and there are visible grid lines that violate the 'no fake UI' constraint. Furthermore, there is an extra, smaller snake sprite present, breaking the exact count of six pictograms.",
+    "present_elements": [
+      "compact animal pictograms",
+      "Bear",
+      "Ox",
+      "Crane",
+      "Swallow",
+      "Snake",
+      "Eagle",
+      "pixel art",
+      "bold silhouettes",
+      "1-2px dark ink stroke",
+      "no text labels"
+    ],
+    "missing_elements": [
+      "six pictograms (there are seven)",
+      "one horizontal sprite sheet",
+      "transparent background",
+      "Bear Ox Crane Swallow Snake Eagle in that order",
+      "no fake UI (grid lines are present)"
+    ]
+  },
+  "craft": {
+    "palette_adherence": false,
+    "unique_color_count": 24,
+    "silhouette_readable": true,
+    "contrast_score": 0.9058196544647217,
+    "grid_alignment_ok": true
+  },
+  "craft_variants": {
+    "vinik24_256": {
+      "palette_adherence": false,
+      "unique_color_count": 24,
+      "silhouette_readable": true,
+      "contrast_score": 0.9058196544647217,
+      "grid_alignment_ok": true
+    }
+  }
+}

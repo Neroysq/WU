@@ -1,0 +1,107 @@
+{
+  "schema": "wu-art-canon-v1",
+  "created": "2026-07-03",
+  "source_docs": [
+    "docs/ART_DESIGN_DOC.md",
+    "docs/art/STYLE_BIBLE.md",
+    "docs/superpowers/specs/2026-07-03-art-style-bible-design.md",
+    "docs/superpowers/plans/2026-07-03-art-style-canon.md"
+  ],
+  "generator_default": {
+    "proof_python": "/Users/animula/GitReps/AIexp/.venv/bin/python",
+    "pixel_art": "/Users/animula/GitReps/AIexp/.venv/bin/pixel-art run",
+    "pixelforge_sprite": "/Users/animula/GitReps/AIexp/.venv/bin/pixelforge-sprite run",
+    "pixelforge_pixelize": "/Users/animula/GitReps/AIexp/.venv/bin/pixelforge-sprite pixelize"
+  },
+  "sheets": {
+    "school_icons": {
+      "status": "pick_gate",
+      "approved": null,
+      "candidates": [
+        {
+          "file": "art/canon/candidates/icons/aiexp/cand_1.png",
+          "prompt": "six compact animal kung-fu school pictograms in one horizontal sprite sheet, equal-width cells, transparent background, VINIK24 pixel art, 24px legibility, bold silhouettes, 1-2px dark ink stroke, 2px safe padding, Bear Ox Crane Swallow Snake Eagle in that order. no anti-alias blur, no off-palette colors, no painterly gradients, no unreadable micro-detail, no text labels, no fake UI",
+          "backend": "aiexp",
+          "generator": "aiexp pixel-art run --model google/gemini-3.1-flash-image-preview --palettes vinik24 --size 256 --kind sprite --remove-bg",
+          "seed": null,
+          "approved": null,
+          "notes": "Automated reviewer scored faithfulness 0.40: generated a grid, an extra snake, and no usable transparent background."
+        },
+        {
+          "file": "art/canon/candidates/icons/aiexp/cand_2.png",
+          "prompt": "exactly six kung-fu animal school mark pictograms arranged left-to-right in one single horizontal row across the center of the canvas: bear head, ox head, standing crane, swallow in flight, coiled snake, eagle head. No boxes, no grid, no dividers, no extra animals, no labels. Each pictogram is a compact bold silhouette seal mark with 1-2 pixel dark ink outline and 2 pixel padding, readable at 24px, using only VINIK24 colors. Background must be perfectly flat solid #FF00FF chroma key and must not appear inside the icons. Order must be Bear Ox Crane Swallow Snake Eagle.",
+          "backend": "aiexp",
+          "generator": "aiexp pixel-art run --model google/gemini-3.1-flash-image-preview --palettes vinik24 --size 256 --kind sprite --remove-bg",
+          "seed": null,
+          "approved": null,
+          "notes": "Automated reviewer scored faithfulness 0.60: correct six/order and clean chroma, but arranged as two rows instead of one."
+        },
+        {
+          "file": "art/canon/candidates/icons/pixelforge/cand_1.png",
+          "prompt": "six compact animal kung-fu school pictograms in one horizontal sprite sheet, equal-width cells, transparent background, VINIK24 pixel art, 24px legibility, bold silhouettes, 1-2px dark ink stroke, 2px safe padding, Bear Ox Crane Swallow Snake Eagle in that order. no anti-alias blur, no off-palette colors, no painterly gradients, no unreadable micro-detail, no text labels, no fake UI",
+          "backend": "pixelforge",
+          "generator": "tools/art/generate_pixelforge_image.py --model openai/gpt-5.4-image-2 --palette vinik24 --width 384 --height 64 --remove-bg",
+          "seed": null,
+          "approved": null,
+          "notes": "Direct Pixelforge API candidate with exact 384x64 output."
+        },
+        {
+          "file": "art/canon/candidates/icons/pixelforge/cand_2.png",
+          "prompt": "exactly six standalone wuxia school seal pictograms in one unbroken left-to-right row on transparent background: bear, ox, crane, swallow, snake, eagle. Equal spacing, no boxes, no grid, no dividers, no labels, no extra animals. Each mark is a bold readable 24px animal silhouette with dark ink outline and 2-3 VINIK24 colors, consistent stroke weight, strong negative space, designed as game UI icons.",
+          "backend": "pixelforge",
+          "generator": "tools/art/generate_pixelforge_image.py --model google/gemini-3.1-flash-image-preview --palette vinik24 --width 384 --height 64 --remove-bg",
+          "seed": null,
+          "approved": null,
+          "notes": "Direct Pixelforge API Gemini retry after openai/gpt-5.4-image-2 returned an OpenRouter 429 for this second slot."
+        },
+        {
+          "file": "art/canon/candidates/icons/pixelforge/cand_3.png",
+          "prompt": "Create exactly one horizontal transparent sprite sheet, 384x64 pixels, divided conceptually into six equal 64x64 cells but draw no cell borders. Each cell contains one LARGE centered animal-head pictogram, not a person: bear head, ox head with horns, crane head and neck, swallow bird silhouette, coiled snake head/body mark, eagle head. Every animal fills most of its 64x64 cell, about 44-54 pixels tall, with 2-4 pixels safe padding. Bold simple game UI icons, strong readable silhouette, 1-2 pixel dark ink outline, 2-3 VINIK24 colors, no humans, no full-body fighters, no extra animals, no labels, no grid, no dividers.",
+          "backend": "pixelforge",
+          "generator": "tools/art/generate_pixelforge_image.py --model google/gemini-3.1-flash-image-preview --palette vinik24 --width 384 --height 64 --fit-mode cover --remove-bg",
+          "seed": null,
+          "approved": null,
+          "notes": "Best structural candidate in this pass; bear/ox/crane/snake/eagle read at 24px, swallow remains weak."
+        }
+      ],
+      "proof": "art/canon/proofs/icons/review.html",
+      "notes": "First pick gate; replaces WUGodot/assets/icons/schools/*.png only after approval. Palette audit passed for all five candidates with 0 off-palette visible pixels."
+    },
+    "hu_clean": {
+      "status": "pending",
+      "approved": null,
+      "candidates": [],
+      "notes": "Hu reference canon after school icons."
+    },
+    "hu_corruption_strip": {
+      "status": "pending",
+      "approved": null,
+      "candidates": [],
+      "notes": "Clean, touched, marked, claimed overlay reference."
+    },
+    "xiong_tie": {
+      "status": "pending",
+      "approved": null,
+      "candidates": [],
+      "notes": "Boss profile proof uses enemy_humanoid_boss."
+    },
+    "dropout_blade": {
+      "status": "pending",
+      "approved": null,
+      "candidates": [],
+      "notes": "Basic mook reference; touched-ness remains runtime overlay."
+    },
+    "school_stances": {
+      "status": "pending",
+      "approved": null,
+      "candidates": [],
+      "notes": "Silhouette-law source sheet for the six schools."
+    },
+    "mountain_scene_strip": {
+      "status": "pending",
+      "approved": null,
+      "candidates": [],
+      "notes": "Four altitude bands of the same mountain composition."
+    }
+  }
+}

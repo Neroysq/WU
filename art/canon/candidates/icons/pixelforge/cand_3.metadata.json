@@ -1,0 +1,263 @@
+{
+  "backend": "openrouter",
+  "converter_metadata": {
+    "algorithm": "exact-fit+nearest+deaa",
+    "aspect_ratio": 6.0,
+    "fit": {
+      "content_bbox": [
+        0,
+        0,
+        1376,
+        768
+      ],
+      "final_size": [
+        384,
+        64
+      ],
+      "fit_mode": "cover",
+      "pad_box": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "raw_size": [
+        1376,
+        768
+      ],
+      "scale_applied": [
+        0.27906976744186046,
+        0.27906976744186046
+      ],
+      "visible_bbox": [
+        0,
+        0,
+        384,
+        61
+      ]
+    },
+    "height": 64,
+    "palette_used": [
+      [
+        15,
+        15,
+        27
+      ],
+      [
+        86,
+        90,
+        117
+      ],
+      [
+        198,
+        183,
+        190
+      ],
+      [
+        250,
+        246,
+        246
+      ],
+      [
+        244,
+        158,
+        76
+      ],
+      [
+        171,
+        82,
+        54
+      ],
+      [
+        191,
+        38,
+        82
+      ],
+      [
+        116,
+        35,
+        60
+      ],
+      [
+        59,
+        23,
+        37
+      ],
+      [
+        115,
+        23,
+        45
+      ],
+      [
+        180,
+        32,
+        42
+      ],
+      [
+        223,
+        113,
+        38
+      ],
+      [
+        238,
+        156,
+        36
+      ],
+      [
+        248,
+        200,
+        60
+      ],
+      [
+        78,
+        131,
+        57
+      ],
+      [
+        44,
+        74,
+        46
+      ],
+      [
+        32,
+        57,
+        79
+      ],
+      [
+        37,
+        86,
+        116
+      ],
+      [
+        87,
+        115,
+        153
+      ],
+      [
+        150,
+        178,
+        197
+      ],
+      [
+        161,
+        210,
+        224
+      ],
+      [
+        107,
+        62,
+        117
+      ],
+      [
+        144,
+        94,
+        169
+      ],
+      [
+        168,
+        132,
+        243
+      ]
+    ],
+    "size": 64,
+    "unique_colors": 21,
+    "width": 384
+  },
+  "fit_metadata": {
+    "content_bbox": [
+      0,
+      0,
+      1376,
+      768
+    ],
+    "final_size": [
+      384,
+      64
+    ],
+    "fit_mode": "cover",
+    "pad_box": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "raw_size": [
+      1376,
+      768
+    ],
+    "scale_applied": [
+      0.27906976744186046,
+      0.27906976744186046
+    ],
+    "visible_bbox": [
+      0,
+      0,
+      384,
+      61
+    ]
+  },
+  "generator_metadata": {
+    "cost_usd": 0.0673675,
+    "latency_ms": 15661,
+    "model": "google/gemini-3.1-flash-image-preview-20260226",
+    "raw_request": {
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "Render a wide horizontal subject that fills the frame left-to-right with thin margins top and bottom. Style: bold flat 2D character sprite designed to remain readable at very low resolutions (32-64 pixels). Use large areas of solid color with clear boundaries - no gradients, no photorealistic shading, no fine textures. Strong recognizable silhouette against a solid cyan #00FFFF background. The background must be one uniform color fill - no gradient, no shading, no shadow cast on the background, no texture. Only the background pixels use this color; the subject should not contain this color. Thick dark outlines defining the form. Limited distinctive color palette. Center the full-body subject, front-facing or 3/4 view, filling most of the frame. Square aspect ratio. No text, no logos, no watermarks.\n\nSubject: Create exactly one horizontal transparent sprite sheet, 384x64 pixels, divided conceptually into six equal 64x64 cells but draw no cell borders. Each cell contains one LARGE centered animal-head pictogram, not a person: bear head, ox head with horns, crane head and neck, swallow bird silhouette, coiled snake head/body mark, eagle head. Every animal fills most of its 64x64 cell, about 44-54 pixels tall, with 2-4 pixels safe padding. Bold simple game UI icons, strong readable silhouette, 1-2 pixel dark ink outline, 2-3 VINIK24 colors, no humans, no full-body fighters, no extra animals, no labels, no grid, no dividers.\n",
+              "type": "text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-3.1-flash-image-preview"
+    },
+    "request_id": "gen-1783059617-0RN2LwFyvBZMRIYDRDWh",
+    "usage": {
+      "completion_tokens": 1120,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 1120,
+        "reasoning_tokens": 0
+      },
+      "cost": 0.0673675,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0.0672,
+        "upstream_inference_cost": 0.0673675,
+        "upstream_inference_prompt_cost": 0.0001675
+      },
+      "is_byok": false,
+      "prompt_tokens": 335,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 1455
+    }
+  },
+  "removal_applied": true,
+  "removal_metadata": {
+    "chroma_hex": "#00FFFF",
+    "chroma_ratio": 0.1761749031007752,
+    "flood_fill_ratio": 0.0,
+    "strategy": "chroma-key",
+    "style_preset": "sprite-v1-chroma"
+  },
+  "request": {
+    "chroma_hex": null,
+    "fit_mode": "cover",
+    "height": 64,
+    "model": "google/gemini-3.1-flash-image-preview",
+    "palette": "vinik24",
+    "prompt": "Create exactly one horizontal transparent sprite sheet, 384x64 pixels, divided conceptually into six equal 64x64 cells but draw no cell borders. Each cell contains one LARGE centered animal-head pictogram, not a person: bear head, ox head with horns, crane head and neck, swallow bird silhouette, coiled snake head/body mark, eagle head. Every animal fills most of its 64x64 cell, about 44-54 pixels tall, with 2-4 pixels safe padding. Bold simple game UI icons, strong readable silhouette, 1-2 pixel dark ink outline, 2-3 VINIK24 colors, no humans, no full-body fighters, no extra animals, no labels, no grid, no dividers.",
+    "remove_bg": true,
+    "size": 256,
+    "style_preset": "sprite-v1",
+    "width": 384
+  },
+  "transparent_fraction": 0.5773518880208334
+}

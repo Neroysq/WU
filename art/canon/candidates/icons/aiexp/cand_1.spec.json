@@ -1,0 +1,24 @@
+{
+  "prompt_id": "six-compact-animal-kung-fu-school-pictog",
+  "prompt_text": "six compact animal kung-fu school pictograms in one horizontal sprite sheet, equal-width cells, transparent background, VINIK24 pixel art, 24px legibility, bold silhouettes, 1-2px dark ink stroke, 2px safe padding, Bear Ox Crane Swallow Snake Eagle in that order. no anti-alias blur, no off-palette colors, no painterly gradients, no unreadable micro-detail, no text labels, no fake UI",
+  "generator_model": "google/gemini-3.1-flash-image-preview",
+  "generator_params": {
+    "style_preset": "sprite-v1-chroma"
+  },
+  "converter_name": "palette-quantize-v2",
+  "converter_params": {
+    "palettes": [
+      "vinik24"
+    ],
+    "sizes": [
+      256
+    ],
+    "primary_palette": "vinik24",
+    "primary_size": 256,
+    "preserve_alpha": true,
+    "alpha_bleed_strategy": "edge-pad",
+    "alpha_erode_px": 1
+  },
+  "reviewer_model": "google/gemini-3.1-pro-preview",
+  "remove_bg_chroma_hex": "#FF00FF"
+}

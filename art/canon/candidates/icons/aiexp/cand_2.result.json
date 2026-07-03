@@ -1,0 +1,444 @@
+{
+  "spec": {
+    "prompt_id": "exactly-six-kung-fu-animal-school-mark-p",
+    "prompt_text": "exactly six kung-fu animal school mark pictograms arranged left-to-right in one single horizontal row across the center of the canvas: bear head, ox head, standing crane, swallow in flight, coiled snake, eagle head. No boxes, no grid, no dividers, no extra animals, no labels. Each pictogram is a compact bold silhouette seal mark with 1-2 pixel dark ink outline and 2 pixel padding, readable at 24px, using only VINIK24 colors. Background must be perfectly flat solid #FF00FF chroma key and must not appear inside the icons. Order must be Bear Ox Crane Swallow Snake Eagle.",
+    "generator_model": "google/gemini-3.1-flash-image-preview",
+    "generator_params": {
+      "style_preset": "sprite-v1-chroma"
+    },
+    "converter_name": "palette-quantize-v2",
+    "converter_params": {
+      "palettes": [
+        "vinik24"
+      ],
+      "sizes": [
+        256
+      ],
+      "primary_palette": "vinik24",
+      "primary_size": 256,
+      "preserve_alpha": true,
+      "alpha_bleed_strategy": "edge-pad",
+      "alpha_erode_px": 1
+    },
+    "reviewer_model": "google/gemini-3.1-pro-preview",
+    "remove_bg_chroma_hex": "#FF00FF"
+  },
+  "run_dir": "/Users/animula/GitReps/AIexp/experiments/pixel-art-from-image-gen/src/pixel_art_exp/runs/2026-07-03T13-57-26__exactly-six-kung-fu-animal-school-mark-p__vinik24__9974953e",
+  "artifacts": {
+    "generate": {
+      "stage": "generate",
+      "inputs_hash": "7060b53de6169387de224b0f870e05813a69b7565348c5af519b349412e98652",
+      "created_at": "2026-07-03T13:57:39",
+      "files": {
+        "source_image": "source.png"
+      },
+      "metadata": {
+        "request_id": "gen-1783058247-mXMH0sFWnrrAHnkaZ93l",
+        "model": "google/gemini-3.1-flash-image-preview-20260226",
+        "latency_ms": 12077,
+        "usage": {
+          "prompt_tokens": 287,
+          "completion_tokens": 1120,
+          "total_tokens": 1407,
+          "cost": 0.0673435,
+          "is_byok": false,
+          "prompt_tokens_details": {
+            "cached_tokens": 0,
+            "cache_write_tokens": 0,
+            "audio_tokens": 0,
+            "video_tokens": 0
+          },
+          "cost_details": {
+            "upstream_inference_cost": 0.0673435,
+            "upstream_inference_prompt_cost": 0.0001435,
+            "upstream_inference_completions_cost": 0.0672
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 0,
+            "image_tokens": 1120,
+            "audio_tokens": 0
+          }
+        },
+        "cost_usd": 0.0673435,
+        "raw_request": {
+          "model": "google/gemini-3.1-flash-image-preview",
+          "messages": [
+            {
+              "role": "user",
+              "content": [
+                {
+                  "type": "text",
+                  "text": "Style: bold flat 2D character sprite designed to remain readable at very low resolutions (32-64 pixels). Use large areas of solid color with clear boundaries - no gradients, no photorealistic shading, no fine textures. Strong recognizable silhouette against a solid magenta #FF00FF background. The background must be one uniform color fill - no gradient, no shading, no shadow cast on the background, no texture. Only the background pixels use this color; the subject should not contain this color. Thick dark outlines defining the form. Limited distinctive color palette. Center the full-body subject, front-facing or 3/4 view, filling most of the frame. Square aspect ratio. No text, no logos, no watermarks.\n\nSubject: exactly six kung-fu animal school mark pictograms arranged left-to-right in one single horizontal row across the center of the canvas: bear head, ox head, standing crane, swallow in flight, coiled snake, eagle head. No boxes, no grid, no dividers, no extra animals, no labels. Each pictogram is a compact bold silhouette seal mark with 1-2 pixel dark ink outline and 2 pixel padding, readable at 24px, using only VINIK24 colors. Background must be perfectly flat solid #FF00FF chroma key and must not appear inside the icons. Order must be Bear Ox Crane Swallow Snake Eagle.\n"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "remove-bg": {
+      "stage": "remove-bg",
+      "inputs_hash": "62a95d4eab98aedd80065d8498289540741c89cc401f7ce2707d93902a207dbd",
+      "created_at": "2026-07-03T13:57:39",
+      "files": {
+        "transparent_image": "source_transparent.png",
+        "metadata": "metadata.json"
+      },
+      "metadata": {
+        "strategy": "chroma-key",
+        "chroma_hex": "#FF00FF",
+        "chroma_ratio": 0.7853279113769531,
+        "flood_fill_ratio": 0.0,
+        "chroma_tolerance": 80,
+        "chroma_ratio_threshold": 0.03
+      }
+    },
+    "convert": {
+      "stage": "convert",
+      "inputs_hash": "2b940500a2adc75eee2bb0054eb7e0322478edaff7ec79425540901ba752ba67",
+      "created_at": "2026-07-03T13:57:39",
+      "files": {
+        "pixel_image": "pixel.png",
+        "pixel_display": "pixel_display.png",
+        "pixel_vinik24_256": "pixel_vinik24_256.png"
+      },
+      "metadata": {
+        "algorithm": "nearest+nearest+deaa",
+        "primary_palette": "vinik24",
+        "primary_size": 256,
+        "palettes_rendered": [
+          "vinik24"
+        ],
+        "sizes_rendered": [
+          256
+        ],
+        "variants": [
+          {
+            "palette": "vinik24",
+            "size": 256,
+            "file": "pixel_vinik24_256.png",
+            "width": 256,
+            "height": 256,
+            "palette_used": [
+              [
+                15,
+                15,
+                27
+              ],
+              [
+                86,
+                90,
+                117
+              ],
+              [
+                198,
+                183,
+                190
+              ],
+              [
+                250,
+                246,
+                246
+              ],
+              [
+                244,
+                158,
+                76
+              ],
+              [
+                171,
+                82,
+                54
+              ],
+              [
+                191,
+                38,
+                82
+              ],
+              [
+                116,
+                35,
+                60
+              ],
+              [
+                59,
+                23,
+                37
+              ],
+              [
+                115,
+                23,
+                45
+              ],
+              [
+                180,
+                32,
+                42
+              ],
+              [
+                223,
+                113,
+                38
+              ],
+              [
+                238,
+                156,
+                36
+              ],
+              [
+                248,
+                200,
+                60
+              ],
+              [
+                78,
+                131,
+                57
+              ],
+              [
+                44,
+                74,
+                46
+              ],
+              [
+                32,
+                57,
+                79
+              ],
+              [
+                37,
+                86,
+                116
+              ],
+              [
+                87,
+                115,
+                153
+              ],
+              [
+                150,
+                178,
+                197
+              ],
+              [
+                161,
+                210,
+                224
+              ],
+              [
+                107,
+                62,
+                117
+              ],
+              [
+                144,
+                94,
+                169
+              ],
+              [
+                168,
+                132,
+                243
+              ]
+            ],
+            "unique_colors": 18,
+            "aspect_ratio": 1.0
+          }
+        ],
+        "size": 256,
+        "width": 256,
+        "height": 256,
+        "palette_used": [
+          [
+            15,
+            15,
+            27
+          ],
+          [
+            86,
+            90,
+            117
+          ],
+          [
+            198,
+            183,
+            190
+          ],
+          [
+            250,
+            246,
+            246
+          ],
+          [
+            244,
+            158,
+            76
+          ],
+          [
+            171,
+            82,
+            54
+          ],
+          [
+            191,
+            38,
+            82
+          ],
+          [
+            116,
+            35,
+            60
+          ],
+          [
+            59,
+            23,
+            37
+          ],
+          [
+            115,
+            23,
+            45
+          ],
+          [
+            180,
+            32,
+            42
+          ],
+          [
+            223,
+            113,
+            38
+          ],
+          [
+            238,
+            156,
+            36
+          ],
+          [
+            248,
+            200,
+            60
+          ],
+          [
+            78,
+            131,
+            57
+          ],
+          [
+            44,
+            74,
+            46
+          ],
+          [
+            32,
+            57,
+            79
+          ],
+          [
+            37,
+            86,
+            116
+          ],
+          [
+            87,
+            115,
+            153
+          ],
+          [
+            150,
+            178,
+            197
+          ],
+          [
+            161,
+            210,
+            224
+          ],
+          [
+            107,
+            62,
+            117
+          ],
+          [
+            144,
+            94,
+            169
+          ],
+          [
+            168,
+            132,
+            243
+          ]
+        ],
+        "unique_colors": 18,
+        "aspect_ratio": 1.0
+      }
+    },
+    "review-faithfulness": {
+      "stage": "review-faithfulness",
+      "inputs_hash": "c59f754e28771d068675de0c9338cf1abbb55d82148b0029f587fe974adb8be8",
+      "created_at": "2026-07-03T13:57:46",
+      "files": {
+        "score": "score.json"
+      },
+      "metadata": {}
+    },
+    "review-craft": {
+      "stage": "review-craft",
+      "inputs_hash": "dc31aa036b2bb903ccf562b524e5abdc33b23e2728fdbd457a89fea118780c38",
+      "created_at": "2026-07-03T13:57:46",
+      "files": {
+        "score": "score.json"
+      },
+      "metadata": {
+        "variants": [
+          {
+            "palette": "vinik24",
+            "size": 256,
+            "score": {
+              "palette_adherence": false,
+              "unique_color_count": 19,
+              "silhouette_readable": false,
+              "contrast_score": 0.9058196544647217,
+              "grid_alignment_ok": true
+            }
+          }
+        ]
+      }
+    }
+  },
+  "faithfulness": {
+    "score": 0.6,
+    "rationale": "The image successfully features all six requested animal pictograms in the correct order, with the proper solid magenta background and without any extra noise or dividers. However, it completely fails the specific layout constraint to arrange them 'left-to-right in one single horizontal row across the center of the canvas', placing them in two rows of three instead.",
+    "present_elements": [
+      "six kung-fu animal school mark pictograms",
+      "bear head",
+      "ox head",
+      "standing crane",
+      "swallow in flight",
+      "coiled snake",
+      "eagle head",
+      "no boxes, grids, dividers or labels",
+      "flat solid #FF00FF chroma key background"
+    ],
+    "missing_elements": [
+      "arranged left-to-right in one single horizontal row across the center of the canvas"
+    ]
+  },
+  "craft": {
+    "palette_adherence": false,
+    "unique_color_count": 19,
+    "silhouette_readable": false,
+    "contrast_score": 0.9058196544647217,
+    "grid_alignment_ok": true
+  },
+  "craft_variants": {
+    "vinik24_256": {
+      "palette_adherence": false,
+      "unique_color_count": 19,
+      "silhouette_readable": false,
+      "contrast_score": 0.9058196544647217,
+      "grid_alignment_ok": true
+    }
+  }
+}

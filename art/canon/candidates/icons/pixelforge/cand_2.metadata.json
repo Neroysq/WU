@@ -1,0 +1,263 @@
+{
+  "backend": "openrouter",
+  "converter_metadata": {
+    "algorithm": "exact-fit+nearest+deaa",
+    "aspect_ratio": 6.0,
+    "fit": {
+      "content_bbox": [
+        56,
+        216,
+        902,
+        576
+      ],
+      "final_size": [
+        384,
+        64
+      ],
+      "fit_mode": "pad",
+      "pad_box": [
+        142,
+        0,
+        142,
+        0
+      ],
+      "raw_size": [
+        1024,
+        1024
+      ],
+      "scale_applied": [
+        0.1111111111111111,
+        0.1111111111111111
+      ],
+      "visible_bbox": [
+        142,
+        0,
+        100,
+        64
+      ]
+    },
+    "height": 64,
+    "palette_used": [
+      [
+        15,
+        15,
+        27
+      ],
+      [
+        86,
+        90,
+        117
+      ],
+      [
+        198,
+        183,
+        190
+      ],
+      [
+        250,
+        246,
+        246
+      ],
+      [
+        244,
+        158,
+        76
+      ],
+      [
+        171,
+        82,
+        54
+      ],
+      [
+        191,
+        38,
+        82
+      ],
+      [
+        116,
+        35,
+        60
+      ],
+      [
+        59,
+        23,
+        37
+      ],
+      [
+        115,
+        23,
+        45
+      ],
+      [
+        180,
+        32,
+        42
+      ],
+      [
+        223,
+        113,
+        38
+      ],
+      [
+        238,
+        156,
+        36
+      ],
+      [
+        248,
+        200,
+        60
+      ],
+      [
+        78,
+        131,
+        57
+      ],
+      [
+        44,
+        74,
+        46
+      ],
+      [
+        32,
+        57,
+        79
+      ],
+      [
+        37,
+        86,
+        116
+      ],
+      [
+        87,
+        115,
+        153
+      ],
+      [
+        150,
+        178,
+        197
+      ],
+      [
+        161,
+        210,
+        224
+      ],
+      [
+        107,
+        62,
+        117
+      ],
+      [
+        144,
+        94,
+        169
+      ],
+      [
+        168,
+        132,
+        243
+      ]
+    ],
+    "size": 64,
+    "unique_colors": 19,
+    "width": 384
+  },
+  "fit_metadata": {
+    "content_bbox": [
+      56,
+      216,
+      902,
+      576
+    ],
+    "final_size": [
+      384,
+      64
+    ],
+    "fit_mode": "pad",
+    "pad_box": [
+      142,
+      0,
+      142,
+      0
+    ],
+    "raw_size": [
+      1024,
+      1024
+    ],
+    "scale_applied": [
+      0.1111111111111111,
+      0.1111111111111111
+    ],
+    "visible_bbox": [
+      142,
+      0,
+      100,
+      64
+    ]
+  },
+  "generator_metadata": {
+    "cost_usd": 0.0675655,
+    "latency_ms": 11575,
+    "model": "google/gemini-3.1-flash-image-preview-20260226",
+    "raw_request": {
+      "messages": [
+        {
+          "content": [
+            {
+              "text": "Render a wide horizontal subject that fills the frame left-to-right with thin margins top and bottom. Style: bold flat 2D character sprite designed to remain readable at very low resolutions (32-64 pixels). Use large areas of solid color with clear boundaries - no gradients, no photorealistic shading, no fine textures. Strong recognizable silhouette against a solid cyan #00FFFF background. The background must be one uniform color fill - no gradient, no shading, no shadow cast on the background, no texture. Only the background pixels use this color; the subject should not contain this color. Thick dark outlines defining the form. Limited distinctive color palette. Center the full-body subject, front-facing or 3/4 view, filling most of the frame. Square aspect ratio. No text, no logos, no watermarks.\n\nSubject: exactly six standalone wuxia school seal pictograms in one unbroken left-to-right row on transparent background: bear, ox, crane, swallow, snake, eagle. Equal spacing, no boxes, no grid, no dividers, no labels, no extra animals. Each mark is a bold readable 24px animal silhouette with dark ink outline and 2-3 VINIK24 colors, consistent stroke weight, strong negative space, designed as game UI icons.\n",
+              "type": "text"
+            }
+          ],
+          "role": "user"
+        }
+      ],
+      "model": "google/gemini-3.1-flash-image-preview"
+    },
+    "request_id": "gen-1783059178-bb3HvNFdTTaXOqCFWX6G",
+    "usage": {
+      "completion_tokens": 1197,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 1120,
+        "reasoning_tokens": 0
+      },
+      "cost": 0.0675655,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0.067431,
+        "upstream_inference_cost": 0.0675655,
+        "upstream_inference_prompt_cost": 0.0001345
+      },
+      "is_byok": false,
+      "prompt_tokens": 269,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 1466
+    }
+  },
+  "removal_applied": true,
+  "removal_metadata": {
+    "chroma_hex": "#00FFFF",
+    "chroma_ratio": 0.8043956756591797,
+    "flood_fill_ratio": 0.0,
+    "strategy": "chroma-key",
+    "style_preset": "sprite-v1-chroma"
+  },
+  "request": {
+    "chroma_hex": null,
+    "fit_mode": "pad",
+    "height": 64,
+    "model": "google/gemini-3.1-flash-image-preview",
+    "palette": "vinik24",
+    "prompt": "exactly six standalone wuxia school seal pictograms in one unbroken left-to-right row on transparent background: bear, ox, crane, swallow, snake, eagle. Equal spacing, no boxes, no grid, no dividers, no labels, no extra animals. Each mark is a bold readable 24px animal silhouette with dark ink outline and 2-3 VINIK24 colors, consistent stroke weight, strong negative space, designed as game UI icons.",
+    "remove_bg": true,
+    "size": 256,
+    "style_preset": "sprite-v1",
+    "width": 384
+  },
+  "transparent_fraction": 0.8971761067708334
+}
