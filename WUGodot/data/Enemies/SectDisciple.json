@@ -1,7 +1,7 @@
 {
   "archetype": "sect_disciple",
-  "name": "Sect Disciple",
-  "name_cn": "門徒",
+  "name": "Outer-Gate Disciple",
+  "name_cn": "外門弟子",
   "difficulty": "hard",
   "visualProfile": "enemy_humanoid_elite",
   "moveSpeed": 380.0,

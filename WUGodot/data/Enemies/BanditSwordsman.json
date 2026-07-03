@@ -1,7 +1,7 @@
 {
   "archetype": "bandit_swordsman",
-  "name": "Bandit Swordsman",
-  "name_cn": "\u532a\u528d",
+  "name": "Dropout Blade",
+  "name_cn": "棄徒刀",
   "difficulty": "easy",
   "visualProfile": "enemy_humanoid_basic",
   "moveSpeed": 200.0,

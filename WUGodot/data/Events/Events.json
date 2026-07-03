@@ -2,90 +2,90 @@
   "events": [
     {
       "id": "roadside_villager",
-      "title": "Roadside Villager",
-      "title_cn": "路邊村民",
-      "text": "A villager waves you down from the roadside. \"Please, traveler. Bandits took my cart just ahead. Help me, and I'll share what they stole.\"",
+      "title": "Villager at the First Step",
+      "title_cn": "初路村民",
+      "text": "A villager waves from the first bend of the pilgrim road. \"The higher you climb, the friendlier the smiles. Don't trust the teeth.\"",
       "choices": [
-        {"label": "Help the villager", "outcome": "help"},
+        {"label": "Drive off the grinning bandits", "outcome": "help"},
         {"label": "Ignore and continue", "outcome": "ignore"}
       ],
       "outcomes": {
-        "help": {"gold": 30, "hp": -10, "message": "You drive off the bandits but take a few cuts. The villager shares 30 gold."},
-        "ignore": {"message": "You keep walking. The villager's voice fades behind you."}
+        "help": {"gold": 30, "hp": -10, "message": "The villager laughs too loudly when the bandits run. Your cuts sting; your purse is 30 gold heavier."},
+        "ignore": {"message": "You keep climbing. Behind you, the villager's warning turns into a song about teeth."}
       }
     },
     {
       "id": "travelling_merchant",
-      "title": "Travelling Merchant",
-      "title_cn": "行商",
-      "text": "A merchant with a heavy pack nods at you. \"I carry rare goods from distant schools. Care to trade?\"",
+      "title": "Pilgrim-Road Merchant",
+      "title_cn": "朝山行商",
+      "text": "A merchant sells Nine-Immortal charms from a lacquered pack. Hu is delighted; the merchant says he never climbs past the second shrine, \"as policy.\"",
       "choices": [
-        {"label": "Trade", "outcome": "trade"},
+        {"label": "Browse the mountain wares", "outcome": "trade"},
         {"label": "Leave", "outcome": "leave"}
       ],
       "outcomes": {
-        "trade": {"open_shop": true, "shop_rarity_boost": true, "message": "The merchant spreads out wares of unusual quality."},
-        "leave": {"message": "You nod politely and move on."}
+        "trade": {"open_shop": true, "shop_rarity_boost": true, "message": "The merchant spreads charms, manuals, and a smile that refuses to look uphill."},
+        "leave": {"message": "You leave the souvenirs behind. The merchant wishes you luck and shuts his pack before the mist notices."}
       }
     },
     {
       "id": "shrine_offering",
-      "title": "Shrine Offering",
-      "title_cn": "祠堂供品",
-      "text": "A weathered roadside shrine still burns with incense. The air hums with martial intent.",
+      "title": "The Hungry Shrine",
+      "title_cn": "飢祠",
+      "text": "An old shrine leans into the path. Its incense is cold, but something inside it asks for more than coin. Giving something up feels strangely light.",
       "choices": [
-        {"label": "Offer gold (30g)", "outcome": "gold"},
-        {"label": "Offer blood (10 HP)", "outcome": "blood"},
+        {"label": "Feed it gold (30g)", "outcome": "gold"},
+        {"label": "Feed it blood (10 HP)", "outcome": "blood"},
         {"label": "Leave", "outcome": "leave"}
       ],
       "outcomes": {
-        "gold": {"gold": -30, "grant_technique": "random", "message": "The shrine glows. A technique crystallizes in your mind."},
-        "blood": {"hp": -10, "grant_technique": "random", "message": "Blood stains the stone. Knowledge floods your thoughts."},
-        "leave": {"message": "You bow and continue on your way."}
+        "gold": {"gold": -30, "grant_technique": "random", "message": "The shrine swallows the coins without sound. A technique settles in your mind like borrowed weight."},
+        "blood": {"hp": -10, "grant_technique": "random", "message": "Blood darkens the stone. The lesson arrives clean and cold, and you feel lighter than you should."},
+        "leave": {"message": "You bow and keep your offerings. The shrine watches your back until the path turns."}
       }
     },
     {
       "id": "drunken_master",
-      "title": "Drunken Master",
-      "title_cn": "醉師",
-      "text": "An old man sits on a rock, sipping from a gourd. \"Think you're fast? Press J three times in rhythm. Get it right and I'll teach you something.\"",
+      "title": "The Drunk Below the Gate",
+      "title_cn": "門下醉客",
+      "text": "A shabby drunk sits below the gate, smelling of wine and bamboo. He refuses to teach and laughs at the Nine: \"I'm the only master on this mountain who never asks for tuition.\"",
       "choices": [
-        {"label": "Accept the test", "outcome": "test"},
+        {"label": "Humor his rhythm test", "outcome": "test"},
         {"label": "Decline", "outcome": "decline"}
       ],
       "outcomes": {
         "test": {
           "timing_test": true,
-          "pass": {"grant_technique": "random_B", "message": "The old man grins. \"Not bad.\" He shares a secret technique."},
-          "fail": {"hp": -15, "message": "The old man cracks your forehead with his gourd. \"Too slow!\""}
+          "pass": {"grant_technique": "random_B", "message": "The drunk grins through his beard. \"Not bad.\" He gives you one lesson and denies he taught it."},
+          "fail": {"hp": -15, "message": "The gourd cracks your forehead. \"Too stiff,\" he says, and drinks to your improvement."}
         },
-        "decline": {"message": "The old man shrugs and takes another sip."}
+        "decline": {"message": "The drunk shrugs, takes another sip, and waves like he has seen how you die."}
       }
     },
     {
       "id": "bandit_camp",
-      "title": "Bandit Camp",
-      "title_cn": "匪營",
-      "text": "Smoke rises from behind the trees. A bandit camp lies ahead, poorly guarded but full of stolen supplies.",
+      "title": "Dropout Camp",
+      "title_cn": "棄徒營",
+      "text": "Smoke rises behind the trees. The camp is full of failed outer-gate disciples practicing bad copies of immortal forms.",
       "choices": [
         {"label": "Sneak past", "outcome": "sneak"},
-        {"label": "Infiltrate", "outcome": "infiltrate"}
+        {"label": "Break their borrowed forms", "outcome": "infiltrate"}
       ],
       "outcomes": {
-        "sneak": {"message": "You slip past without a sound."},
-        "infiltrate": {"trigger_combat": true, "combat_gold_multiplier": 2, "message": "You charge in. The bandits scramble for weapons."}
+        "sneak": {"message": "You slip past while a dropout argues that his Ox stance is supposed to lean that far."},
+        "infiltrate": {"trigger_combat": true, "combat_gold_multiplier": 2, "message": "You step into the clearing. Their borrowed forms collapse into panic before the first blade is drawn."}
       }
     },
     {
       "id": "abandoned_scroll",
-      "title": "Abandoned Scroll",
-      "title_cn": "遺卷",
-      "text": "A scroll lies half-buried in the dirt, its seal broken. The calligraphy describes a martial technique.",
+      "title": "A Founder-Era Scroll",
+      "title_cn": "祖師遺卷",
+      "text": "A scroll lies half-buried in the dirt, older than any school on the mountain. Reading the calligraphy too long makes your eyes ache.",
       "choices": [
-        {"label": "Read the scroll", "outcome": "read"}
+        {"label": "Read until the ink moves", "outcome": "read"}
       ],
       "outcomes": {
-        "read": {"grant_technique": "random_A", "message": "You study the scroll's teachings. A new technique takes root."}
+        "read": {"grant_technique": "random_A", "message": "The founder-era strokes teach your hands before your mind agrees. Something behind the letters stays shut."}
       }
     }
   ]

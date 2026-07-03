@@ -1,7 +1,7 @@
 {
   "archetype": "wandering_ronin",
-  "name": "Wandering Ronin",
-  "name_cn": "浪人",
+  "name": "Lone Walker",
+  "name_cn": "獨行客",
   "difficulty": "medium",
   "visualProfile": "enemy_humanoid_ronin",
   "moveSpeed": 300.0,

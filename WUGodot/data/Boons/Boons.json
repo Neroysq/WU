@@ -73,7 +73,7 @@
     },
     {
       "id": "venom_mastery",
-      "name": "Thousand-Venom Heart",
+      "name": "Snake Mastery",
       "school": "venom",
       "kind": "mastery",
       "requires": {"counts": {"venom": 3}},
@@ -153,7 +153,7 @@
     },
     {
       "id": "thunder_mastery",
-      "name": "Heaven's Thunder",
+      "name": "Ox Mastery",
       "school": "thunder",
       "kind": "mastery",
       "requires": {"counts": {"thunder": 3}},
@@ -162,7 +162,7 @@
 
     {
       "id": "soft_iron_palm",
-      "name": "Iron Palm",
+      "name": "Crane's Beak",
       "school": "soft",
       "kind": "move",
       "slot": "light",
@@ -190,13 +190,13 @@
     },
     {
       "id": "soft_drunken_form",
-      "name": "Drunken Form",
+      "name": "Yielding Crane",
       "school": "soft",
       "kind": "move",
       "slot": "stance",
       "sourceTechnique": "D1",
       "tiers": {
-        "common": {"effect": {"type": "stance_drunken", "display_name": "醉拳 DRUNKEN FORM", "dash_duration": 0.30, "dash_iframe_end": 0.26, "break_damage": 20.0}},
+        "common": {"effect": {"type": "stance_drunken", "display_name": "柔鶴 YIELDING CRANE", "dash_duration": 0.30, "dash_iframe_end": 0.26, "break_damage": 20.0}},
         "rare": {"riders": [{"type": "deflect_reduce", "multiplier": 0.85}]},
         "epic": {"riders": [{"type": "deflect", "damage": 5.0}]},
         "legendary": {"riders": [{"type": "deflect_redirect", "reflect": 0.3}]}
@@ -238,7 +238,7 @@
     },
     {
       "id": "soft_mastery",
-      "name": "Soft Palm Mastery",
+      "name": "Crane Mastery",
       "school": "soft",
       "kind": "mastery",
       "requires": {"counts": {"soft": 3}},
@@ -261,13 +261,13 @@
     },
     {
       "id": "iron_tiger_stance",
-      "name": "Tiger Stance",
+      "name": "Bear Stance",
       "school": "iron",
       "kind": "move",
       "slot": "stance",
       "sourceTechnique": "D2",
       "tiers": {
-        "common": {"effect": {"type": "stance_tiger", "display_name": "虎形 TIGER STANCE", "duration": 15.0, "reflect": 0.10}},
+        "common": {"effect": {"type": "stance_tiger", "display_name": "熊形 BEAR STANCE", "duration": 15.0, "reflect": 0.10}},
         "rare": {"riders": [{"type": "block_chip", "multiplier": 0.8}]},
         "epic": {"riders": [{"type": "stat_delta", "flat": {"health_max": 8.0, "health_current": 8.0}}]},
         "legendary": {"riders": [{"type": "low_hp_boost", "hp_threshold": 0.35, "multiplier": 1.2}]}
@@ -361,7 +361,7 @@
     },
     {
       "id": "iron_mastery",
-      "name": "Iron Body Mastery",
+      "name": "Bear Mastery",
       "school": "iron",
       "kind": "mastery",
       "requires": {"counts": {"iron": 3}},
@@ -384,7 +384,7 @@
     },
     {
       "id": "wind_sparrow_wing",
-      "name": "Sparrow Wing",
+      "name": "Swallow Wing",
       "school": "wind",
       "kind": "move",
       "slot": "dash",
@@ -438,7 +438,7 @@
     },
     {
       "id": "wind_crane_step",
-      "name": "Crane Step",
+      "name": "Swallow Skim",
       "school": "wind",
       "kind": "passive",
       "sourceTechnique": "A7",
@@ -485,7 +485,7 @@
     },
     {
       "id": "wind_mastery",
-      "name": "Windstep Mastery",
+      "name": "Swallow Mastery",
       "school": "wind",
       "kind": "mastery",
       "requires": {"counts": {"wind": 3}},
@@ -580,7 +580,7 @@
     },
     {
       "id": "sword_mastery",
-      "name": "Sword Intent Mastery",
+      "name": "Eagle Mastery",
       "school": "sword",
       "kind": "mastery",
       "requires": {"counts": {"sword": 3}},

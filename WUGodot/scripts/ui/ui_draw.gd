@@ -5,11 +5,19 @@ const TextWrappingScript = preload("res://scripts/util/text_wrapping.gd")
 const BODY_FONT_PATH: String = "res://assets/fonts/NotoSansSC-Regular.otf"
 
 static var _fallback_body_font: Font = null
+static var _school_icon_cache: Dictionary = {}
 
-static func background(canvas: CanvasItem) -> void:
+static func background(canvas: CanvasItem, band: String = "foothill") -> void:
 	canvas.draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), GameConstants.COLOR_INK_BLACK, true)
 	canvas.draw_rect(Rect2(0.0, float(GameConstants.VIEW_HEIGHT) * 0.58, GameConstants.VIEW_WIDTH, float(GameConstants.VIEW_HEIGHT) * 0.42), Color(GameConstants.COLOR_EARTH_DARK.r, GameConstants.COLOR_EARTH_DARK.g, GameConstants.COLOR_EARTH_DARK.b, 0.32), true)
 	canvas.draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), GameConstants.COLOR_SCREEN_VIGNETTE, true)
+	depth_wash(canvas, band)
+
+static func depth_wash(canvas: CanvasItem, band: String, rect: Rect2 = Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT)) -> void:
+	var tint: Color = GameConstants.BAND_TINTS.get(str(band).to_lower(), GameConstants.BAND_TINTS["foothill"]) as Color
+	if tint.a <= 0.0 or canvas == null:
+		return
+	canvas.draw_rect(rect, tint, true)
 
 static func modal_backdrop(canvas: CanvasItem) -> void:
 	canvas.draw_rect(Rect2(0.0, 0.0, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.44), true)
@@ -68,6 +76,23 @@ static func rarity_label(rarity: int) -> String:
 		_:
 			return "Common"
 
+static func school_mark(canvas: CanvasItem, school_data: Dictionary, pos: Vector2, size: float, tint: Color = GameConstants.COLOR_TEXT_HEADING) -> bool:
+	var icon_path: String = str(school_data.get("icon", ""))
+	if not icon_path.is_empty():
+		var texture: Texture2D = _school_icon(icon_path)
+		if texture != null:
+			if canvas != null:
+				canvas.draw_texture_rect(texture, Rect2(pos, Vector2(size, size)), false, tint)
+			return true
+	var hanzi: String = str(school_data.get("hanzi", ""))
+	if hanzi.is_empty():
+		hanzi = str(school_data.get("id", "?")).substr(0, 1).to_upper()
+	if canvas != null:
+		var font_size: int = maxi(10, int(round(size * 0.72)))
+		var width: float = float(measure_text(hanzi, font_size, true))
+		text(canvas, hanzi, pos.x + (size - width) * 0.5, pos.y + size * 0.76, tint, font_size, true)
+	return false
+
 static func menu_cursor(canvas: CanvasItem, position: Vector2, cursor_flash: float) -> void:
 	var pulse: float = 0.5 + 0.5 * sin(cursor_flash * 8.0)
 	var cursor_color: Color = Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, 0.55 + 0.35 * pulse)
@@ -124,3 +149,13 @@ static func measure_text(value: String, size: int = 16, display: bool = false) -
 
 static func wrap_text(value: String, max_width: float, size: int = 16, display: bool = false) -> Array[String]:
 	return TextWrappingScript.wrap_lines(font_for_size(size, display), value, max_width, size)
+
+static func _school_icon(path: String) -> Texture2D:
+	if _school_icon_cache.has(path):
+		return _school_icon_cache[path] as Texture2D
+	if not ResourceLoader.exists(path):
+		return null
+	var texture: Texture2D = load(path) as Texture2D
+	if texture != null:
+		_school_icon_cache[path] = texture
+	return texture

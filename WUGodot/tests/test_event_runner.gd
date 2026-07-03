@@ -117,6 +117,35 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("get_event_by_id should return abandoned_scroll")
 
+	var identity_expectations: Dictionary = {
+		"roadside_villager": {"title": "Villager at the First Step", "title_cn": "初路村民", "message": "teeth"},
+		"travelling_merchant": {"title": "Pilgrim-Road Merchant", "title_cn": "朝山行商", "message": "look uphill"},
+		"shrine_offering": {"title": "The Hungry Shrine", "title_cn": "飢祠", "message": "borrowed weight"},
+		"drunken_master": {"title": "The Drunk Below the Gate", "title_cn": "門下醉客", "message": "denies he taught it"},
+		"bandit_camp": {"title": "Dropout Camp", "title_cn": "棄徒營", "message": "borrowed forms"},
+		"abandoned_scroll": {"title": "A Founder-Era Scroll", "title_cn": "祖師遺卷", "message": "founder-era strokes"},
+	}
+	for event_id in identity_expectations.keys():
+		var expected: Dictionary = identity_expectations[event_id] as Dictionary
+		var event: Dictionary = DataManagerScript.get_event_by_id(str(event_id))
+		if str(event.get("title", "")) == str(expected.get("title", "")):
+			passed += 1
+		else:
+			failed += 1
+			failures.append("%s title should be '%s'" % [str(event_id), str(expected.get("title", ""))])
+
+		if str(event.get("title_cn", "")) == str(expected.get("title_cn", "")):
+			passed += 1
+		else:
+			failed += 1
+			failures.append("%s title_cn should be '%s'" % [str(event_id), str(expected.get("title_cn", ""))])
+
+		if _outcome_messages_contain(event, str(expected.get("message", ""))):
+			passed += 1
+		else:
+			failed += 1
+			failures.append("%s should have an outcome message containing '%s'" % [str(event_id), str(expected.get("message", ""))])
+
 	var favor_event: Dictionary = {
 		"id": "favor",
 		"title": "Favor",
@@ -134,3 +163,23 @@ func run_all() -> Dictionary:
 		failures.append("event favor outcome should surface favor_school")
 
 	return {"passed": passed, "failed": failed, "failures": failures}
+
+func _outcome_messages_contain(event: Dictionary, needle: String) -> bool:
+	var messages: Array[String] = []
+	_collect_messages(event.get("outcomes", {}), messages)
+	for message in messages:
+		if message.find(needle) >= 0:
+			return true
+	return false
+
+func _collect_messages(value: Variant, out: Array[String]) -> void:
+	match typeof(value):
+		TYPE_DICTIONARY:
+			var dict: Dictionary = value as Dictionary
+			if dict.has("message"):
+				out.append(str(dict.get("message", "")))
+			for child in dict.values():
+				_collect_messages(child, out)
+		TYPE_ARRAY:
+			for child in value as Array:
+				_collect_messages(child, out)

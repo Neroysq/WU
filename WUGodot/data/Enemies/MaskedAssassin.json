@@ -1,7 +1,7 @@
 {
   "archetype": "masked_assassin",
-  "name": "Masked Assassin",
-  "name_cn": "面刺客",
+  "name": "The Faceless",
+  "name_cn": "無面者",
   "difficulty": "hard",
   "visualProfile": "enemy_humanoid_assassin",
   "moveSpeed": 420.0,

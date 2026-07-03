@@ -26,6 +26,7 @@ var end_message: String = ""
 var cursor_flash: float = 0.0
 var notice_message: String = ""
 var notice_timer: float = 0.0
+var depth_band_override: String = ""
 
 var next_scene: int = -1
 var transition_payload: Dictionary = {}

@@ -4,6 +4,7 @@ extends RefCounted
 const SceneContext = preload("res://scripts/scene_context.gd")
 const MenuInput = preload("res://scripts/ui/menu_input.gd")
 const UiDraw = preload("res://scripts/ui/ui_draw.gd")
+const DepthBandScript = preload("res://scripts/ui/depth_band.gd")
 const MenuSceneScript = preload("res://scripts/scenes/menu_scene.gd")
 const LoadoutViewScript = preload("res://scripts/scenes/loadout_view.gd")
 
@@ -40,7 +41,7 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 		_apply_travel_decision(ctx, RunFlow.travel_decision(chosen, ctx.player, ctx.run_state))
 
 func draw(ctx: Variant, canvas: CanvasItem) -> void:
-	UiDraw.background(canvas)
+	UiDraw.background(canvas, DepthBandScript.band_for_context(ctx))
 	_draw_map_wash(canvas)
 	_draw_bamboo_silhouettes(canvas, float(GameConstants.VIEW_HEIGHT) - 6.0, 0.38, ctx.cursor_flash)
 
@@ -82,8 +83,8 @@ func draw(ctx: Variant, canvas: CanvasItem) -> void:
 
 	var header: Rect2 = Rect2(42.0, 34.0, float(GameConstants.VIEW_WIDTH) - 84.0, 92.0)
 	UiDraw.panel(canvas, header)
-	UiDraw.text(canvas, "江湖", 74.0, 78.0, GameConstants.COLOR_TEXT_HEADING, 32, true)
-	UiDraw.text(canvas, "Path Select", 144.0, 78.0, GameConstants.COLOR_TEXT_SUBHEADING, 20)
+	UiDraw.text(canvas, "九仙山", 74.0, 78.0, GameConstants.COLOR_TEXT_HEADING, 32, true)
+	UiDraw.text(canvas, "Path Select", 196.0, 78.0, GameConstants.COLOR_TEXT_SUBHEADING, 20)
 	UiDraw.text(canvas, "Gold: %d" % ctx.player.gold, GameConstants.VIEW_WIDTH - 220.0, 78.0, GameConstants.COLOR_TEXT_ACCENT, 22)
 	UiDraw.text(canvas, "Arrows / A-D to move · Enter / J or click to travel", 74.0, 106.0, GameConstants.COLOR_TEXT_BODY, 16)
 	_draw_node_legend(canvas, 74.0, 150.0)

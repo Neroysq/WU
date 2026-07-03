@@ -33,14 +33,14 @@ func draw(ctx: Variant, canvas: CanvasItem) -> void:
 	UiDraw.panel(canvas, title_panel)
 	UiDraw.centered_text(canvas, "武", center_x, title_y, GameConstants.COLOR_TEXT_HEADING, 200, true)
 	UiDraw.centered_text(canvas, "WU", center_x, title_y + 94.0, GameConstants.COLOR_TEXT_SUBHEADING, 42, true)
-	UiDraw.centered_text(canvas, "The Wanderer Emerges", center_x, title_y + 150.0, GameConstants.COLOR_TEXT_BODY, 22)
-	UiDraw.centered_text(canvas, "A Sekiro-paced wuxia duel roguelike", center_x, title_y + 184.0, GameConstants.COLOR_TEXT_HINT, 17)
+	UiDraw.centered_text(canvas, "The Pilgrim Climbs", center_x, title_y + 150.0, GameConstants.COLOR_TEXT_BODY, 22)
+	UiDraw.centered_text(canvas, "天下武功出九仙 — all martial arts under heaven come from the Nine Immortals", center_x, title_y + 184.0, GameConstants.COLOR_TEXT_HINT, 17)
 
 	var prompt_pulse: float = 0.775 + 0.225 * sin(ctx.cursor_flash * 4.0)
 	_draw_menu_option(canvas, "Begin", 0, center_x, float(GameConstants.VIEW_HEIGHT) * 0.78, ctx.cursor_flash, prompt_pulse)
 	_draw_menu_option(canvas, "Settings", 1, center_x, float(GameConstants.VIEW_HEIGHT) * 0.84, ctx.cursor_flash, prompt_pulse)
-	UiDraw.centered_text(canvas, "第一章 江湖", center_x, float(GameConstants.VIEW_HEIGHT) - 78.0, GameConstants.COLOR_TEXT_BODY, 18, true)
-	UiDraw.centered_text(canvas, "Bamboo roads, wandering blades, and a debt still unpaid", center_x, float(GameConstants.VIEW_HEIGHT) - 48.0, GameConstants.COLOR_TEXT_HINT, 15)
+	UiDraw.centered_text(canvas, "第一章 九仙山", center_x, float(GameConstants.VIEW_HEIGHT) - 78.0, GameConstants.COLOR_TEXT_BODY, 18, true)
+	UiDraw.centered_text(canvas, "A nobody climbs the mountain to learn. The mountain has other plans.", center_x, float(GameConstants.VIEW_HEIGHT) - 48.0, GameConstants.COLOR_TEXT_HINT, 15)
 
 func _draw_menu_option(canvas: CanvasItem, label: String, idx: int, center_x: float, y: float, cursor_flash: float, prompt_pulse: float) -> void:
 	var selected: bool = idx == selection_idx

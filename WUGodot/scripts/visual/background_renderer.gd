@@ -1,6 +1,8 @@
 class_name BackgroundRenderer
 extends RefCounted
 
+const UiDraw = preload("res://scripts/ui/ui_draw.gd")
+
 var current_arena_id: String = ""
 var _texture: Texture2D = null
 var _fallback_color: Color = GameConstants.COLOR_INK_BLACK
@@ -17,7 +19,7 @@ func set_arena(arena_id: String) -> void:
 	if not path.is_empty() and ResourceLoader.exists(path):
 		_texture = load(path) as Texture2D
 
-func draw(canvas: CanvasItem, camera_offset: Vector2, _battle_state: Dictionary) -> void:
+func draw(canvas: CanvasItem, camera_offset: Vector2, _battle_state: Dictionary, ctx: Dictionary = {}) -> void:
 	var bleed: float = 40.0
 	if _texture != null:
 		var rect: Rect2 = Rect2(
@@ -37,3 +39,4 @@ func draw(canvas: CanvasItem, camera_offset: Vector2, _battle_state: Dictionary)
 			),
 			_fallback_color
 		)
+	UiDraw.depth_wash(canvas, str(ctx.get("band", "foothill")))

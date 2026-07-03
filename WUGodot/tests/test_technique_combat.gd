@@ -56,7 +56,7 @@ func run_all() -> Dictionary:
 	var feedback_log: Array[String] = []
 	cs.show_feedback.connect(func(msg: String, _duration: float) -> void: feedback_log.append(msg))
 	_strike(cs, p[0], p[1], AttackCatalogScript.hu_light())
-	var sparrow_idx: int = feedback_log.find("雀翼!")
+	var sparrow_idx: int = feedback_log.find("燕翼!")
 	var hit_idx: int = feedback_log.find("HIT")
 	if sparrow_idx != -1 and hit_idx != -1 and sparrow_idx < hit_idx:
 		passed += 1

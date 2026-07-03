@@ -12,6 +12,7 @@ const DEV_CAPTURE_DEFAULT_DIR: String = "user://capture"
 const EncounterResolverScript = preload("res://scripts/encounter_resolver.gd")
 const SettingsManagerScript = preload("res://scripts/settings_manager.gd")
 const SettingsSceneScript = preload("res://scripts/scenes/settings_scene.gd")
+const DepthBandScript = preload("res://scripts/ui/depth_band.gd")
 
 const _ACTION_CAPTURE := {
 	"ATTACKING_LIGHT": {"prep": "attack_light_full", "frames": 32, "loop": false},
@@ -436,6 +437,15 @@ func _prepare_capture_ui(spec: Dictionary) -> bool:
 			_set_scene(SceneContext.SCENE_REWARD, payload)
 		"event":
 			_set_scene(SceneContext.SCENE_EVENT, payload)
+		"victory":
+			_ctx.run_end_time = Time.get_ticks_msec() / 1000.0
+			_set_scene(SceneContext.SCENE_VICTORY, payload)
+		"game_over", "gameover":
+			_ctx.run_end_time = Time.get_ticks_msec() / 1000.0
+			_set_scene(SceneContext.SCENE_GAME_OVER, payload)
+		"forget", "forget_technique":
+			_apply_capture_techniques(spec)
+			_set_scene(SceneContext.SCENE_FORGET_TECHNIQUE, payload)
 		"settings":
 			_set_scene(SceneContext.SCENE_SETTINGS, payload)
 		_:
@@ -487,6 +497,7 @@ func _prepare_capture_context(spec: Dictionary) -> void:
 	_ctx.run_start_time = Time.get_ticks_msec() / 1000.0
 	_ctx.player.gold = int(spec.get("gold", _ctx.player.gold))
 	_ctx.run_state.insight = int(spec.get("insight", _ctx.run_state.insight))
+	_apply_capture_depth_band(spec)
 
 func _apply_capture_build(spec: Dictionary) -> void:
 	if spec.has("seed") and spec.has("after_node"):
@@ -522,10 +533,38 @@ func _apply_capture_build_value(value: Variant) -> void:
 				data = data.get("loadout") as Dictionary
 			_ctx.run_state.boon_loadout.restore(data)
 
+func _apply_capture_techniques(spec: Dictionary) -> void:
+	if _ctx.player == null or _ctx.player.technique_engine == null:
+		return
+	var techniques: Array = spec.get("techniques", []) as Array
+	for raw_id in techniques:
+		var id: String = str(raw_id)
+		if id.is_empty():
+			continue
+		_ctx.player.technique_engine.add(id, _ctx.player)
+
 func _capture_node(spec: Dictionary) -> MapNode:
 	var node_type: int = _capture_node_type(spec)
-	var tier: int = int(spec.get("tier", 6 if node_type == MapNode.NodeType.BOSS else 1))
+	var default_tier: int = 6 if node_type == MapNode.NodeType.BOSS else _tier_for_band(str(spec.get("tier_band", "")))
+	var tier: int = int(spec.get("tier", default_tier))
 	return MapNode.new(int(spec.get("node_id", 9001)), tier, node_type, [])
+
+func _apply_capture_depth_band(spec: Dictionary) -> void:
+	if spec.has("tier_band"):
+		_ctx.depth_band_override = DepthBandScript.normalize(str(spec.get("tier_band", "")))
+	elif spec.has("tier"):
+		_ctx.depth_band_override = DepthBandScript.band_for_tier(int(spec.get("tier", 1)))
+
+func _tier_for_band(band: String) -> int:
+	match DepthBandScript.normalize(band):
+		"mid":
+			return 2
+		"high":
+			return 4
+		"gate":
+			return 6
+		_:
+			return 1
 
 func _capture_node_type(spec: Dictionary) -> int:
 	var raw: Variant = spec.get("node_type", spec.get("nodeType", ""))
@@ -581,7 +620,6 @@ func _dictionary_value(value: Variant) -> Dictionary:
 func _save_viewport_png(path: String) -> int:
 	await get_tree().process_frame
 	await get_tree().process_frame
-	await RenderingServer.frame_post_draw
 	var image: Image = get_viewport().get_texture().get_image()
 	return image.save_png(path)
 

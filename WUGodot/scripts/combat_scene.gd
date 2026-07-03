@@ -5,6 +5,8 @@ const CombatDebugOverlayScript = preload("res://scripts/combat_debug_overlay.gd"
 const BoonTextScript = preload("res://scripts/boons/boon_text.gd")
 const InputBufferScript = preload("res://scripts/input_buffer.gd")
 const BackgroundRendererScript = preload("res://scripts/visual/background_renderer.gd")
+const UiDraw = preload("res://scripts/ui/ui_draw.gd")
+const DepthBandScript = preload("res://scripts/ui/depth_band.gd")
 const AnimationClockScript = preload("res://scripts/visual/animation_clock.gd")
 const AnimationDebugOverlayScript = preload("res://scripts/visual/animation_debug_overlay.gd")
 const FighterPresenterScript = preload("res://scripts/visual/fighter_presenter.gd")
@@ -55,7 +57,9 @@ var _heavy_committed_attack: bool = false
 var _boss_death_timer: float = 0.0
 var _boss_death_triggered: bool = false
 var _boss_beat_message: String = ""
+var _boss_beat_caption: String = ""
 var _boss_beat_timer: float = 0.0
+var _boss_beat_duration: float = 1.1
 var _controls_legend_timer: float = 0.0
 var _pause_cursor_flash: float = 0.0
 var _settings_open: bool = false
@@ -152,7 +156,9 @@ func setup_combat(player: Fighter, node: MapNode, show_controls_legend: bool = f
 	_boss_death_timer = 0.0
 	_boss_death_triggered = false
 	_boss_beat_message = ""
+	_boss_beat_caption = ""
 	_boss_beat_timer = 0.0
+	_boss_beat_duration = 1.1
 	_controls_legend_timer = 6.0 if show_controls_legend else 0.0
 	_pause_cursor_flash = 0.0
 	_settings_open = false
@@ -179,6 +185,8 @@ func on_enter() -> void:
 	_slow_mo_factor = 1.0
 	_entry_timer = ENTRY_DRAW_DURATION
 	_entry_presenter_active = true
+	if _current_node != null and _current_node.node_type == MapNode.NodeType.BOSS:
+		_show_boss_beat("山門不開。", 1.4, "熊鐵 Xiong Tie — First of the Nine keeps the gate")
 
 func on_exit() -> void:
 	_particle_system.clear()
@@ -493,7 +501,7 @@ func _process(delta: float) -> void:
 			_boss_death_timer = 1.0
 			_trigger_slow_mo(0.2, 1.0)
 			_on_camera_shake(20.0)
-			_show_boss_beat("破山!", 1.1)
+			_show_boss_beat("破山!", 1.1, "the gate stands open — something above is listening")
 			_particle_system.spawn_hit_sparks(_enemy.position + Vector2(0.0, -_enemy.height * 0.5), 40, GameConstants.COLOR_GOLD_BRIGHT)
 			_particle_system.spawn_hit_sparks(_enemy.position + Vector2(0.0, -_enemy.height * 0.3), 20, GameConstants.COLOR_CRIMSON)
 		else:
@@ -714,7 +722,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _draw_arena(offset: Vector2) -> void:
 	if _background != null:
-		_background.draw(self, offset, {})
+		_background.draw(self, offset, {}, {"band": _combat_depth_band()})
 	else:
 		draw_rect(Rect2(offset.x, offset.y, GameConstants.VIEW_WIDTH, GameConstants.VIEW_HEIGHT), GameConstants.COLOR_INK_BLACK)
 	_draw_platform(offset)
@@ -952,13 +960,14 @@ func _draw_break_feedback() -> void:
 func _draw_boss_beat() -> void:
 	if _boss_beat_timer <= 0.0 or _boss_beat_message.is_empty():
 		return
-	var alpha: float = clampf(_boss_beat_timer / 1.1, 0.0, 1.0)
-	var pulse: float = 0.7 + 0.3 * sin((1.1 - _boss_beat_timer) * 12.0)
+	var alpha: float = clampf(_boss_beat_timer / maxf(_boss_beat_duration, 0.001), 0.0, 1.0)
+	var pulse: float = 0.7 + 0.3 * sin((maxf(_boss_beat_duration, 0.001) - _boss_beat_timer) * 12.0)
 	var rect: Rect2 = Rect2(GameConstants.VIEW_WIDTH * 0.5 - 250.0, 118.0, 500.0, 120.0)
 	draw_rect(rect, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.58 * alpha), true)
 	draw_rect(rect, Color(GameConstants.COLOR_PANEL_ACCENT.r, GameConstants.COLOR_PANEL_ACCENT.g, GameConstants.COLOR_PANEL_ACCENT.b, 0.75 * alpha), false, 2.0)
 	_draw_text(_boss_beat_message, rect.position.x + rect.size.x * 0.5 - _measure_text(_boss_beat_message, 52, true) * 0.5, rect.position.y + 60.0, Color(GameConstants.COLOR_TEXT_HEADING.r, GameConstants.COLOR_TEXT_HEADING.g, GameConstants.COLOR_TEXT_HEADING.b, alpha), 52, true)
-	_draw_text("Iron Bear falls", rect.position.x + rect.size.x * 0.5 - _measure_text("Iron Bear falls", 18) * 0.5, rect.position.y + 92.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, alpha * pulse), 18)
+	if not _boss_beat_caption.is_empty():
+		_draw_text(_boss_beat_caption, rect.position.x + rect.size.x * 0.5 - _measure_text(_boss_beat_caption, 18) * 0.5, rect.position.y + 92.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, alpha * pulse), 18)
 
 func _draw_end_message() -> void:
 	var rect: Rect2 = Rect2((GameConstants.VIEW_WIDTH - 420) / 2, (GameConstants.VIEW_HEIGHT - 120) / 2 - 24, 420, 120)
@@ -1089,9 +1098,11 @@ func _show_feedback(message: String, duration: float) -> void:
 	_feedback_message = message
 	_feedback_timer = duration
 
-func _show_boss_beat(message: String, duration: float) -> void:
+func _show_boss_beat(message: String, duration: float = 1.1, caption: String = "") -> void:
 	_boss_beat_message = message
+	_boss_beat_caption = caption
 	_boss_beat_timer = duration
+	_boss_beat_duration = duration
 
 func _draw_ambush_progress(x: float, y: float) -> void:
 	if _current_node == null:
@@ -1128,7 +1139,7 @@ func _equipped_slot_boon_entries() -> Array[Dictionary]:
 			"name": BoonTextScript.name(boon),
 			"tier": str(identity.get("tier", "common")),
 			"school": school_id,
-			"hanzi": str(school_data.get("hanzi", school_id.substr(0, 1).to_upper())),
+			"school_data": school_data,
 			"color": _school_color_from_data(school_data),
 		})
 	return entries
@@ -1152,8 +1163,8 @@ func _draw_compact_loadout_panel(tech_count: int, slot_entries: Array[Dictionary
 			var y: float = start_y + float(row) * 18.0
 			var color_value: Variant = entry.get("color", GameConstants.COLOR_PANEL_ACCENT)
 			var color: Color = color_value if typeof(color_value) == TYPE_COLOR else GameConstants.COLOR_PANEL_ACCENT
-			draw_circle(Vector2(x + 4.0, y - 5.0), 4.0, Color(color.r, color.g, color.b, 0.84))
-			_draw_text(str(entry.get("hanzi", "")), x + 12.0, y, Color(color.r, color.g, color.b, 0.95), 12, true)
+			var school_data: Dictionary = entry.get("school_data", {}) as Dictionary
+			UiDraw.school_mark(self, school_data, Vector2(x, y - 15.0), 16.0, Color(color.r, color.g, color.b, 0.95))
 			var label: String = "%s %s" % [_slot_label(str(entry.get("slot", ""))), str(entry.get("name", ""))]
 			_draw_text(_fit_text(label, item_width - 40.0, 12), x + 34.0, y, GameConstants.COLOR_TEXT_BODY, 12)
 		return
@@ -1195,13 +1206,15 @@ func _draw_school_chips(schools: Array[String], x: float, y: float) -> void:
 	var chip_x: float = x
 	for school_id in schools.slice(0, mini(schools.size(), 5)):
 		var school_data: Dictionary = DataManager.get_school(school_id)
-		var hanzi: String = str(school_data.get("hanzi", school_id.substr(0, 1).to_upper()))
 		var color: Color = _school_color_from_data(school_data)
 		var rect: Rect2 = Rect2(chip_x, y - 17.0, 30.0, 22.0)
 		draw_rect(rect, Color(color.r, color.g, color.b, 0.22), true)
 		draw_rect(rect, Color(color.r, color.g, color.b, 0.82), false, 1.0)
-		_draw_text(hanzi, rect.position.x + 7.0, rect.position.y + 16.0, GameConstants.COLOR_TEXT_HEADING, 13, true)
+		UiDraw.school_mark(self, school_data, Vector2(rect.position.x + 6.0, rect.position.y + 2.0), 18.0)
 		chip_x += 36.0
+
+func _combat_depth_band() -> String:
+	return DepthBandScript.band_for_node(_current_node)
 
 func _school_color_from_data(school_data: Dictionary) -> Color:
 	var text: String = str(school_data.get("themeColor", ""))

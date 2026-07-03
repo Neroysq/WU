@@ -72,3 +72,10 @@ const COLOR_SCREEN_VIGNETTE: Color = Color(15.0 / 255.0, 15.0 / 255.0, 27.0 / 25
 const COLOR_HEALTH: Color = Color8(180, 32, 42)
 const COLOR_POSTURE: Color = Color8(238, 156, 36)
 const COLOR_RAGE: Color = Color8(168, 132, 243)
+
+const BAND_TINTS: Dictionary = {
+	"foothill": Color(1.0, 1.0, 1.0, 0.0),
+	"mid": Color(0.50, 0.62, 0.74, 0.10),
+	"high": Color(0.26, 0.36, 0.50, 0.20),
+	"gate": Color(0.16, 0.10, 0.18, 0.30),
+}

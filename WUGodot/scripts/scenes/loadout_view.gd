@@ -42,16 +42,24 @@ static func _draw_record_row(canvas: CanvasItem, rect: Rect2, y: float, label: S
 	var label_text: String = label
 	var body: String = "Empty"
 	var hint: String = ""
+	var school_data: Dictionary = {}
 	if not boon_id.is_empty():
 		var boon: Dictionary = DataManager.get_boon(boon_id)
 		body = BoonTextScript.name(boon)
 		hint = "%s · %s" % [tier.capitalize(), BoonTextScript.summary(boon, tier)]
+		school_data = DataManager.get_school(str(boon.get("school", "")))
 
 	if not label_text.is_empty():
 		UiDraw.text(canvas, label_text, row.position.x + 10.0, y + 2.0, GameConstants.COLOR_TEXT_HINT, 12)
-		UiDraw.text(canvas, body, row.position.x + 76.0, y + 2.0, GameConstants.COLOR_TEXT_HEADING, 14)
-		UiDraw.text(canvas, hint, row.position.x + 76.0, y + 20.0, GameConstants.COLOR_TEXT_HINT, 11)
+		if not school_data.is_empty():
+			UiDraw.school_mark(canvas, school_data, Vector2(row.position.x + 52.0, row.position.y + 9.0), 22.0)
+		UiDraw.text(canvas, body, row.position.x + 82.0, y + 2.0, GameConstants.COLOR_TEXT_HEADING, 14)
+		UiDraw.text(canvas, hint, row.position.x + 82.0, y + 20.0, GameConstants.COLOR_TEXT_HINT, 11)
 	else:
-		UiDraw.text(canvas, body, row.position.x + 10.0, y + 2.0, GameConstants.COLOR_TEXT_HEADING, 14)
-		UiDraw.text(canvas, hint, row.position.x + 10.0, y + 20.0, GameConstants.COLOR_TEXT_HINT, 11)
+		var body_x: float = row.position.x + 10.0
+		if not school_data.is_empty():
+			UiDraw.school_mark(canvas, school_data, Vector2(row.position.x + 10.0, row.position.y + 9.0), 22.0)
+			body_x = row.position.x + 40.0
+		UiDraw.text(canvas, body, body_x, y + 2.0, GameConstants.COLOR_TEXT_HEADING, 14)
+		UiDraw.text(canvas, hint, body_x, y + 20.0, GameConstants.COLOR_TEXT_HINT, 11)
 	return y + 48.0

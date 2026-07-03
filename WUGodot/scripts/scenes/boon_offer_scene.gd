@@ -4,6 +4,7 @@ extends RefCounted
 const SceneContext = preload("res://scripts/scene_context.gd")
 const MenuInput = preload("res://scripts/ui/menu_input.gd")
 const UiDraw = preload("res://scripts/ui/ui_draw.gd")
+const DepthBandScript = preload("res://scripts/ui/depth_band.gd")
 const BoonTextScript = preload("res://scripts/boons/boon_text.gd")
 
 var offers: Array = []
@@ -53,7 +54,7 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 		_apply_offer_by_index(ctx, hovered_idx)
 
 func draw(ctx: Variant, canvas: CanvasItem) -> void:
-	UiDraw.background(canvas)
+	UiDraw.background(canvas, DepthBandScript.band_for_context(ctx))
 	UiDraw.modal_backdrop(canvas)
 
 	var school_data: Dictionary = DataManager.get_school(school)
@@ -66,15 +67,20 @@ func draw(ctx: Variant, canvas: CanvasItem) -> void:
 	var header_bar: Rect2 = Rect2(panel.position.x + 18.0, panel.position.y + 18.0, panel.size.x - 36.0, 54.0)
 	canvas.draw_rect(header_bar, Color(accent.r, accent.g, accent.b, 0.18), true)
 	canvas.draw_rect(header_bar, Color(accent.r, accent.g, accent.b, 0.8), false, 1.0)
-	UiDraw.text(canvas, header_cn, header_bar.position.x + 18.0, header_bar.position.y + 28.0, GameConstants.COLOR_TEXT_HEADING, 24, true)
-	UiDraw.text(canvas, header_en, header_bar.position.x + 18.0, header_bar.position.y + 48.0, GameConstants.COLOR_TEXT_BODY, 17)
+	if choosing_school:
+		UiDraw.text(canvas, header_cn, header_bar.position.x + 18.0, header_bar.position.y + 28.0, GameConstants.COLOR_TEXT_HEADING, 24, true)
+		UiDraw.text(canvas, header_en, header_bar.position.x + 18.0, header_bar.position.y + 48.0, GameConstants.COLOR_TEXT_BODY, 17)
+	else:
+		UiDraw.school_mark(canvas, school_data, Vector2(header_bar.position.x + 16.0, header_bar.position.y + 11.0), 32.0)
+		UiDraw.text(canvas, header_en, header_bar.position.x + 60.0, header_bar.position.y + 37.0, GameConstants.COLOR_TEXT_HEADING, 22, true)
+		UiDraw.text(canvas, header_cn, header_bar.position.x + 60.0 + UiDraw.measure_text(header_en, 22, true) + 10.0, header_bar.position.y + 36.0, GameConstants.COLOR_TEXT_BODY, 18, true)
 	UiDraw.text(canvas, "Arrows, 1/2/3, Enter or click", panel.position.x + 26.0, panel.position.y + 92.0, GameConstants.COLOR_TEXT_HINT, 15)
 
 	if choosing_school:
 		for i in range(school_choices.size()):
 			var choice_box: Rect2 = _get_offer_box_rect(i)
 			var choice: Dictionary = school_choices[i] as Dictionary
-			UiDraw.reward_option(canvas, choice_box, _school_choice_label(choice), _school_choice_description(choice), selection_idx == i, ctx.cursor_flash, accent)
+			_draw_school_choice_card(canvas, choice_box, choice, selection_idx == i, ctx.cursor_flash)
 		return
 
 	for i in range(offers.size()):
@@ -141,12 +147,15 @@ func _offer_description(offer: Dictionary) -> String:
 func _school_choice_label(choice: Dictionary) -> String:
 	var school_id: String = str(choice.get("school", ""))
 	var data: Dictionary = choice.get("school_data", {}) as Dictionary
+	if data.is_empty():
+		data = DataManager.get_school(school_id)
 	var name: String = str(data.get("name", school_id.capitalize()))
-	var hanzi: String = str(data.get("hanzi", school_id))
-	return "%s %s" % [hanzi, name]
+	return name
 
 func _school_choice_description(choice: Dictionary) -> String:
 	var data: Dictionary = choice.get("school_data", {}) as Dictionary
+	if data.is_empty():
+		data = DataManager.get_school(str(choice.get("school", "")))
 	var blurb: String = str(data.get("blurb", ""))
 	return blurb if not blurb.is_empty() else "Choose this school for the next boon offer."
 
@@ -208,6 +217,23 @@ func _draw_offer_card(canvas: CanvasItem, rect: Rect2, offer: Dictionary, select
 	UiDraw.text_block(canvas, BoonTextScript.describe(boon, tier), card.position.x + 18.0, body_y, card.size.x - 36.0, 22.0, GameConstants.COLOR_TEXT_BODY, 14)
 	if selected:
 		UiDraw.menu_cursor(canvas, Vector2(card.position.x - 16.0, card.position.y + 42.0), cursor_flash)
+
+func _draw_school_choice_card(canvas: CanvasItem, rect: Rect2, choice: Dictionary, selected: bool, cursor_flash: float) -> void:
+	var school_id: String = str(choice.get("school", ""))
+	var school_data: Dictionary = choice.get("school_data", {}) as Dictionary
+	if school_data.is_empty():
+		school_data = DataManager.get_school(school_id)
+	var accent: Color = _school_color(school_data)
+	if selected:
+		rect.position.y -= 10.0
+		canvas.draw_rect(rect.grow(8.0), Color(accent.r, accent.g, accent.b, 0.10), true)
+	canvas.draw_rect(rect, Color(GameConstants.COLOR_INK_BLACK.r, GameConstants.COLOR_INK_BLACK.g, GameConstants.COLOR_INK_BLACK.b, 0.88), true)
+	canvas.draw_rect(rect, accent if selected else Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.3), false, 2.0 if selected else 1.0)
+	UiDraw.school_mark(canvas, school_data, Vector2(rect.position.x + 18.0, rect.position.y + 16.0), 30.0)
+	UiDraw.text(canvas, _school_choice_label(choice), rect.position.x + 58.0, rect.position.y + 38.0, GameConstants.COLOR_TEXT_HEADING, 20)
+	UiDraw.text_block(canvas, _school_choice_description(choice), rect.position.x + 18.0, rect.position.y + 70.0, rect.size.x - 36.0, 18.0, GameConstants.COLOR_TEXT_BODY, 14)
+	if selected:
+		UiDraw.menu_cursor(canvas, Vector2(rect.position.x - 16.0, rect.position.y + 36.0), cursor_flash)
 
 func _offer_kind_slot(boon: Dictionary) -> String:
 	var kind: String = str(boon.get("kind", ""))

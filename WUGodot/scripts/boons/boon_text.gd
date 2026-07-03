@@ -98,9 +98,9 @@ static func describe_effect(effect_data: Dictionary) -> String:
 		"stagger":
 			return "%d%% chance to stagger on hit" % int(round(float(effect_data.get("chance", 0.0)) * 100.0))
 		"stance_drunken":
-			return "drunken stance: longer dash and %.0f break damage" % float(effect_data.get("break_damage", 0.0))
+			return "yielding stance: longer dash and %.0f break damage" % float(effect_data.get("break_damage", 0.0))
 		"stance_tiger":
-			return "tiger stance reflects %d%% for %.0fs" % [int(round(float(effect_data.get("reflect", 0.0)) * 100.0)), float(effect_data.get("duration", 0.0))]
+			return "bear stance reflects %d%% for %.0fs" % [int(round(float(effect_data.get("reflect", 0.0)) * 100.0)), float(effect_data.get("duration", 0.0))]
 		"stat_delta":
 			return _stat_delta_text(effect_data)
 		"twin_strike":

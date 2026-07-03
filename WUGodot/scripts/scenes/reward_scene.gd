@@ -4,6 +4,7 @@ extends RefCounted
 const SceneContext = preload("res://scripts/scene_context.gd")
 const MenuInput = preload("res://scripts/ui/menu_input.gd")
 const UiDraw = preload("res://scripts/ui/ui_draw.gd")
+const DepthBandScript = preload("res://scripts/ui/depth_band.gd")
 
 var rewards: Array = []
 var selection_idx: int = 0
@@ -43,7 +44,7 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 		_apply_reward_by_index(ctx, hovered_idx)
 
 func draw(ctx: Variant, canvas: CanvasItem) -> void:
-	UiDraw.background(canvas)
+	UiDraw.background(canvas, DepthBandScript.band_for_context(ctx))
 	UiDraw.modal_backdrop(canvas)
 
 	var current_node: MapNode = ctx.run_state.get_current_node() if ctx.run_state != null else null

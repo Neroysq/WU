@@ -35,9 +35,9 @@ func _draw_victory(ctx: Variant, canvas: CanvasItem) -> void:
 
 	var y: float = scroll.position.y + 50.0
 	var left: float = scroll.position.x + 40.0
-	UiDraw.centered_text(canvas, "江湖初顯", center_x, y, GameConstants.COLOR_TEXT_HEADING, 40, true)
+	UiDraw.centered_text(canvas, "山門開了", center_x, y, GameConstants.COLOR_TEXT_HEADING, 40, true)
 	y += 40.0
-	UiDraw.centered_text(canvas, "The Wanderer Emerges", center_x, y, GameConstants.COLOR_TEXT_SUBHEADING, 19)
+	UiDraw.centered_text(canvas, "The Gate Stands Open", center_x, y, GameConstants.COLOR_TEXT_SUBHEADING, 19)
 	y += 60.0
 	canvas.draw_rect(Rect2(left, y, scroll.size.x - 80.0, 1.0), Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.4))
 	y += 30.0
@@ -75,7 +75,7 @@ func _draw_victory(ctx: Variant, canvas: CanvasItem) -> void:
 	y += 24.0
 	canvas.draw_rect(Rect2(left, y, scroll.size.x - 80.0, 1.0), Color(GameConstants.COLOR_PANEL_BORDER.r, GameConstants.COLOR_PANEL_BORDER.g, GameConstants.COLOR_PANEL_BORDER.b, 0.4))
 	y += 20.0
-	UiDraw.text(canvas, "The road beyond the bamboo leads deeper into the jianghu...", left, y, GameConstants.COLOR_TEXT_BODY, 15, true)
+	UiDraw.text_block(canvas, "The gatekeeper kneels. The summit is silent. Somewhere above, a door you cannot see has noticed you.", left, y, scroll.size.x - 80.0, 22.0, GameConstants.COLOR_TEXT_BODY, 15, true)
 	var pulse: float = 0.775 + 0.225 * sin(ctx.cursor_flash * 4.0)
 	UiDraw.centered_text(canvas, "Press Enter to return", center_x, scroll.end.y - 28.0, Color(GameConstants.COLOR_TEXT_ACCENT.r, GameConstants.COLOR_TEXT_ACCENT.g, GameConstants.COLOR_TEXT_ACCENT.b, pulse), 18)
 
@@ -90,7 +90,7 @@ func _draw_game_over(ctx: Variant, canvas: CanvasItem) -> void:
 		var alpha: float = 0.015 + float(9 - ring) * 0.009
 		canvas.draw_circle(glyph_center, radius, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, alpha))
 	UiDraw.centered_text(canvas, "敗", center_x, center_y - 18.0, Color(GameConstants.COLOR_VERMILLION_RED.r, GameConstants.COLOR_VERMILLION_RED.g, GameConstants.COLOR_VERMILLION_RED.b, 0.88), 300, true)
-	UiDraw.centered_text(canvas, "Defeated", center_x, center_y + 132.0, Color(GameConstants.COLOR_TEXT_SUBHEADING.r, GameConstants.COLOR_TEXT_SUBHEADING.g, GameConstants.COLOR_TEXT_SUBHEADING.b, 0.92), 30)
+	UiDraw.centered_text(canvas, "The mountain keeps what it kills.", center_x, center_y + 132.0, Color(GameConstants.COLOR_TEXT_SUBHEADING.r, GameConstants.COLOR_TEXT_SUBHEADING.g, GameConstants.COLOR_TEXT_SUBHEADING.b, 0.92), 30)
 	var run_duration: float = ctx.run_end_time - ctx.run_start_time
 	var minutes: int = int(run_duration) / 60
 	var seconds: int = int(run_duration) % 60

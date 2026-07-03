@@ -4,6 +4,7 @@ extends RefCounted
 const SceneContext = preload("res://scripts/scene_context.gd")
 const MenuInput = preload("res://scripts/ui/menu_input.gd")
 const UiDraw = preload("res://scripts/ui/ui_draw.gd")
+const DepthBandScript = preload("res://scripts/ui/depth_band.gd")
 
 var choice_idx: int = 0
 
@@ -29,7 +30,7 @@ func update(ctx: Variant, input: Variant, _delta: float) -> void:
 		ctx.goto(SceneContext.SCENE_MAP)
 
 func draw(ctx: Variant, canvas: CanvasItem) -> void:
-	UiDraw.background(canvas)
+	UiDraw.background(canvas, DepthBandScript.band_for_context(ctx))
 	UiDraw.modal_backdrop(canvas)
 	var panel: Rect2 = Rect2(520.0, (float(GameConstants.VIEW_HEIGHT) - 350.0) * 0.5, float(GameConstants.VIEW_WIDTH) - 1040.0, 350.0)
 	UiDraw.panel(canvas, panel)
