@@ -31,12 +31,12 @@
 
 ## Task 2: Boon display renames in place (data only)
 
-**Files:** Modify `WUGodot/data/Boons/Boons.json` (`name` fields ONLY — never `id`, `school`, tiers, or effects).
+**Files:** Modify `WUGodot/data/Boons/Boons.json` (display `name` fields + the ONE display payload below — never `id`, `school`, tiers, or effect *types/numbers*), `WUGodot/scripts/boons/boon_text.gd` (one describer wording).
 
 - [ ] **Step 1:** Apply these renames (rule: names must fit the school's animal; vacate "drunken" for the Panda):
   - `wind_crane_step`: Crane Step → **Swallow Skim** (crane name belongs to `soft`)
   - `wind_sparrow_wing`: Sparrow Wing → **Swallow Wing**
-  - `soft_drunken_form`: Drunken Form → **Yielding Crane** (vacates 醉拳 for the future 熊貓 outsider)
+  - `soft_drunken_form`: Drunken Form → **Yielding Crane** — vacating 醉拳 takes **three display edits**, not one: (a) the boon `name`; (b) the effect payload's stance **`display_name`** (`Boons.json:199`, currently 醉拳 DRUNKEN FORM — shown in the combat STANCE label via `active_stance_display_name()`, `technique_engine.gd:243`/`combat_scene.gd:872`) → **柔鶴 YIELDING CRANE**; (c) the `stance_drunken` describer in `boon_text.gd:100` ("drunken stance: …") → **"yielding stance: longer dash and %.0f break damage"**. The effect **type id `stance_drunken` and all mechanics stay unchanged** (internal id, not display).
   - `soft_iron_palm`: Iron Palm → **Crane's Beak** (iron belongs to `iron`/Bear)
   - `wind_mastery`: Windstep Mastery → **Swallow Mastery**; `soft_mastery`: Soft Palm Mastery → **Crane Mastery** (sweep ALL `*_mastery` names to `<Animal> Mastery`)
   - Sweep the remaining boons for animal-mismatch names against the Task-1 table; rename display-only where a name contradicts its school's animal (most — Descending Leaf, Flowing Water, Cutting Breeze, Cloud Hands, Mountain Echo — read fine; leave them).
@@ -44,12 +44,12 @@
 
 ## Task 3: School icons (asset + renderer + fallback) ✋ art checkpoint
 
-**Files:** Create `WUGodot/assets/icons/schools/{iron,thunder,soft,wind,venom,sword}.png`; Modify `Schools.json` (`icon` field), `scripts/scenes/boon_offer_scene.gd` (:62 header, :141 school-choice), `scripts/combat_scene.gd` (school chips :1156/:1203), `scripts/scenes/map_scene.gd` (loadout panel :99); Test `tests/test_school_icons.gd`.
+**Files:** Create `WUGodot/assets/icons/schools/{iron,thunder,soft,wind,venom,sword}.png`; Modify `Schools.json` (`icon` field), `scripts/scenes/boon_offer_scene.gd` (:62 header, :141 school-choice), `scripts/combat_scene.gd` (school chips :1156/:1203), **`scripts/scenes/loadout_view.gd`** (the map loadout panel's actual renderer — `map_scene.gd:99` only calls `LoadoutViewScript.draw`; the rows render in `loadout_view.gd:40` — draw each slot/passive row's school icon before the boon name, school resolved from the boon's data), `tests/run_tests.gd` (register the new module); Test `tests/test_school_icons.gd`.
 
 - [ ] **Step 1:** Generate six small animal pictogram icons (~24px, VINIK24-compatible, strong silhouettes: bear head, ox head, crane, swallow in flight, coiled snake, eagle head). Any pipeline (GPT Image 2 → pixelize per the existing art workflow, or hand-pixel). **✋ STOP — show the icon sheet to the user for approval before installing** (per the project's art-review convention).
 - [ ] **Step 2:** Add `"icon": "res://assets/icons/schools/<id>.png"` per school in `Schools.json`.
 - [ ] **Step 3:** Renderer: a small helper (e.g. `UiDraw.school_mark(canvas, school_data, pos, size)`) that draws the icon texture if the `icon` path loads, else the `hanzi` text (fallback). Use it at all four surfaces above (icon + text name alongside, per spec).
-- [ ] **Step 4:** Test `test_school_icons.gd`: all six school entries have non-empty `icon` paths AND the files exist; a synthetic school dict with no icon falls back to hanzi without error.
+- [ ] **Step 4:** Test `test_school_icons.gd`: all six school entries have non-empty `icon` paths AND the files exist; a synthetic school dict with no icon falls back to hanzi without error. **Register `"res://tests/test_school_icons.gd"` in `run_tests.gd`'s `_TEST_MODULES`** (static list — new tests don't run otherwise).
 - [ ] **Step 5 (gate captures):** two forced school-choice captures covering all six ids + one boon-offer capture + a `kind:"matchup"` capture with a `build` (combat chips) + a `"screen":"map"` capture with a `build` (loadout panel). Icons visible in all; `python3 tools/assert_nonblank.py` each.
 - [ ] **Step 6:** Commit `feat(identity): school animal icons + hanzi fallback`.
 
@@ -107,17 +107,18 @@ Store `caption` in a var; `_draw_boss_beat` draws the caption line ONLY when non
 
 - [ ] **Step 1:** Victory reads hollow: headline **"山門開了 — The Gate Stands Open"**, body **"The gatekeeper kneels. The summit is silent. Somewhere above, a door you cannot see has noticed you."**
 - [ ] **Step 2:** Game-over in fiction: **"The mountain keeps what it kills."**
-- [ ] **Step 3:** Suite green; ending capture nonblank. Commit `feat(identity): hollow-victory and mountain ending texts`.
+- [ ] **Step 3 (capture plumbing — these screens have no capture cases today, `main.gd:407`):** add `"victory"`, `"game_over"`, and `"forget"` cases to `_prepare_capture_ui` (route to the matching `SCENE_*` with a minimal payload; forget needs a technique in the loadout — reuse `_apply_capture_build`). Menu stays manual (Task 4).
+- [ ] **Step 4:** Suite green; victory + game_over captures nonblank. Commit `feat(identity): hollow-victory and mountain ending texts + ending/forget capture cases`.
 
 ## Task 9: Depth-band palette (the one code system in this pass)
 
-**Files:** Create `scripts/ui/depth_band.gd`; Modify `scripts/game_constants.gd` (band tints), `scripts/ui/ui_draw.gd` (`background`), `scripts/visual/background_renderer.gd` (ctx), the 8 covered scenes (map, combat, event, shop, rest, boon_offer, reward, forget), `scripts/main.gd` (capture `tier_band`); Test `tests/test_depth_band.gd`.
+**Files:** Create `scripts/ui/depth_band.gd`; Modify `scripts/game_constants.gd` (band tints), `scripts/ui/ui_draw.gd` (`background`), `scripts/visual/background_renderer.gd` (ctx), the 8 covered scenes (map, combat, event, shop, rest, boon_offer, reward, forget), `scripts/main.gd` (capture `tier_band`), `tests/run_tests.gd` (register); Test `tests/test_depth_band.gd`.
 
 - [ ] **Step 1:** `depth_band.gd` (static): `band_for_node(node) -> String` — `"gate"` if BOSS type; else by tier: `<=1 "foothill"`, `2-3 "mid"`, `4-5 "high"`, else `"high"`. `band_for_run(run_state)` = band of current node (fallback `"foothill"`).
 - [ ] **Step 2:** `GameConstants.BAND_TINTS: Dictionary` — `foothill: Color(1,1,1,0)` (no-op), `mid`: slight cool wash, `high`: colder/darker wash, `gate`: darkest (exact VINIK24-derived values tuned by capture; alpha-overlay wash rects are sufficient — no new art).
 - [ ] **Step 3:** `UiDraw.background(canvas, band: String = "foothill")` applies the wash after the base; `BackgroundRenderer.draw(..., ctx)` reads `ctx.band` the same way. Each covered scene passes `DepthBand.band_for_run(ctx.run_state)` (combat: from its node). Menu/settings/ending stay callers of the default (opted out).
 - [ ] **Step 4:** Capture support: UI capture specs accept `"tier_band": "high"` (or `"tier": N`) — `_prepare_capture_ui`/`_prepare_capture_matchup` set the band context before `_set_scene`, for **every** UI screen.
-- [ ] **Step 5:** Test `test_depth_band.gd`: band function boundaries (tier 1/2/3/4/5, BOSS node); tints exist for all four bands.
+- [ ] **Step 5:** Test `test_depth_band.gd`: band function boundaries (tier 1/2/3/4/5, BOSS node); tints exist for all four bands. **Register `"res://tests/test_depth_band.gd"` in `run_tests.gd`'s `_TEST_MODULES`.**
 - [ ] **Step 6 (gate):** tiered captures — map, combat (matchup), boon_offer, reward each at `foothill` vs `high`; pairs must visibly differ; all nonblank. Commit `feat(identity): depth-band palette — the mountain darkens as you climb`.
 
 ## Task 10: Full verification + record ✋
