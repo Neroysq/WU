@@ -26,7 +26,7 @@ Two first-signals, explicitly (they don't compete): **altitude is the first *wor
 ## 3. Presentation & technical constants (locked)
 
 - **Diorama stage:** combat on platform stages with painted backgrounds; theatrical framing per arena context. Platform materials: worn stone / wood / bamboo; cracked earth reserved for touched arenas (folded from v1 — v1 is fully superseded).
-- **Character canvas:** **256×256 native**; character bbox ≈205px tall (80%). **Runtime scales are per-profile locked values** from `DefaultProfiles.json` (player_humanoid **1.625**, enemy_humanoid_basic **1.575**, others per profile — the "~1.7–1.9×" range in older text is descriptive, the table is normative). Sampling: **nearest-neighbor**, no AA at source or scale time.
+- **Character canvas:** **256×256 native**; character bbox ≈205px tall (80%). **Runtime scales are per-profile values whose normative source is `WUGodot/data/VisualProfiles/DefaultProfiles.json`** — cite the file, never bake numbers into docs (they drift: the 256px spec's migration table said player 1.625; live data today says 2.0). Proof tooling reads the file. Sampling: **nearest-neighbor**, no AA at source or scale time.
 - **Pipeline:** generation (aiexp / GPT-Image-2; **pixelforge** — lives in `AIexp/tools/pixelforge-*` — under trial) → pixelize/normalize → canonical slots with measured anchors + manifests; foot-anchored rendering; capsule collision matched to visible art. Judgments **in-game at runtime scale**, never zoomed stills.
 - **Animation:** presenter graph/timeline JSON; attack/move motion via Seedance video → frame harvest; GPT-Image-2 keyframes for Gate-1 approval and pins.
 
