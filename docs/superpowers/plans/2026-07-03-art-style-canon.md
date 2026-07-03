@@ -19,7 +19,7 @@
 
 ## Task 2: Proof tooling
 
-**Files:** Create `tools/art/vinik24.json`, `tools/art/palette_audit.py`, `tools/art/make_proofs.py`.
+**Files:** Create `tools/art/vinik24.json`, `tools/art/palette_audit.py`, `tools/art/make_proofs.py`, `tools/art/contrast_cvd_audit.py`.
 
 - [ ] **Step 1:** Copy the 24 VINIK24 hexes into `tools/art/vinik24.json` from the pipeline's source of truth — **`/Users/animula/GitReps/AIexp/tools/pixelforge-palettes/src/pixelforge/palettes/data/vinik24.json`** (located during the design review; matches ART_DESIGN_DOC §3a). Do NOT hand-type from memory.
 - [ ] **Step 2 (environment, explicit):** these tools need real image ops (quantize/slice/scale) — use the **AIexp venv interpreter**, which has PIL: `PYART=/Users/animula/GitReps/AIexp/.venv/bin/python` (verify `"$PYART" -c "import PIL"`; if it ever lacks PIL, create `python3 -m venv .venv-art && .venv-art/bin/pip install pillow` at repo root and use that). All `tools/art/*.py` invocations in this plan run under `$PYART`. (This repo itself has no venv — do not write bare `pip install`.)
@@ -68,7 +68,7 @@
 ## Task 6: Hu corruption strip (4 stages) ✋
 
 - [ ] **Step 1 (brief):** *"Same character 4 times, left to right: (1) clean; (2) black ink stain at collar and sword hand, knuckles darkening; (3) ink veins up forearms and neck, eyes darkened, stain slightly offset from body; (4) half-swallowed — torso and sword arm mostly ink, and the stain's edge forms faint WRONG shapes: an extra finger silhouette, a hint of a grin where no mouth is. Body stays intact — the ink lies. Pixel art 256px, VINIK24, ink pure black with cold blue-purple edge tones."* Base = the approved Task-5 Hu (image-to-image so stages stay on-model).
-- [ ] **Step 2:** Proofs incl. runtime.png at gameplay size (stage differences MUST read at gameplay size) **+ the §5b checks against ART_DESIGN_DOC: clean zones respected (weapon hand/blade/face/feet ink-free), coverage caps ≈10/25/45% per stage [PROV], wrong-shape motifs ≥8 source px** — annotate the review.html with these checks. ✋ user picks → canon + manifest. Commit.
+- [ ] **Step 2:** Proofs (`--kind char --profile player_humanoid`) incl. runtime.png at gameplay size (stage differences MUST read at gameplay size) **+ the §5b checks against ART_DESIGN_DOC: clean zones respected (weapon hand/blade/face/feet ink-free), coverage caps ≈10/25/45% per stage [PROV], wrong-shape motifs ≥8 source px** — annotate the review.html with these checks. ✋ user picks → canon + manifest. Commit.
 
 ## Task 7: Xiong Tie ✋
 
@@ -83,7 +83,7 @@
 ## Task 9: Six-school stance sheet ✋ (the silhouette gate's source asset)
 
 - [ ] **Step 1 (brief):** *"Six martial artists in one row, same body scale, each frozen in their school's signature stance, designed to be tellable apart in PURE BLACK SILHOUETTE: (1) Bear — low rooted wide horse stance, massive base; (2) Ox — mid-charge, shoulder leading, mass driving forward; (3) Crane — one vertical line, single-leg, arms folded like wings on the centerline; (4) Swallow — mid circle-step, body curved in turning flight; (5) Snake — coiled low, spine curved, one arm striking like a head; (6) Eagle — tall reach, clawed hand seizing downward. Generic disciples (not the immortals), simple dark clothes, 256px pixel art, VINIK24."* Shotgun 2–3 sheets.
-- [ ] **Step 2:** Proofs: `make_proofs.py --kind char` — the **silhouette.png of this sheet at gameplay size IS the bible's §2 hard-rule test**: six stances tellable apart in pure black. Include it prominently in review.html.
+- [ ] **Step 2:** Proofs: `make_proofs.py --kind char --profile enemy_humanoid_basic` (generic disciples render at mook scale) — the **silhouette.png of this sheet at gameplay size IS the bible's §2 hard-rule test**: six stances tellable apart in pure black. Include it prominently in review.html.
 - [ ] **Step 3:** ✋ user picks (judging silhouettes first, detail second) → `art/canon/schools/stances.png` + manifest. This sheet is the stance canon for every future school practitioner/enemy. Commit.
 
 ## Task 10: Scene strip — four skies of one mountain ✋
