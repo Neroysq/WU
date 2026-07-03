@@ -77,7 +77,7 @@
 
 ## Task 6: Events rewrite (text only — foreshadow, never mechanics)
 
-**Files:** Modify `WUGodot/data/Events/Events.json` (title/body/choice-label text ONLY; every outcome field untouched — `event_runner.gd:58` behavior identical).
+**Files:** Modify `WUGodot/data/Events/Events.json` — **display text only, which includes `outcomes.*.message`** (it's the result copy the player reads after choosing: returned at `event_runner.gd:60`, drawn at `event_scene.gd:70`). Rewrite titles, bodies, choice labels, AND outcome `message` fields in the new register; **freeze every mechanical field** (`gold`, `hp`, `grant_technique`, `open_shop`, `trigger_combat`, `shop_rarity_boost`, etc.) — behavior identical.
 
 - [ ] **Step 1:** Rewrite the six in the bright-with-a-shadow register (may FORESHADOW loss-as-cleansing; must never state or imply mechanical purification):
   - `roadside_villager` → **Villager at the First Step**: warns cheerfully — "The higher you climb, the friendlier the smiles. Don't trust the teeth."
@@ -107,7 +107,7 @@ Store `caption` in a var; `_draw_boss_beat` draws the caption line ONLY when non
 
 - [ ] **Step 1:** Victory reads hollow: headline **"山門開了 — The Gate Stands Open"**, body **"The gatekeeper kneels. The summit is silent. Somewhere above, a door you cannot see has noticed you."**
 - [ ] **Step 2:** Game-over in fiction: **"The mountain keeps what it kills."**
-- [ ] **Step 3 (capture plumbing — these screens have no capture cases today, `main.gd:407`):** add `"victory"`, `"game_over"`, and `"forget"` cases to `_prepare_capture_ui` (route to the matching `SCENE_*` with a minimal payload; forget needs a technique in the loadout — reuse `_apply_capture_build`). Menu stays manual (Task 4).
+- [ ] **Step 3 (capture plumbing — these screens have no capture cases today, `main.gd:407`):** add `"victory"`, `"game_over"`, and `"forget"` cases to `_prepare_capture_ui` (route to the matching `SCENE_*` with a minimal payload). **Forget seeding:** `_apply_capture_build` only fills `boon_loadout` (`main.gd:491`), but ForgetScene renders `technique_engine.technique_ids()` (`forget_scene.gd:50`) — so the forget case reads a **`"techniques": ["A1", "A9"]`** spec field and adds each via `_ctx.player.technique_engine.add(id, _ctx.player)` (`technique_engine.gd:27`). Menu stays manual (Task 4).
 - [ ] **Step 4:** Suite green; victory + game_over captures nonblank. Commit `feat(identity): hollow-victory and mountain ending texts + ending/forget capture cases`.
 
 ## Task 9: Depth-band palette (the one code system in this pass)
