@@ -1,0 +1,369 @@
+{
+  "url": "https://brennantranslation.wordpress.com/2014/06/01/wudang-sword/",
+  "scraped_at": "2026-07-08T05:00:44.941Z",
+  "files": [
+    {
+      "path": "image-001.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/themes/pub/twentyten/images/headers/concave.jpg?m=1610459589i",
+      "size": 38292,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-002.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-calligraphy-1.jpg",
+      "size": 43509,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-003.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-calligraphy-2.jpg",
+      "size": 28937,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-004.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-calligraphy-3.jpg",
+      "size": 47833,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-005.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-calligraphy-4.jpg",
+      "size": 23824,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-006.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-calligraphy-5.jpg",
+      "size": 55414,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-007.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-calligraphy-6.jpg",
+      "size": 20548,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-008.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-44.jpg",
+      "size": 29385,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-009.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-portrait-1.jpg",
+      "size": 59399,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-010.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-portrait-2.jpg",
+      "size": 60577,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-011.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-portrait-3.jpg",
+      "size": 53414,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-012.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-1.jpg?w=640",
+      "size": 58463,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-013.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-2.jpg?w=640",
+      "size": 55309,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-014.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-3.jpg?w=640",
+      "size": 60358,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-015.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-4.jpg?w=640",
+      "size": 60337,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-016.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-5.jpg?w=640",
+      "size": 58644,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-017.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-6.jpg?w=640",
+      "size": 60261,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-018.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-7.jpg?w=640",
+      "size": 61262,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-019.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-8.jpg?w=640",
+      "size": 55058,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-020.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-9.jpg?w=640",
+      "size": 54707,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-021.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-10.jpg?w=640",
+      "size": 60794,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-022.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-11.jpg?w=640",
+      "size": 59079,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-023.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-12.jpg?w=640",
+      "size": 55628,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-024.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-13.jpg?w=640",
+      "size": 55301,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-025.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-14.jpg?w=640",
+      "size": 60942,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-026.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-15.jpg?w=640",
+      "size": 59997,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-027.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-16.jpg?w=640",
+      "size": 56872,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-028.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-17.jpg?w=640",
+      "size": 59757,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-029.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-18.jpg?w=640",
+      "size": 54918,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-030.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-19.jpg?w=640",
+      "size": 55606,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-031.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-20.jpg?w=640",
+      "size": 56222,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-032.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-21.jpg?w=640",
+      "size": 59374,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-033.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-22.jpg?w=640",
+      "size": 62937,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-034.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-23.jpg?w=640",
+      "size": 56383,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-035.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-24.jpg?w=640",
+      "size": 53940,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-036.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-25.jpg?w=640",
+      "size": 59357,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-037.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-26.jpg?w=640",
+      "size": 59984,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-038.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-27.jpg?w=640",
+      "size": 56124,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-039.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-28.jpg?w=640",
+      "size": 57662,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-040.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-29.jpg?w=640",
+      "size": 53915,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-041.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-30.jpg?w=640",
+      "size": 54941,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-042.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-31.jpg?w=640",
+      "size": 58053,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-043.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-32.jpg?w=640",
+      "size": 60144,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-044.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-33.jpg?w=640",
+      "size": 54703,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-045.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-34.jpg?w=640",
+      "size": 53962,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-046.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-35.jpg?w=640",
+      "size": 60181,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-047.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-36.jpg?w=640",
+      "size": 59441,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-048.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-37.jpg?w=640",
+      "size": 57157,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-049.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-38.jpg?w=640",
+      "size": 55302,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-050.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-39.jpg?w=640",
+      "size": 60408,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-051.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-40.jpg?w=640",
+      "size": 55176,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-052.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-41.jpg?w=640",
+      "size": 54788,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-053.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-diagram-1a.jpg?w=640",
+      "size": 20236,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-054.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-diagram-1b.jpg?w=640",
+      "size": 20112,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-055.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/yinyang-clock-face.jpg?w=640",
+      "size": 32430,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-056.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-42.jpg?w=640",
+      "size": 32006,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-057.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-photo-43.jpg?w=640",
+      "size": 37561,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-058.jpg",
+      "src": "https://brennantranslation.wordpress.com/wp-content/uploads/2014/06/e9bb83e58583e7a780e3808ae6ada6e795b6e58a8de6b395e5a4a7e8a681e3808b1931-diagram-2.jpg?w=640",
+      "size": 9991,
+      "type": "image/jpeg"
+    },
+    {
+      "path": "image-059.png",
+      "src": "https://s0.wp.com/i/logo/wpcom-gray-white.png?m=1479929237i",
+      "size": 8203,
+      "type": "image/png"
+    },
+    {
+      "path": "image-060.gif",
+      "src": "https://pixel.wp.com/g.gif?blog=20390553&v=wpcom&tz=-5&user_id=0&post=3280&subd=brennantranslation&host=brennantranslation.wordpress.com&ref=&rand=0.886741620342717",
+      "size": 50,
+      "type": "image/gif"
+    }
+  ],
+  "total_size": 2985168,
+  "succeeded": 60,
+  "failed": 0
+}
