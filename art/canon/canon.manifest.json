@@ -127,8 +127,8 @@
       "backend": "codex (GPT-Image-2)",
       "generator": "pixelforge.api.generate_pixel_image + denoise",
       "seed": null,
-      "approved": "2026-07-08",
-      "notes": "平刺 flat thrust (light active)"
+      "approved": "2026-07-08 (consistency pass)",
+      "notes": "v2: pale face + full size (was orange-blob face, 0.66x mass — the undersize that shrank the first video clip)"
     },
     "hu_k3": {
       "file": "art/canon/hu/k3.png",
@@ -136,8 +136,8 @@
       "backend": "codex (GPT-Image-2)",
       "generator": "pixelforge.api.generate_pixel_image + denoise",
       "seed": null,
-      "approved": "2026-07-08",
-      "notes": "劈山 overhead chop (heavy active)"
+      "approved": "2026-07-08 (consistency pass)",
+      "notes": "v3 pose-first: impact-end low chop (v2 drifted to mid-swing); pale face; 0.94x mass"
     },
     "hu_k4": {
       "file": "art/canon/hu/k4.png",
@@ -154,8 +154,8 @@
       "backend": "codex (GPT-Image-2)",
       "generator": "pixelforge.api.generate_pixel_image + denoise",
       "seed": null,
-      "approved": "2026-07-08",
-      "notes": "登雲 cloud-stepping leap apex (fantastic 輕功)"
+      "approved": "2026-07-08 (consistency pass)",
+      "notes": "v3: diagonal blade recomposition (strict vertical could not hold true scale in 256px); pale face; airborne mass 0.68x is pose-legitimate"
     },
     "hu_k7": {
       "file": "art/canon/hu/k7.png",
@@ -163,8 +163,8 @@
       "backend": "codex (GPT-Image-2)",
       "generator": "pixelforge.api.generate_pixel_image + denoise",
       "seed": null,
-      "approved": "2026-07-08",
-      "notes": "點腕 wrist-point (light recovery, experimental) — NIT: blade drew slightly curved, straighten if it bothers in motion"
+      "approved": "2026-07-08 (consistency pass)",
+      "notes": "v3 pose-first: level arm + wrist dip restored; straight blade (curve nit fixed); 0.92x mass"
     },
     "hu_k5": {
       "file": "art/canon/hu/k5.png",

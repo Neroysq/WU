@@ -58,6 +58,13 @@ Cloud-stepping: rising as if pulled skyward by a thread — body drawn long and 
 Body and arm still — ONLY the wrist snaps the tip down (the manual is explicit: 身臂皆不動). Front foot 虛, rear 實; a small, precise, almost polite motion — the comic beat after a landed light. **Flaw:** none; this one he does perfectly by accident, which is the joke. *(Experimental — unclear read at game size; one trial round, cut if it doesn't land.)*
 `recover-point:1:false:standing nearly still after a strike - sword arm extended level while only the wrist snaps the blade tip downward in a small precise point - front foot light rear foot full - left hand sword-fingers in a calm half circle - side view facing right - pleasantly surprised face`
 
+## Prompt & verification law (learned 2026-07-08, consistency pass)
+
+- **Pose-first prompt order:** the pose description LEADS the prompt ("POSE (most important): ..."), consistency rules trail — a long preamble dilutes the pose and codex drifts the moment (k3 drew mid-swing instead of impact until reordered).
+- **Consistency tail (every pose prompt):** pale face matching the reference, same body size as reference, all limbs + both feet complete, everything in frame with margin, straight blade, NO baked glow/spark/impact effects.
+- **Verification gauntlet (every generated pose, before presenting):** palette audit 0 off-palette · skin census (face 紙/雪-dominant, never 橙-dominant) · mass vs k1 within ~0.85–1.15× (airborne stretches legitimately lower, judge bbox+eyeball) · completeness eyeball (feet!).
+- **Geometry law:** a full-scale body + strict-vertical long sword exceeds 256px — compose tall poses with diagonal blades.
+
 ## Pipeline notes
 
 - **Framing rule (from the K5 clip):** every pose prompt carries "the ENTIRE figure AND the ENTIRE sword from pommel to tip fully inside the image with clear empty margin on every side."
