@@ -80,4 +80,4 @@ Generate candidates of **this** Hu — one **Song 短打** take, one **Tang 圓�
 
 ## 9. Approved concept
 
-*(filled after the round-2 pick — file, provenance, axis decisions; the turnaround must match it.)*
+**APPROVED 2026-07-08.** The PersonaGen-derived candidate: user's reference `personaGen/examples/hu/references/model-sheet.png` → `sprite-extractor extract` (run hu-canon-r2) → 256px VINIK24 (0 off-palette). Files: `art/canon/candidates/hu/round2/persona_extract_256.png` (+ master). Look: Song 短打 cross-collar pilgrim blues w/ mending patches, black short tail, grey sash, 贗劍 + red tassel-tag left hip, 集印簿 right belt, leg wraps, cloth shoes. **The Task-5 turnaround must match this** (and fixes the known nits: pale profile face at thumbnail, green shadow-flecks from the quick quantize). The PersonaGen model sheet itself is the master visual reference for all Hu art.
