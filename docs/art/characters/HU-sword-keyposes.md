@@ -15,11 +15,13 @@
 | K2 | 平刺 flat thrust | 刺 | #040 left — tall clean full-extension line | light attack (active) |
 | K3 | 劈山 overhead chop | 劈 | #030 right — overhead drop | heavy attack (active) |
 | K4 | 上格 rising deflect | 格 | #048 left — blade up across the body | block / parry pose |
-| K5 | 抽腕 dash draw-cut | 抽 | #013 left — deep committed lunge, rear arm arced | dash (attack blend) |
-| K6 | 提膝 lifted-knee aerial | 提 | #037 right — 金雞獨立 one-leg thrust (圖26) | jump apex |
+| K5 | 遊龍 dash — FANTASTIC | 輕功 | **no ref — deliberately cinematic** | dash |
+| K6 | 登雲 jump — FANTASTIC | 輕功 | **no ref — deliberately cinematic** | jump apex |
 | K7 | 點腕 wrist-point | 點 | #029 left — tip dropping onto the wrist line | light-attack recovery accent |
 
 *(Plate↔figure numbering: front matter occupies images 001–011, so 圖N ≈ image #(N+11) — confirmed by 圖26 金雞獨立 = #037.)*
+
+**Grounding rule (user decision, 2026-07-08):** grounded combat verbs (K1–K4, K7) take manual refs — they are the "real kung fu" register. **Dash and jump are NOT realistic combat moves; they go fantastic** (輕功 register, art law #2: bursts go cartoon) — no photographic ref, exaggeration in the prompt itself. K7 is experimental (unclear read) — one trial round.
 
 ## K1 — f1 起手式 (supersedes the three earlier f1 candidates; refines 乙)
 
@@ -41,19 +43,19 @@ Blade at the top of the drop, both hands committed, body tall then folding; fron
 Blade angled up-forward across the body (下格 line), edge catching an imaginary wrist from below; hilt low, tip high; weight dropped, both knees soft, rear 實; 戟指 tucked at the sternum. This single pose serves block-hold AND the parry flash (deflect spark overlays it). **Flaw:** grip white-knuckled — he braces harder than a master needs to.
 `guard-deflect:1:false:defensive deflect stance - sword held angled upward across the body with hilt low near the hip and tip high at head height - edge facing forward-up - knees bent weight dropped low - left hand sword-fingers tucked at the sternum - side view facing right - focused clenched expression`
 
-## K5 — 抽 dash draw-cut (dash)
+## K5 — 遊龍 dash (FANTASTIC — 輕功 register)
 
-Mid-slip past the enemy: body low and long in the direction of travel, sword trailing in 太陰 (palm-down) grip slicing horizontally as he passes; 戟指 leading the motion. Reads as the dash streak's source pose. **Flaw:** eyes closed — he still flinches when he commits.
-`dash-drawcut:1:false:low lunging slip to the right with body stretched long and low - sword trailing behind in palm-down grip slicing a flat horizontal line at waist height - left hand sword-fingers stabbing forward leading the motion - hair and sash streaming - side view facing right - eyes squeezed shut grin`
+From Li Jinglin's own words: 身如遊龍 — the body like a swimming dragon. The dash is that line made literal: body stretched almost horizontal, impossibly low and long, slipping through the air like a dragon through water; sword swept back along the body; 戟指 cutting the way forward; everything streaming. Exaggeration budget: 2–3× stretch, smear-friendly (§3c). **Flaw:** eyes squeezed shut — he still flinches when he commits.
+`dash-youlong:1:false:fantastical martial arts dash - body stretched almost horizontal flying low above the ground lunging right like a dragon slipping through water - sword swept back along the body blade trailing - left hand sword-fingers cutting forward leading the motion - sash and hair whipping straight back clothes rippling with speed - side view facing right - eyes squeezed shut thrilled grin`
 
-## K6 — 提 lifted-knee aerial (jump apex)
+## K6 — 登雲 jump apex (FANTASTIC — 輕功 register)
 
-One knee lifted high (金雞獨立-class), hilt raised to shoulder, tip hanging down-forward (提 line), body drawn tall at the apex. **Flaw:** the lifted foot flexed, not pointed — no one taught him the finish.
-`jump-lift:1:false:airborne apex pose - one knee lifted high to the chest - sword hilt raised at shoulder height with the blade tip hanging down-forward - body drawn tall and light - left hand sword-fingers extended level for balance - side view facing right - wide-eyed exhilarated face`
+Cloud-stepping: rising as if pulled skyward by a thread — body drawn long and weightless, legs gathered beneath, sword swept up in one vertical line above the head, robe and sash billowing DOWN while he goes up. The mountain's clouds are the destination; the pose should look like he belongs to them for half a second. **Flaw:** the gathered foot flexed, not pointed — no one taught him the finish.
+`jump-dengyun:1:false:fantastical weightless leap apex - rising straight up as if pulled skyward by a thread - body drawn long and light - both legs gathered slightly beneath - sword swept up above the head in one vertical line - robe and sash billowing downward - left hand sword-fingers pointing to the sky - side view facing right - wide-eyed exhilarated laugh`
 
 ## K7 — 點 wrist-point (light recovery accent)
 
-Body and arm still — ONLY the wrist snaps the tip down (the manual is explicit: 身臂皆不動). Front foot 虛, rear 實; a small, precise, almost polite motion — the comic beat after a landed light. **Flaw:** none; this one he does perfectly by accident, which is the joke.
+Body and arm still — ONLY the wrist snaps the tip down (the manual is explicit: 身臂皆不動). Front foot 虛, rear 實; a small, precise, almost polite motion — the comic beat after a landed light. **Flaw:** none; this one he does perfectly by accident, which is the joke. *(Experimental — unclear read at game size; one trial round, cut if it doesn't land.)*
 `recover-point:1:false:standing nearly still after a strike - sword arm extended level while only the wrist snaps the blade tip downward in a small precise point - front foot light rear foot full - left hand sword-fingers in a calm half circle - side view facing right - pleasantly surprised face`
 
 ## Pipeline notes
