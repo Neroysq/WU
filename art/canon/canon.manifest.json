@@ -165,6 +165,15 @@
       "seed": null,
       "approved": "2026-07-08",
       "notes": "點腕 wrist-point (light recovery, experimental) — NIT: blade drew slightly curved, straighten if it bothers in motion"
+    },
+    "hu_k5": {
+      "file": "art/canon/hu/k5.png",
+      "prompt": "HU-sword-keyposes.md K5 遊龍 dash (fantastic 輕功) — retake with full-sword framing (v1 clipped the blade, user finding)",
+      "backend": "codex (GPT-Image-2)",
+      "generator": "pixelforge.api.generate_pixel_image + denoise",
+      "seed": null,
+      "approved": "2026-07-08",
+      "notes": "framing rule added to the prompt spine: entire figure AND sword inside frame with margin — carry into all future pose prompts"
     }
   }
 }

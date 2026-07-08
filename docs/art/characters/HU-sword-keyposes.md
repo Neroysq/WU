@@ -60,6 +60,8 @@ Body and arm still — ONLY the wrist snaps the tip down (the manual is explicit
 
 ## Pipeline notes
 
+- **Framing rule (from the K5 clip):** every pose prompt carries "the ENTIRE figure AND the ENTIRE sword from pommel to tip fully inside the image with clear empty margin on every side."
+
 - Generate K1 first (it replaces the earlier f1 gate); on approval, K2–K7 generate with K1's approved frame attached as the character reference, then clips pin K1 at start/end per the user directive (mid keys assist where Seedance/animate drifts).
 - Grip-dial words (中陰/太陰 → "thumb-up grip"/"palm-down grip") stay in English in hints — the generator doesn't read the dial.
 - Judged per ART_DESIGN_DOC: §3c timing budgets, §5b clean zones (weapon hand/blade unobscured), silhouette-vs-schools check at Task-9 time.
