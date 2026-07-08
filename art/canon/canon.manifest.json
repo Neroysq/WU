@@ -111,6 +111,15 @@
       "seed": null,
       "approved": "2026-07-03",
       "notes": "winner=aiexp_cand_2 w/ swallow cell fix (original had 3 wings, user finding); runner-up=pixelforge_cand_3 (best row discipline, all-black swallow failed dark panels); original cand_2 24px proof was invalid (grid sliced as row) -> make_proofs.py --grid added"
+    },
+    "hu_k1": {
+      "file": "art/canon/hu/k1.png",
+      "prompt": "K1 起手式 combat idle (HU-sword-keyposes.md) — anime cel take 2: cloth shoes, needle-long jian, flat fills, denoised",
+      "backend": "codex (GPT-Image-2)",
+      "generator": "pixelforge.api.generate_pixel_image + flatten_quantize --denoise-only",
+      "seed": null,
+      "approved": "2026-07-08",
+      "notes": "f1 anchor for the whole combat set; user accepted the face trade-off (profile reads flat at 256 — revisit in a face-polish pass). POLICY: pixelforge x codex = character-keyframe generator (aiexp keeps small assets per icon bake-off). Identity ref for K2-K7."
     }
   }
 }

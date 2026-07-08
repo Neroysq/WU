@@ -1,6 +1,6 @@
 # Hu — Sword Key Poses (chapter-1 weapon: 贗劍)
 
-**Date:** 2026-07-08 · **Status:** proposed — awaiting user review
+**Date:** 2026-07-08 · **Status:** K1 APPROVED (`art/canon/hu/k1.png`, anime cel take 2 — face trade-off accepted); K2–K7 generating. **Generator policy: pixelforge×codex (GPT-Image-2) for character keyframes**; every output gets `flatten_quantize.py --denoise-only`; style spine = crisp anime cel, flat fills, 布鞋 cloth shoes, needle-long jian.
 **Sources:** 武當劍法大要 1931 plates (`art/reference/wudang-sword/`), HU.md §9 approved look, user directive (f1 anchors; walk/attack/jump/dash/block pin to f1 at both ends).
 
 **Shared prompt spine (prepended to every action hint):** the §9 look is carried by the approved master (`hu-extract/extract/character.png`) via `sprite-extractor animate --character`; hints below are the per-action custom hints (comma-free, `name:frames:loop:hint` format).
