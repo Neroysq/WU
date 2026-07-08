@@ -119,13 +119,34 @@ def main() -> int:
     ap.add_argument("--remap", nargs="*", default=[],
                     help="post palette-substitutions as FROMHEX:TOHEX pairs (e.g. '#ee9c24:#c6b7be')")
     ap.add_argument("--remap-box", help="scope --remap to x0,y0,x1,y1 (output-canvas coords)")
+    ap.add_argument("--denoise-only", action="store_true",
+                    help="skip clustering/rescale: mode-filter + palette-snap the input as-is (eats speckle on already-palettized images)")
     args = ap.parse_args()
 
     img = Image.open(args.src)
     if args.chroma:
         img = chroma_key(img, args.chroma)
     palette = load_palette(args.palette)
-    result = flatten_quantize(img, palette, args.size, args.colors, args.mode_passes, args.bbox_height)
+    if args.denoise_only:
+        result = img.convert("RGBA")
+        for _ in range(max(1, args.mode_passes)):
+            alpha = result.getchannel("A")
+            filtered = result.convert("RGB").filter(ImageFilter.ModeFilter(3))
+            merged = Image.new("RGBA", result.size, (0, 0, 0, 0))
+            merged.paste(filtered, mask=alpha)
+            pm, cache = merged.load(), {}
+            for y in range(merged.height):
+                for x in range(merged.width):
+                    r, g, b, a = pm[x, y]
+                    if a:
+                        key = (r, g, b)
+                        if key not in cache:
+                            cache[key] = nearest(key, palette)
+                        n = cache[key]
+                        pm[x, y] = (n[0], n[1], n[2], 255)
+            result = merged
+    else:
+        result = flatten_quantize(img, palette, args.size, args.colors, args.mode_passes, args.bbox_height)
     if args.remap:
         def h2rgb(h):
             h = h.lstrip("#")
