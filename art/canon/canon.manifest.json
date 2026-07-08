@@ -154,8 +154,8 @@
       "backend": "codex (GPT-Image-2)",
       "generator": "pixelforge.api.generate_pixel_image + denoise",
       "seed": null,
-      "approved": "2026-07-08 (consistency pass)",
-      "notes": "v3: diagonal blade recomposition (strict vertical could not hold true scale in 256px); pale face; airborne mass 0.68x is pose-legitimate"
+      "approved": "2026-07-08 (hands pass)",
+      "notes": "hands pass: sword moved to the NEAR arm; diagonal blade kept; airborne mass 0.75x pose-legit"
     },
     "hu_k7": {
       "file": "art/canon/hu/k7.png",
@@ -172,8 +172,8 @@
       "backend": "codex (GPT-Image-2)",
       "generator": "pixelforge.api.generate_pixel_image + denoise",
       "seed": null,
-      "approved": "2026-07-08",
-      "notes": "framing rule added to the prompt spine: entire figure AND sword inside frame with margin — carry into all future pose prompts"
+      "approved": "2026-07-08 (hands pass)",
+      "notes": "hands pass: sword moved to the NEAR arm (was far — forced hand-swaps in every clip); 遊龍 kept; airborne mass 0.67x pose-legit"
     },
     "hu_clip_attack_light": {
       "file": "art/canon/hu/clips/attack_light/ (16 frames + preview)",
