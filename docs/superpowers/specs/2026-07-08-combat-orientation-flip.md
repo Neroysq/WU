@@ -31,3 +31,19 @@ orientation and lets the existing runtime facing-flip do the work.
 
 Enemy art stays as-is (mirrors the other way — enemies now natively face right
 toward the player… verify enemy sprites don't double-flip).
+
+## Revision (2026-07-08, after the hand-consistency work)
+
+The runtime-flip-only approach is superseded for the PLAYER. Learned: k5/k6's
+sword hand could not be fixed generatively (codex anchors or mirrors); the user
+mirrored those pins deterministically, making them left-facing — and clips must
+be rolled from uniformly-facing pins or the hand swaps mid-clip.
+
+**Final convention:**
+- **Player art faces LEFT natively.** k5/k6 already do; k1-k4/k7 and the
+  light/heavy/block clip frames get a one-time deterministic batch mirror at
+  install. Dash/jump clips are being re-rolled left-facing from uniform pins.
+- **Player spawns RIGHT, faces LEFT, and is NEVER runtime-flipped** (that would
+  undo the handedness). Enemy keeps runtime flipping as today.
+- Anatomical result: Hu is right-handed on screen at all times.
+- Back-dash note stands: one dash clip serves both directions for now.
