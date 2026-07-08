@@ -154,8 +154,8 @@
       "backend": "codex (GPT-Image-2)",
       "generator": "pixelforge.api.generate_pixel_image + denoise",
       "seed": null,
-      "approved": "2026-07-08 (hands pass)",
-      "notes": "hands pass: sword moved to the NEAR arm; diagonal blade kept; airborne mass 0.75x pose-legit"
+      "approved": "2026-07-08 (mirror pass)",
+      "notes": "MIRRORED (user decision): hands swapped deterministically. Same facing caveat as k5."
     },
     "hu_k7": {
       "file": "art/canon/hu/k7.png",
@@ -172,8 +172,8 @@
       "backend": "codex (GPT-Image-2)",
       "generator": "pixelforge.api.generate_pixel_image + denoise",
       "seed": null,
-      "approved": "2026-07-08 (hands pass)",
-      "notes": "hands pass: sword moved to the NEAR arm (was far — forced hand-swaps in every clip); 遊龍 kept; airborne mass 0.67x pose-legit"
+      "approved": "2026-07-08 (mirror pass)",
+      "notes": "MIRRORED (user decision): hands swapped deterministically; pose now reads as BACKWARD dash — used for both dash directions for now, forward variant later. NOTE: this pin faces LEFT natively (unlike the rest) — for future Seedance sequences mirror k1 to match, then mirror the output back."
     },
     "hu_clip_attack_light": {
       "file": "art/canon/hu/clips/attack_light/ (16 frames + preview)",
