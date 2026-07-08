@@ -120,6 +120,51 @@
       "seed": null,
       "approved": "2026-07-08",
       "notes": "f1 anchor for the whole combat set; user accepted the face trade-off (profile reads flat at 256 — revisit in a face-polish pass). POLICY: pixelforge x codex = character-keyframe generator (aiexp keeps small assets per icon bake-off). Identity ref for K2-K7."
+    },
+    "hu_k2": {
+      "file": "art/canon/hu/k2.png",
+      "prompt": "HU-sword-keyposes.md K2 — anime cel spine, f1 identity ref",
+      "backend": "codex (GPT-Image-2)",
+      "generator": "pixelforge.api.generate_pixel_image + denoise",
+      "seed": null,
+      "approved": "2026-07-08",
+      "notes": "平刺 flat thrust (light active)"
+    },
+    "hu_k3": {
+      "file": "art/canon/hu/k3.png",
+      "prompt": "HU-sword-keyposes.md K3 — anime cel spine, f1 identity ref",
+      "backend": "codex (GPT-Image-2)",
+      "generator": "pixelforge.api.generate_pixel_image + denoise",
+      "seed": null,
+      "approved": "2026-07-08",
+      "notes": "劈山 overhead chop (heavy active)"
+    },
+    "hu_k4": {
+      "file": "art/canon/hu/k4.png",
+      "prompt": "HU-sword-keyposes.md K4 — anime cel spine, f1 identity ref",
+      "backend": "codex (GPT-Image-2)",
+      "generator": "pixelforge.api.generate_pixel_image + denoise",
+      "seed": null,
+      "approved": "2026-07-08",
+      "notes": "上格 rising deflect (block hold + parry flash)"
+    },
+    "hu_k6": {
+      "file": "art/canon/hu/k6.png",
+      "prompt": "HU-sword-keyposes.md K6 — anime cel spine, f1 identity ref",
+      "backend": "codex (GPT-Image-2)",
+      "generator": "pixelforge.api.generate_pixel_image + denoise",
+      "seed": null,
+      "approved": "2026-07-08",
+      "notes": "登雲 cloud-stepping leap apex (fantastic 輕功)"
+    },
+    "hu_k7": {
+      "file": "art/canon/hu/k7.png",
+      "prompt": "HU-sword-keyposes.md K7 — anime cel spine, f1 identity ref",
+      "backend": "codex (GPT-Image-2)",
+      "generator": "pixelforge.api.generate_pixel_image + denoise",
+      "seed": null,
+      "approved": "2026-07-08",
+      "notes": "點腕 wrist-point (light recovery, experimental) — NIT: blade drew slightly curved, straighten if it bothers in motion"
     }
   }
 }
