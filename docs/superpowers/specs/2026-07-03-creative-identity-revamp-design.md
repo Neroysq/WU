@@ -112,3 +112,18 @@ The difficulty curve and the horror curve are the same curve — deaths already 
 
 ## Decision log (from the brainstorm)
 wuxia+Cthulhu (user) · corruption-arc blend (a) · premise 九仙山/mastery=corruption/cleanse-as-loss/false→true boss (user's own) · scope = identity + paper mechanics (a) · schools: Hades-2 model, animals only, rooted in 八極/八卦/詠春/洪拳/蛇形/鷹爪 (user-refined) · the Unknown = First Master's door (a) · Hu = starstruck pilgrim (a) · corruption UX = diegetic + mirrors (a) · delivery = environmental + boss text beats (a; brainstorm label was "voiced bosses", meaning written dialogue, no VO) · 内功/外功 + 走火入魔 endings (user) · 熊貓 drunken outsider + animal icons (user).
+
+---
+
+## Revision notes (2026-07-08, from the Hu character-bible review)
+
+User direction that extends the identity beyond §1–§8 (recorded here; each gets its own design slice):
+
+1. **Named places:** the foothill village is **仙麓**; Hu's home inn is the **奈何客棧** ("what-can-you-do inn" — the village's gallows humor; pilgrims laugh going up).
+2. **The warm mountain (tone rework):** the climb initially reads **warm and respectful** — fights are *sparring matches*, masters correct and teach, hospitality is real. The horror arrives as **anomalies** (climbers who never come down or come down wrong; masters repeating sentences identically; the politeness never breaking) — not early menace. The within-run altitude bands stay; this warm register sits over the early experience.
+3. **The real face is META-GATED:** the mountain's truth is revealed only after long-term achievement (defeating the false final boss(es) across runs / collecting key relics — exact gate TBD). Requires a **narrative-structure slice** (meta-arc across runs, Hades-style surface-story pacing). Note: slice-1's "hollow victory" text may need retuning to the warm register for early meta-stages.
+4. **Hu's arc:** curious → humorous → **calm, master-like** (growth across the meta-game; late-arc visual maturation ties to gains-affect-appearance).
+5. **Weapon system (future gameplay direction, Hades-aspect pattern):** Hu is weapon-broad (the 奈何客棧's buy-back wall was his armory). Each run assigns ONE weapon; weapon types have variants + one hidden legendary variant; long-term target **十八般兵器**. **Chapter-1: sword only** (the 贗劍); the fiction of the wall ships now, the system later.
+6. **Costume language:** Chinese-authentic **Tang/Song commoner dress** (Song 短打 or Tang 圓領袍 directions) — supersedes generic wuxia costuming in all character briefs.
+
+Full character detail: `docs/art/characters/HU.md`.
