@@ -7,15 +7,19 @@
 
 **The wrongness dial:** keyframes generate the CLEAN Wudang shape; Hu's self-taught read comes from the eager face + one deliberate flaw per pose (noted per pose). Masters on the mountain later reuse these same shapes done perfectly — the contrast is the storytelling.
 
-| # | pose | 字 | ref plate | game verb |
-|---|------|----|-----------|-----------|
-| K1 | 起手式 combat idle **f1** | 中陰 ready | #012 (engagement manner) | idle anchor |
-| K2 | 平刺 flat thrust | 刺 | #012 | light attack (active) |
-| K3 | 劈山 overhead chop | 劈 | #030 | heavy attack (active) |
-| K4 | 上格 rising deflect | 格 | #048 | block / parry pose |
-| K5 | 抽腕 dash draw-cut | 抽 | #013 | dash (attack blend) |
-| K6 | 提膝 lifted-knee aerial | 提 | #040 | jump apex |
-| K7 | 點腕 wrist-point | 點 | #029 | light-attack recovery accent |
+**Reference crops are SINGLE-FIGURE** (user note: paired plates are ambiguous generator input) — `art/reference/wudang-sword/crops/K*_plateNNN[LR].jpg`, cropped to the practitioner demonstrating the target shape:
+
+| # | pose | 字 | ref crop (single figure) | game verb |
+|---|------|----|--------------------------|-----------|
+| K1 | 起手式 combat idle **f1** | 中陰 ready | #048 right — wide stable ready, 戟指 arced high | idle anchor |
+| K2 | 平刺 flat thrust | 刺 | #040 left — tall clean full-extension line | light attack (active) |
+| K3 | 劈山 overhead chop | 劈 | #030 right — overhead drop | heavy attack (active) |
+| K4 | 上格 rising deflect | 格 | #048 left — blade up across the body | block / parry pose |
+| K5 | 抽腕 dash draw-cut | 抽 | #013 left — deep committed lunge, rear arm arced | dash (attack blend) |
+| K6 | 提膝 lifted-knee aerial | 提 | #037 right — 金雞獨立 one-leg thrust (圖26) | jump apex |
+| K7 | 點腕 wrist-point | 點 | #029 left — tip dropping onto the wrist line | light-attack recovery accent |
+
+*(Plate↔figure numbering: front matter occupies images 001–011, so 圖N ≈ image #(N+11) — confirmed by 圖26 金雞獨立 = #037.)*
 
 ## K1 — f1 起手式 (supersedes the three earlier f1 candidates; refines 乙)
 
