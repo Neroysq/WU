@@ -60,6 +60,7 @@ Body and arm still — ONLY the wrist snaps the tip down (the manual is explicit
 
 ## Prompt & verification law (learned 2026-07-08, consistency pass)
 
+- **DEPTH-ORDER LANGUAGE (2026-07-09, the fix that finally worked):** to control WHICH arm holds the sword, never say left/right — describe OCCLUSION: "the arm holding the sword is the arm CLOSER to the viewer, drawn fully visible IN FRONT of and overlapping the chest/head; the other arm is the FARTHER one, partially hidden BEHIND the body." This produced right-facing near-arm k5/k6 on the first try after every left/right phrasing failed.
 - **HAND LAW (learned from the dash/jump hand-swap):** every pose holds the sword in the **near arm** (his right, closest to the viewer) — same as k1. Prompt phrasing must say "the arm NEARER to the viewer" — "right hand" is ambiguous to the generator in side view. **Pins that disagree on hands force every video clip to swap hands mid-motion**; verify the sword hand on every new pose before it becomes a pin.
 
 - **Pose-first prompt order:** the pose description LEADS the prompt ("POSE (most important): ..."), consistency rules trail — a long preamble dilutes the pose and codex drifts the moment (k3 drew mid-swing instead of impact until reordered).
