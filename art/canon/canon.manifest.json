@@ -118,8 +118,8 @@
       "backend": "codex (GPT-Image-2)",
       "generator": "pixelforge.api.generate_pixel_image + flatten_quantize --denoise-only",
       "seed": null,
-      "approved": "2026-07-08",
-      "notes": "f1 anchor for the whole combat set; user accepted the face trade-off (profile reads flat at 256 — revisit in a face-polish pass). POLICY: pixelforge x codex = character-keyframe generator (aiexp keeps small assets per icon bake-off). Identity ref for K2-K7."
+      "approved": "2026-07-09 (round-5 lock)",
+      "notes": "LOCKED round 5: right-facing, near-arm sword, far-side scabbard (mouth forward), 6-head proportions (held_relaxed target). k1 = viewpoint-trick back view. Full law stack in HU-sword-keyposes.md."
     },
     "hu_k2": {
       "file": "art/canon/hu/k2.png",
@@ -127,8 +127,8 @@
       "backend": "codex (GPT-Image-2)",
       "generator": "pixelforge.api.generate_pixel_image + denoise",
       "seed": null,
-      "approved": "2026-07-08 (consistency pass)",
-      "notes": "v2: pale face + full size (was orange-blob face, 0.66x mass — the undersize that shrank the first video clip)"
+      "approved": "2026-07-09 (round-5 lock)",
+      "notes": "LOCKED round 5: right-facing, near-arm sword, far-side scabbard (mouth forward), 6-head proportions (held_relaxed target). k1 = viewpoint-trick back view. Full law stack in HU-sword-keyposes.md."
     },
     "hu_k3": {
       "file": "art/canon/hu/k3.png",
@@ -145,8 +145,8 @@
       "backend": "codex (GPT-Image-2)",
       "generator": "pixelforge.api.generate_pixel_image + denoise",
       "seed": null,
-      "approved": "2026-07-08",
-      "notes": "上格 rising deflect (block hold + parry flash)"
+      "approved": "2026-07-09 (round-5 lock)",
+      "notes": "LOCKED round 5: right-facing, near-arm sword, far-side scabbard (mouth forward), 6-head proportions (held_relaxed target). k1 = viewpoint-trick back view. Full law stack in HU-sword-keyposes.md."
     },
     "hu_k6": {
       "file": "art/canon/hu/k6.png",
@@ -154,8 +154,8 @@
       "backend": "codex (GPT-Image-2)",
       "generator": "pixelforge.api.generate_pixel_image + denoise",
       "seed": null,
-      "approved": "2026-07-08 (mirror pass)",
-      "notes": "MIRRORED (user decision): hands swapped deterministically. Same facing caveat as k5."
+      "approved": "2026-07-09 (round-5 lock)",
+      "notes": "LOCKED round 5: right-facing, near-arm sword, far-side scabbard (mouth forward), 6-head proportions (held_relaxed target). k1 = viewpoint-trick back view. Full law stack in HU-sword-keyposes.md."
     },
     "hu_k7": {
       "file": "art/canon/hu/k7.png",
@@ -163,8 +163,8 @@
       "backend": "codex (GPT-Image-2)",
       "generator": "pixelforge.api.generate_pixel_image + denoise",
       "seed": null,
-      "approved": "2026-07-08 (consistency pass)",
-      "notes": "v3 pose-first: level arm + wrist dip restored; straight blade (curve nit fixed); 0.92x mass"
+      "approved": "2026-07-09 (round-5 lock)",
+      "notes": "LOCKED round 5: right-facing, near-arm sword, far-side scabbard (mouth forward), 6-head proportions (held_relaxed target). k1 = viewpoint-trick back view. Full law stack in HU-sword-keyposes.md."
     },
     "hu_k5": {
       "file": "art/canon/hu/k5.png",
@@ -172,8 +172,8 @@
       "backend": "codex (GPT-Image-2)",
       "generator": "pixelforge.api.generate_pixel_image + denoise",
       "seed": null,
-      "approved": "2026-07-08 (mirror pass)",
-      "notes": "MIRRORED (user decision): hands swapped deterministically; pose now reads as BACKWARD dash — used for both dash directions for now, forward variant later. NOTE: this pin faces LEFT natively (unlike the rest) — for future Seedance sequences mirror k1 to match, then mirror the output back."
+      "approved": "2026-07-09 (round-5 lock)",
+      "notes": "LOCKED round 5: right-facing, near-arm sword, far-side scabbard (mouth forward), 6-head proportions (held_relaxed target). k1 = viewpoint-trick back view. Full law stack in HU-sword-keyposes.md."
     },
     "hu_clip_attack_light": {
       "file": "art/canon/hu/clips/attack_light/ (16 frames + preview)",
@@ -219,6 +219,15 @@
       "seed": null,
       "approved": "2026-07-08",
       "notes": "APPROVED: same board pass as heavy (user findings were dash/jump only; set closed 2026-07-09 'it is ok'). Promote to art/canon/hu/clips/guard_deflect/ at install."
+    },
+    "hu_held": {
+      "file": "art/canon/hu/held/ (hit, stun_a, stun_b, relaxed, fall, land)",
+      "prompt": "held poses per HU-sword-keyposes; proportion pass vs relaxed; hit/stuns codex statics; fall/land regens",
+      "backend": "codex (GPT-Image-2)",
+      "generator": "pixelforge statics + proportion edits",
+      "seed": null,
+      "approved": "2026-07-09 (round-5 lock)",
+      "notes": "stun_a keeps cartoon dizzy stars (user-accepted stun-read convention)"
     }
   }
 }
