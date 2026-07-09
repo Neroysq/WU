@@ -69,7 +69,7 @@ Body and arm still — ONLY the wrist snaps the tip down (the manual is explicit
 
 ## Pipeline notes
 
-- **Zoom correction law (2026-07-09):** camera-lock prompt language reduces but does not eliminate Seedance zoom (v8 back-dash zoomed 1.9× mid-clip despite it). Detect + correct with the RIGID FEATURE: measure the sword length per frame (longest steel-pixel span); per-frame scale = ref_sword/frame_sword. Mass/bbox normalization across different poses is unreliable — the sword is the only true invariant.
+- **Zoom correction law (2026-07-09, refined with the user):** camera-lock prompt language reduces but does not eliminate Seedance zoom (v8 back-dash zoomed 1.9× mid-clip despite it). **Measure with the sword** (longest steel-pixel span — plateaus <1% noise), **validate with the head** (user's anchor: topmost dark hair mass — right in principle, but streaming hair is non-rigid mid-motion, ±85% raw noise, so it serves as the cross-check: post-normalization head size must be constant within ~10%). Mass/bbox normalization across differing poses is unreliable — never use it when a rigid feature is measurable.
 
 - **Framing rule (from the K5 clip):** every pose prompt carries "the ENTIRE figure AND the ENTIRE sword from pommel to tip fully inside the image with clear empty margin on every side."
 
