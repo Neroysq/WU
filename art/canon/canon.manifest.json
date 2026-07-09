@@ -201,6 +201,24 @@
       "seed": null,
       "approved": "2026-07-09",
       "notes": "APPROVED. Serves both dash directions for now (forward variant later). Installs mirrored per final convention."
+    },
+    "hu_clip_heavy": {
+      "file": "art/canon/candidates/hu/clips/heavy/v2/ (16 frames + source video)",
+      "prompt": "k1 -> k3 -> k1 overhead chop, diagonal windup (blade in frame), smear strike frame",
+      "backend": "seedance via pixelforge-sprite animate-video",
+      "generator": "phase-aware harvest",
+      "seed": null,
+      "approved": "2026-07-08",
+      "notes": "APPROVED: user passed the combat-set board 2026-07-08 raising findings only on dash/jump; heavy re-roll (diagonal windup) explicitly reviewed. Promote to art/canon/hu/clips/attack_heavy/ at install."
+    },
+    "hu_clip_deflect": {
+      "file": "art/canon/candidates/hu/clips/block/ (16 frames + source video)",
+      "prompt": "k1 -> k4 -> k1 rise into angled deflect, braced hold (frames 5-12 = block-hold loop), return",
+      "backend": "seedance via pixelforge-sprite animate-video",
+      "generator": "phase-aware harvest",
+      "seed": null,
+      "approved": "2026-07-08",
+      "notes": "APPROVED: same board pass as heavy (user findings were dash/jump only; set closed 2026-07-09 'it is ok'). Promote to art/canon/hu/clips/guard_deflect/ at install."
     }
   }
 }
