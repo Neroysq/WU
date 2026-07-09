@@ -1,8 +1,24 @@
 {
   "id": "held_dash",
   "duration": 0.2,
+  "loop": false,
   "useFighterOffset": true,
   "keyposes": [
-    { "t": 0.0, "pose": "vp_dash" }
+    { "t": 0.0000, "pose": "hu_dash_00" },
+    { "t": 0.0667, "pose": "hu_dash_01" },
+    { "t": 0.1333, "pose": "hu_dash_02" },
+    { "t": 0.2000, "pose": "hu_dash_03" },
+    { "t": 0.2667, "pose": "hu_dash_04" },
+    { "t": 0.3333, "pose": "hu_dash_05" },
+    { "t": 0.4000, "pose": "hu_dash_06" },
+    { "t": 0.4667, "pose": "hu_dash_07" },
+    { "t": 0.5333, "pose": "hu_dash_08" },
+    { "t": 0.6000, "pose": "hu_dash_09" },
+    { "t": 0.6667, "pose": "hu_dash_10" },
+    { "t": 0.7333, "pose": "hu_dash_11" },
+    { "t": 0.8000, "pose": "hu_dash_12" },
+    { "t": 0.8667, "pose": "hu_dash_13" },
+    { "t": 0.9333, "pose": "hu_dash_14" },
+    { "t": 1.0000, "pose": "hu_dash_15" }
   ]
 }

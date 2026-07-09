@@ -171,21 +171,23 @@ func update(fighter: Fighter, state_name: String, combat_dt: float, presentation
 	var pose: Dictionary = _manifest.get_pose(_clip.pose_at(_norm_t, attack_def))
 	_sprite_current.texture = _catalog.get_texture(str(pose.get("path", "")))
 	var foot: Vector2 = pose.get("footAnchor", Vector2.ZERO) as Vector2
-	var facing: int = fighter.facing
+	var gameplay_facing: int = fighter.facing
+	var native_facing: int = int(pose.get("nativeFacing", _manifest.native_facing))
+	var render_facing: float = float(gameplay_facing * (-1 if native_facing < 0 else 1))
 	var off_x: float = _clip.sample_track("offsetX", _norm_t, 0.0)
 	var off_y: float = _clip.sample_track("offsetY", _norm_t, 0.0)
 	var scale_y: float = _clip.sample_track("scaleY", _norm_t, 1.0)
 	var scale_x: float = _clip.sample_track("scaleX", _norm_t, 1.0)
 	if not _clip.has_track("scaleX") and _clip.has_track("scaleY"):
 		scale_x = clampf(1.0 / maxf(scale_y, 0.001), 0.75, 1.25)
-	var rotation_rad: float = deg_to_rad(_clip.sample_track("rotation", _norm_t, 0.0) * float(facing))
+	var rotation_rad: float = deg_to_rad(_clip.sample_track("rotation", _norm_t, 0.0) * render_facing)
 	var smear_v: float = _clip.sample_track("smear", _norm_t, 0.0)
 
-	var sx: float = _render_scale * float(facing) * scale_x
+	var sx: float = _render_scale * render_facing * scale_x
 	var sy: float = _render_scale * scale_y
 	_sprite_current.scale = Vector2(sx, sy)
 	_sprite_current.rotation = rotation_rad
-	_sprite_current.position = Vector2(off_x * float(facing), off_y) - Vector2(foot.x * sx, foot.y * sy).rotated(rotation_rad)
+	_sprite_current.position = Vector2(off_x * render_facing, off_y) - Vector2(foot.x * sx, foot.y * sy).rotated(rotation_rad)
 
 	if _dissolve_t < 1.0:
 		_dissolve_t = minf(1.0, _dissolve_t + presentation_dt / _dissolve_time)
@@ -194,7 +196,7 @@ func update(fighter: Fighter, state_name: String, combat_dt: float, presentation
 	_flash = maxf(0.0, _flash - presentation_dt / FLASH_DECAY)
 
 	_mat_current.set_shader_parameter("smear", smear_v)
-	_mat_current.set_shader_parameter("smear_dir", Vector2(float(facing), 0.0))
+	_mat_current.set_shader_parameter("smear_dir", Vector2(float(gameplay_facing), 0.0))
 	_mat_current.set_shader_parameter("flash", _flash)
 	_mat_current.set_shader_parameter("dissolve", _dissolve_t)
 	_mat_current.set_shader_parameter("skin_tint_weight", 0.0)

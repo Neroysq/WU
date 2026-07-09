@@ -15,11 +15,13 @@ const OVERRIDE_ALLOWLIST: Dictionary = {}
 func _init() -> void:
 	var root: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST_PATH)) as Dictionary
 	var scale: float = float(root.get("renderScale", 1.0))
+	var root_native_facing: int = _native_facing(root.get("nativeFacing", root.get("native_facing", 1)))
 	var poses: Dictionary = root.get("poses", {}) as Dictionary
 	var fails: Array[String] = []
 	var foot_groups: Dictionary = {}
 	for pose_name in poses.keys():
 		var pose: Dictionary = poses[pose_name] as Dictionary
+		var native_facing: int = _native_facing(pose.get("nativeFacing", root_native_facing))
 		var foot: Vector2 = _v(pose.get("footAnchor"))
 		var tip: Vector2 = _v(pose.get("weaponTip"))
 		var hb: Rect2 = _r(pose.get("hurtbox"))
@@ -29,7 +31,7 @@ func _init() -> void:
 			continue
 		var canvas_w: float = float(img.get_width())
 		var canvas_h: float = float(img.get_height())
-		var group_key: String = "%.0f" % canvas_w
+		var group_key: String = "%s:%.0f:%d" % [pose_name.get_slice("_", 0), canvas_w, native_facing]
 		if not foot_groups.has(group_key):
 			foot_groups[group_key] = {"min": foot.x, "max": foot.x}
 		else:
@@ -50,7 +52,7 @@ func _init() -> void:
 			fails.append("%s: tip-distance %.0f world-px beyond coarse ceiling %.0f" % [pose_name, tip_dist_world, TIP_DISTANCE_CEILING_WORLD])
 
 		if not OVERRIDE_ALLOWLIST.has(pose_name):
-			var m: Dictionary = AnchorMeasureScript.measure(img)
+			var m: Dictionary = AnchorMeasureScript.measure(img, native_facing)
 			var measured_tip: Vector2 = m["weaponTip"] as Vector2
 			if tip.distance_to(measured_tip) > ANCHOR_TOLERANCE:
 				fails.append("%s: stored weaponTip drifts from measured (%s vs %s) - regenerate or allowlist" % [pose_name, str(tip), str(measured_tip)])
@@ -78,6 +80,9 @@ func _r(raw: Variant) -> Rect2:
 	if typeof(raw) == TYPE_ARRAY and (raw as Array).size() >= 4:
 		return Rect2(float(raw[0]), float(raw[1]), float(raw[2]), float(raw[3]))
 	return Rect2()
+
+func _native_facing(raw: Variant) -> int:
+	return -1 if int(raw) < 0 else 1
 
 func _load_pose_image(pose: Dictionary) -> Image:
 	var tex: Texture2D = load(str(pose.get("path", ""))) as Texture2D

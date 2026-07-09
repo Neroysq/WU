@@ -4,7 +4,7 @@ extends RefCounted
 const ALPHA_MIN: float = 0.05
 const TIP_MIN_RUN: int = 2
 
-static func measure(img: Image) -> Dictionary:
+static func measure(img: Image, native_facing: int = 1) -> Dictionary:
 	var w: int = img.get_width()
 	var h: int = img.get_height()
 
@@ -96,13 +96,20 @@ static func measure(img: Image) -> Dictionary:
 	var foot_y: int = sil_bot
 	var foot_x: float = float(body_left + body_right) * 0.5
 
-	var tip_x: int = sil_right
+	var tip_x: int = sil_right if native_facing >= 0 else sil_left
 	var tip_y: float = float(body_top + body_bot) * 0.5
-	for x in range(w - 1, -1, -1):
-		if col_count[x] >= TIP_MIN_RUN:
-			tip_x = x
-			tip_y = float(col_top[x] + col_bot[x]) * 0.5
-			break
+	if native_facing >= 0:
+		for x in range(w - 1, -1, -1):
+			if col_count[x] >= TIP_MIN_RUN:
+				tip_x = x
+				tip_y = float(col_top[x] + col_bot[x]) * 0.5
+				break
+	else:
+		for x in range(w):
+			if col_count[x] >= TIP_MIN_RUN:
+				tip_x = x
+				tip_y = float(col_top[x] + col_bot[x]) * 0.5
+				break
 
 	var chest_x: float = float(body_left + body_right) * 0.5
 	var chest_y: float = float(body_top) + float(foot_y - body_top) * 0.45

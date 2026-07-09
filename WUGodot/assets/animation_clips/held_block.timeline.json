@@ -3,6 +3,13 @@
   "duration": 0.4,
   "useFighterOffset": true,
   "keyposes": [
-    { "t": 0.0, "pose": "vp_block" }
+    { "t": 0.000, "pose": "hu_deflect_05" },
+    { "t": 0.125, "pose": "hu_deflect_06" },
+    { "t": 0.250, "pose": "hu_deflect_07" },
+    { "t": 0.375, "pose": "hu_deflect_08" },
+    { "t": 0.500, "pose": "hu_deflect_09" },
+    { "t": 0.625, "pose": "hu_deflect_10" },
+    { "t": 0.750, "pose": "hu_deflect_11" },
+    { "t": 0.875, "pose": "hu_deflect_12" }
   ]
 }

@@ -21,6 +21,7 @@
 #   ./run.sh --playtest-daemon --session ID # run an agent-clocked interactive session
 #   ./run.sh --capture spec.json [dir_or_png] # capture a JSON-described visual state
 #   ./run.sh --install-video <run-dir> --action=<name> --frames=... [--prefix=va] # install staged video frames
+#   ./run.sh --install-raw-frames <args> # install approved f*.png frames into hu.manifest.json
 #   ./run.sh --editor     # open the Godot editor
 
 set -euo pipefail
@@ -112,6 +113,11 @@ case "${1:-}" in
         echo "Installing video frames..."
         exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/install_video_frames.gd -- "$@"
         ;;
+    --install-raw-frames)
+        shift
+        echo "Installing raw canon frames..."
+        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://tools/install_raw_frames.gd -- "$@"
+        ;;
     --shot-combat)
         SHOT_DIR="${2:-/tmp/wu-shot-combat}"
         echo "Capturing combat screenshots -> $SHOT_DIR"
@@ -123,36 +129,36 @@ case "${1:-}" in
         echo "Capturing action frames for $STATE -> $SHOT_DIR"
         exec "$GODOT" --path "$PROJECT_DIR" -- --shot-action "--shot-state=$STATE" "--shot-dir=$SHOT_DIR"
         ;;
-	    --shot-archetype=*)
-	        ARCHETYPE="${1#--shot-archetype=}"
-	        SHOT_DIR="${2:-/tmp/wu-balance-$ARCHETYPE}"
-	        echo "Capturing combat screenshots for $ARCHETYPE -> $SHOT_DIR"
-	        exec "$GODOT" --path "$PROJECT_DIR" -- --shot-combat "--shot-archetype=$ARCHETYPE" "--shot-dir=$SHOT_DIR"
-	        ;;
-	    --playtest|--playtest-batch)
-	        echo "Running deterministic playtest..."
-	        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://scripts/sim/playtest_main.gd -- "$@"
-	        ;;
-	    --playtest-daemon)
-	        shift
-	        echo "Running interactive playtest daemon..."
-	        exec "$GODOT" --path "$PROJECT_DIR" --script res://scripts/sim/playtest_daemon_main.gd -- "$@"
-	        ;;
-	    --capture)
-	        SPEC="${2:?usage: ./run.sh --capture spec.json [out_dir_or_png]}"
-	        OUT="${3:-/tmp/wu-capture}"
-	        if [ "$OUT" = "--out" ]; then
-	            OUT="${4:?usage: ./run.sh --capture spec.json [out_dir_or_png]}"
-	        fi
-	        echo "Capturing visual state -> $OUT"
-	        exec "$GODOT" --path "$PROJECT_DIR" -- --capture "--capture-spec=$SPEC" "--shot-dir=$OUT"
-	        ;;
+    --shot-archetype=*)
+        ARCHETYPE="${1#--shot-archetype=}"
+        SHOT_DIR="${2:-/tmp/wu-balance-$ARCHETYPE}"
+        echo "Capturing combat screenshots for $ARCHETYPE -> $SHOT_DIR"
+        exec "$GODOT" --path "$PROJECT_DIR" -- --shot-combat "--shot-archetype=$ARCHETYPE" "--shot-dir=$SHOT_DIR"
+        ;;
+    --playtest|--playtest-batch)
+        echo "Running deterministic playtest..."
+        exec "$GODOT" --path "$PROJECT_DIR" --headless --script res://scripts/sim/playtest_main.gd -- "$@"
+        ;;
+    --playtest-daemon)
+        shift
+        echo "Running interactive playtest daemon..."
+        exec "$GODOT" --path "$PROJECT_DIR" --script res://scripts/sim/playtest_daemon_main.gd -- "$@"
+        ;;
+    --capture)
+        SPEC="${2:?usage: ./run.sh --capture spec.json [out_dir_or_png]}"
+        OUT="${3:-/tmp/wu-capture}"
+        if [ "$OUT" = "--out" ]; then
+            OUT="${4:?usage: ./run.sh --capture spec.json [out_dir_or_png]}"
+        fi
+        echo "Capturing visual state -> $OUT"
+        exec "$GODOT" --path "$PROJECT_DIR" -- --capture "--capture-spec=$SPEC" "--shot-dir=$OUT"
+        ;;
     --editor|-e)
         echo "Opening Godot editor..."
         exec "$GODOT" --path "$PROJECT_DIR" --editor
         ;;
     --help|-h)
-	        sed -n '2,20p' "$0"
+        sed -n '2,25p' "$0"
         ;;
     "")
         echo "Launching WU..."
@@ -160,7 +166,7 @@ case "${1:-}" in
         ;;
     *)
         echo "Unknown option: $1" >&2
-	        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-video <args>|--probe-reach|--probe-light-deadzone|--probe-duel-ratios|--snapshot-reach <out.json>|--stage-held-keyframes <dir>|--shot-combat|--shot-action STATE|--shot-archetype=<id>|--playtest|--playtest-batch|--playtest-daemon --session ID|--capture spec.json [out_dir_or_png]|--editor|--help]" >&2
+        echo "Usage: $0 [--test|--import|--reimport|--measure-anchors|--anchor-sanity|--scale-masters <dir>|--install-video <args>|--install-raw-frames <args>|--probe-reach|--probe-light-deadzone|--probe-duel-ratios|--snapshot-reach <out.json>|--stage-held-keyframes <dir>|--shot-combat|--shot-action STATE|--shot-archetype=<id>|--playtest|--playtest-batch|--playtest-daemon --session ID|--capture spec.json [out_dir_or_png]|--editor|--help]" >&2
         exit 1
         ;;
 esac

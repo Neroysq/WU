@@ -26,7 +26,7 @@ func run_all() -> Dictionary:
 	pc.register_fighter(heavy, "hu")
 	var capsule: Dictionary = pc.attack_capsule_world(heavy)
 	var endpoint: Vector2 = capsule.get("b", Vector2.INF) as Vector2
-	var heavy_tip: Vector2 = _world_tip(heavy_pose, heavy.position, manifest.render_scale)
+	var heavy_tip: Vector2 = _world_tip(heavy_pose, heavy.position, manifest.render_scale, heavy.facing, manifest.native_facing)
 
 	if endpoint.distance_to(heavy_tip) <= 1.0:
 		passed += 1
@@ -37,7 +37,7 @@ func run_all() -> Dictionary:
 	var light_tip_source: Vector2 = light_pose.get("weaponTip", Vector2.ZERO) as Vector2
 	var heavy_tip_source: Vector2 = heavy_pose.get("weaponTip", Vector2.ZERO) as Vector2
 	if not heavy_tip_source.is_equal_approx(light_tip_source):
-		var light_tip: Vector2 = _world_tip(light_pose, heavy.position, manifest.render_scale)
+		var light_tip: Vector2 = _world_tip(light_pose, heavy.position, manifest.render_scale, heavy.facing, manifest.native_facing)
 		if endpoint.distance_to(light_tip) > 1.0:
 			passed += 1
 		else:
@@ -56,7 +56,11 @@ func _mid_active(attack_def: Variant) -> Variant:
 	fighter._attack_state.advance(attack_def.windup_end + 0.01)
 	return fighter
 
-func _world_tip(pose: Dictionary, root: Vector2, scale: float) -> Vector2:
+func _world_tip(pose: Dictionary, root: Vector2, scale: float, facing: int, manifest_native_facing: int) -> Vector2:
 	var foot: Vector2 = pose.get("footAnchor", Vector2.ZERO) as Vector2
 	var tip: Vector2 = pose.get("weaponTip", Vector2.ZERO) as Vector2
-	return root + (tip - foot) * scale
+	var local: Vector2 = (tip - foot) * scale
+	var native_facing: int = -1 if int(pose.get("nativeFacing", manifest_native_facing)) < 0 else 1
+	if facing * native_facing < 0:
+		local.x = -local.x
+	return root + local

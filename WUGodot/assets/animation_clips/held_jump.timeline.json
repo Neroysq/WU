@@ -1,9 +1,24 @@
 {
   "id": "held_jump",
   "duration": 0.3,
+  "loop": false,
   "useFighterOffset": true,
   "keyposes": [
-    { "t": 0.0, "pose": "vp_rise" },
-    { "t": 0.5, "pose": "vp_peak" }
+    { "t": 0.0000, "pose": "hu_jump_00" },
+    { "t": 0.0667, "pose": "hu_jump_01" },
+    { "t": 0.1333, "pose": "hu_jump_02" },
+    { "t": 0.2000, "pose": "hu_jump_03" },
+    { "t": 0.2667, "pose": "hu_jump_04" },
+    { "t": 0.3333, "pose": "hu_jump_05" },
+    { "t": 0.4000, "pose": "hu_jump_06" },
+    { "t": 0.4667, "pose": "hu_jump_07" },
+    { "t": 0.5333, "pose": "hu_jump_08" },
+    { "t": 0.6000, "pose": "hu_jump_09" },
+    { "t": 0.6667, "pose": "hu_jump_10" },
+    { "t": 0.7333, "pose": "hu_jump_11" },
+    { "t": 0.8000, "pose": "hu_jump_12" },
+    { "t": 0.8667, "pose": "hu_jump_13" },
+    { "t": 0.9333, "pose": "hu_jump_14" },
+    { "t": 1.0000, "pose": "hu_jump_15" }
   ]
 }

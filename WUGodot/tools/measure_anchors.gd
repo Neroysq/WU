@@ -23,9 +23,11 @@ const ALIASES: Dictionary = {
 
 func _init() -> void:
 	var root: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST_PATH)) as Dictionary
+	var root_native_facing: int = _native_facing(root.get("nativeFacing", root.get("native_facing", 1)))
 	var poses: Dictionary = root.get("poses", {}) as Dictionary
 	for pose_name in poses.keys():
 		var pose: Dictionary = poses[pose_name] as Dictionary
+		var native_facing: int = _native_facing(pose.get("nativeFacing", root_native_facing))
 		var tex: Texture2D = load(str(pose.get("path", ""))) as Texture2D
 		if tex == null:
 			print("SKIP %s" % pose_name)
@@ -33,7 +35,7 @@ func _init() -> void:
 		var img: Image = tex.get_image()
 		if img.is_compressed():
 			img.decompress()
-		var m: Dictionary = AnchorMeasureScript.measure(img)
+		var m: Dictionary = AnchorMeasureScript.measure(img, native_facing)
 		pose["footAnchor"] = _stable_root(pose_name, _iv(m["footAnchor"] as Vector2), img.get_size())
 		pose["weaponTip"] = _iv(m["weaponTip"] as Vector2)
 		pose["chestAnchor"] = _iv(m["chestAnchor"] as Vector2)
@@ -51,6 +53,9 @@ func _init() -> void:
 
 func _iv(v: Vector2) -> Array:
 	return [int(round(v.x)), int(round(v.y))]
+
+func _native_facing(raw: Variant) -> int:
+	return -1 if int(raw) < 0 else 1
 
 func _stable_root(pose_name: String, fallback: Array, canvas_size: Vector2i) -> Array:
 	var prefix: String = pose_name.get_slice("_", 0)

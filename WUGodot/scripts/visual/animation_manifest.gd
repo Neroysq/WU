@@ -4,6 +4,7 @@ extends RefCounted
 var id: String = "unknown"
 var source_canvas: Vector2 = Vector2(256, 256)
 var render_scale: float = 1.0
+var native_facing: int = 1
 var weapon_class: String = "sword"
 var poses: Dictionary = {}
 
@@ -22,6 +23,7 @@ static func load_from_file(path: String) -> Variant:
 	manifest.id = str(root.get("id", "unknown"))
 	manifest.source_canvas = _vec2(root.get("sourceCanvas", [256, 256]), Vector2(256, 256))
 	manifest.render_scale = float(root.get("renderScale", 1.0))
+	manifest.native_facing = _facing(root.get("nativeFacing", root.get("native_facing", 1)))
 	manifest.weapon_class = str(root.get("weaponClass", "sword"))
 
 	var raw_poses: Dictionary = root.get("poses", {}) as Dictionary
@@ -34,6 +36,7 @@ static func load_from_file(path: String) -> Variant:
 			"chestAnchor": _vec2(entry.get("chestAnchor", null), Vector2.ZERO),
 			"weaponTip": _vec2(entry.get("weaponTip", null), Vector2.ZERO),
 			"hurtbox": _rect(hurtbox_variant),
+			"nativeFacing": _facing(entry.get("nativeFacing", entry.get("native_facing", manifest.native_facing))),
 			"_has": entry.keys(),
 		}
 	return manifest
@@ -69,6 +72,9 @@ static func _vec2(raw: Variant, fallback: Vector2) -> Vector2:
 		if list.size() >= 2:
 			return Vector2(float(list[0]), float(list[1]))
 	return fallback
+
+static func _facing(raw: Variant) -> int:
+	return -1 if int(raw) < 0 else 1
 
 static func _rect(raw: Variant) -> Variant:
 	if typeof(raw) == TYPE_ARRAY:

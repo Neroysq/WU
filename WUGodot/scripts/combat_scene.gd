@@ -225,10 +225,10 @@ func dev_prepare_capture_state(state_name: String) -> void:
 
 	_player.reset_for_combat()
 	_enemy.reset_for_combat()
-	_player.position = Vector2(520.0, GameConstants.GROUND_Y)
-	_enemy.position = Vector2(805.0, GameConstants.GROUND_Y)
-	_player.facing = 1
-	_enemy.facing = -1
+	_player.position = Vector2(805.0, GameConstants.GROUND_Y)
+	_enemy.position = Vector2(520.0, GameConstants.GROUND_Y)
+	_player.facing = -1
+	_enemy.facing = 1
 	_player.velocity = Vector2.ZERO
 	_enemy.velocity = Vector2.ZERO
 	_player.animation_offset = Vector2.ZERO
@@ -258,7 +258,7 @@ func dev_prepare_capture_state(state_name: String) -> void:
 			_entry_timer = ENTRY_DRAW_DURATION
 			_entry_presenter_active = true
 		"02_walk":
-			_enemy.position = Vector2(1300.0, GameConstants.GROUND_Y)
+			_enemy.position = Vector2(130.0, GameConstants.GROUND_Y)
 			_player.current_animation = Fighter.AnimationState.WALKING
 			_player.velocity.x = _player.move_speed * float(_player.facing)
 			_player.animation_timer = 0.2
@@ -336,10 +336,10 @@ func _dev_place_at_enemy_preferred_range() -> void:
 	if _enemy.ai_brain != null:
 		preferred = _enemy.ai_brain.preferred_range
 	var gap: float = preferred + _enemy.half_width + _player.half_width
-	_player.position = Vector2(520.0, GameConstants.GROUND_Y)
-	_enemy.position = Vector2(_player.position.x + gap, GameConstants.GROUND_Y)
-	_player.facing = 1
-	_enemy.facing = -1
+	_player.position = Vector2(805.0, GameConstants.GROUND_Y)
+	_enemy.position = Vector2(_player.position.x - gap, GameConstants.GROUND_Y)
+	_player.facing = -1
+	_enemy.facing = 1
 	_player.velocity = Vector2.ZERO
 	_enemy.velocity = Vector2.ZERO
 

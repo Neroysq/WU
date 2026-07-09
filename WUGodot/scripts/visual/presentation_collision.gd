@@ -8,8 +8,8 @@ const ShapeMathScript = preload("res://scripts/visual/collision_shape_math.gd")
 const STRIKE_POSE: String = "strike_extended"
 const VISUAL_BODY_HEIGHT: float = 260.0
 const STRIKE_POSE_BY_ID: Dictionary = {
-	"hu_light": "vl_051",
-	"hu_heavy": "vh_070",
+	"hu_light": "hu_light_05",
+	"hu_heavy": "hu_heavy_08",
 }
 
 const _AUTHORED_IDS: Dictionary = {
@@ -55,13 +55,14 @@ func attack_capsule_world(fighter: Variant) -> Dictionary:
 		return {}
 
 	var foot: Vector2 = pose.get("footAnchor", Vector2.ZERO) as Vector2
+	var render_facing: int = fighter.facing * _pose_native_facing(pose, manifest)
 	var chest: Vector2 = pose.get("chestAnchor", Vector2.ZERO) as Vector2
 	var tip: Vector2 = pose.get("weaponTip", Vector2.ZERO) as Vector2
 	var def: Variant = fighter._attack_state.def
 	var cap: Dictionary = HitboxTemplateScript.build(manifest.weapon_class, chest, tip, bool(def.is_heavy), bool(def.is_grab))
 	return {
-		"a": _to_world(cap["a"] as Vector2, foot, fighter.position, manifest.render_scale, fighter.facing),
-		"b": _to_world(cap["b"] as Vector2, foot, fighter.position, manifest.render_scale, fighter.facing),
+		"a": _to_world(cap["a"] as Vector2, foot, fighter.position, manifest.render_scale, render_facing),
+		"b": _to_world(cap["b"] as Vector2, foot, fighter.position, manifest.render_scale, render_facing),
 		"r": float(cap["radius"]) * manifest.render_scale,
 	}
 
@@ -104,9 +105,10 @@ func _defender_hurtbox(defender: Variant) -> Rect2:
 		if hb != null:
 			var guard: Dictionary = manifest.get_pose("guard")
 			var foot: Vector2 = guard.get("footAnchor", Vector2.ZERO) as Vector2
+			var render_facing: int = defender.facing * _pose_native_facing(guard, manifest)
 			var r: Rect2 = hb as Rect2
-			var p0: Vector2 = _to_world(r.position, foot, defender.position, manifest.render_scale, defender.facing)
-			var p1: Vector2 = _to_world(r.position + r.size, foot, defender.position, manifest.render_scale, defender.facing)
+			var p0: Vector2 = _to_world(r.position, foot, defender.position, manifest.render_scale, render_facing)
+			var p1: Vector2 = _to_world(r.position + r.size, foot, defender.position, manifest.render_scale, render_facing)
 			return Rect2(Vector2(minf(p0.x, p1.x), minf(p0.y, p1.y)), (p1 - p0).abs())
 
 	var pad: float = 16.0
@@ -117,8 +119,12 @@ func _defender_hurtbox(defender: Variant) -> Rect2:
 		VISUAL_BODY_HEIGHT
 	)
 
-static func _to_world(px: Vector2, foot: Vector2, root: Vector2, scale: float, facing: int) -> Vector2:
+static func _to_world(px: Vector2, foot: Vector2, root: Vector2, scale: float, render_facing: int) -> Vector2:
 	var local: Vector2 = (px - foot) * scale
-	if facing < 0:
+	if render_facing < 0:
 		local.x = -local.x
 	return root + local
+
+static func _pose_native_facing(pose: Dictionary, manifest: Variant) -> int:
+	var fallback: int = manifest.native_facing if manifest != null else 1
+	return -1 if int(pose.get("nativeFacing", fallback)) < 0 else 1

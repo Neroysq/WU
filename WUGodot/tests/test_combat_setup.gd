@@ -22,7 +22,7 @@ func run_all() -> Dictionary:
 		failed += 1
 		failures.append("CombatSetup should create an AI enemy and CombatSystem")
 
-	if player.position == Vector2(360.0, GameConstants.GROUND_Y) and enemy.position == Vector2(1560.0, GameConstants.GROUND_Y) and player.facing == 1 and enemy.facing == -1:
+	if player.position == Vector2(1560.0, GameConstants.GROUND_Y) and enemy.position == Vector2(360.0, GameConstants.GROUND_Y) and player.facing == -1 and enemy.facing == 1:
 		passed += 1
 	else:
 		failed += 1
