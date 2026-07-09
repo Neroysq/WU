@@ -69,6 +69,8 @@ Body and arm still — ONLY the wrist snaps the tip down (the manual is explicit
 
 ## Pipeline notes
 
+- **Zoom correction law (2026-07-09):** camera-lock prompt language reduces but does not eliminate Seedance zoom (v8 back-dash zoomed 1.9× mid-clip despite it). Detect + correct with the RIGID FEATURE: measure the sword length per frame (longest steel-pixel span); per-frame scale = ref_sword/frame_sword. Mass/bbox normalization across different poses is unreliable — the sword is the only true invariant.
+
 - **Framing rule (from the K5 clip):** every pose prompt carries "the ENTIRE figure AND the ENTIRE sword from pommel to tip fully inside the image with clear empty margin on every side."
 
 - Generate K1 first (it replaces the earlier f1 gate); on approval, K2–K7 generate with K1's approved frame attached as the character reference, then clips pin K1 at start/end per the user directive (mid keys assist where Seedance/animate drifts).
