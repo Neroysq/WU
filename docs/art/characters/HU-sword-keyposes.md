@@ -60,6 +60,7 @@ Body and arm still — ONLY the wrist snaps the tip down (the manual is explicit
 
 ## Prompt & verification law (learned 2026-07-08, consistency pass)
 
+- **VIEWPOINT TRICK (2026-07-09, user-discovered — the strongest hand/side tool):** to swap which arm is near/far while preserving the pose, do NOT edit anatomy — edit the CAMERA: "change the viewpoint to the other side of the body, like we are taking the photo from behind him." The model re-renders the same pose from the opposite side (arms/scabbard swap sides naturally and correctly), then MIRROR the result deterministically to restore the original facing. Chain: viewpoint-flip edit + PIL mirror = hand swap with pose, props, and depth all correct.
 - **DEPTH-ORDER LANGUAGE (2026-07-09, the fix that finally worked):** to control WHICH arm holds the sword, never say left/right — describe OCCLUSION: "the arm holding the sword is the arm CLOSER to the viewer, drawn fully visible IN FRONT of and overlapping the chest/head; the other arm is the FARTHER one, partially hidden BEHIND the body." This produced right-facing near-arm k5/k6 on the first try after every left/right phrasing failed.
 - **HAND LAW (learned from the dash/jump hand-swap):** every pose holds the sword in the **near arm** (his right, closest to the viewer) — same as k1. Prompt phrasing must say "the arm NEARER to the viewer" — "right hand" is ambiguous to the generator in side view. **Pins that disagree on hands force every video clip to swap hands mid-motion**; verify the sword hand on every new pose before it becomes a pin.
 
