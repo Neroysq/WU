@@ -176,49 +176,49 @@
       "notes": "LOCKED round 5: right-facing, near-arm sword, far-side scabbard (mouth forward), 6-head proportions (held_relaxed target). k1 = viewpoint-trick back view. Full law stack in HU-sword-keyposes.md."
     },
     "hu_clip_attack_light": {
-      "file": "art/canon/hu/clips/attack_light/ (16 frames + preview)",
-      "prompt": "Seedance sequence k1->k2->k1, one slow-mo thrust, camera-lock language; harvested 16 frames (5 windup/6 active/5 recovery)",
+      "file": "art/canon/hu/clips/attack_light/ (97 frames FULL DENSITY + preview)",
+      "prompt": "final locked-canon roll (see roll-request page); full 97-master harvest for timeline flexibility (user: max frames to speed up/slow down at install)",
       "backend": "seedance via pixelforge-sprite animate-video",
-      "generator": "corrected harvest pipeline (spark-strip, constant-mass, shared-tile quantize)",
+      "generator": "harvest_full (phase-target by fraction, spark-strip, purple->steel, per-frame palette snap)",
       "seed": null,
-      "approved": "2026-07-08",
-      "notes": "source video archived in candidates/.../v3/source_video.mp4; mass scales 0.98-1.03; install = implementer (manifest+timeline per venom-handoff recipe)"
+      "approved": "2026-07-09 (final set)",
+      "notes": "timelines pick subsets at install; exact-duplicate frames dropped only"
     },
     "hu_clip_jump": {
-      "file": "art/canon/candidates/hu/clips/jump/v7-noflip/ (16 frames + source video)",
-      "prompt": "k1 -> k6' (mirrored apex) -> k1, clean vertical rise, no flip (user-approved roll B)",
+      "file": "art/canon/hu/clips/jump/ (97 frames FULL DENSITY + preview)",
+      "prompt": "final locked-canon roll (see roll-request page); full 97-master harvest for timeline flexibility (user: max frames to speed up/slow down at install)",
       "backend": "seedance via pixelforge-sprite animate-video",
-      "generator": "phase-aware harvest",
+      "generator": "harvest_full (phase-target by fraction, spark-strip, purple->steel, per-frame palette snap)",
       "seed": null,
-      "approved": "2026-07-09",
-      "notes": "APPROVED by user. Installs mirrored (final left-facing convention). Dash counterpart pending re-roll (v7 froze mid-clip)."
+      "approved": "2026-07-09 (final set)",
+      "notes": "timelines pick subsets at install; exact-duplicate frames dropped only"
     },
     "hu_clip_dash": {
-      "file": "art/canon/hu/clips/dash/ (16 frames + preview)",
-      "prompt": "back-dash k1 -> k5' -> k1, continuous glide no rolling; source zoom 1.9x corrected by sword-length normalization (head-validated)",
+      "file": "art/canon/hu/clips/dash/ (97 frames FULL DENSITY + preview)",
+      "prompt": "final locked-canon roll (see roll-request page); full 97-master harvest for timeline flexibility (user: max frames to speed up/slow down at install)",
       "backend": "seedance via pixelforge-sprite animate-video",
-      "generator": "sword-measure/head-validate harvest",
+      "generator": "harvest_full (phase-target by fraction, spark-strip, purple->steel, per-frame palette snap)",
       "seed": null,
-      "approved": "2026-07-09",
-      "notes": "APPROVED. Serves both dash directions for now (forward variant later). Installs mirrored per final convention."
+      "approved": "2026-07-09 (final set)",
+      "notes": "timelines pick subsets at install; exact-duplicate frames dropped only"
     },
     "hu_clip_heavy": {
-      "file": "art/canon/candidates/hu/clips/heavy/v2/ (16 frames + source video)",
-      "prompt": "k1 -> k3 -> k1 overhead chop, diagonal windup (blade in frame), smear strike frame",
+      "file": "art/canon/hu/clips/attack_heavy/ (97 frames FULL DENSITY + preview)",
+      "prompt": "final locked-canon roll (see roll-request page); full 97-master harvest for timeline flexibility (user: max frames to speed up/slow down at install)",
       "backend": "seedance via pixelforge-sprite animate-video",
-      "generator": "phase-aware harvest",
+      "generator": "harvest_full (phase-target by fraction, spark-strip, purple->steel, per-frame palette snap)",
       "seed": null,
-      "approved": "2026-07-08",
-      "notes": "APPROVED: user passed the combat-set board 2026-07-08 raising findings only on dash/jump; heavy re-roll (diagonal windup) explicitly reviewed. Promote to art/canon/hu/clips/attack_heavy/ at install."
+      "approved": "2026-07-09 (final set)",
+      "notes": "timelines pick subsets at install; exact-duplicate frames dropped only"
     },
     "hu_clip_deflect": {
-      "file": "art/canon/candidates/hu/clips/block/ (16 frames + source video)",
-      "prompt": "k1 -> k4 -> k1 rise into angled deflect, braced hold (frames 5-12 = block-hold loop), return",
+      "file": "art/canon/hu/clips/guard_deflect/ (97 frames FULL DENSITY + preview)",
+      "prompt": "final locked-canon roll (see roll-request page); full 97-master harvest for timeline flexibility (user: max frames to speed up/slow down at install)",
       "backend": "seedance via pixelforge-sprite animate-video",
-      "generator": "phase-aware harvest",
+      "generator": "harvest_full (phase-target by fraction, spark-strip, purple->steel, per-frame palette snap)",
       "seed": null,
-      "approved": "2026-07-08",
-      "notes": "APPROVED: same board pass as heavy (user findings were dash/jump only; set closed 2026-07-09 'it is ok'). Promote to art/canon/hu/clips/guard_deflect/ at install."
+      "approved": "2026-07-09 (final set)",
+      "notes": "timelines pick subsets at install; exact-duplicate frames dropped only"
     },
     "hu_held": {
       "file": "art/canon/hu/held/ (hit, stun_a, stun_b, relaxed, fall, land)",
@@ -228,6 +228,15 @@
       "seed": null,
       "approved": "2026-07-09 (round-5 lock)",
       "notes": "stun_a keeps cartoon dizzy stars (user-accepted stun-read convention)"
+    },
+    "hu_clip_entry": {
+      "file": "art/canon/hu/clips/entry/ (97 frames FULL DENSITY + preview)",
+      "prompt": "final locked-canon roll (see roll-request page); full 97-master harvest for timeline flexibility (user: max frames to speed up/slow down at install)",
+      "backend": "seedance via pixelforge-sprite animate-video",
+      "generator": "harvest_full (phase-target by fraction, spark-strip, purple->steel, per-frame palette snap)",
+      "seed": null,
+      "approved": "2026-07-09 (final set)",
+      "notes": "timelines pick subsets at install; exact-duplicate frames dropped only"
     }
   }
 }
