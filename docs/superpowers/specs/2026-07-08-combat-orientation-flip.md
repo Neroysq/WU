@@ -47,3 +47,17 @@ be rolled from uniformly-facing pins or the hand swaps mid-clip.
   undo the handedness). Enemy keeps runtime flipping as today.
 - Anatomical result: Hu is right-handed on screen at all times.
 - Back-dash note stands: one dash clip serves both directions for now.
+
+## GROUND TRUTH (2026-07-09, user-confirmed on the layout mock)
+
+1. **Layout FINAL:** player always on the RIGHT facing LEFT; enemy on the LEFT.
+2. **Sword hand FINAL:** as in the mock — blade on the VIEWER side, fully visible
+   (anatomically his left when facing left; readability over strict anatomy).
+   Operationally: final on-screen player art = MIRROR of the right-facing canon.
+3. **Dash:** the v6 back-dash structure is directionally correct (guard-right +
+   leftward flight; mirrors at install into the final rightward back-dash).
+   Its defect is the SOMERSAULT — a dash must not roll. Re-roll with rolling
+   forbidden (approval pending). One dash clip serves both directions for now.
+
+Install derivation: batch-mirror ALL player pins + clip frames (deterministic);
+player never runtime-flipped; enemy keeps runtime flip.
