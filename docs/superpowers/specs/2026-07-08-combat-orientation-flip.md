@@ -61,3 +61,17 @@ be rolled from uniformly-facing pins or the hand swaps mid-clip.
 
 Install derivation: batch-mirror ALL player pins + clip frames (deterministic);
 player never runtime-flipped; enemy keeps runtime flip.
+
+## REVERSAL (2026-07-09, final): back to player-LEFT, facing-RIGHT
+
+User decision after playtest + the scabbard finding: the original layout wins.
+- **Art: faces RIGHT natively, sword in the NEAR (right) hand** — anatomically
+  right-handed AND blade viewer-side. No install mirroring, no nativeFacing
+  overrides (mechanism stays in code, set to +1 — harmless and future-useful).
+- **Player spawns LEFT facing RIGHT; enemy RIGHT facing LEFT** (revert
+  combat_setup.gd to facing 1/-1 and any capture setups).
+- **Scabbard law** (HU-sword-keyposes.md) composes cleanly here: sheathed states
+  show the scabbard at the LEFT hip = far side when facing right.
+- k5/k6 (currently mirrored/left-facing in canon) must be REGENERATED
+  right-facing with the sword in the near hand; then ALL clips re-roll from the
+  cleaned right-facing pins, and the game re-installs without the mirror step.
