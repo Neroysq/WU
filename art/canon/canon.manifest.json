@@ -183,6 +183,15 @@
       "seed": null,
       "approved": "2026-07-08",
       "notes": "source video archived in candidates/.../v3/source_video.mp4; mass scales 0.98-1.03; install = implementer (manifest+timeline per venom-handoff recipe)"
+    },
+    "hu_clip_jump": {
+      "file": "art/canon/candidates/hu/clips/jump/v7-noflip/ (16 frames + source video)",
+      "prompt": "k1 -> k6' (mirrored apex) -> k1, clean vertical rise, no flip (user-approved roll B)",
+      "backend": "seedance via pixelforge-sprite animate-video",
+      "generator": "phase-aware harvest",
+      "seed": null,
+      "approved": "2026-07-09",
+      "notes": "APPROVED by user. Installs mirrored (final left-facing convention). Dash counterpart pending re-roll (v7 froze mid-clip)."
     }
   }
 }
