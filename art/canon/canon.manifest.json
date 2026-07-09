@@ -192,6 +192,15 @@
       "seed": null,
       "approved": "2026-07-09",
       "notes": "APPROVED by user. Installs mirrored (final left-facing convention). Dash counterpart pending re-roll (v7 froze mid-clip)."
+    },
+    "hu_clip_dash": {
+      "file": "art/canon/hu/clips/dash/ (16 frames + preview)",
+      "prompt": "back-dash k1 -> k5' -> k1, continuous glide no rolling; source zoom 1.9x corrected by sword-length normalization (head-validated)",
+      "backend": "seedance via pixelforge-sprite animate-video",
+      "generator": "sword-measure/head-validate harvest",
+      "seed": null,
+      "approved": "2026-07-09",
+      "notes": "APPROVED. Serves both dash directions for now (forward variant later). Installs mirrored per final convention."
     }
   }
 }
