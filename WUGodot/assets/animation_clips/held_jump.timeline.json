@@ -4,21 +4,16 @@
   "loop": false,
   "useFighterOffset": true,
   "keyposes": [
-    { "t": 0.0000, "pose": "hu_jump_00" },
-    { "t": 0.0667, "pose": "hu_jump_01" },
-    { "t": 0.1333, "pose": "hu_jump_02" },
-    { "t": 0.2000, "pose": "hu_jump_03" },
-    { "t": 0.2667, "pose": "hu_jump_04" },
-    { "t": 0.3333, "pose": "hu_jump_05" },
-    { "t": 0.4000, "pose": "hu_jump_06" },
-    { "t": 0.4667, "pose": "hu_jump_07" },
-    { "t": 0.5333, "pose": "hu_jump_08" },
-    { "t": 0.6000, "pose": "hu_jump_09" },
-    { "t": 0.6667, "pose": "hu_jump_10" },
-    { "t": 0.7333, "pose": "hu_jump_11" },
-    { "t": 0.8000, "pose": "hu_jump_12" },
-    { "t": 0.8667, "pose": "hu_jump_13" },
-    { "t": 0.9333, "pose": "hu_jump_14" },
-    { "t": 1.0000, "pose": "hu_jump_15" }
+    { "t": 0.0000, "pose": "hu_jump_000" },
+    { "t": 0.1000, "pose": "hu_jump_008" },
+    { "t": 0.2000, "pose": "hu_jump_016" },
+    { "t": 0.3333, "pose": "hu_jump_028" },
+    { "t": 0.4667, "pose": "hu_jump_040" },
+    { "t": 0.5667, "pose": "hu_jump_048" },
+    { "t": 0.6667, "pose": "hu_jump_056" },
+    { "t": 0.7667, "pose": "hu_jump_068" },
+    { "t": 0.8667, "pose": "hu_jump_080" },
+    { "t": 0.9667, "pose": "hu_jump_088" },
+    { "t": 1.0000, "pose": "hu_jump_095" }
   ]
 }

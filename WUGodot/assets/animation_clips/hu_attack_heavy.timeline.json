@@ -2,27 +2,26 @@
   "id": "hu_attack_heavy",
   "duration": "fromAttackDef",
   "keyposes": [
-    { "t": 0.00, "pose": "hu_heavy_00" },
-    { "t": 0.12, "pose": "hu_heavy_01" },
-    { "t": 0.24, "pose": "hu_heavy_02" },
-    { "t": 0.36, "pose": "hu_heavy_03" },
-    { "t": 0.45, "pose": "hu_heavy_04" },
-    { "t": "windup_end", "pose": "hu_heavy_05" },
-    { "t": 0.50, "pose": "hu_heavy_06" },
-    { "t": 0.54, "pose": "hu_heavy_07" },
-    { "t": 0.58, "pose": "hu_heavy_08" },
-    { "t": 0.62, "pose": "hu_heavy_09" },
-    { "t": "active_end", "pose": "hu_heavy_10" },
-    { "t": 0.70, "pose": "hu_heavy_11" },
-    { "t": 0.76, "pose": "hu_heavy_12" },
-    { "t": 0.82, "pose": "hu_heavy_13" },
-    { "t": 0.91, "pose": "hu_heavy_14" },
-    { "t": 1.00, "pose": "hu_heavy_15" }
+    { "t": 0.00, "pose": "hu_heavy_000" },
+    { "t": 0.12, "pose": "hu_heavy_010" },
+    { "t": 0.24, "pose": "hu_heavy_020" },
+    { "t": 0.36, "pose": "hu_heavy_030" },
+    { "t": 0.45, "pose": "hu_heavy_040" },
+    { "t": 0.50, "pose": "hu_heavy_050" },
+    { "t": "windup_end", "pose": "hu_heavy_058" },
+    { "t": 0.56, "pose": "hu_heavy_064" },
+    { "t": "active_end", "pose": "hu_heavy_070" },
+    { "t": 0.69, "pose": "hu_heavy_074" },
+    { "t": 0.76, "pose": "hu_heavy_078" },
+    { "t": 0.82, "pose": "hu_heavy_078" },
+    { "t": 0.87, "pose": "hu_heavy_082" },
+    { "t": 0.93, "pose": "hu_heavy_088" },
+    { "t": 1.00, "pose": "hu_heavy_096" }
   ],
   "tracks": {
     "smear": [
       { "t": 0.47, "v": 0.25 },
-      { "t": 0.60, "v": 1.0 },
+      { "t": 0.58, "v": 1.0 },
       { "t": 0.67, "v": 0.0 }
     ]
   },

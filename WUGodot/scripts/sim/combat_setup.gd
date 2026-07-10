@@ -15,10 +15,10 @@ static func prepare(player: Fighter, node: MapNode, forced_archetype: String = "
 	_apply_encounter_modifiers(enemy, encounter_context)
 	hit_geometry.register_fighter(player, "hu")
 
-	player.position = Vector2(1560.0, GameConstants.GROUND_Y)
-	enemy.position = Vector2(360.0, GameConstants.GROUND_Y)
-	player.facing = -1
-	enemy.facing = 1
+	player.position = Vector2(360.0, GameConstants.GROUND_Y)
+	enemy.position = Vector2(1560.0, GameConstants.GROUND_Y)
+	player.facing = 1
+	enemy.facing = -1
 
 	return {
 		"player": player,

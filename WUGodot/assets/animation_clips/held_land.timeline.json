@@ -3,6 +3,6 @@
   "duration": 0.2,
   "useFighterOffset": true,
   "keyposes": [
-    { "t": 0.0, "pose": "vp_land" }
+    { "t": 0.0, "pose": "hu_land" }
   ]
 }

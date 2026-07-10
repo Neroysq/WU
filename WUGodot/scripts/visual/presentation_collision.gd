@@ -8,8 +8,8 @@ const ShapeMathScript = preload("res://scripts/visual/collision_shape_math.gd")
 const STRIKE_POSE: String = "strike_extended"
 const VISUAL_BODY_HEIGHT: float = 260.0
 const STRIKE_POSE_BY_ID: Dictionary = {
-	"hu_light": "hu_light_05",
-	"hu_heavy": "hu_heavy_08",
+	"hu_light": "hu_light_030",
+	"hu_heavy": "hu_heavy_058",
 }
 
 const _AUTHORED_IDS: Dictionary = {

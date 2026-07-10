@@ -11,14 +11,14 @@ const STABLE_ROOTS: Dictionary = {
 	"vp": [334, 382],
 }
 const ALIASES: Dictionary = {
-	"breath": "vi_050",
-	"guard": "vi_002",
-	"heavy_recover": "vh_080",
-	"heavy_strike": "vh_064",
-	"heavy_windup": "vh_001",
-	"recover": "vl_081",
-	"strike_extended": "vl_051",
-	"windup": "vl_001",
+	"breath": "hu_k1",
+	"guard": "hu_k1",
+	"heavy_recover": "hu_heavy_082",
+	"heavy_strike": "hu_heavy_064",
+	"heavy_windup": "hu_heavy_050",
+	"recover": "hu_light_068",
+	"strike_extended": "hu_light_038",
+	"windup": "hu_light_024",
 }
 
 func _init() -> void:
