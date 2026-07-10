@@ -40,3 +40,18 @@
 3. Matchup capture w/ build (spec file per run.sh:141): blade length equal across
    action frames; sword never changes hands; entry draw plays at combat start.
 4. In-game scale vs idle + head-size constancy spot-check (~10%).
+
+## Addendum (2026-07-10, final harvests — supersedes the 256×256 frame contract)
+
+- Clips are now **variable-canvas envelope frames** (light 471×257 · heavy 325×320 ·
+  deflect 253×229 · dash 304×229 · jump 249×319 · entry 257×309), spatially
+  REGISTERED: the character holds one position across a clip's frames; only the
+  pose moves. Nothing is cropped.
+- `install_raw_frames.gd`: compute footAnchor from content bbox per frame as
+  specced — do NOT assume 256×256 or bottom-anchored-at-246; use each frame's
+  actual content. Spatial registration means anchors will be consistent within
+  a clip by construction.
+- **Heavy recovery**: the source jump-cuts from the low chop to guard (~2
+  frames). ACCEPTED by the user — the timeline should ease/hold across that
+  transition rather than expecting smooth source frames.
+- White impact flash (≤2 frames, light clip) is §3c-compliant; keep.

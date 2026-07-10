@@ -181,7 +181,7 @@
       "backend": "seedance via pixelforge-sprite animate-video",
       "generator": "harvest_fm v2 (source-trust constant scale + REGISTRATION-PRESERVING union-envelope canvas — no cropping, no centering jitter)",
       "seed": null,
-      "approved": "2026-07-10 (source-trust harvest)",
+      "approved": "2026-07-10 FINAL (user: 'the current animations are acceptable')",
       "notes": "97f full density; envelope canvas 471x257 (VARIABLE size — installer computes footAnchor from content; frames are spatially registered); white impact flash <=2 frames is law-compliant (S3c)"
     },
     "hu_clip_jump": {
@@ -190,7 +190,7 @@
       "backend": "seedance via pixelforge-sprite animate-video",
       "generator": "harvest_fm v2 (source-trust constant scale + REGISTRATION-PRESERVING union-envelope canvas — no cropping, no centering jitter)",
       "seed": null,
-      "approved": "2026-07-10 (source-trust harvest)",
+      "approved": "2026-07-10 FINAL (user: 'the current animations are acceptable')",
       "notes": "97f full density; envelope canvas 249x319 (VARIABLE size — installer computes footAnchor from content; frames are spatially registered); white impact flash <=2 frames is law-compliant (S3c)"
     },
     "hu_clip_dash": {
@@ -199,7 +199,7 @@
       "backend": "seedance via pixelforge-sprite animate-video",
       "generator": "harvest_fm v2 (source-trust constant scale + REGISTRATION-PRESERVING union-envelope canvas — no cropping, no centering jitter)",
       "seed": null,
-      "approved": "2026-07-10 (source-trust harvest)",
+      "approved": "2026-07-10 FINAL (user: 'the current animations are acceptable')",
       "notes": "97f full density; envelope canvas 304x229 (VARIABLE size — installer computes footAnchor from content; frames are spatially registered); white impact flash <=2 frames is law-compliant (S3c)"
     },
     "hu_clip_heavy": {
@@ -208,8 +208,8 @@
       "backend": "seedance via pixelforge-sprite animate-video",
       "generator": "harvest_fm v2 (source-trust constant scale + REGISTRATION-PRESERVING union-envelope canvas — no cropping, no centering jitter)",
       "seed": null,
-      "approved": "2026-07-10 (source-trust harvest)",
-      "notes": "97f full density; envelope canvas 325x320 (VARIABLE size — installer computes footAnchor from content; frames are spatially registered); white impact flash <=2 frames is law-compliant (S3c)"
+      "approved": "2026-07-10 FINAL (user: 'the current animations are acceptable')",
+      "notes": "97f full density; envelope canvas 325x320 (VARIABLE size — installer computes footAnchor from content; frames are spatially registered); white impact flash <=2 frames is law-compliant (S3c) — recovery jump-cut ACCEPTED as-is: timeline eases across the two transition frames (no re-roll)"
     },
     "hu_clip_deflect": {
       "file": "art/canon/hu/clips/guard_deflect/ (97 frames FULL DENSITY + preview)",
@@ -217,7 +217,7 @@
       "backend": "seedance via pixelforge-sprite animate-video",
       "generator": "harvest_fm v2 (source-trust constant scale + REGISTRATION-PRESERVING union-envelope canvas — no cropping, no centering jitter)",
       "seed": null,
-      "approved": "2026-07-10 (source-trust harvest)",
+      "approved": "2026-07-10 FINAL (user: 'the current animations are acceptable')",
       "notes": "97f full density; envelope canvas 253x229 (VARIABLE size — installer computes footAnchor from content; frames are spatially registered); white impact flash <=2 frames is law-compliant (S3c)"
     },
     "hu_held": {
@@ -235,7 +235,7 @@
       "backend": "seedance via pixelforge-sprite animate-video",
       "generator": "harvest_fm v2 (source-trust constant scale + REGISTRATION-PRESERVING union-envelope canvas — no cropping, no centering jitter)",
       "seed": null,
-      "approved": "2026-07-10 (source-trust harvest)",
+      "approved": "2026-07-10 FINAL (user: 'the current animations are acceptable')",
       "notes": "97f full density; envelope canvas 257x309 (VARIABLE size — installer computes footAnchor from content; frames are spatially registered); white impact flash <=2 frames is law-compliant (S3c)"
     }
   }
