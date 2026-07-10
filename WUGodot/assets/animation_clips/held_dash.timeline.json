@@ -4,16 +4,129 @@
   "loop": false,
   "useFighterOffset": true,
   "keyposes": [
-    { "t": 0.0000, "pose": "hu_dash_000" },
-    { "t": 0.0667, "pose": "hu_dash_006" },
-    { "t": 0.1333, "pose": "hu_dash_012" },
-    { "t": 0.2667, "pose": "hu_dash_020" },
-    { "t": 0.4000, "pose": "hu_dash_032" },
-    { "t": 0.5333, "pose": "hu_dash_044" },
-    { "t": 0.6667, "pose": "hu_dash_056" },
-    { "t": 0.8000, "pose": "hu_dash_068" },
-    { "t": 0.9000, "pose": "hu_dash_080" },
-    { "t": 0.9667, "pose": "hu_dash_090" },
-    { "t": 1.0000, "pose": "hu_dash_096" }
+    {
+      "t": 0.0,
+      "pose": "hu_dash_000"
+    },
+    {
+      "t": 0.035,
+      "pose": "hu_dash_003"
+    },
+    {
+      "t": 0.07,
+      "pose": "hu_dash_006"
+    },
+    {
+      "t": 0.105,
+      "pose": "hu_dash_009"
+    },
+    {
+      "t": 0.14,
+      "pose": "hu_dash_012"
+    },
+    {
+      "t": 0.18,
+      "pose": "hu_dash_016"
+    },
+    {
+      "t": 0.209,
+      "pose": "hu_dash_019"
+    },
+    {
+      "t": 0.239,
+      "pose": "hu_dash_022"
+    },
+    {
+      "t": 0.268,
+      "pose": "hu_dash_025"
+    },
+    {
+      "t": 0.298,
+      "pose": "hu_dash_028"
+    },
+    {
+      "t": 0.327,
+      "pose": "hu_dash_031"
+    },
+    {
+      "t": 0.357,
+      "pose": "hu_dash_034"
+    },
+    {
+      "t": 0.386,
+      "pose": "hu_dash_037"
+    },
+    {
+      "t": 0.416,
+      "pose": "hu_dash_040"
+    },
+    {
+      "t": 0.445,
+      "pose": "hu_dash_043"
+    },
+    {
+      "t": 0.475,
+      "pose": "hu_dash_046"
+    },
+    {
+      "t": 0.504,
+      "pose": "hu_dash_049"
+    },
+    {
+      "t": 0.534,
+      "pose": "hu_dash_052"
+    },
+    {
+      "t": 0.563,
+      "pose": "hu_dash_055"
+    },
+    {
+      "t": 0.593,
+      "pose": "hu_dash_058"
+    },
+    {
+      "t": 0.622,
+      "pose": "hu_dash_061"
+    },
+    {
+      "t": 0.652,
+      "pose": "hu_dash_064"
+    },
+    {
+      "t": 0.681,
+      "pose": "hu_dash_067"
+    },
+    {
+      "t": 0.711,
+      "pose": "hu_dash_070"
+    },
+    {
+      "t": 0.74,
+      "pose": "hu_dash_072"
+    },
+    {
+      "t": 0.78,
+      "pose": "hu_dash_076"
+    },
+    {
+      "t": 0.824,
+      "pose": "hu_dash_080"
+    },
+    {
+      "t": 0.868,
+      "pose": "hu_dash_084"
+    },
+    {
+      "t": 0.912,
+      "pose": "hu_dash_088"
+    },
+    {
+      "t": 0.956,
+      "pose": "hu_dash_092"
+    },
+    {
+      "t": 1.0,
+      "pose": "hu_dash_096"
+    }
   ]
 }

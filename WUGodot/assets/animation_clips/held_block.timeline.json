@@ -3,14 +3,105 @@
   "duration": 0.4,
   "useFighterOffset": true,
   "keyposes": [
-    { "t": 0.000, "pose": "hu_deflect_000" },
-    { "t": 0.125, "pose": "hu_deflect_008" },
-    { "t": 0.250, "pose": "hu_deflect_016" },
-    { "t": 0.375, "pose": "hu_deflect_024" },
-    { "t": 0.500, "pose": "hu_deflect_037" },
-    { "t": 0.625, "pose": "hu_deflect_050" },
-    { "t": 0.750, "pose": "hu_deflect_064" },
-    { "t": 0.875, "pose": "hu_deflect_072" },
-    { "t": 1.000, "pose": "hu_deflect_096" }
+    {
+      "t": 0.0,
+      "pose": "hu_deflect_000"
+    },
+    {
+      "t": 0.031,
+      "pose": "hu_deflect_003"
+    },
+    {
+      "t": 0.062,
+      "pose": "hu_deflect_006"
+    },
+    {
+      "t": 0.094,
+      "pose": "hu_deflect_009"
+    },
+    {
+      "t": 0.125,
+      "pose": "hu_deflect_012"
+    },
+    {
+      "t": 0.156,
+      "pose": "hu_deflect_015"
+    },
+    {
+      "t": 0.188,
+      "pose": "hu_deflect_018"
+    },
+    {
+      "t": 0.219,
+      "pose": "hu_deflect_021"
+    },
+    {
+      "t": 0.25,
+      "pose": "hu_deflect_024"
+    },
+    {
+      "t": 0.28,
+      "pose": "hu_deflect_029"
+    },
+    {
+      "t": 0.334,
+      "pose": "hu_deflect_034"
+    },
+    {
+      "t": 0.389,
+      "pose": "hu_deflect_039"
+    },
+    {
+      "t": 0.443,
+      "pose": "hu_deflect_044"
+    },
+    {
+      "t": 0.497,
+      "pose": "hu_deflect_049"
+    },
+    {
+      "t": 0.551,
+      "pose": "hu_deflect_054"
+    },
+    {
+      "t": 0.606,
+      "pose": "hu_deflect_059"
+    },
+    {
+      "t": 0.66,
+      "pose": "hu_deflect_064"
+    },
+    {
+      "t": 0.7,
+      "pose": "hu_deflect_068"
+    },
+    {
+      "t": 0.743,
+      "pose": "hu_deflect_072"
+    },
+    {
+      "t": 0.786,
+      "pose": "hu_deflect_076"
+    },
+    {
+      "t": 0.829,
+      "pose": "hu_deflect_080"
+    },
+    {
+      "t": 0.871,
+      "pose": "hu_deflect_084"
+    },
+    {
+      "t": 0.914,
+      "pose": "hu_deflect_088"
+    },
+    {
+      "t": 0.957,
+      "pose": "hu_deflect_092"
+    },
+    {
+      "t": 1.0,
+      "pose": "hu_deflect_096"
+    }
   ]
 }

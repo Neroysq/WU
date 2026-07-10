@@ -34,7 +34,7 @@ func run_all() -> Dictionary:
 	var hu_light: Variant = AttackCatalogScript.hu_light()
 	var hu_active_start_t: float = clip.event_time("attack_active_start", hu_light)
 	var hu_active_end_t: float = clip.event_time("attack_active_end", hu_light)
-	if clip.pose_at(0.0, hu_light) == "hu_light_000" and clip.pose_at(0.12, hu_light) == "hu_light_008" and clip.pose_at(hu_active_start_t - 0.01, hu_light) == "hu_light_024" and clip.pose_at(hu_active_start_t, hu_light) == "hu_light_030" and clip.pose_at(hu_active_end_t + 0.01, hu_light) == "hu_light_046" and clip.pose_at(0.67, hu_light) == "hu_light_056" and clip.pose_at(1.0, hu_light) == "hu_light_096":
+	if clip.pose_at(0.0, hu_light) == "hu_light_000" and clip.pose_at(0.12, hu_light) == "hu_light_009" and clip.pose_at(hu_active_start_t - 0.01, hu_light) == "hu_light_027" and clip.pose_at(hu_active_start_t, hu_light) == "hu_light_030" and clip.pose_at(hu_active_end_t + 0.01, hu_light) == "hu_light_046" and clip.pose_at(0.67, hu_light) == "hu_light_054" and clip.pose_at(1.0, hu_light) == "hu_light_096":
 		passed += 1
 	else:
 		failed += 1
@@ -73,7 +73,7 @@ func run_all() -> Dictionary:
 	var hu_heavy: Variant = AttackCatalogScript.hu_heavy()
 	var heavy_active_start_t: float = heavy_clip.event_time("attack_active_start", hu_heavy)
 	var heavy_active_end_t: float = heavy_clip.event_time("attack_active_end", hu_heavy)
-	if heavy_clip.pose_at(0.26, hu_heavy) == "hu_heavy_020" and heavy_clip.pose_at(heavy_active_start_t - 0.01, hu_heavy) == "hu_heavy_040" and heavy_clip.pose_at(heavy_active_start_t, hu_heavy) == "hu_heavy_058" and heavy_clip.pose_at(heavy_active_end_t, hu_heavy) == "hu_heavy_070" and not heavy_clip.use_fighter_offset and is_equal_approx(heavy_clip.sample_track("offsetX", 0.50, 0.0), 0.0) and not heavy_clip.has_track("scaleX") and heavy_clip.sample_track("smear", 0.60) > 0.5:
+	if heavy_clip.pose_at(0.26, hu_heavy) == "hu_heavy_032" and heavy_clip.pose_at(heavy_active_start_t - 0.01, hu_heavy) == "hu_heavy_054" and heavy_clip.pose_at(heavy_active_start_t, hu_heavy) == "hu_heavy_058" and heavy_clip.pose_at(heavy_active_end_t, hu_heavy) == "hu_heavy_070" and not heavy_clip.use_fighter_offset and is_equal_approx(heavy_clip.sample_track("offsetX", 0.50, 0.0), 0.0) and not heavy_clip.has_track("scaleX") and heavy_clip.sample_track("smear", 0.60) > 0.5:
 		passed += 1
 	else:
 		failed += 1
@@ -88,14 +88,14 @@ func run_all() -> Dictionary:
 
 	var jump: Variant = TimelineScript.load_from_file("res://assets/animation_clips/held_jump.timeline.json")
 	var stunned: Variant = TimelineScript.load_from_file("res://assets/animation_clips/held_stunned.timeline.json")
-	if jump.use_fighter_offset and jump.pose_at(0.0) == "hu_jump_000" and jump.pose_at(0.67) == "hu_jump_056" and stunned.use_fighter_offset and stunned.pose_at(0.5) == "hu_stun_b":
+	if jump.use_fighter_offset and jump.pose_at(0.0) == "hu_jump_000" and jump.pose_at(0.67) == "hu_jump_064" and stunned.use_fighter_offset and stunned.pose_at(0.5) == "hu_stun_b":
 		passed += 1
 	else:
 		failed += 1
 		failures.append("held timelines should use final Hu canon poses, including jump peak and stunned pair")
 
 	var entry: Variant = TimelineScript.load_from_file("res://assets/animation_clips/entry_draw.timeline.json")
-	if not entry.duration_from_attack_def and not entry.loop and is_equal_approx(entry.fixed_duration, 1.6) and entry.pose_at(0.0) == "hu_entry_000" and entry.pose_at(0.5) == "hu_entry_050" and entry.pose_at(1.0) == "hu_entry_096":
+	if not entry.duration_from_attack_def and not entry.loop and is_equal_approx(entry.fixed_duration, 1.6) and entry.pose_at(0.0) == "hu_entry_000" and entry.pose_at(0.5) == "hu_entry_049" and entry.pose_at(1.0) == "hu_entry_096":
 		passed += 1
 	else:
 		failed += 1

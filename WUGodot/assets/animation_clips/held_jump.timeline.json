@@ -4,16 +4,137 @@
   "loop": false,
   "useFighterOffset": true,
   "keyposes": [
-    { "t": 0.0000, "pose": "hu_jump_000" },
-    { "t": 0.1000, "pose": "hu_jump_008" },
-    { "t": 0.2000, "pose": "hu_jump_016" },
-    { "t": 0.3333, "pose": "hu_jump_028" },
-    { "t": 0.4667, "pose": "hu_jump_040" },
-    { "t": 0.5667, "pose": "hu_jump_048" },
-    { "t": 0.6667, "pose": "hu_jump_056" },
-    { "t": 0.7667, "pose": "hu_jump_068" },
-    { "t": 0.8667, "pose": "hu_jump_080" },
-    { "t": 0.9667, "pose": "hu_jump_088" },
-    { "t": 1.0000, "pose": "hu_jump_095" }
+    {
+      "t": 0.0,
+      "pose": "hu_jump_000"
+    },
+    {
+      "t": 0.029,
+      "pose": "hu_jump_003"
+    },
+    {
+      "t": 0.059,
+      "pose": "hu_jump_006"
+    },
+    {
+      "t": 0.088,
+      "pose": "hu_jump_009"
+    },
+    {
+      "t": 0.117,
+      "pose": "hu_jump_012"
+    },
+    {
+      "t": 0.147,
+      "pose": "hu_jump_015"
+    },
+    {
+      "t": 0.176,
+      "pose": "hu_jump_018"
+    },
+    {
+      "t": 0.205,
+      "pose": "hu_jump_021"
+    },
+    {
+      "t": 0.235,
+      "pose": "hu_jump_024"
+    },
+    {
+      "t": 0.264,
+      "pose": "hu_jump_027"
+    },
+    {
+      "t": 0.293,
+      "pose": "hu_jump_030"
+    },
+    {
+      "t": 0.323,
+      "pose": "hu_jump_033"
+    },
+    {
+      "t": 0.352,
+      "pose": "hu_jump_036"
+    },
+    {
+      "t": 0.381,
+      "pose": "hu_jump_039"
+    },
+    {
+      "t": 0.411,
+      "pose": "hu_jump_042"
+    },
+    {
+      "t": 0.44,
+      "pose": "hu_jump_044"
+    },
+    {
+      "t": 0.48,
+      "pose": "hu_jump_048"
+    },
+    {
+      "t": 0.515,
+      "pose": "hu_jump_051"
+    },
+    {
+      "t": 0.55,
+      "pose": "hu_jump_054"
+    },
+    {
+      "t": 0.585,
+      "pose": "hu_jump_057"
+    },
+    {
+      "t": 0.62,
+      "pose": "hu_jump_060"
+    },
+    {
+      "t": 0.66,
+      "pose": "hu_jump_064"
+    },
+    {
+      "t": 0.691,
+      "pose": "hu_jump_067"
+    },
+    {
+      "t": 0.722,
+      "pose": "hu_jump_070"
+    },
+    {
+      "t": 0.753,
+      "pose": "hu_jump_073"
+    },
+    {
+      "t": 0.784,
+      "pose": "hu_jump_076"
+    },
+    {
+      "t": 0.815,
+      "pose": "hu_jump_079"
+    },
+    {
+      "t": 0.845,
+      "pose": "hu_jump_082"
+    },
+    {
+      "t": 0.876,
+      "pose": "hu_jump_085"
+    },
+    {
+      "t": 0.907,
+      "pose": "hu_jump_088"
+    },
+    {
+      "t": 0.938,
+      "pose": "hu_jump_091"
+    },
+    {
+      "t": 0.969,
+      "pose": "hu_jump_094"
+    },
+    {
+      "t": 1.0,
+      "pose": "hu_jump_095"
+    }
   ]
 }

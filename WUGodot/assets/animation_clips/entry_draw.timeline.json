@@ -3,17 +3,117 @@
   "duration": 1.6,
   "loop": false,
   "keyposes": [
-    { "t": 0.00, "pose": "hu_entry_000" },
-    { "t": 0.10, "pose": "hu_entry_010" },
-    { "t": 0.20, "pose": "hu_entry_020" },
-    { "t": 0.30, "pose": "hu_entry_030" },
-    { "t": 0.42, "pose": "hu_entry_040" },
-    { "t": 0.50, "pose": "hu_entry_050" },
-    { "t": 0.60, "pose": "hu_entry_060" },
-    { "t": 0.68, "pose": "hu_entry_066" },
-    { "t": 0.76, "pose": "hu_entry_072" },
-    { "t": 0.84, "pose": "hu_entry_080" },
-    { "t": 0.92, "pose": "hu_entry_088" },
-    { "t": 1.00, "pose": "hu_entry_096" }
+    {
+      "t": 0.0,
+      "pose": "hu_entry_000"
+    },
+    {
+      "t": 0.04,
+      "pose": "hu_entry_004"
+    },
+    {
+      "t": 0.08,
+      "pose": "hu_entry_008"
+    },
+    {
+      "t": 0.12,
+      "pose": "hu_entry_012"
+    },
+    {
+      "t": 0.16,
+      "pose": "hu_entry_016"
+    },
+    {
+      "t": 0.2,
+      "pose": "hu_entry_020"
+    },
+    {
+      "t": 0.24,
+      "pose": "hu_entry_024"
+    },
+    {
+      "t": 0.28,
+      "pose": "hu_entry_028"
+    },
+    {
+      "t": 0.32,
+      "pose": "hu_entry_032"
+    },
+    {
+      "t": 0.36,
+      "pose": "hu_entry_036"
+    },
+    {
+      "t": 0.4,
+      "pose": "hu_entry_040"
+    },
+    {
+      "t": 0.432,
+      "pose": "hu_entry_043"
+    },
+    {
+      "t": 0.463,
+      "pose": "hu_entry_046"
+    },
+    {
+      "t": 0.495,
+      "pose": "hu_entry_049"
+    },
+    {
+      "t": 0.527,
+      "pose": "hu_entry_052"
+    },
+    {
+      "t": 0.558,
+      "pose": "hu_entry_055"
+    },
+    {
+      "t": 0.59,
+      "pose": "hu_entry_058"
+    },
+    {
+      "t": 0.622,
+      "pose": "hu_entry_061"
+    },
+    {
+      "t": 0.653,
+      "pose": "hu_entry_064"
+    },
+    {
+      "t": 0.685,
+      "pose": "hu_entry_067"
+    },
+    {
+      "t": 0.717,
+      "pose": "hu_entry_070"
+    },
+    {
+      "t": 0.748,
+      "pose": "hu_entry_073"
+    },
+    {
+      "t": 0.78,
+      "pose": "hu_entry_076"
+    },
+    {
+      "t": 0.82,
+      "pose": "hu_entry_080"
+    },
+    {
+      "t": 0.865,
+      "pose": "hu_entry_084"
+    },
+    {
+      "t": 0.91,
+      "pose": "hu_entry_088"
+    },
+    {
+      "t": 0.955,
+      "pose": "hu_entry_092"
+    },
+    {
+      "t": 1.0,
+      "pose": "hu_entry_096"
+    }
   ]
 }
