@@ -7,7 +7,7 @@
 **Specs of record:** `docs/superpowers/specs/2026-07-09-combat-set-install-rev3.md` + its **2026-07-10 addendum** (variable-canvas frames — read it before Task 2) · orientation ground truth + REVERSAL section in `2026-07-08-combat-orientation-flip.md` · provenance `art/canon/canon.manifest.json`.
 
 **Assets (all right-facing native, NO mirroring anywhere):**
-- Clips (97 frames each, `f%03d.png`, spatially REGISTERED, VARIABLE canvas):
+- Clips (`f%03d.png`, spatially REGISTERED, VARIABLE canvas; **97 frames each EXCEPT jump = 96** — count files, never assume):
   `art/canon/hu/clips/attack_light/` (471×257) · `attack_heavy/` (325×320) ·
   `guard_deflect/` (253×229) · `dash/` (304×229) · `jump/` (249×319, 96f) · `entry/` (257×309)
 - Held statics (256×256): `art/canon/hu/held/{hit,stun_a,stun_b,relaxed,fall,land}.png`
@@ -28,7 +28,7 @@
 **Files:** `WUGodot/tools/install_raw_frames.gd`, `run.sh` (`--install-raw-frames`).
 
 - [ ] **Step 1:** Update the installer per the rev-3 ADDENDUM: accept any canvas size; `footAnchor = (content bbox center x, content bbox bottom)` per frame from the ACTUAL frame content (no 256/246 assumptions). Frames within a clip are registered, so anchors come out consistent — assert that (per-clip footAnchor x/y spread < 4px → warn if larger).
-- [ ] **Step 2:** weaponTip: only on attack ACTIVE keyposes — steel-extreme heuristic + optional per-clip JSON override (`art/canon/hu/clips/<clip>/weapontip_overrides.json`) as already contracted.
+- [ ] **Step 2:** weaponTip: the manifest loader REQUIRES weaponTip on every pose (`animation_manifest.gd:11` `_REQUIRED_ANCHORS`) and `anchor_sanity.gd:54` measures every pose's tip. So: **emit a MEASURED weaponTip for EVERY installed pose** (steel-extreme heuristic); hand-tuned overrides (`art/canon/hu/clips/<clip>/weapontip_overrides.json`) only need care on attack ACTIVE poses. Add any pose whose heuristic tip is legitimately weird (sheathed entry frames!) to anchor_sanity's `OVERRIDE_ALLOWLIST` rather than weakening the validator.
 - [ ] **Step 3:** Run the installer per clip into the sprites dir (e.g. `WUGodot/assets/sprites/characters/hu/<clip>/`), emitting manifest pose entries. Commit `feat(tools): variable-canvas raw-frame install + hu combat sprites`.
 
 ## Task 3: Timelines (subsample the 97 — do NOT install all frames as keyposes)
@@ -41,8 +41,9 @@ Suggested default picks (indices into f%03d; retime freely later — that's why 
 - [ ] **deflect** (`held_block`): rise 0,8,16 · hold-loop over the braced segment (~24-64: pick 4 evenly, loop) · return 72,84,96.
 - [ ] **dash** (`held_dash`): 0,6,12 (crouch) · flight 20,32,44,56,68 · land/return 80,90,96.
 - [ ] **jump** (`held_jump` + fall/land states): rise 0,8,16,28,40 · apex 48,56 · descend 68,80 · land 88,95. (held_fall/held_land statics from Task 4 cover the physics-driven fall/land states.)
-- [ ] **entry** (`entry_draw.timeline.json`, replaces the vd_* sequence): stand 0,10,20,30 · hilt 40,50 · draw 60,66,72 · settle 80,88,96. Retime `main.gd:20` COMBAT_ENTRY `frames: 112` to match the new duration.
+- [ ] **entry** (`entry_draw.timeline.json`, replaces the vd_* sequence): stand 0,10,20,30 · hilt 40,50 · draw 60,66,72 · settle 80,88,96. Retime BOTH timing sites: `combat_scene.gd:23` `ENTRY_DRAW_DURATION: 1.6` (live combat, seconds) AND `main.gd:20` COMBAT_ENTRY `frames: 112` (capture harness) to the new clip length.
 - [ ] **idle**: k1 static (already installed — verify it survived Task 1/2). **walk**: pins to k1 (unchanged this pass).
+- [ ] **Collision keys (P1 — do not skip):** `presentation_collision.gd:10` hard-codes `STRIKE_POSE_BY_ID = {"hu_light": "hu_light_05", "hu_heavy": "hu_heavy_08"}`. Update BOTH to the chosen final ACTIVE-EXTENSION pose names (light ≈ your pick near f038 full extension; heavy ≈ f064 low impact), and update `tests/test_heavy_capsule_pose.gd:10` to match. Visuals looking right while collision samples a stale/windup pose is the failure this prevents.
 - [ ] Commit per clip or as one `feat(anim): final combat timelines from full-density canon`.
 
 ## Task 4: Held statics (kills the last old-era Hu)
@@ -50,14 +51,16 @@ Suggested default picks (indices into f%03d; retime freely later — that's why 
 **Files:** `held_hit.timeline.json` (vp_hit), `held_stunned.timeline.json` (vp_stun_a/b), `held_fall.timeline.json` (vp_fall), `held_land.timeline.json` (vp_land) + manifest poses.
 
 - [ ] **Step 1:** Install `art/canon/hu/held/{hit,stun_a,stun_b,fall,land}.png` as manifest poses (installer from Task 2; single statics). Repoint the four held timelines at the new pose names. `relaxed.png`: install as a pose (unused for now — future out-of-combat idle; note in manifest).
-- [ ] **Step 2:** Grep the manifest for remaining `v[dhilpw]_` pose references reachable from any live timeline — there should be NONE after this task (report any stragglers rather than silently leaving them).
+- [ ] **Step 2:** Grep the manifest for remaining `v[dhilpw]_` pose references reachable from any live timeline — there should be NONE after this task (report stragglers rather than silently leaving them).
+- [ ] **Step 2b (alias policy — P2):** the LEGACY ALIASES (`guard`, `windup`, `strike_extended`, `recover`, `heavy_windup`, `heavy_strike`, `heavy_recover`, `breath`) are load-bearing: collision falls back to `strike_extended`/`guard` (`presentation_collision.gd:8,102`) and `test_animation_manifest.gd:26` validates all of them. **Policy: REPOINT every alias to the corresponding final canon pose** (guard/breath → k1 idle pose; windup/strike_extended/recover → the light windup/active/recovery picks; heavy_* → the heavy picks). Do not delete them; do not leave them on old sprites.
 - [ ] **Step 3:** Commit `feat(anim): held poses — hit/stun/fall/land from canon (old-era Hu fully retired)`.
 
 ## Task 5: Verify (exact commands) + hand back
 
 - [ ] `./run.sh --import && ./run.sh --test` → `failed: 0`
 - [ ] `./run.sh --anchor-sanity` → OK
-- [ ] `./run.sh --shot-combat <out_dir>` → all 15 shots: player LEFT facing RIGHT; new art in EVERY state incl. hit_react/stunned/fall/land; entry draw plays at combat start; `tools/assert_nonblank.py` per shot
+- [ ] `./run.sh --shot-combat <out_dir>` → all 15 shots: player LEFT facing RIGHT; new art in EVERY state incl. hit_react/stunned/fall/land; `tools/assert_nonblank.py` per shot
+- [ ] `./run.sh --shot-action COMBAT_ENTRY <dir>` → the entry draw plays frame by frame with the new art (the 15-shot set does NOT cover entry — this is the check for it)
 - [ ] Matchup capture (spec file, e.g. `{"kind":"matchup","build":[{"boon_id":"wind_descending_leaf","tier":"epic"}]}`): blade fully visible at light's full extension (the envelope canvas exists for exactly this); sword never changes hands; sizes constant across each action
 - [ ] ✋ **STOP — hand the build to the user for the playtest.** That playtest is the juice-first pivot's re-judgment gate; report the shot set + any deviations alongside.
 
