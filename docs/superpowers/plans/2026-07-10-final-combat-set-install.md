@@ -29,6 +29,7 @@
 
 - [ ] **Step 1:** Update the installer per the rev-3 ADDENDUM: accept any canvas size; `footAnchor = (content bbox center x, content bbox bottom)` per frame from the ACTUAL frame content (no 256/246 assumptions). Frames within a clip are registered, so anchors come out consistent — assert that (per-clip footAnchor x/y spread < 4px → warn if larger).
 - [ ] **Step 2:** weaponTip: the manifest loader REQUIRES weaponTip on every pose (`animation_manifest.gd:11` `_REQUIRED_ANCHORS`) and `anchor_sanity.gd:54` measures every pose's tip. So: **emit a MEASURED weaponTip for EVERY installed pose** (steel-extreme heuristic); hand-tuned overrides (`art/canon/hu/clips/<clip>/weapontip_overrides.json`) only need care on attack ACTIVE poses. Add any pose whose heuristic tip is legitimately weird (sheathed entry frames!) to anchor_sanity's `OVERRIDE_ALLOWLIST` rather than weakening the validator.
+- [ ] **Step 2c (pose-id convention — pin it):** the current labeler emits `%02d` indices (`install_raw_frames.gd:115`), which collides with 97-frame clips and this plan's f%03d references. **Convention: pose id = `<clip>_<3-digit stem from the filename>`** (f038.png → `hu_light_038`). Update the labeler to derive labels from filename stems (zero-padded 3), and use these exact ids everywhere downstream (timelines, STRIKE_POSE_BY_ID, aliases, tests).
 - [ ] **Step 3:** Run the installer per clip into the sprites dir (e.g. `WUGodot/assets/sprites/characters/hu/<clip>/`), emitting manifest pose entries. Commit `feat(tools): variable-canvas raw-frame install + hu combat sprites`.
 
 ## Task 3: Timelines (subsample the 97 — do NOT install all frames as keyposes)
@@ -43,6 +44,7 @@ Suggested default picks (indices into f%03d; retime freely later — that's why 
 - [ ] **jump** (`held_jump` + fall/land states): rise 0,8,16,28,40 · apex 48,56 · descend 68,80 · land 88,95. (held_fall/held_land statics from Task 4 cover the physics-driven fall/land states.)
 - [ ] **entry** (`entry_draw.timeline.json`, replaces the vd_* sequence): stand 0,10,20,30 · hilt 40,50 · draw 60,66,72 · settle 80,88,96. Retime BOTH timing sites: `combat_scene.gd:23` `ENTRY_DRAW_DURATION: 1.6` (live combat, seconds) AND `main.gd:20` COMBAT_ENTRY `frames: 112` (capture harness) to the new clip length.
 - [ ] **idle**: k1 static (already installed — verify it survived Task 1/2). **walk**: pins to k1 (unchanged this pass).
+- [ ] **Timeline tests:** `tests/test_animation_clip_timeline.gd:91` asserts `vp_stun_b` and `:98` asserts the vd_* entry sequence (`vd_001/vd_049/vd_097`, fixed_duration 1.6) — rewrite these assertions alongside the timelines they pin (new pose ids, new entry duration), in the SAME commit so the suite never goes red between commits.
 - [ ] **Collision keys (P1 — do not skip):** `presentation_collision.gd:10` hard-codes `STRIKE_POSE_BY_ID = {"hu_light": "hu_light_05", "hu_heavy": "hu_heavy_08"}`. Update BOTH to the chosen final ACTIVE-EXTENSION pose names (light ≈ your pick near f038 full extension; heavy ≈ f064 low impact), and update `tests/test_heavy_capsule_pose.gd:10` to match. Visuals looking right while collision samples a stale/windup pose is the failure this prevents.
 - [ ] Commit per clip or as one `feat(anim): final combat timelines from full-density canon`.
 
@@ -61,7 +63,8 @@ Suggested default picks (indices into f%03d; retime freely later — that's why 
 - [ ] `./run.sh --anchor-sanity` → OK
 - [ ] `./run.sh --shot-combat <out_dir>` → all 15 shots: player LEFT facing RIGHT; new art in EVERY state incl. hit_react/stunned/fall/land; `tools/assert_nonblank.py` per shot
 - [ ] `./run.sh --shot-action COMBAT_ENTRY <dir>` → the entry draw plays frame by frame with the new art (the 15-shot set does NOT cover entry — this is the check for it)
-- [ ] Matchup capture (spec file, e.g. `{"kind":"matchup","build":[{"boon_id":"wind_descending_leaf","tier":"epic"}]}`): blade fully visible at light's full extension (the envelope canvas exists for exactly this); sword never changes hands; sizes constant across each action
+- [ ] Action-state captures — the matchup spec DEFAULTS to `state: "01_idle"` (`main.gd:391`), so idle-only specs verify nothing about attacks. Use explicit states:
+  `{"kind":"matchup","state":"04_light_active","build":[{"boon_id":"wind_descending_leaf","tier":"epic"}]}` and `{"kind":"matchup","state":"07_heavy_active",...}` (or `./run.sh --shot-action ATTACKING_LIGHT/ATTACKING_HEAVY <dir>`): blade fully visible at light's full extension (the envelope canvas exists for exactly this); sword never changes hands; sizes constant across each action
 - [ ] ✋ **STOP — hand the build to the user for the playtest.** That playtest is the juice-first pivot's re-judgment gate; report the shot set + any deviations alongside.
 
 ## Out of scope (deferred, on record)
