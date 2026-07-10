@@ -179,46 +179,46 @@
       "file": "art/canon/hu/clips/attack_light/ (97 frames FULL DENSITY + preview)",
       "prompt": "final locked-canon roll (see roll-request page); full 97-master harvest for timeline flexibility (user: max frames to speed up/slow down at install)",
       "backend": "seedance via pixelforge-sprite animate-video",
-      "generator": "harvest_fm (SOURCE-TRUST: constant scale, registration-verified zero zoom; spark/purple/gold remaps)",
+      "generator": "harvest_fm v2 (source-trust constant scale + REGISTRATION-PRESERVING union-envelope canvas — no cropping, no centering jitter)",
       "seed": null,
       "approved": "2026-07-10 (source-trust harvest)",
-      "notes": "97 frames full density; sources proven size-consistent via Fourier-Mellin; heavy retains source jump-cut in recovery (re-roll pending user approval)"
+      "notes": "97f full density; envelope canvas 471x257 (VARIABLE size — installer computes footAnchor from content; frames are spatially registered); white impact flash <=2 frames is law-compliant (S3c)"
     },
     "hu_clip_jump": {
       "file": "art/canon/hu/clips/jump/ (97 frames FULL DENSITY + preview)",
       "prompt": "final locked-canon roll (see roll-request page); full 97-master harvest for timeline flexibility (user: max frames to speed up/slow down at install)",
       "backend": "seedance via pixelforge-sprite animate-video",
-      "generator": "harvest_fm (SOURCE-TRUST: constant scale, registration-verified zero zoom; spark/purple/gold remaps)",
+      "generator": "harvest_fm v2 (source-trust constant scale + REGISTRATION-PRESERVING union-envelope canvas — no cropping, no centering jitter)",
       "seed": null,
       "approved": "2026-07-10 (source-trust harvest)",
-      "notes": "97 frames full density; sources proven size-consistent via Fourier-Mellin; heavy retains source jump-cut in recovery (re-roll pending user approval)"
+      "notes": "97f full density; envelope canvas 249x319 (VARIABLE size — installer computes footAnchor from content; frames are spatially registered); white impact flash <=2 frames is law-compliant (S3c)"
     },
     "hu_clip_dash": {
       "file": "art/canon/hu/clips/dash/ (97 frames FULL DENSITY + preview)",
       "prompt": "final locked-canon roll (see roll-request page); full 97-master harvest for timeline flexibility (user: max frames to speed up/slow down at install)",
       "backend": "seedance via pixelforge-sprite animate-video",
-      "generator": "harvest_fm (SOURCE-TRUST: constant scale, registration-verified zero zoom; spark/purple/gold remaps)",
+      "generator": "harvest_fm v2 (source-trust constant scale + REGISTRATION-PRESERVING union-envelope canvas — no cropping, no centering jitter)",
       "seed": null,
       "approved": "2026-07-10 (source-trust harvest)",
-      "notes": "97 frames full density; sources proven size-consistent via Fourier-Mellin; heavy retains source jump-cut in recovery (re-roll pending user approval)"
+      "notes": "97f full density; envelope canvas 304x229 (VARIABLE size — installer computes footAnchor from content; frames are spatially registered); white impact flash <=2 frames is law-compliant (S3c)"
     },
     "hu_clip_heavy": {
       "file": "art/canon/hu/clips/attack_heavy/ (97 frames FULL DENSITY + preview)",
       "prompt": "final locked-canon roll (see roll-request page); full 97-master harvest for timeline flexibility (user: max frames to speed up/slow down at install)",
       "backend": "seedance via pixelforge-sprite animate-video",
-      "generator": "harvest_fm (SOURCE-TRUST: constant scale, registration-verified zero zoom; spark/purple/gold remaps)",
+      "generator": "harvest_fm v2 (source-trust constant scale + REGISTRATION-PRESERVING union-envelope canvas — no cropping, no centering jitter)",
       "seed": null,
       "approved": "2026-07-10 (source-trust harvest)",
-      "notes": "97 frames full density; sources proven size-consistent via Fourier-Mellin; heavy retains source jump-cut in recovery (re-roll pending user approval)"
+      "notes": "97f full density; envelope canvas 325x320 (VARIABLE size — installer computes footAnchor from content; frames are spatially registered); white impact flash <=2 frames is law-compliant (S3c)"
     },
     "hu_clip_deflect": {
       "file": "art/canon/hu/clips/guard_deflect/ (97 frames FULL DENSITY + preview)",
       "prompt": "final locked-canon roll (see roll-request page); full 97-master harvest for timeline flexibility (user: max frames to speed up/slow down at install)",
       "backend": "seedance via pixelforge-sprite animate-video",
-      "generator": "harvest_fm (SOURCE-TRUST: constant scale, registration-verified zero zoom; spark/purple/gold remaps)",
+      "generator": "harvest_fm v2 (source-trust constant scale + REGISTRATION-PRESERVING union-envelope canvas — no cropping, no centering jitter)",
       "seed": null,
       "approved": "2026-07-10 (source-trust harvest)",
-      "notes": "97 frames full density; sources proven size-consistent via Fourier-Mellin; heavy retains source jump-cut in recovery (re-roll pending user approval)"
+      "notes": "97f full density; envelope canvas 253x229 (VARIABLE size — installer computes footAnchor from content; frames are spatially registered); white impact flash <=2 frames is law-compliant (S3c)"
     },
     "hu_held": {
       "file": "art/canon/hu/held/ (hit, stun_a, stun_b, relaxed, fall, land)",
@@ -233,10 +233,10 @@
       "file": "art/canon/hu/clips/entry/ (97 frames FULL DENSITY + preview)",
       "prompt": "final locked-canon roll (see roll-request page); full 97-master harvest for timeline flexibility (user: max frames to speed up/slow down at install)",
       "backend": "seedance via pixelforge-sprite animate-video",
-      "generator": "harvest_fm (SOURCE-TRUST: constant scale, registration-verified zero zoom; spark/purple/gold remaps)",
+      "generator": "harvest_fm v2 (source-trust constant scale + REGISTRATION-PRESERVING union-envelope canvas — no cropping, no centering jitter)",
       "seed": null,
       "approved": "2026-07-10 (source-trust harvest)",
-      "notes": "97 frames full density; sources proven size-consistent via Fourier-Mellin; heavy retains source jump-cut in recovery (re-roll pending user approval)"
+      "notes": "97f full density; envelope canvas 257x309 (VARIABLE size — installer computes footAnchor from content; frames are spatially registered); white impact flash <=2 frames is law-compliant (S3c)"
     }
   }
 }
