@@ -1,0 +1,65 @@
+# Final Combat Set Install — Implementation Plan
+
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax. This is an asset-install plan: tests are the game's own suite + captures + the user's playtest eyeball (final gate ✋).
+
+**Goal:** Install the FINAL user-accepted Hu combat set (6 full-density clips + 6 held statics), revert combat orientation to player-left, and remove the last old-era Hu assets.
+
+**Specs of record:** `docs/superpowers/specs/2026-07-09-combat-set-install-rev3.md` + its **2026-07-10 addendum** (variable-canvas frames — read it before Task 2) · orientation ground truth + REVERSAL section in `2026-07-08-combat-orientation-flip.md` · provenance `art/canon/canon.manifest.json`.
+
+**Assets (all right-facing native, NO mirroring anywhere):**
+- Clips (97 frames each, `f%03d.png`, spatially REGISTERED, VARIABLE canvas):
+  `art/canon/hu/clips/attack_light/` (471×257) · `attack_heavy/` (325×320) ·
+  `guard_deflect/` (253×229) · `dash/` (304×229) · `jump/` (249×319, 96f) · `entry/` (257×309)
+- Held statics (256×256): `art/canon/hu/held/{hit,stun_a,stun_b,relaxed,fall,land}.png`
+- Pins `art/canon/hu/k1..k7.png` (k1 = idle base; reference only otherwise)
+
+---
+
+## Task 1: Orientation revert (small, do first — everything verifies against it)
+
+**Files:** `WUGodot/scripts/sim/combat_setup.gd:20-21`, any capture/spawn setups from the flip commit, `WUGodot/assets/animation_manifests/hu.manifest.json:3`.
+
+- [ ] **Step 1:** `combat_setup.gd`: `player.facing = 1`, `enemy.facing = -1` (revert the flip). Grep for other spawn-side/`gap`-sign changes from commit `b72dafb` (`git show b72dafb --stat`) and revert those sites (combat_scene spawn, capture setup).
+- [ ] **Step 2:** `hu.manifest.json`: root `"nativeFacing": 1`. Keep the mechanism in code (per-pose overrides default to root). Enemy manifests untouched.
+- [ ] **Step 3:** `./run.sh --import && ./run.sh --test` → `failed: 0`. `./run.sh --shot-combat` → player on LEFT facing RIGHT, blade viewer-side. Commit `fix(combat): revert orientation — player left, art right-facing native`.
+
+## Task 2: Frame install tooling (variable canvas)
+
+**Files:** `WUGodot/tools/install_raw_frames.gd`, `run.sh` (`--install-raw-frames`).
+
+- [ ] **Step 1:** Update the installer per the rev-3 ADDENDUM: accept any canvas size; `footAnchor = (content bbox center x, content bbox bottom)` per frame from the ACTUAL frame content (no 256/246 assumptions). Frames within a clip are registered, so anchors come out consistent — assert that (per-clip footAnchor x/y spread < 4px → warn if larger).
+- [ ] **Step 2:** weaponTip: only on attack ACTIVE keyposes — steel-extreme heuristic + optional per-clip JSON override (`art/canon/hu/clips/<clip>/weapontip_overrides.json`) as already contracted.
+- [ ] **Step 3:** Run the installer per clip into the sprites dir (e.g. `WUGodot/assets/sprites/characters/hu/<clip>/`), emitting manifest pose entries. Commit `feat(tools): variable-canvas raw-frame install + hu combat sprites`.
+
+## Task 3: Timelines (subsample the 97 — do NOT install all frames as keyposes)
+
+**Files:** `WUGodot/assets/animation_clips/{hu_attack_light, hu_attack_heavy, held_block, held_dash, held_jump, idle, walk, entry_draw}.timeline.json` + manifest.
+
+Suggested default picks (indices into f%03d; retime freely later — that's why density exists):
+- [ ] **light**: windup 0,8,16,24 · active 30,34,38,42,46 · recovery 56,68,80,90,96. Events at the anchors; `duration: fromAttackDef`. White-flash frames (~30-34) are §3c-legal — keep ≤2 of them.
+- [ ] **heavy**: windup 0,10,20,30,40,50 · active 58,64,70 · recovery 74,78, then **EASE THE SOURCE JUMP-CUT** (user-accepted): hold ~78 slightly longer, then 82,88,96 — do not look for smooth source frames between the chop and guard; there are none.
+- [ ] **deflect** (`held_block`): rise 0,8,16 · hold-loop over the braced segment (~24-64: pick 4 evenly, loop) · return 72,84,96.
+- [ ] **dash** (`held_dash`): 0,6,12 (crouch) · flight 20,32,44,56,68 · land/return 80,90,96.
+- [ ] **jump** (`held_jump` + fall/land states): rise 0,8,16,28,40 · apex 48,56 · descend 68,80 · land 88,95. (held_fall/held_land statics from Task 4 cover the physics-driven fall/land states.)
+- [ ] **entry** (`entry_draw.timeline.json`, replaces the vd_* sequence): stand 0,10,20,30 · hilt 40,50 · draw 60,66,72 · settle 80,88,96. Retime `main.gd:20` COMBAT_ENTRY `frames: 112` to match the new duration.
+- [ ] **idle**: k1 static (already installed — verify it survived Task 1/2). **walk**: pins to k1 (unchanged this pass).
+- [ ] Commit per clip or as one `feat(anim): final combat timelines from full-density canon`.
+
+## Task 4: Held statics (kills the last old-era Hu)
+
+**Files:** `held_hit.timeline.json` (vp_hit), `held_stunned.timeline.json` (vp_stun_a/b), `held_fall.timeline.json` (vp_fall), `held_land.timeline.json` (vp_land) + manifest poses.
+
+- [ ] **Step 1:** Install `art/canon/hu/held/{hit,stun_a,stun_b,fall,land}.png` as manifest poses (installer from Task 2; single statics). Repoint the four held timelines at the new pose names. `relaxed.png`: install as a pose (unused for now — future out-of-combat idle; note in manifest).
+- [ ] **Step 2:** Grep the manifest for remaining `v[dhilpw]_` pose references reachable from any live timeline — there should be NONE after this task (report any stragglers rather than silently leaving them).
+- [ ] **Step 3:** Commit `feat(anim): held poses — hit/stun/fall/land from canon (old-era Hu fully retired)`.
+
+## Task 5: Verify (exact commands) + hand back
+
+- [ ] `./run.sh --import && ./run.sh --test` → `failed: 0`
+- [ ] `./run.sh --anchor-sanity` → OK
+- [ ] `./run.sh --shot-combat <out_dir>` → all 15 shots: player LEFT facing RIGHT; new art in EVERY state incl. hit_react/stunned/fall/land; entry draw plays at combat start; `tools/assert_nonblank.py` per shot
+- [ ] Matchup capture (spec file, e.g. `{"kind":"matchup","build":[{"boon_id":"wind_descending_leaf","tier":"epic"}]}`): blade fully visible at light's full extension (the envelope canvas exists for exactly this); sword never changes hands; sizes constant across each action
+- [ ] ✋ **STOP — hand the build to the user for the playtest.** That playtest is the juice-first pivot's re-judgment gate; report the shot set + any deviations alongside.
+
+## Out of scope (deferred, on record)
+Forward-dash variant · walk regen · K7 wrist-point install · hero-sound iteration · enemy canon (next art phase).
