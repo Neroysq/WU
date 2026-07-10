@@ -70,3 +70,13 @@ Suggested default picks (indices into f%03d; retime freely later — that's why 
 
 ## Out of scope (deferred, on record)
 Forward-dash variant · walk regen · K7 wrist-point install · hero-sound iteration · enemy canon (next art phase).
+
+## Post-playtest addendum (2026-07-10, user findings)
+
+- [ ] **Keypose density too low:** resample every timeline to ~28–36 keyposes
+  (every 2–3 frames in active/fast phases; every 4–5 in windup/recovery/holds;
+  deflect's hold-loop can stay sparse). All 97 poses are already in the manifest —
+  this is timeline JSON only. Update the pose-id assertions in
+  test_animation_clip_timeline.gd in the same commit.
+- [ ] **Walk animation:** pending a user-approved Seedance roll (k1→k1 gait
+  cycle); harvest + timeline + walk.timeline.json rewire when it lands.
